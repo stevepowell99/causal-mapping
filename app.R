@@ -1,13 +1,11 @@
 # options -----------------------------------------------------------------
 options(shiny.port = 1111)
 doNotificationLevel=1     #notification popups. level=1 is debugging and level=2 is user.
-storage <- "dropbox"
-storage <- "gsheets"
-storage <- "local"
-
-
-
 options(stringsAsFactors = F)
+
+
+
+
 
 # source ------------------------------------------------------------------
 
@@ -49,6 +47,16 @@ library(DiagrammeR)
 library(rpivotTable)  
 library(shape)
 
+
+
+# attempt to bypass lack of local storage at shinyapps, both dropb --------
+
+
+storage <- "dropbox"
+storage <- "gsheets"
+storage <- "local"
+
+
 if(storage=="local" | storage=="gsheets"){
   file__exists <- file.exists
   read__csv <- read_csv
@@ -72,53 +80,12 @@ if(storage=="local" | storage=="gsheets"){
 
 mutate_if_sw=function(...)suppressMessages(mutate_if(...))
 
-mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
-  condition <- eval(substitute(condition), .data, envir)
-  .data[condition, ] <- .data[condition, ] %>% mutate(...)
-  .data
-}
 
-widthScalr <- function(x) x / 10
 
 doNotification <- function(text,level=1) {
-  # set=findset("diagramnotification")
-  # set=replace_na(set,"")
-  # if(""==(set))set=F
   if(level>doNotificationLevel)showNotification(text)
-  # x=readLines("log.txt")
-  # if(exists("values")) {
-  # x="log"#values$current
   write(paste0(text), paste0("","log.txt"), append = T)
-  # }
 }
-
-
-addtran <- function(col, alpha) { # it is vectorised but assume both are same length
-  sapply(1:length(col), function(i){
-    col2rgb(col[i]) %>% paste0(collapse = ",") %>% paste0('rgba(', ., ',', alpha[i], ')')  # I couldn't work out any other way to make transparency work with edges with visnetwork
-  }
-  )
-}  # maybe the standard way works if you use html colors not red etc
-
-
-add_highlight=function(tex,background){
-  
-  if(!is.na(tex)[1]){
-    loc=sapply(tex,function(x)str_locate(background,x)) %>% data.frame
-    tagList(
-      tags$span(background %>% str_sub(1,loc[y,1]-1)),
-      lapply(1:ncol(loc),function(y){
-        tags$b(background %>% str_sub(loc[1,y],loc[2,y]))
-      }
-      ),
-      tags$span(background %>% str_sub(loc[2,ncol(loc)]+1,nchar(background)))
-    )
-  }
-  else
-    background
-}
-
-stripper <- function(vec) vec %>% str_remove_all("\\n|\\r") %>% str_replace_all("\\s+", " ") %>% str_replace_all("\\'", "")
 
 
 
@@ -137,7 +104,8 @@ replaceNA <- function(df) {
   df
 }
 
-inv=function(ed){   #inverts an edgelist
+
+inv=function(ed){   #inverts an edgelist. For Rick's suggestion for cacluating a node metric
   ed %>% 
     select(from,to) %>% 
     unlist %>% 
@@ -155,7 +123,7 @@ inv=function(ed){   #inverts an edgelist
 }
 
 
-inv_multi=function(df){
+inv_multi=function(df){   #For Rick's suggestion for cacluating a node metric
   # browser()
   stats <- df %>%
     split(.$statement) %>%
@@ -255,6 +223,7 @@ infer=function(gr){                         # sets levels of downstream variable
   gr
 }
 
+
 # helpers for tidygraph
 N_ <- function(gr) gr %>% activate(nodes)
 E_ <- function(gr) gr %>% activate(edges)
@@ -274,12 +243,6 @@ findfirst <- function(vec, vec2) {
 
 
 
-
-
-
-
-
-
 # constants ----
 
 writeLines("", "log.txt") # just to open up a fresh file
@@ -287,7 +250,8 @@ writeLines("", "log.txt") # just to open up a fresh file
 
 csvlist <- xc("nodes edges settings statements settingsGlobal")
 
-blanks <- (c("", "", ""))
+
+# generate some nice colours
 
 allcols1 <- lapply(xc("Greys Set1 Pastel1 Reds Oranges Blues Greens Purples"), function(x) RColorBrewer::brewer.pal(8, x)) %>%
   # c(RColorBrewer::brewer.pal(8,"Pastel1"),.) %>%
@@ -437,18 +401,6 @@ valuelist <- list(
 )
 
 
-arrcollist <- c(
-  "quote",
-  "label",
-  "strength",
-  "trust",
-  "dir",
-  #  "color",
-  #  "style",
-  "statement"
-)
-
-
 
 defaultSettings <- read_csv("defaultSettings.csv")
 defaultSettingsGlobal <- read_csv("defaultSettingsGlobal.csv")
@@ -513,7 +465,7 @@ ui <- tagList(
                        div(
                          
                          
-                         sidebarLayout(
+                         sidebarLayout(                             #the main panels are resizable
                            jqui_resizable(sidebarPanel(
                              id="resizablePanel",
                              width = 4, style =
@@ -526,24 +478,14 @@ ui <- tagList(
                              
                              hr(style = "margin-top:5px"),
                              
-                             # uiOutput("keyp")
-                             # ,
-                             
-                             
+                             # alerts if user requests correct or incorrect permalink
                              bsAlert("bsmsg"),
                              bsAlert("found"),
                              bsAlert("notfound"),
                              
                              
-                             uiOutput("test"),
+                             # uiOutput("test"),
                              
-                             # selectInput(inputId = "selnodes", label = "Nodes selection", choices = 1:15, multiple = TRUE)
-                             # ui sidepanels----
-                             conditionalPanel(
-                               condition = "1==1",
-                               style = "padding:0",
-                               # tabsetPanel(type = "tabs",selected="statements",
-                               
                                uiOutput("savebut"),
                                hr(),
                                tabsetPanel(
@@ -551,9 +493,8 @@ ui <- tagList(
                                  
                                  # ui statements----
                                  
-                                 tabPanel("",icon=icon("upload"),
+                                 tabPanel("",icon=icon("upload"),                        # user can upload set of statements to process, and optionally also pre-existing node and edge lists
                                           style = glue(";border-radius:10px"),
-                                          # h3("uploads"),
                                           
                                           bsCollapse(
                                             id = "uploads", open = "Upload statements",
@@ -602,14 +543,15 @@ ui <- tagList(
                                           )
                                  ),
                                  
-                                 # ui coding----
+                                 # ui coding----                             
+                                 #  most important panel. in a state of flux at the moment. in most cases user will be looking at / scrolling through pieces of text and will "code" them aka use the information to create arrows/edges
                                  tabPanel("",icon=icon("highlighter"),
                                           value = "Code", style = glue("background-color:{rgb(0.99,1,0.97)};;border-radius:10px"), 
                                           
                                           # checkboxInput("showPage","Code one sentence")
                                           # ,
                                           uiOutput("pagerBig"),
-                                          uiOutput("pagePanel"),
+                                          uiOutput("displayStatementPanel"),
                                           
                                           
                                             uiOutput("varForm"),
@@ -629,7 +571,7 @@ ui <- tagList(
                                             ),
                                             
                                             
-                                            bsCollapsePanel(
+                                            bsCollapsePanel(                    #this is just a utility from visnetwork which I will drop at some point
                                               "Advanced options",
                                               p("Development only"),
                                               icon("exclamation-triangle"),
@@ -637,7 +579,7 @@ ui <- tagList(
                                             )
                                           )
                                  ),
-                                 tabPanel(value="Variables","",
+                                 tabPanel(value="Variables","",                      # user can directly edit the nodes table. still functional but will probably be dropped
                                           style = glue("background-color:{rgb(0.99,1,0.97)};;border-radius:10px"), icon = icon("boxes"),
                                           # h3("View and edit variables"),
                                           div(actionButton("nodeTableUp", "Update"),style="display:inline-block"),
@@ -651,7 +593,7 @@ ui <- tagList(
                                    # ,
                                    #        uiOutput("formMakr")
                                  ),
-                                 tabPanel("",
+                                 tabPanel("",                             # user can directly edit the edges aka arrows table. still functional but will probably be dropped
                                           value = "Arrows", style = glue("background-color:{rgb(0.99,1,0.97)};;border-radius:10px"), icon = icon("arrow-right"),
                                           # h3("View and edit arrows"),
                                           actionButton("edgeTableUp", "Update"),
@@ -666,23 +608,23 @@ ui <- tagList(
                                  
                                  # ui settings----
                                  
-                                 tabPanel("",value="Display",
+                                 tabPanel("",value="Display",    # more of a settings panel 
                                           style = glue("background-color:{rgb(0.97,1,0.97)};;border-radius:10px"), icon = icon("palette"),
                                           
                                           # selectInput("layout","layout",choices=c("Sugiyama"="layout_with_sugiyama", "circle"="layout_in_circle"),selected = "layout_with_sugiyama")
                                           # ,
-                                          uiOutput("filters"),
-                                          uiOutput("inputs"),
+                                          uiOutput("filters"),                         # transient filters to filter out some nodes/edges, values are not stored in settings csv files
+                                          uiOutput("inputs"),                         # user-friendlier widgets which are produced instead of rows of the settings tables if user has written "slider" etc in the last column of settings tables
                                           bsCollapse(
                                             id = "display", open =
                                               "Advanced",
                                             bsCollapsePanel(
                                               "Advanced",
-                                              actionButton("bigTableGUp","Update"),
-                                              rHandsontableOutput("bigTableG"),
+                                              actionButton("settingsTableGlobalUp","Update"),
+                                              rHandsontableOutput("settingsTableGlobal"),                         # global settings
                                               hr(),
-                                              actionButton("bigTableUp","Update"),
-                                              rHandsontableOutput("bigTable"),
+                                              actionButton("settingsTableUp","Update"),
+                                              rHandsontableOutput("settingsTable"),                         # set things like size and colour of items 
                                               hr()
                                               # htmlOutput("overview"),
                                               # hr()
@@ -690,21 +632,11 @@ ui <- tagList(
                                           ),
                                           bsCollapsePanel(
                                             "Easy",
-                                            uiOutput("setwig"),
-                                            actionButton("autoMerge", "Auto-suggest clusters")
+                                            actionButton("autoMerge", "Auto-suggest clusters")                         # not importatn
                                           )
                                    # ,
-                                          # bsCollapsePanel(
-                                          #   "Final / merged variables",
-                                          #   rHandsontableOutput("node2")
-                                          # ),
-                                          # 
-                                          # bsCollapsePanel(
-                                          #   "Final / merged arrows",
-                                          #   rHandsontableOutput("edge2")
-                                          # )
                                  ),
-                                 tabPanel("",icon=icon("chart-pie"),
+                                 tabPanel("",icon=icon("chart-pie"),                         # some additional output, not important
                                    style = "padding:20px;background-color:white;z-index:99",
                                    # d3Output("d3")
                                    
@@ -719,7 +651,7 @@ ui <- tagList(
                                    
                                  ),
                                  
-                                 tabPanel("", icon=icon("stack-overflow"),div(style = ""),
+                                 tabPanel("", icon=icon("stack-overflow"),div(style = ""),                         # library of existing projects stored locally as csv files. clicking loads up the project 
                                    style = "",
                                    uiOutput("gallery")
                                  ),
@@ -728,7 +660,7 @@ ui <- tagList(
                                    uiOutput("downloads")
                                  )
                                )
-                             )
+                             
                            ), options = list(minHeight = 100, maxHeight = 2000,
                                              minWidth = 200, maxWidth = 3000)),
                            
@@ -736,32 +668,17 @@ ui <- tagList(
                            mainPanel(
                              
                              width = 8, style = "border-left:2px dotted black",
-                             # actionButton("aggbut","agg"),
-                             conditionalPanel("!input.crowd",style="background-color:white;border-radius:5px",
+                             conditionalPanel("!input.crowd",style="background-color:white;border-radius:5px",                         # input.crowd is part of an alternative, "crowdsourced" phone-friendly version of the interface which is not important at moment
                                
-                               uiOutput("showbigpicture"),
+                               uiOutput("floatingWidgets"),
                                
                                
-                                              # tabsetPanel(
-                                              #   type = "tabs", selected =
-                                              #     "Diagram",
-                                              #   
-                                              #   tabPanel("Diagram", div(style = ""),
-                                              #            style = "padding:20px;",
-                                              # 
-                                              #            
-                                              #            # uiOutput("titlvalid"),
                                                          
-                                                         conditionalPanel("1==1",visNetworkOutput("net", height = "950px", width = "100%")),
-                                                        # conditionalPanel("input.diagType!='Interactive'",grVizOutput("dot")),                                                         
-                                                         uiOutput("versions"),
+                                                         visNetworkOutput("net", height = "950px", width = "100%"),                         # the main network viz. 
+                                                         uiOutput("savedMsg"),
                                                          
-                                                         
-                                                         # textInput("urll","lab"),
-                                                         # uiOutput("propslider"),
                                                          tags$hr(),
-                                                         # textOutput("itmess"),
-                                                         uiOutput("blog"), 
+                                                         uiOutput("blog"),                          # additional narrative abou the project stored in the settings csv
                                                          textOutput("info")
                                               #   )
                                               # )
@@ -796,24 +713,22 @@ ui <- tagList(
 server <- function(input, output, session) {
   autoInvalidate <- reactiveTimer(2000)
   
-  values <- reactiveValues()
-  # values$isBig <- F
-  values$pag <- 1
+  values <- reactiveValues()                         # nearly all reactive values are stored in values$...
+  values$pag <- 1                         # stores value of pager in Code panel
   values$statements <- default.statements
-  values$clickArrow <- F
+  values$clickArrow <- F                         # no idea 
   values$crowd = F
-  # values$graph <- NULL
   
-  values$settings <- defaultSettings #%>% mutate_all(as.character)
-  values$settingsGlobal <- defaultSettingsGlobal# %>% mutate_all(as.character)
+  values$settings <- defaultSettings 
+  values$settingsGlobal <- defaultSettingsGlobal
   
-  values$highlightedText <- ""
+  values$highlightedText <- ""                         # part of a system to copy any text highlighted with mouse in browser i.e. from interview quotes and insert into the edge information
   
   observeEvent(input$highlightedText,{
     if (!is.null(input$highlightedText)) if ("" != (input$highlightedText)) values$highlightedText <- paste0(values$highlightedText," ... ",input$highlightedText)
   })
   
-  loaded <- F
+  loaded <- F                         # whether loaded from url permalink
   makeReactiveBinding("loaded")
   
   first <- T
@@ -828,12 +743,13 @@ server <- function(input, output, session) {
   inputtitl <- ""
   makeReactiveBinding("inputtitl")
   
-  ts <- reactiveValues(counter = 0)
+  # ts <- reactiveValues(counter = 0)
   
   
   
 
 # findset function to transfer user settings to values$settings -----------
+  # this is important and a bit clunky. I think it sucks in the two settings tables, combines them with defaults in case anything is missing, and then providess the value of the setting sought. probably most ripe for rationalisation
 
   
   findset <- function(tex, which = "current",global=T,v=values) {
@@ -873,19 +789,13 @@ server <- function(input, output, session) {
   
   
   
-  observeEvent(input$Interrupt, {
+  observeEvent(input$Interrupt, {                         #the useful "interrupt" button in bottom righthand corner
     browser()
   })
   
   
-  observeEvent(input$statementsTableUp, {
+  observeEvent(input$statementsTableUp, {                         # first of zillions of handsontables. 
     
-    # vs=values$statements
-    # # browser()
-    # if (nrow(vs) == 1 & vs$text[1] == "") {
-    #   vs$text[1] <- "Some statement made by one of the sources ..."
-    #   vs$statement[1] <- "1"
-    # }
     
     values$statements <-  hot_to_r(input$statements) %>%
       mutate(text = str_replace(text, "\'", "")) %>% 
@@ -898,7 +808,7 @@ server <- function(input, output, session) {
   
   
   
-  # update from permalink or example url; also set buttons and messages -----------
+  # update from permalink or example url; -----------
   
   observe(isolate({
     first <- F
@@ -1107,35 +1017,138 @@ server <- function(input, output, session) {
     stringsAsFactors = F
   )
   
-  # if(is.null(values$graf))  
-  values$graf <- tbl_graph(defaultNodes%>% filter(F), defaultEdges %>% filter(F))
+  values$graf <- tbl_graph(defaultNodes%>% filter(F), defaultEdges %>% filter(F))  #   the default graph object with no nodes or edges
+  
+
+# ++ Import/Statements panel -------------------------------------------------
+
   
   
-  # observe({
-  #   # if (is.null(values$nodes)) values$nodes <- defaultNodes
-  #   if (is.null(values$graf) & is.null(values$current)) {
-  #     doNotification("Creating default graph")
-  #     # if (""==(values$current))
-  #     nodes <- defaultNodes
-  #     edges <- defaultEdges
-  # 
-  # 
-  #     # browser()
-  #     # # values$graf=tbl_graph(nodes,edges)
-  #     # values$graf=NULL
-  #     # values$graf=NULL
-  #     values$graf <- tbl_graph(nodes, edges)
-  #     doNotification("Created default graph")
-  #   }
-  # })
+  # ++create statements table to allow user edit of statements----
+  
+  output$statements <- renderRHandsontable({
+    
+    rhandsontable(values$statements[,], height = 700, rowHeaders = FALSE, usetypes = T) %>%
+      hot_context_menu(allowRowEdit = T, allowColEdit = T) %>%
+      hot_cols(colWidths = c(400, rep(70, ncol(values$statements) - 1))) %>%
+      hot_cols(fixedColumnsLeft = 1)
+  })
+  
+  # file upload ----
   
   
+  observeEvent(input$up.nodes, {
+    
+    # browser()
+    req(input$up.nodes)
+    df <- read_csv(input$up.nodes$datapath) %>%
+      bind_rows(defaultNodes %>% filter(F))
+    
+    
+    values$graf <- tbl_graph(df, values$graf %>% EE())
+    doNotification("Updated variables")
+  })
+  
+  id.finder <- function(label, node.df) {
+    sapply(label, function(x) {
+      (node.df$label == x) %>% which() %>% first()
+    })
+  }
+  
+  observeEvent(input$up.edges, {
+    req(input$up.edges)
+    max <- (values$graf %>% NN() %>% nrow()) + 1
+    
+    df <- read_csv(input$up.edges$datapath)[, ]
+    # browser()
+    
+    if (input$use.labels) {
+      df <- df %>%
+        mutate(
+          from = id.finder(from, values$graf %>% NN()),
+          to = id.finder(to, values$graf %>% NN())
+        )
+    }
+    
+    df <- df %>%
+      mutate(from = as.numeric(from), to = as.numeric(to)) %>%
+      select(one_of(xc("from to label strength trust statement"))) %>%
+      filter(from < max & to < max) %>%
+      bind_rows(defaultEdges %>% filter(F))
+    
+    
+    
+    if (select(df, from, to) %>% unlist() %>% max() > max) doNotification("You have edges which don't make sense",level=2)
+    # browser()
+    values$graf <- tbl_graph(values$graf %>% NN(), df)
+    doNotification("Updated arrows")
+  })
+  
+  
+  # observe import statements -----------------------------------------------
+  
+  
+  observeEvent(input$up.statements, {
+    req(input$up.statements)
+    # browser()
+    vstat <- read_csv(input$up.statements$datapath)[, ] 
+    
+    
+    # vstat <- values$statements  
+    # fs <- findset("diagramsplitColumnNames")
+    if(str_detect(colnames(vstat),"\\.") %>% any){
+      
+      
+      col <- colnames(vstat) %>%
+        str_detect("\\.") %>%
+        which %>%
+        first
+      
+      fsx= str_split(colnames(vstat)[col],"\\.")[[1]] %>% str_trim
+      
+      if(!is.na(col)){
+        vstat <- vstat %>%
+          separate(col,into=fsx,sep="\\.")
+      }
+      # values$statements <- vstat
+    } else 
+      if(str_detect(colnames(vstat),",") %>% any){
+        
+        col <- colnames(vstat) %>%
+          str_detect(",") %>%
+          which %>%
+          first
+        
+        fsx= str_split(colnames(vstat)[col],",")[[1]] %>% str_trim
+        widths <- fsx %>%  str_extract("[0-9]*$")
+        names <- fsx %>%  str_remove("[0-9]*$")
+        
+        if(!is.na(col)){
+          vstat <- vstat %>%
+            separate(col,into=names ,sep=cumsum(widths),convert=T)
+        } 
+      }
+    # %>%
+    #   bind_rows(default.statements %>% filter(F))
+    # 
+    # if (ncol(vs) > 9) vs <- vs[, 1:8]
+    colnames(vstat)[1]="text"
+    values$statements  <- vstat %>%
+      mutate(statement = row_number())
+    # <- vs
+    doNotification("Updated statements")
+    # browser()
+  })
+  
+
+# ++ Code panel -----------------------------------------------------------
+
   
 
 # create values$tot -------------------------------------------------------
 
   
-  observe(({
+  observe(({                                  #   just the total number of statements, to provide the maximum value of the pager
     if (!is.null(values$statements)) {
       # tot=nrow(values$statements)
       # 
@@ -1158,7 +1171,7 @@ server <- function(input, output, session) {
   
   # **Pager----
   
-  output$pagerBig <- renderUI({
+  output$pagerBig <- renderUI({                                  #   the pager allows user to view interview statements one by one
     
     tagList(
       div(
@@ -1170,17 +1183,17 @@ server <- function(input, output, session) {
         style = "display:inline-block;"
       ),
       div(
-        sliderInput("timeslider", NULL, min = 0, max = values$tot, value = 0, animate = animationOptions(loop = T), ticks = F, width = "50px"),
+        sliderInput("timeslider", NULL, min = 0, max = values$tot, value = 0, animate = animationOptions(loop = T), ticks = F, width = "50px"),       # hilarious widget which scrolls through statements one by one   
         style = "display:inline-block;"
       ),
-      div(if("source" %in% colnames(values$statements))actionButton("overview_col", label = "Whole source"),
+      div(if("source" %in% colnames(values$statements))actionButton("overview_col", label = "Whole source"),                                  #   if one interview source has made more than one statement, show all of them
           style = "display:inline-block;margin-left:20px"
       )
     )
   })
   
   
-  values$obsList <- list()
+  values$obsList <- list()                                                #   to show all the statemtns from one source
   
   observeEvent(input$overview_col,{
     vs=values$statements
@@ -1227,38 +1240,11 @@ server <- function(input, output, session) {
   
   
   
-  # 
-  # observe({
-  #   if (!is.null(values$statements)) {
-  #     # tot=nrow(values$statements)
-  #     tot <- values$statements %>%
-  #       filter(text != "") %>%
-  #       pull(statement) %>%
-  #       na.omit() %>%
-  #       as.numeric() %>%
-  #       max()
-  #     values$tot <- tot
-  #     # browser()
-  #   } # if(!is.na(tot)) if(tot>1) browser()
-  #   else {
-  #     tot <- 9
-  #   }
-  #   updatePageruiInput(session, "pager", pages_total = as.numeric(tot))
-  # })
+  # ** display statements one by one ----
   
-  # ** create page panel ----
-  
-  # observeEvent(req(input$pager),{
-  #   if (!is.null(input$pager)) {
-  #     pag <- input$pager[[1]]
-      # vs <- values$statements %>% filter(text != "")
-      
-      
-        # browser()
-        # ve=values$graf %>% EE
 
         
-      output$pagePanel <- renderUI({
+      output$displayStatementPanel <- renderUI({
           
         tagList(
           icon("quote-left"),
@@ -1268,13 +1254,6 @@ server <- function(input, output, session) {
         )
         
         })
-        
-        
-  #   }
-  # })
-
-  
-  
   
   observeEvent(
     {
@@ -1289,66 +1268,443 @@ server <- function(input, output, session) {
     })
   
   
-  # observeEvent(input$pager,{
-  #   # browser()
-  # })
   
-  # Import statements----
   
-  output$statements <- renderRHandsontable({
-    
-    # if(is.null(values$statements))values$statements=default.statements
+  observeEvent(input$firstuncoded, {
     # browser()
-    rhandsontable(values$statements[,], height = 700, rowHeaders = FALSE, usetypes = T) %>%
-      hot_context_menu(allowRowEdit = T, allowColEdit = T) %>%
-      hot_cols(colWidths = c(400, rep(70, ncol(values$statements) - 1))) %>%
-      hot_cols(fixedColumnsLeft = 1)
+    slist <- values$statements %>%
+      filter(text != "") %>%
+      pull(statement) %>%
+      na.omit() %>%
+      as.numeric() %>%
+      sort()
+    
+    elist <- EE(values$graf)$statement %>% na.omit() %>% as.numeric()
+    
+    min <- slist[sapply(slist, function(y) !(y %in% elist))] %>% min()
+    
+    if (is.infinite(min)) {
+      doNotification("You have coded everything!",level=2)
+    } else {
+      updatePageruiInput(session, "pager", page_current = min)
+    }
   })
   
   
-  # # **create edit columns statements ----
+  
+  
+  
+  # focus -------------------------------------------------------------------
+  
+  
   # 
-  # output$statementsButton <- renderUI({
-  #   tab <- (values$statements)
+  # 
+  # observe(if(req(input$sides)=="Code"){
+  #   # vno <- req(values$grafAgg2) %>% NN
+  #   # if (as.logical(findset("diagramfocus")) & !is.null(values$pag) & nrow(vno)>0) {
+  #   #   ids <- vno %>%
+  #   #     mutate(sel=ifelse(str_detect(paste0(",|^", statement, ",|$"), as.character(values$pag)),T,F)) %>%
+  #   #     pull(sel) %>%
+  #   #     which
+  #   # 
+  #   # visNetworkProxy("net") %>%
+  #   #   visSelectNodes(id = ids)
+  #   # }
+  # 
   #   
-  #   tagList(
-  #     checkboxInput("editColumns", "Edit column names"),
-  #     # if(!is.null(input$editColumns))
-  #     conditionalPanel(
-  #       "input.editColumns",
-  #       
-  #       # for(x in 1:7){
-  #       lapply(2:(ncol(tab)), function(x) {
-  #         textInput(paste0("statementscol", x), NULL, value = colnames(tab)[x])
-  #       })
-  #     )
-  #   )
+  # })   
+  
+  
+  # OLD add edges observer ----
+  # not using this any more but not prepared to delete it yet
+  
+  observeEvent({
+    c(
+      input$updateE3,
+      input$updateE2,
+      input$updateE,
+      input$updateE_crowd
+    )  }, {
+      
+      
+      # browser()
+      # browser()
+      
+      ### NEW
+      qq <- if (!is.null(input$quote)) {
+        input$quote %>% as.character()
+      } else qq=""
+      
+      # qq="" #FIXME
+      # browser()
+      if(!is.null(input$new1_edge)) {inpfrom <- input$new1_edge} else if(!is.null(input$new1_edge_crowd)) {inpfrom <- input$new1_edge_crowd}
+      if(!is.null(input$new2_edge)) {inpto <- input$new2_edge} else if(!is.null(input$new2_edge_crowd)) {inpto <- input$new2_edge_crowd}
+      if (length(req(inpto)) > 0 & length(req(inpfrom)) > 0) {
+        if (length(inpfrom) > 1 & length(inpto) > 1) {
+          doNotification("Only using the first of the to arrows as there is more than one from arrow")
+          inpto <- inpto[1]
+        }
+        # browser()
+        if(input$crowd){
+          trust =.5
+          strength =.5
+          label = ""
+          combo.type=""
+          definition.type=""
+          statement = 1
+          quote = qq
+          full.quote =""
+        }
+        
+        newEdges <- data.frame(
+          from = inpfrom, 
+          to = inpto,
+          trust = ifelse(input$crowd,.5,input$trust),
+          strength = ifelse(input$crowd,.5,input$strength),
+          label = ifelse(input$crowd,"",input$arrLabel),
+          fun = "",
+          combo.type = ifelse(input$crowd,"",ifelse(is.null(input$combo), "", input$combo)),
+          definition.type = ifelse(input$crowd,"",input$definition.type),
+          statement = ifelse(input$crowd,1,values$pag %>% as.integer()),
+          quote = ifelse(input$crowd,"",qq),
+          full.quote = ifelse(input$crowd,"",values$statements$text[values$statements$statement == values$pag])
+        ) 
+        
+        new.nodes <- data.frame(label = newEdges %>% select(from, to) %>% unlist() %>% unique())
+        # if(!is.null(input$combo)) new.nodes$fun=input$combo
+        new.graph <- tbl_graph(new.nodes, newEdges)
+        old.graph <- values$graf
+        # browser()
+        if (is.null(values$graf)) values$graf <- new.graph else values$graf <- graph_join(old.graph , new.graph,by="label")
+        
+        
+        if(!is.null(input$combo)) {if(input$combo!="") values$graf=values$graf %>% N_ %>%
+            mutate(fun=ifelse(inpto==label,input$combo,fun))
+        
+        }
+        updateSelectizeInput(session, "new2_edge", selected = "")
+        # updateSelectizeInput(session,"new1_edge",selected="")
+        
+        doNotification(paste0("Creating arrows: ", paste0(input$new1_edge, collapse = ", "), " to ", paste0(input$new2_edge, collapse = " - ")))
+      }
+      else {
+        doNotification("You need to put at least one variable in each box",level=2)
+      }
+    })
+  
+  observeEvent(input$updateE2, {
+    updateSelectizeInput(session, "new1_edge", selected = input$new2_edge)
+  })
+  
+  observeEvent(input$updateE3, {
+    updatePageruiInput(session,inputId = "pager",page_current = as.numeric(values$pag)+1)
+  })
+  
+  
+  
+  # Add edges widget----
+  
+  output$add_edges_widget <- renderUI({
+    varlist=values$graf %>% NN() %>% pull(label) %>% unique() %>% as.character()
+    varlist <- na.omit(varlist)
+    
+    
+    tagList(
+      div(
+        div(
+          # actionButton("updateE",
+          #              "Add",
+          #              style = "border:1px solid green;padding:15px;display:inline-block;width:7%"
+          # ),
+          # actionButton("updateE3",
+          #              "Add & next",
+          #              style = "border:1px solid green;padding:15px;display:inline-block;width:15%"
+          # ),
+          # 
+          # # actionButton("saveb2", "Save", icon = icon("save"),
+          # #              style = "border:1px solid green;padding:15px;display:inline-block;width:15%"),
+          # 
+          # actionButton("updateE2",
+          #              "Add & chain",
+          #              style = "border:1px solid green;padding:15px;display:inline-block;width:15%"
+          #),
+          div(style = "display:inline-block;width:5%"),
+          div(textInput("arrLabel", NULL, value = "", placeholder = "label"), style = "display:inline-block;height:10px;width:20%"),
+          div(style = "display:inline-block;width:5%"),
+          div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "display:inline-block;width:20%"),
+          div(textAreaInput("quote", NULL, value = values$highlightedText, placeholder = "quote",rows=3,width="100%"), style = "")
+        ),
+        div(
+          id = "sliders",
+          div(actionLink("flip", "Flip"), style = "display:inline-block;"),
+          div(style = "display:inline-block;width:5%"),
+          div(sliderInput("strength", "Strength", min = -1, max = 1, step = .1, value = .5, ticks = F), style = "display:inline-block;width:40%"),
+          div(style = "display:inline-block;width:5%"),
+          div(sliderInput("trust", "Trust", min = 0, max = 1, step = .1, value = .5, ticks = F), style = "display:inline-block;width:40%"),
+          style = "margin-top:20px"
+        )
+      )
+    )
+  })
+  
+  
+  observeEvent(input$flip, { 
+    updateSliderInput(session, inputId = "strength", value = -input$strength)
+  })
+  
+  
+  output$combo <- renderUI(if(T){
+    div(if (length(input$new1_edge) > 1) {
+      selectizeInput("combo", "Arrows interact?",
+        choices = c("", "AND", "OR","min","max","SAME","mean","sum"), width = "150px", selected = NULL, 
+        options =
+          list(create = T, placeholder = "", onInitialize = I('function() { this.setValue(""); }')),
+      )
+    })
+  })
+  
+  output$addNewNodeButton=renderUI({
+    if( !is.null(input$selectboxvalue)){
+      if(length((values$foundIDs))==0 && input$selectboxvalue!=""){
+        actionButton(inputId = "addNewNode","Add new node")
+      }
+    }
+    
+  })  
+  
+  output$selectbox=renderUI({
+    tagList(
+      textInput("selectboxvalue","Type to select",placeholder="Type to select variables in the diagram"),
+      
+      if(is.null(values$fromStack)) {
+        actionButton("selectFrom","Start arrow(s) with selected variables(s)")
+      } else if(!is.null(input$net_selected)){
+        actionButton("selectTo","Finish arrow(s) with the selected variable")
+        # p(as.character(unlist(values$fromStack)))
+      }
+    )
+  })
+  
+  
+  observeEvent(input$selectFrom,{
+    values$fromStack <- c(input$net_selected,values$foundIDs) %>% unique
+    visNetworkProxy("net") %>% 
+      visUpdateNodes(tibble(id=values$fromStack,color.background="gold"))
+    
+    visNetworkProxy("net") %>% 
+      visSelectNodes(id=NULL)
+    # updateSelectizeInput("new1_edge","asdf")#input$selectboxvalue %>% str_trim)
+  })
+  
+  # observeEvent(input$selectTo,{
+  #   visNetworkProxy("net") %>% 
+  #     visSelectNodes(id=NULL)
+  #   
   # })
+  observeEvent(input$selectTo,{
+    # browser()
+    qq <- if (!is.null(input$quote)) {
+      input$quote %>% as.character()
+    } else qq=""
+    
+    # qq="" #FIXME
+    # browser()
+    inpfrom <- req(values$fromStack)
+    inpto <- req(input$net_selected)[1]
+    
+    newEdges <- tibble(
+      from = inpfrom, 
+      to = inpto,
+      trust = ifelse(input$crowd,.5,input$trust),
+      strength = ifelse(input$crowd,.5,input$strength),
+      label = ifelse(input$crowd,"",input$arrLabel),
+      fun = "",
+      combo.type = ifelse(input$crowd,"",ifelse(is.null(input$combo), "", input$combo)),
+      definition.type = ifelse(input$crowd,"",input$definition.type),
+      statement = ifelse(input$crowd,1,values$pag %>% as.integer()),
+      quote = ifelse(input$crowd,"",qq),
+      full.quote = ifelse(input$crowd,"",values$statements$text[values$statements$statement == values$pag])
+    ) 
+    
+    values$graf <- values$graf %>% 
+      bind_edges(newEdges) 
+    
+    if(!is.null(input$combo)) {
+      if(input$combo!="") values$graf=values$graf %>% N_ %>%
+          mutate(fun=ifelse(inpto==label,input$combo,fun))
+    }
+    
+    values$fromStack <- NULL
+    values$foundIDs <- NULL
+    visNetworkProxy("net") %>% 
+      visSelectNodes(id=NULL)
+  })
+  
+  # textbox search nodes and highlights them --------------------------------
+  
+  observeEvent(c(input$selectboxvalue),{
+    if(req(input$sides)=="Code"){
+      
+      req(values$grafAgg2)
+      
+      if(input$selectboxvalue!=""){
+        vag <- values$grafAgg2 %>% NN
+        
+        ids=vag %>% 
+          pull(label) %>% 
+          tolower %>% 
+          str_detect(input$selectboxvalue %>% tolower) %>% 
+          which
+        
+        if(length(ids) !=0 && length(ids)<nrow(vag)){
+          visNetworkProxy("net") %>%
+            visSelectNodes(id=ids) 
+          
+        }
+        values$foundIDs <- ids
+      }
+    } 
+  })
+  
+  observeEvent(input$addNewNode,{
+    # browser()
+    if(length(values$foundIDs)==0 && (input$selectboxvalue!="")){
+      values$graf <- values$graf %>% 
+        bind_nodes(tibble(label=input$selectboxvalue))
+      
+      values$fromStack <- nrow(values$graf %>% NN)
+      doNotification("Added new node",2)
+    }
+    
+  })
+  
+  
+  observeEvent(req(input$pager),{
+    vno <- req(values$grafAgg2) %>% NN
+    # browser()
+    if (!is.null(values$pag) & nrow(vno)>0) {
+      ids <- vno %>%
+        mutate(sel=ifelse(str_detect(statement, paste0("(,|^)", as.character(values$pag), "(,|$)")),T,F)) %>%
+        pull(sel) %>%
+        which
+      
+      visNetworkProxy("net") %>%
+        visSelectNodes(id = ids)
+    }
+  })
+  
+  
+
+
+# widgets to edit and delete selected nodes and edges. not complete ----
   # 
-  # 
-  # # ** observe form for changing statements colnames  ----
-  # observe({
-  #   lapply(1:ncol(values$statements), function(x) {
-  #     # browser()
-  #     inx <- input[[paste0("statementscol", x)]]
-  #     if (!is.null(inx)) colnames(values$statements)[x] <- inx
-  #     if (!is.null(inx)) colnames(default.statements)[x] <- inx
-  #   })
+  
+  output$varForm=renderUI({
+    if (length(req(input$net_selected))>0) {
+      # browser()
+      df <- values$graf %>%
+        NN() %>%
+        mutate(id = row_number()) %>%
+        left_join(values$grafAgg2 %>% NN() %>% select(new = id, id = origID)) # to provide a lo,1>9okup to find original ids if the nodes have been merged
+      # df <- (values$graf %>% NN %>% mutate(id=row_number()))
+      tagList(
+        if (length(input$net_selected)>0) {
+          tagList(
+            div(
+              span(
+                paste0("Delete variable ", input$net_selected %>% paste0(collapse=";"),"? "),
+                style="display:inline-block;margin-right:5px"
+              ),
+              actionButton("deleteVarForm", "Delete!"),
+              style = "background-color:white;padding:10px;border-radius:5px"
+            )
+          )
+        },
+        hr(style="margin:2px")
+      )
+    }
+    
+  })
+  
+  
+  
+  observeEvent(input$deleteVarForm, {
+    # browser()
+    whichtarg=values$grafAgg2 %>% NN %>% 
+      filter(row_number()==input$net_selected) %>% 
+      pull(origID) 
+    
+    values$graf <- values$graf %>%
+      activate(nodes) %>%
+      filter(!(row_number() %in% whichtarg) )
+  })
+  
+  
+  
+  
+  
+  # ++node/variables panel----
+  
+  
+  output$combineVars <- renderUI({
+    varlist <- values$nodes$label %>% unique() %>% as.character()
+    varlist <- na.omit(varlist)
+    
+    
+    tagList(
+      # h5("Combine variables")
+      # ,
+      
+      ### this will fail if duplicate labels TODO
+      selectizeInput("combineSelect",
+        label = NULL, selected = NULL, multiple = T,
+        options =
+          list(create = T, placeholder = "start typing the name of the variables you want to combine", onInitialize = I('function() { this.setValue(""); }')),
+        choices = varlist
+      ),
+      textInput("newName", "Type a name for this new combined variable"),
+      actionButton("combine", "Combine!"),
+      hr()
+    )
+  })
+  
+  # observeEvent(input$combine, {
+  #   if (!is.null(input$combineSelect)) {
+  #     ic <- input$combineSelect
+  #     if (length(ic) > 1) {
+  #       one <- ic[1]
+  #       rest <- ic[-1]
+  #
+  #       restids <- values$nodes %>%
+  #         filter(label %in% rest) %>%
+  #         pull(id)
+  #
+  #       oneid <- values$nodes %>%
+  #         filter(label %in% one) %>%
+  #         pull(id)
+  #
+  #       allids <- c(oneid, restids)
+  #
+  #       allLabs <- values$nodes %>%
+  #         filter(id %in% allids) %>%
+  #         pull(label) %>%
+  #         paste0(collapse = "\n")
+  #
+  #       values$nodes <- values$nodes %>%
+  #         mutate(cluster = ifelse(id %in% allids, oneid, cluster)) %>%
+  #         mutate(clusterLabel = ifelse(id == oneid, ifelse(input$newName == "", allLabs, input$newName), clusterLabel))
+  #
+  #       doNotification("Added cluster information to variables")
+  #     } else {
+  #       doNotification("You need to put more than one variable to combine")
+  #     }
+  #   }
   # })
-  # 
-  # 
-  
-  
-  
-  
-  # Code----
-  
-  
-  
+  #
   
   # automerge----
   
-  observeEvent(input$autoMerge, { # notice this jumpt so edgesAGG, is that good?
+  observeEvent(input$autoMerge, { #               this is ancient. not used at moment
     # browser()
     values$edgesAgg %>%
       select(from, to, frequency) %>%
@@ -1410,41 +1766,202 @@ server <- function(input, output, session) {
     }
     
     
-    # values$nodes=values$nodes %>%
-    #   mutate(cluster=ifelse(as.numeric(id)<3,"1",""))
   })
   
   
   
-  observeEvent(input$firstuncoded, {
-    # browser()
-    slist <- values$statements %>%
-      filter(text != "") %>%
-      pull(statement) %>%
-      na.omit() %>%
-      as.numeric() %>%
-      sort()
-    
-    elist <- EE(values$graf)$statement %>% na.omit() %>% as.numeric()
-    
-    min <- slist[sapply(slist, function(y) !(y %in% elist))] %>% min()
-    
-    if (is.infinite(min)) {
-      doNotification("You have coded everything!",level=2)
-    } else {
-      updatePageruiInput(session, "pager", page_current = min)
+  output$combine_button=renderUI({
+    if(!all(replace_na((NN(values$graf))$cluster,"")=="")){
+      div(actionButton("node_permanent_combine", "Combine clusters permanently!?"),style="margin-top:5px;")
     }
   })
   
   
+  observeEvent(input$node_permanent_combine,{
+    values$graf <- values$tmp.graf
+  })
+  
+  output$nodeTable <- renderRHandsontable({
+    # browser()
+    arrows=values$graf %>% EE %>% select(xid=from,to) %>% unlist %>% unclass() %>% as.tibble
+    
+    vg=values$graf %>% NN %>% 
+      # mutate_all(replaceNA) %>% 
+      mutate(xid=row_number()) %>% 
+      left_join(arrows %>%  select(xid=value),by="xid") %>% 
+      group_by(xid) %>% 
+      mutate(frequency=n()) %>% 
+      summarise_all(last)
+    
+    
+    if(!is.null(input$net_selected)){
+      whichtarg=values$grafAgg2 %>% NN %>% 
+        filter(row_number()==input$net_selected) %>% 
+        pull(origID) 
+      # clu=vg$cluster[whichtarg]
+      # if(clu!=""){
+      #   whichtarg=
+      # } #could highlight all the rows in a cluster, but would have to allow for multiple selection already
+      
+    }
+    else
+      whichtarg=0
+    
+    
+    
+    doNotification("Creating nodes table")
+    rhandsontable(vg, rowHeaders = FALSE, selectCallback = T,
+      row_highlight=as.numeric(whichtarg)-1, 
+      col_highlight=0, 
+      row_hide=(unite(vg, "xox") %>% pull(xox) %>% str_detect(input$nodeTableFilter) %>% `!`() %>% which)-1
+      ,usetypes = T) %>%
+      hot_context_menu(allowRowEdit = F) %>%
+      hot_cols(fixedColumnsLeft = 1) %>%
+      hot_cols(columnSorting = T) %>%
+      hot_cols(manualColumnMove = T) %>%
+      hot_col("type",source=xc("◨ ◪ ♛ ֍"),type="dropdown")%>% 
+      hot_cols(renderer = "function(instance, td, row, col, prop, value, cellProperties) {
+                 Handsontable.renderers.TextRenderer.apply(this, arguments);
+                 if (instance.params) {
+                 mhrows = instance.params.row_highlight;
+                 mhrows = mhrows instanceof Array ? mhrows : [mhrows];
+                 mhrows2 = instance.params.row_hide;
+                 mhrows2 = mhrows2 instanceof Array ? mhrows2 : [mhrows2];
+                 hcols = instance.params.col_highlight;
+                 hcols = hcols instanceof Array ? hcols : [hcols];
+
+                 }
+                 if (instance.params && mhrows2.includes(row)) td.style.display = 'none';
+                 if (instance.params &&  mhrows.includes(row)) td.style.background = 'coral';
+                 if (instance.params &&  hcols.includes(col)) td.style.background = '#DDEEDD';
+    }"
+      )
+    
+    
+  })
+  
+  output$nodeTableAddCol=renderUI({
+    tagList(
+      div(textInput("newNodeName","Name"),style="display:inline-block;width:30%"),
+      div(selectInput("newNodeType","Type",choices=xc("text numeric logical")),style="display:inline-block;width:30%"),
+      div(actionButton("newNodeGo","Add column"),style="display:inline-block;width:30%"),
+      hr()
+    )
+  })
+  
+  observeEvent(input$newNodeGo,{
+    # browser()
+    if(!is.na(input$newNodeName)){
+      values$graf=values$graf %>%
+        activate(nodes) %>%
+        mutate(!!input$newNodeName := ifelse(input$newNodeType=="numeric",as.numeric(NA),ifelse(input$newNodeType=="logical",as.logical(NA),"")))
+      updateCheckboxInput(session,inputId = "nodeTableAddCol",value=F)
+      # mutate(x=1)
+    }})
+  
+  # observe node table----
+  
+  observeEvent(input$nodeTableUp, {
+    # browser()
+    doNotification("Creating nodes table")
+    x <- hot_to_r(input$nodeTable) %>% 
+      select(-frequency) %>% 
+      arrange(xid) 
+    
+    values$graf <- tbl_graph(x, values$graf %>% EE()) 
+    
+  })
+  
+  
+  
+  # ++edge/arrows panel----
+  
+  output$test=renderUI({
+    tagList(
+      req(input$nodeTable_select$select$r) %>% as.character() %>% p()
+    )
+    
+    # div(paste0(input$net_selected,"--",input$current_edge_id),style="background:white")
+  })
+  
+  observeEvent(input$edgeTableUp, {
+    # browser()
+    doNotification("Updating edges table")
+    x <- hot_to_r(input$edgeTable) %>%
+      select(-fromLabel, -toLabel)
+    
+    node.ids <- values$graf %>% NN() %>% mutate(id = row_number()) %>% pull(id)
+    
+    x <- x %>%
+      filter(from %in% node.ids & to %in% node.ids)
+    
+    values$graf <- tbl_graph(values$graf %>% NN(), x)
+  })
   
   
   
   
+  output$edgeTable <- renderRHandsontable({
+    # browser()
+    doNotification("Creating edges table")
+    # values$edges=values$edges
+    ve <- values$graf %>%
+      E_() %>%
+      mutate(fromLabel = .N()$label[from], toLabel = .N()$label[to]) %>%
+      select(fromLabel, toLabel, -full.quote, everything(), full.quote) %>%
+      EE() %>% 
+      select(-from,-to,everything())
+    
+    # vn=values$graf %>% NN 
+    # 
+    # # ve$from=factor(ve$from)
+    # ve$from=factor(ve$from,labels=vn$label[ve$from])
+    
+    
+    rhandsontable(ve, height = 600, rowHeaders = FALSE, row_highlight=as.numeric(input$current_edge_id)-1, usetypes = T) %>%
+      hot_context_menu(allowRowEdit = F) %>%
+      hot_cols(fixedColumnsLeft = 1) %>%
+      hot_cols(columnSorting = TRUE) %>%
+      hot_cols(manualColumnMove = TRUE) %>%
+      
+      # hot_col() %>% 
+      # hot_rows(fixedRowsTop = 1)%>%
+      hot_cols(renderer = "function(instance, td, row, col, prop, value, cellProperties) {
+                 Handsontable.renderers.TextRenderer.apply(this, arguments);
+                 if (instance.params) {
+                 mhrows = instance.params.row_highlight;
+                 mhrows = mhrows instanceof Array ? mhrows : [mhrows];
+                 }
+                 if (instance.params && mhrows.includes(row)) td.style.background = 'coral';
+    }"
+      )
+  })
   
-  # Display----
+  # output$overview <- renderPrint(if (!is.null(values$grafAgg2)) {
+  #   pre(str(values$grafAgg2 %>% EE()))
+  # })
+  # 
+  output$edge2 <- renderRHandsontable(if (!is.null(values$grafAgg2)) {
+    doNotification("Creating edges2 table")
+    rhandsontable(values$grafAgg2 %>% EE(), height = 700, rowHeaders = FALSE, usetypes = T) %>%
+      hot_context_menu(allowRowEdit = T) %>%
+      hot_cols(columnSorting = TRUE) %>%
+      hot_cols(fixedColumnsLeft = 1) %>%
+      hot_rows(fixedRowsTop = 1)
+  })
   
-  # ....bigtable----
+  output$node2 <- renderRHandsontable(if (!is.null(values$grafAgg2)) {
+    doNotification("Creating nodes2 table")
+    rhandsontable(values$grafAgg2 %>% NN(), height = 700, rowHeaders = FALSE, usetypes = T) %>%
+      hot_context_menu(allowRowEdit = T) %>%
+      hot_cols(columnSorting = TRUE) %>%
+      hot_cols(fixedColumnsLeft = 1) %>%
+      hot_rows(fixedRowsTop = 1)
+  })
+  
+  
+  # ++Display / settings panel ----
+  
   
   
   output$filters=renderUI({
@@ -1457,8 +1974,11 @@ server <- function(input, output, session) {
     })
   })  
   
+
+# produce user-friendlier settings widgets --------------------------------
+
   
-  observeEvent(input$bigTableGUp,{
+  observeEvent(input$settingsTableGlobalUp,{
     # browser()
     vs <- values$settingsGlobal %>% mutate_all(as.character)
     output$inputs=renderUI({
@@ -1494,30 +2014,23 @@ server <- function(input, output, session) {
   })
   
   ## observe changes in display widgets ----
-  observe(if(F){
-    vs <- values$settingsGlobal %>% mutate_all(as.character)
-    lapply(1:nrow(vs),function(x){
-      row=vs[x,]
-      rg=replace_na(row$widget,"")
-      rt=paste0(row$type,row$setting,collapse="")
-      rt=replace_na(rt,"")
-      # if(rg=="color")  {checkboxInput("asdf","asdf")}
-      inp=input[[paste0("input",rt)]]
-      if(rg!="" & !is.null(inp))  {
-        values$settingsGlobal$value[x]=inp
-        doNotification(paste0("updated settings from widget: ",inp))
-      }
-      # else if(rg=="slider")  {
-      #   div(sliderInput(paste0('input', rt),rt,min = 0,max=1000,value = 50
-      #   ) ,
-      #   style="display:inline-block;margin:0;padding:0;height=8px")
-      # }
-      # else 
-      #   if(rg=="input") paste0(row$type,row$setting,collapse="")
-    })
-  })
+  # observe(if(F){
+  #   vs <- values$settingsGlobal %>% mutate_all(as.character)
+  #   lapply(1:nrow(vs),function(x){
+  #     row=vs[x,]
+  #     rg=replace_na(row$widget,"")
+  #     rt=paste0(row$type,row$setting,collapse="")
+  #     rt=replace_na(rt,"")
+  #     # if(rg=="color")  {checkboxInput("asdf","asdf")}
+  #     inp=input[[paste0("input",rt)]]
+  #     if(rg!="" & !is.null(inp))  {
+  #       values$settingsGlobal$value[x]=inp
+  #       doNotification(paste0("updated settings from widget: ",inp))
+  #     }
+  #   })
+  # })
   
-  output$bigTableG <- renderRHandsontable({
+  output$settingsTableGlobal <- renderRHandsontable({
     vs <- values$settingsGlobal %>% mutate_all(as.character)
     
     ds <- defaultSettingsGlobal %>% mutate_all(as.character)
@@ -1532,7 +2045,7 @@ server <- function(input, output, session) {
       hot_cols(colWidths = c(80,120,250,80))
   })
   
-  output$bigTable <- renderRHandsontable({
+  output$settingsTable <- renderRHandsontable({
     vs <- values$settings %>% mutate_all(as.character)
     
     ds <- defaultSettings %>% mutate_all(as.character)
@@ -1548,14 +2061,14 @@ server <- function(input, output, session) {
     
   })
   
-  observeEvent(input$bigTableUp, {
-    doNotification("updating from bigtable")
-    values$settings <- hot_to_r(input$bigTable)
+  observeEvent(input$settingsTableUp, {
+    doNotification("updating from settingsTable")
+    values$settings <- hot_to_r(input$settingsTable)
   })
   
-  observeEvent(input$bigTableGUp, {
-    doNotification("updating from bigtableG")
-    values$settingsGlobal <- hot_to_r(input$bigTableG)
+  observeEvent(input$settingsTableGlobalUp, {
+    doNotification("updating from settingsTableGlobal")
+    values$settingsGlobal <- hot_to_r(input$settingsTableGlobal)
   })
   
   
@@ -1563,67 +2076,115 @@ server <- function(input, output, session) {
   
   
   
-  observeEvent(input$fitaction, {
+  observeEvent(input$fitaction, {               # restore network to normal zoom
     visNetworkProxy("net") %>%
       visFit() 
   })
   
+
+# ++ library/gallery panel ------------------------------------------------
+
   
+  ## Gallery ----
   
-  
-  mutfun <- function(vec) {
-    if (allNum(vec)) {
-      sum(as.numeric(vec), na.rm = T)
-    } else {
-      first(vec)
+  output$gallery <- renderUI({
+    
+    if(storage=="local"){
+      details <- file.info(list.files("www", pattern = "-nodes.csv$", full.names = TRUE))
+      
+      details <- details[with(details, order(as.POSIXct(mtime))), ]
+      files <- rownames(details) %>% gsub("www/", "", .) %>% gsub("\\-nodes.csv", "", .)
+      
+      lapply(rev(files), function(x) {
+        sets=read_csv(paste0("www/",x,"-settingsGlobal.csv"))
+        desc=sets$value[sets$setting=="description"][1]
+        tagList(
+          tags$a(x, href = paste0(".?permalink=", gsub("\\.-nodes.csv$", "", x))),
+          "|",
+          desc,
+          hr()
+        )
+      })
+    } else if(storage=="dropbox"){
+      # browser()
+      details <- drop_dir("www") %>% mutate(x=as.POSIXct(client_modified)) %>% filter(str_detect(name,"-settingsGlobal\\.csv$")) %>% arrange(x)
+      
+      files <- details %>% pull("path_display") 
+      doNotification("Loading file information",2)      
+      lapply(rev(files), function(x) {
+        sets=read__csv(x)
+        desc=sets$value[sets$setting=="description"][1]
+        x=gsub("/www/","",x)
+        x=x %>%  str_remove("-settingsGlobal\\.csv$")
+        tagList(
+          tags$a(x, href = paste0(".?permalink=", gsub("-settingsGlobal\\. csv$", "", x))),
+          "|",
+          desc,
+          hr()
+        )
+      })
+      
     }
-  }
+    
+  })
   
-  catfun <- function(x) {
-    x <- na.omit(x)
-    x <- x[x != ""]
-    paste0(x, collapse = ",")
-  }
+
+# ++ charts panel  -----------------------------------------------------------
   
-  andfun <- function(x) {
-    x <- na.omit(x)
-    x <- x[x != ""]
-    all(as.logical(x)) %>% as.numeric
-  }
   
-  orfun <- function(x) {
-    x <- na.omit(x)
-    x <- x[x != ""]
-    any(as.logical(x)) %>% as.numeric
-  }
   
-  sumfun <- function(x) {
-    # x[is.na(x)]=0
-    # x <- sum(as.numeric(x), na.rm = T) %>% round(2)
-    # x
-    # x[1]
-    # 
-    sum(x,na.rm=T) 
-  }
+  output$pivot <- renderRpivotTable({
+    # mtcars$car <- rownames(mtcars)
+    doNotification("creating pivot")
+    rpivotTable(NN(values$grafAgg2)[,1:20])
+  })  
   
-  meanfun <- function(x) {
-    # x[is.na(x)]=0
-    # x <- mean(as.numeric(x), na.rm = T) %>% round(2)
-    # x
-    # x[1]
-    mean(x,na.rm=T) 
-  }
+# ++ downloads panel  -----------------------------------------------------------
   
-  # catfun=function(x)paste0(x,collapse=",")
   
-  # group_if=function(df,cond,vars1,vars2){
-  # dots = sapply(if(cond)vars1 else vars2, . %>% {as.formula(paste0('~', .))})
-  # group_by_(df,.dots=dots)
-  # }
-  #
-  #
+  output$downloads=renderUI({
+    # browser()
+    doNotification("Creating library list")
+    if(!is.null(values$current)){
+      tagList(
+        h4("Download your csv files"),
+        hr(),
+        lapply(csvlist,function(x){
+          tagList(a(href=paste0(values$current,"-",x,".csv"),x),hr())
+        })
+      )}
+  })
   
-  # AGGREGATE ---------------------------------------------------------------------------
+  
+# ++ main panel  -----------------------------------------------------------
+# description below graph
+  output$description=renderUI({
+    x=findset("diagramdescription")
+    if(x!="")  div(p(x),style="padding:10px;background-color:whitesmoke;margin-top:10px;border-radius:5px")
+    else ""
+  })
+  
+  
+  # colorLegend -------------------------------------------------------------
+  # just a placeholder right now
+  
+  output$colourLegend <- renderPlot({
+    emptyplot(main = "Percentage of women mentioning each factor and each link                 Percentage of younger people mentioning each factor",adj=0)
+    colorlegend(posx = c(0, 0.1), 
+      col = intpalette(c("blue", "red"), 100), 
+      zlim = c(0, 100), zval = c(0,25,50,75,100))
+    
+    colorlegend(posx = c(0.5, 0.6), 
+      col = intpalette(c("black", "white"), 100), 
+      zlim = c(0, 100), zval = c(0,25,50,75,100))
+    
+  })
+  
+  
+  
+  
+  # ++AGGREGATE ---------------------------------------------------------------------------
+# the long process of aggregating values$graf into values$grafAgg2, adding formatting etc
   
   observe(
     if ((req(values$graf)) %>% EE %>% nrow %>% `>`(0)) {
@@ -1636,7 +2197,6 @@ server <- function(input, output, session) {
 
       
           
-      # if(input$crowd)browser
   doNotification("starting aggregation")    
       legend <- ""
       
@@ -1773,7 +2333,7 @@ server <- function(input, output, session) {
         
         # ved edge merge ----
         
-        if (findset("arrowmerge") %>% as.logical() && input$sides!="Code") {
+        if (findset("arrowmerge") %>% as.logical() ) {
           ved <- ved %>%
             group_by(from, to)
           
@@ -1911,15 +2471,6 @@ server <- function(input, output, session) {
             
             vno <- tmp %>% NN()
             ved <- tmp %>% EE()
-            # #
-            #
-            # vno=vno %>%
-            #   filter(frequency>mf)
-            #
-            #
-            # ved=ved %>%
-            #   filter(from %in% vno$id & to %in% vno$id)
-            #
           }
           
         }
@@ -2161,18 +2712,11 @@ server <- function(input, output, session) {
       doNotification("Aggregated")
     })
   
-  # values$grafAgg2 <-values$grafAgg2 %>% debounce(4000)
   
   
   # RENDER visnetwork----
-  # observeEvent(c(input$render_button, input$updateE3,
-  #                input$updateE2,
-  #                input$updateE,
-  #                input$updateE_crowd,
-  #                input$timeslider,
-  #                input$pager
-  # ),{
-
+# finally we use values$grafAgg2 to generate the viz 
+  
   observe({
     
     vga <- (req(values$grafAgg2)) #%>% shiny::debounce(4000)
@@ -2218,8 +2762,7 @@ server <- function(input, output, session) {
             # width="2000px"
           ) 
         
-        # visSave(vn1,"vn1.html",selfcontained = F,background = "white")
-        
+
         vn= vn1 %>%
           visInteraction(dragNodes = T, dragView = T, zoomView = T, navigationButtons = F, multiselect = T) %>%
           visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;
@@ -2356,7 +2899,7 @@ server <- function(input, output, session) {
             # dashes = findset("arrowdashes") %>% as.logical()
           )
         
-        x <- function(fghj){vn}
+        x <- function(){vn}  # I turned it into a function in order to be able to use throttle on it. but it didn't help
         
         values$net <- x#throttle(x,6000)
         
@@ -2364,7 +2907,6 @@ server <- function(input, output, session) {
         # browser()
         
       }
-      # else if (!is.null(values$nodesAgg)) doNotification(paste0("You have arrows which mention non-existent variables"))
       
       
       
@@ -2387,627 +2929,11 @@ server <- function(input, output, session) {
   
   
 
-# focus -------------------------------------------------------------------
+# ++ floating widgets -----------------------------------------------------
 
   
   
-  
-  observe(if(req(input$sides)=="Code"){
-    # vno <- req(values$grafAgg2) %>% NN
-    # if (as.logical(findset("diagramfocus")) & !is.null(values$pag) & nrow(vno)>0) {
-    #   ids <- vno %>%
-    #     mutate(sel=ifelse(str_detect(paste0(",|^", statement, ",|$"), as.character(values$pag)),T,F)) %>%
-    #     pull(sel) %>%
-    #     which
-    # 
-    # visNetworkProxy("net") %>%
-    #   visSelectNodes(id = ids)
-    # }
-
-    
-  })   # took this out because
-  
-  # observe(if(req(input$nodeTable_select$select$c)==1){
-  #   visNetworkProxy("net") %>%
-  #     visSelectNodes(id = input$nodeTable_select$select$r)
-  #   #
-  # 
-  # })
-  
-  
-  
-  # add edges observer ----
-  
-  observeEvent({
-    c(
-      input$updateE3,
-      input$updateE2,
-      input$updateE,
-      input$updateE_crowd
-    )  }, {
-      
-      
-      # browser()
-      # browser()
-      
-      ### NEW
-      qq <- if (!is.null(input$quote)) {
-        input$quote %>% as.character()
-      } else qq=""
-      
-      # qq="" #FIXME
-      # browser()
-      if(!is.null(input$new1_edge)) {inpfrom <- input$new1_edge} else if(!is.null(input$new1_edge_crowd)) {inpfrom <- input$new1_edge_crowd}
-      if(!is.null(input$new2_edge)) {inpto <- input$new2_edge} else if(!is.null(input$new2_edge_crowd)) {inpto <- input$new2_edge_crowd}
-      if (length(req(inpto)) > 0 & length(req(inpfrom)) > 0) {
-        if (length(inpfrom) > 1 & length(inpto) > 1) {
-          doNotification("Only using the first of the to arrows as there is more than one from arrow")
-          inpto <- inpto[1]
-        }
-        # browser()
-        if(input$crowd){
-          trust =.5
-          strength =.5
-          label = ""
-          combo.type=""
-          definition.type=""
-          statement = 1
-        quote = qq
-        full.quote =""
-        }
-        
-        newEdges <- data.frame(
-          from = inpfrom, 
-          to = inpto,
-          trust = ifelse(input$crowd,.5,input$trust),
-          strength = ifelse(input$crowd,.5,input$strength),
-          label = ifelse(input$crowd,"",input$arrLabel),
-          fun = "",
-          combo.type = ifelse(input$crowd,"",ifelse(is.null(input$combo), "", input$combo)),
-          definition.type = ifelse(input$crowd,"",input$definition.type),
-          statement = ifelse(input$crowd,1,values$pag %>% as.integer()),
-          quote = ifelse(input$crowd,"",qq),
-          full.quote = ifelse(input$crowd,"",values$statements$text[values$statements$statement == values$pag])
-        ) 
-        
-        new.nodes <- data.frame(label = newEdges %>% select(from, to) %>% unlist() %>% unique())
-        # if(!is.null(input$combo)) new.nodes$fun=input$combo
-        new.graph <- tbl_graph(new.nodes, newEdges)
-        old.graph <- values$graf
-        # browser()
-        if (is.null(values$graf)) values$graf <- new.graph else values$graf <- graph_join(old.graph , new.graph,by="label")
-        
-        
-        if(!is.null(input$combo)) {if(input$combo!="") values$graf=values$graf %>% N_ %>%
-            mutate(fun=ifelse(inpto==label,input$combo,fun))
-        
-        }
-        updateSelectizeInput(session, "new2_edge", selected = "")
-        # updateSelectizeInput(session,"new1_edge",selected="")
-        
-        doNotification(paste0("Creating arrows: ", paste0(input$new1_edge, collapse = ", "), " to ", paste0(input$new2_edge, collapse = " - ")))
-      }
-      else {
-        doNotification("You need to put at least one variable in each box",level=2)
-      }
-    })
-  
-  observeEvent(input$updateE2, {
-    updateSelectizeInput(session, "new1_edge", selected = input$new2_edge)
-  })
-  
-  observeEvent(input$updateE3, {
-    updatePageruiInput(session,inputId = "pager",page_current = as.numeric(values$pag)+1)
-  })
-  
-  
-  # **node table----
-  
-  output$combine_button=renderUI({
-    if(!all(replace_na((NN(values$graf))$cluster,"")=="")){
-      div(actionButton("node_permanent_combine", "Combine clusters permanently!?"),style="margin-top:5px;")
-    }
-  })
-  
-  
-  observeEvent(input$node_permanent_combine,{
-    values$graf <- values$tmp.graf
-  })
-  
-  output$nodeTable <- renderRHandsontable({
-    # browser()
-    arrows=values$graf %>% EE %>% select(xid=from,to) %>% unlist %>% unclass() %>% as.tibble
-    
-    vg=values$graf %>% NN %>% 
-      # mutate_all(replaceNA) %>% 
-      mutate(xid=row_number()) %>% 
-      left_join(arrows %>%  select(xid=value),by="xid") %>% 
-      group_by(xid) %>% 
-      mutate(frequency=n()) %>% 
-      summarise_all(last)
-    
-    
-    if(!is.null(input$net_selected)){
-    whichtarg=values$grafAgg2 %>% NN %>% 
-      filter(row_number()==input$net_selected) %>% 
-      pull(origID) 
-    # clu=vg$cluster[whichtarg]
-    # if(clu!=""){
-    #   whichtarg=
-    # } #could highlight all the rows in a cluster, but would have to allow for multiple selection already
-    
-    }
-    else
-      whichtarg=0
-    
-    
-    
-    doNotification("Creating nodes table")
-    rhandsontable(vg, rowHeaders = FALSE, selectCallback = T,
-                  row_highlight=as.numeric(whichtarg)-1, 
-                  col_highlight=0, 
-                  row_hide=(unite(vg, "xox") %>% pull(xox) %>% str_detect(input$nodeTableFilter) %>% `!`() %>% which)-1
-                  ,usetypes = T) %>%
-      hot_context_menu(allowRowEdit = F) %>%
-      hot_cols(fixedColumnsLeft = 1) %>%
-      hot_cols(columnSorting = T) %>%
-      hot_cols(manualColumnMove = T) %>%
-      hot_col("type",source=xc("◨ ◪ ♛ ֍"),type="dropdown")%>% 
-      hot_cols(renderer = "function(instance, td, row, col, prop, value, cellProperties) {
-                 Handsontable.renderers.TextRenderer.apply(this, arguments);
-                 if (instance.params) {
-                 mhrows = instance.params.row_highlight;
-                 mhrows = mhrows instanceof Array ? mhrows : [mhrows];
-                 mhrows2 = instance.params.row_hide;
-                 mhrows2 = mhrows2 instanceof Array ? mhrows2 : [mhrows2];
-                 hcols = instance.params.col_highlight;
-                 hcols = hcols instanceof Array ? hcols : [hcols];
-
-                 }
-                 if (instance.params && mhrows2.includes(row)) td.style.display = 'none';
-                 if (instance.params &&  mhrows.includes(row)) td.style.background = 'coral';
-                 if (instance.params &&  hcols.includes(col)) td.style.background = '#DDEEDD';
-    }"
-      )
-    
-    
-  })
-  
-  output$nodeTableAddCol=renderUI({
-    tagList(
-      div(textInput("newNodeName","Name"),style="display:inline-block;width:30%"),
-      div(selectInput("newNodeType","Type",choices=xc("text numeric logical")),style="display:inline-block;width:30%"),
-      div(actionButton("newNodeGo","Add column"),style="display:inline-block;width:30%"),
-      hr()
-    )
-  })
-  
-  observeEvent(input$newNodeGo,{
-    # browser()
-    if(!is.na(input$newNodeName)){
-      values$graf=values$graf %>%
-        activate(nodes) %>%
-        mutate(!!input$newNodeName := ifelse(input$newNodeType=="numeric",as.numeric(NA),ifelse(input$newNodeType=="logical",as.logical(NA),"")))
-      updateCheckboxInput(session,inputId = "nodeTableAddCol",value=F)
-      # mutate(x=1)
-    }})
-  
-  # observe node table----
-  
-  observeEvent(input$nodeTableUp, {
-    # browser()
-    doNotification("Creating nodes table")
-    x <- hot_to_r(input$nodeTable) %>% 
-      select(-frequency) %>% 
-      arrange(xid) 
-    
-    values$graf <- tbl_graph(x, values$graf %>% EE()) 
-    
-  })
-  
-  
-  
-  # **edge table----
-  
-  output$test=renderUI({
-    tagList(
-      req(input$nodeTable_select$select$r) %>% as.character() %>% p()
-    )
-    
-    # div(paste0(input$net_selected,"--",input$current_edge_id),style="background:white")
-  })
-  
-  observeEvent(input$edgeTableUp, {
-    # browser()
-    doNotification("Updating edges table")
-    x <- hot_to_r(input$edgeTable) %>%
-      select(-fromLabel, -toLabel)
-    
-    node.ids <- values$graf %>% NN() %>% mutate(id = row_number()) %>% pull(id)
-    
-    x <- x %>%
-      filter(from %in% node.ids & to %in% node.ids)
-    
-    values$graf <- tbl_graph(values$graf %>% NN(), x)
-  })
-  
-  
-  
-  
-  output$edgeTable <- renderRHandsontable({
-    # browser()
-    doNotification("Creating edges table")
-    # values$edges=values$edges
-    ve <- values$graf %>%
-      E_() %>%
-      mutate(fromLabel = .N()$label[from], toLabel = .N()$label[to]) %>%
-      select(fromLabel, toLabel, -full.quote, everything(), full.quote) %>%
-      EE() %>% 
-      select(-from,-to,everything())
-    
-    # vn=values$graf %>% NN 
-    # 
-    # # ve$from=factor(ve$from)
-    # ve$from=factor(ve$from,labels=vn$label[ve$from])
-    
-    
-    rhandsontable(ve, height = 600, rowHeaders = FALSE, row_highlight=as.numeric(input$current_edge_id)-1, usetypes = T) %>%
-      hot_context_menu(allowRowEdit = F) %>%
-      hot_cols(fixedColumnsLeft = 1) %>%
-      hot_cols(columnSorting = TRUE) %>%
-      hot_cols(manualColumnMove = TRUE) %>%
-      
-      # hot_col() %>% 
-      # hot_rows(fixedRowsTop = 1)%>%
-      hot_cols(renderer = "function(instance, td, row, col, prop, value, cellProperties) {
-                 Handsontable.renderers.TextRenderer.apply(this, arguments);
-                 if (instance.params) {
-                 mhrows = instance.params.row_highlight;
-                 mhrows = mhrows instanceof Array ? mhrows : [mhrows];
-                 }
-                 if (instance.params && mhrows.includes(row)) td.style.background = 'coral';
-    }"
-      )
-  })
-  
-  # output$overview <- renderPrint(if (!is.null(values$grafAgg2)) {
-  #   pre(str(values$grafAgg2 %>% EE()))
-  # })
-  # 
-  output$edge2 <- renderRHandsontable(if (!is.null(values$grafAgg2)) {
-    doNotification("Creating edges2 table")
-    rhandsontable(values$grafAgg2 %>% EE(), height = 700, rowHeaders = FALSE, usetypes = T) %>%
-      hot_context_menu(allowRowEdit = T) %>%
-      hot_cols(columnSorting = TRUE) %>%
-      hot_cols(fixedColumnsLeft = 1) %>%
-      hot_rows(fixedRowsTop = 1)
-  })
-  
-  output$node2 <- renderRHandsontable(if (!is.null(values$grafAgg2)) {
-    doNotification("Creating nodes2 table")
-    rhandsontable(values$grafAgg2 %>% NN(), height = 700, rowHeaders = FALSE, usetypes = T) %>%
-      hot_context_menu(allowRowEdit = T) %>%
-      hot_cols(columnSorting = TRUE) %>%
-      hot_cols(fixedColumnsLeft = 1) %>%
-      hot_rows(fixedRowsTop = 1)
-  })
-  
-  
-  # Add edges widget----
-  
-  output$add_edges_widget <- renderUI({
-    # varlist <- values$graf %>% NN() %>% pull(label) %>% unique() %>% as.character()
-    # vn=values$graf %>% NN()
-    # if(nrow(vn)>0){
-    # browser()
-    #     varlist=
-    #       vn %>% 
-    #     mutate(id=row_number()) %>% 
-    #     left_join(values$graf %>% EE %>% mutate(id=from) %>% select(id),by="id") %>% 
-    #     left_join(values$graf %>% EE %>% mutate(id=to) %>% select(id),by="id") %>% 
-    #     group_by(id) %>% 
-    #     mutate(n=n()) %>% 
-    #       summarise(label=first(label)) %>% 
-    #     unite("label",sep=": ") %>% 
-    #     pull(label) %>% 
-    #       as.character()
-    #     
-    #     
-    # } else 
-    varlist=values$graf %>% NN() %>% pull(label) %>% unique() %>% as.character()
-    varlist <- na.omit(varlist)
-    
-    ### this will fail if dupliate labels TODO
-    # doNotification(paste0("Refreshing add edges widget", input$net_selected))
-    
-    tagList(
-      div(
-        # selectizeInput("new1_edge",
-        #                label = NULL, selected = if (values$clickArrow) input$net_selected else NULL, multiple = T,
-        #                options =
-        #                  list(create = T, placeholder = "start typing the name of the variable(s) at the start of the arrow(s)", onInitialize = I('function() { this.setValue(""); }')),
-        #                choices = varlist
-        # ),
-        # selectizeInput("new2_edge",
-        #                label = NULL, selected = NULL, multiple = T,
-        #                options =
-        #                  list(create = T, placeholder = "start typing the name of the variable(s) at the end of the arrow(s)", onInitialize = I('function() { this.setValue(""); }')),
-        #                choices = varlist
-        # ),
-        div(
-          actionButton("updateE",
-                       "Add",
-                       style = "border:1px solid green;padding:15px;display:inline-block;width:7%"
-          ),
-          actionButton("updateE3",
-                       "Add & next",
-                       style = "border:1px solid green;padding:15px;display:inline-block;width:15%"
-          ),
-          
-          # actionButton("saveb2", "Save", icon = icon("save"),
-          #              style = "border:1px solid green;padding:15px;display:inline-block;width:15%"),
-          
-          actionButton("updateE2",
-                       "Add & chain",
-                       style = "border:1px solid green;padding:15px;display:inline-block;width:15%"
-          ),
-          div(style = "display:inline-block;width:5%"),
-          div(textInput("arrLabel", NULL, value = "", placeholder = "label"), style = "display:inline-block;height:10px;width:20%"),
-          div(style = "display:inline-block;width:5%"),
-          div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "display:inline-block;width:20%"),
-          div(textAreaInput("quote", NULL, value = values$highlightedText, placeholder = "quote",rows=3,width="100%"), style = "")
-        ),
-        div(
-          id = "sliders",
-          div(actionLink("flip", "Flip"), style = "display:inline-block;"),
-          div(style = "display:inline-block;width:5%"),
-          div(sliderInput("strength", "Strength", min = -1, max = 1, step = .1, value = .5, ticks = F), style = "display:inline-block;width:40%"),
-          div(style = "display:inline-block;width:5%"),
-          div(sliderInput("trust", "Trust", min = 0, max = 1, step = .1, value = .5, ticks = F), style = "display:inline-block;width:40%"),
-          style = "margin-top:20px"
-        )
-      )
-    )
-  })
-  
-  
-  observeEvent(input$flip, { 
-    updateSliderInput(session, inputId = "strength", value = -input$strength)
-  })
-  
-  # observeEvent(input$clickArrow, { # doesn't work, don't know why
-  #   updateSelectizeInput(session, inputId = "new1_edge", selected = "input$net_selected")
-  #   values$clickArrow <- T
-  #   # doNotification(paste0("Updating first node", input$net_selected))
-  # })
-  
-  
-  output$combo <- renderUI(if(T){
-    div(if (length(input$new1_edge) > 1) {
-      selectizeInput("combo", "Arrows interact?",
-                     choices = c("", "AND", "OR","min","max","SAME","mean","sum"), width = "150px", selected = NULL, 
-                     options =
-                       list(create = T, placeholder = "", onInitialize = I('function() { this.setValue(""); }')),
-      )
-    })
-  })
-  
-output$addNewNodeButton=renderUI({
-  if( !is.null(input$selectboxvalue)){
-    if(length((values$foundIDs))==0 && input$selectboxvalue!=""){
-      actionButton(inputId = "addNewNode","Add new node")
-    }
-  }
-  
-})  
-  
-  output$selectbox=renderUI({
-    tagList(
-    textInput("selectboxvalue","Type to select",placeholder="Type to select variables in the diagram"),
-      
-      if(is.null(values$fromStack) && !is.null(input$net_selected)){
-      actionButton("selectFrom","Start arrow(s) with selected variables(s)")
-        } else if(!is.null(input$net_selected)){
-            actionButton("selectTo","Finish arrow(s) with the selected variable")
-          # p(as.character(unlist(values$fromStack)))
-        }
-    )
-  })
-  
-  
-  observeEvent(input$selectFrom,{
-    values$fromStack <- input$net_selected
-    visNetworkProxy("net") %>% 
-      visUpdateNodes(tibble(id=input$net_selected,color.background="gold"))
-    
-    visNetworkProxy("net") %>% 
-      visSelectNodes(id=NULL)
-    # updateSelectizeInput("new1_edge","asdf")#input$selectboxvalue %>% str_trim)
-  })
-  
-  # observeEvent(input$selectTo,{
-  #   visNetworkProxy("net") %>% 
-  #     visSelectNodes(id=NULL)
-  #   
-  # })
-  observeEvent(input$selectTo,{
-    # browser()
-    qq <- if (!is.null(input$quote)) {
-      input$quote %>% as.character()
-    } else qq=""
-    
-    # qq="" #FIXME
-    # browser()
-    inpfrom <- req(values$fromStack)
-    inpto <- req(input$net_selected)[1]
-      
-      newEdges <- tibble(
-        from = inpfrom, 
-        to = inpto,
-        trust = ifelse(input$crowd,.5,input$trust),
-        strength = ifelse(input$crowd,.5,input$strength),
-        label = ifelse(input$crowd,"",input$arrLabel),
-        fun = "",
-        combo.type = ifelse(input$crowd,"",ifelse(is.null(input$combo), "", input$combo)),
-        definition.type = ifelse(input$crowd,"",input$definition.type),
-        statement = ifelse(input$crowd,1,values$pag %>% as.integer()),
-        quote = ifelse(input$crowd,"",qq),
-        full.quote = ifelse(input$crowd,"",values$statements$text[values$statements$statement == values$pag])
-      ) 
-      
-      values$graf <- values$graf %>% 
-        bind_edges(newEdges) 
-      
-      if(!is.null(input$combo)) {
-        if(input$combo!="") values$graf=values$graf %>% N_ %>%
-          mutate(fun=ifelse(inpto==label,input$combo,fun))
-      }
-      
-      values$fromStack <- NULL
-      visNetworkProxy("net") %>% 
-        visSelectNodes(id=NULL)
-  })
-
-# textbox search nodes and highlights them --------------------------------
-
-    observeEvent(c(input$selectboxvalue),{
-    if(req(input$sides)=="Code"){
-
-          req(values$grafAgg2)
-    
-      if(input$selectboxvalue!=""){
-    vag <- values$grafAgg2 %>% NN
-    
-    ids=vag %>% 
-      pull(label) %>% 
-      tolower %>% 
-      str_detect(input$selectboxvalue %>% tolower) %>% 
-      which
-    
-    if(length(ids) !=0 && length(ids)<nrow(vag)){
-    visNetworkProxy("net") %>%
-      visSelectNodes(id=ids) 
-      
-    }
-      values$foundIDs <- ids
-      }
-    } 
-    })
-  
-  observeEvent(input$addNewNode,{
-    # browser()
-    if(length(values$foundIDs)==0 && (input$selectboxvalue!="")){
-      values$graf <- values$graf %>% 
-        bind_nodes(tibble(label=input$selectboxvalue))
-      
-      values$fromStack <- nrow(values$graf %>% NN)
-      doNotification("Added new node",2)
-    }
-    
-  })
-  
-  
-  observeEvent(req(input$pager),{
-      vno <- req(values$grafAgg2) %>% NN
-      # browser()
-      if (!is.null(values$pag) & nrow(vno)>0) {
-        ids <- vno %>%
-          mutate(sel=ifelse(str_detect(statement, paste0("(,|^)", as.character(values$pag), "(,|$)")),T,F)) %>%
-          pull(sel) %>%
-          which
-        
-        visNetworkProxy("net") %>%
-          visSelectNodes(id = ids)
-      }
-  })
-  
-  
-  
-  
-  # output$reportTable1 <- renderTable({
-  #   table(mtcars$cyl)
-  # })
-  
-  # output$report <- renderUI({
-  #   van=values$grafAgg2 %>% NN %>% 
-  #     arrange(desc(frequency))
-  #   vae=values$grafAgg2 %>% EE
-  #   
-  #   tagList(
-  #     h3("combined variables, with the most mentioned first")
-  #     ,
-  #     lapply(1:nrow(van),function(i){
-  #       n=van[i,]
-  #       tagList(
-  #         hr(),
-  #         h4(n$label),
-  #         paste0("Incoming arrows -- frequency: ",n$to.frequency,"; Outgoing arrows -- frequency: ",n$from.frequency),
-  #         paste0("Quotes: ",n$quote) %>% div(style="background-color:whitesmoke") #%>% paste0("Quotes: ",.)
-  #       )
-  #     })
-  #   )
-  #   
-  # })
-  
-  
-  
-  output$combineVars <- renderUI({
-    varlist <- values$nodes$label %>% unique() %>% as.character()
-    varlist <- na.omit(varlist)
-    
-    
-    tagList(
-      # h5("Combine variables")
-      # ,
-      
-      ### this will fail if duplicate labels TODO
-      selectizeInput("combineSelect",
-                     label = NULL, selected = NULL, multiple = T,
-                     options =
-                       list(create = T, placeholder = "start typing the name of the variables you want to combine", onInitialize = I('function() { this.setValue(""); }')),
-                     choices = varlist
-      ),
-      textInput("newName", "Type a name for this new combined variable"),
-      actionButton("combine", "Combine!"),
-      hr()
-    )
-  })
-  
-  # observeEvent(input$combine, {
-  #   if (!is.null(input$combineSelect)) {
-  #     ic <- input$combineSelect
-  #     if (length(ic) > 1) {
-  #       one <- ic[1]
-  #       rest <- ic[-1]
-  #
-  #       restids <- values$nodes %>%
-  #         filter(label %in% rest) %>%
-  #         pull(id)
-  #
-  #       oneid <- values$nodes %>%
-  #         filter(label %in% one) %>%
-  #         pull(id)
-  #
-  #       allids <- c(oneid, restids)
-  #
-  #       allLabs <- values$nodes %>%
-  #         filter(id %in% allids) %>%
-  #         pull(label) %>%
-  #         paste0(collapse = "\n")
-  #
-  #       values$nodes <- values$nodes %>%
-  #         mutate(cluster = ifelse(id %in% allids, oneid, cluster)) %>%
-  #         mutate(clusterLabel = ifelse(id == oneid, ifelse(input$newName == "", allLabs, input$newName), clusterLabel))
-  #
-  #       doNotification("Added cluster information to variables")
-  #     } else {
-  #       doNotification("You need to put more than one variable to combine")
-  #     }
-  #   }
-  # })
-  #
-  
-  output$showbigpicture <- renderUI({
+  output$floatingWidgets <- renderUI({
     div(
       # div(
       #   # icon("search-plus"),
@@ -3017,17 +2943,27 @@ output$addNewNodeButton=renderUI({
       # ),
       # actionButton("widgetsUP","Update")
       div(
-        
-        actionButton("fontminus", "font-", icon = icon("picture")),
+
+        actionButton("fontminus", "fontscale-", icon = icon("picture")),
+        style = "display:inline-block;margin-right:130px;width:10px"
+      ),
+      div(
+
+        actionButton("fontplus", "fontscale+", icon = icon("picture")),
         style = "display:inline-block;margin-right:110px;width:10px"
       ),
       div(
-        
-        actionButton("fontplus", "font+", icon = icon("picture")),
-        style = "display:inline-block;margin-right:80px;width:10px"
+
+        actionButton("fontscaleminus", "font-", icon = icon("picture")),
+        style = "display:inline-block;margin-right:90px;width:10px"
       ),
       div(
-        
+
+        actionButton("fontscaleplus", "font+", icon = icon("picture")),
+        style = "display:inline-block;margin-right:70px;width:10px"
+      ),
+      div(
+
         actionButton("png", "PNG", icon = icon("picture")),
         style = "display:inline-block;margin-right:50px;width:10px"
       ),
@@ -3037,21 +2973,29 @@ output$addNewNodeButton=renderUI({
       ,style="z-index:999 !important")
     # h1("asdfasdfasdf")
   })
+  # 
+  # observe({
+  # })
   
-  observe({
-    visNetworkProxy("net") %>% 
-    visGetNodes(input = "net_nodes",addCoordinates = T)
+  observeEvent(input$fontplus,{
+    values$settingsGlobal=values$settingsGlobal %>% 
+      mutate(value=if_else(setting=="font.size.floor",as.character(as.numeric(value)*1.1),value)) 
   })
   
-  # observeEvent(input$fontplus,{
-  #   browser()
-  #   visNetworkProxy("net")$x %>% 
-  #     visGetNodes(input = "net_nodes",addCoordinates = T)
-  #   
-  #   input$net_nodes
-  #   visNetworkProxy("net") %>% 
-  #     visUpdateNodes(tibble(id=1:20,font.size=22))
-  # })
+  observeEvent(input$fontminus,{
+    values$settingsGlobal=values$settingsGlobal %>% 
+      mutate(value=if_else(setting=="font.size.floor",as.character(as.numeric(value)*.9),value)) 
+  })
+  
+  observeEvent(input$fontscaleplus,{
+    values$settingsGlobal=values$settingsGlobal %>% 
+      mutate(value=if_else(setting=="font.size.scale",as.character(as.numeric(value)*1.1),value)) 
+  })
+  
+  observeEvent(input$fontscaleminus,{
+    values$settingsGlobal=values$settingsGlobal %>% 
+      mutate(value=if_else(setting=="font.size.scale",as.character(as.numeric(value)*.9),value)) 
+  })
   
   output$savebut <- renderUI(div(
     div(
@@ -3066,158 +3010,16 @@ output$addNewNodeButton=renderUI({
           actionButton("saveb", "Save", icon = icon("save")),
           style ="display:inline-block;margin-left:5px;margin-right:5px;width:10%"
         )
-        # ,
-        # 
-        # div(
-        #   
-        #   actionButton("png", "PNG", icon = icon("picture")),
-        #   style = "display:inline-block;margin-left:5px;width:10px"
-        # ),
-        # div(
-        #   
-        #   actionButton("proxy", "proxy", icon = icon("picture")),
-        #   style = "display:inline-block;margin-left:30px;width:10px"
-        #)
-        
-        
-        
-        # div(radioGroupButtons(inputId = "diagType",status="success",size="xs",choices = xc("Interactive HiQ"),selected = "Interactive",),style="display:inline-block"),
-        # uiOutput("filters")
-        
-        # div(checkboxInput("publicc", "Public", value = T),
-        #   style =
-        #     "display:inline-block;margin-left:15px;width:10%"
-        # ),
       )
       ,
-      # downloadButton(outputId = "downloadGraph", label = "Download image"),
-      # downloadButton(outputId = "downloadHTML", label = "Download HTML"),
-      # downloadButton(outputId = "downloadData", label = "Download data"),
       style = "margin-bottom:-20px"
     )
   ))
   
-  cleanr <- function(tex) {
-    str_replace(as.character(tex), "\'", "")
-  }
   
   
-  
-  # Edit and observe Node form ----
-  # 
-  
-  output$varForm=renderUI({
-    if (length(req(input$net_selected))>0) {
-      # browser()
-      df <- values$graf %>%
-        NN() %>%
-        mutate(id = row_number()) %>%
-        left_join(values$grafAgg2 %>% NN() %>% select(new = id, id = origID)) # to provide a lo,1>9okup to find original ids if the nodes have been merged
-      # df <- (values$graf %>% NN %>% mutate(id=row_number()))
-      tagList(
-        if (length(input$net_selected)>0) {
-          tagList(
-            div(
-              span(
-                paste0("Delete variable ", input$net_selected %>% paste0(collapse=";"),"? "),
-                style="display:inline-block;margin-right:5px"
-              ),
-              actionButton("deleteVarForm", "Delete!"),
-              style = "background-color:white;padding:10px;border-radius:5px"
-            )
-          )
-        },
-        hr(style="margin:2px")
-      )
-    }
-    
-  })
-  
-  # output$formMakr <- renderUI({
-  #   browser()
-  # 
-  # })
-
-  
-  observeEvent(input$deleteVarForm, {
-    # browser()
-    whichtarg=values$grafAgg2 %>% NN %>% 
-    filter(row_number()==input$net_selected) %>% 
-      pull(origID) 
-    
-    values$graf <- values$graf %>%
-      activate(nodes) %>%
-      filter(!(row_number() %in% whichtarg) )
-  })
-  # 
-  # 
-  #   edge.id.split <- function(x) x %>% str_split(":") %>% `[[`(1) %>% as.numeric()
-  # 
-  #   # edit and observe edge form----
-  # 
-  # output$formMakrE <- renderUI({
-  #   if (!is.null(input$current_edge_id)) {
-  #     if (length(input$current_edge_id) == 1) {
-  #       # browser()
-  #       p(input$current_edge_id %>% paste0(collapse=";"))
-  #       
-  #       df <- values$graf %>%
-  #         EE() %>%
-  #         mutate(id = row_number())
-  #       tagList(
-  #         if (!is.null(input$current_edge_id)) {
-  #           tagList(
-  #             div(
-  #               h4(
-  #                 paste0("Edit arrow ", input$current_edge_id)
-  #               ),
-  #               hr(),
-  #               lapply(colnames(df %>% select(-id)), function(v) {
-  #                 ids <- input$current_edge_id
-  #                 div(
-  #                   textInput(paste0("updateEdgeForm.", v), v, value = df[df$id == ids, v], width = ifelse(str_detect(v, "label"), 250, 50)),
-  #                   style = "display:inline-block"
-  #                 )
-  #               }),
-  #               actionButton("updateEdgeForm", "Update!"),
-  #               actionButton("deleteEdgeForm", "Delete!"),
-  #               style = "background-color:white;padding:10px;border-radius:5px"
-  #             )
-  #           )
-  #         },
-  #         hr()
-  #       )
-  #     }
-  #   }
-  # })
-  # 
-  
-  # it would be better to write a general replace_block function for dfs
-  replace_block <- function(df, rows, repl) {
-    if (sum(rows) > 1) {
-      if (!is.data.frame(repl)) stop("repl has to be a df")
-      if (length(rows) != nrow(repl)) stop("wrong shape")
-      if (ncol(df) != ncol(repl)) stop("wrong shape")
-    }
-    df[rows, ] <- repl
-    df
-  }
-  
-  # # switch to variables----
-  # observe({
-  #   
-  #   if(length(input$net_selected)>0)
-  #     updateTabsetPanel(session,inputId = "sides",selected = "Variables")
-  # })
-  # 
-  # # switch to variables----
-  # observe({
-  #   
-  #   if(!is.null(input$current_edge_id))
-  #     updateTabsetPanel(session,inputId = "sides",selected = "Arrows")
-  # })
-  # 
   # observe save button ----
+  # it saves the current project as csv files
   observeEvent(
     {c(
       input$saveb ,
@@ -3256,7 +3058,6 @@ output$addNewNodeButton=renderUI({
           
         }
         
-        # saveRDS(values$graf)
         
         # file.copy(paste0("www/", inputtitl,".tm"),paste0("www/", inputtitl,".otm"),overwrite = T)
         doNotification("Saved")
@@ -3271,8 +3072,8 @@ output$addNewNodeButton=renderUI({
   )
   
 
-# observe png -------------------------------------------------------------
-
+# observe save png button -------------------------------------------------------------
+  #  saves a png and html file which are not yet downloadable
   
   
   observeEvent(input$png,{
@@ -3281,41 +3082,9 @@ output$addNewNodeButton=renderUI({
     webshot::webshot("www/export.html", file = "www/export.png")
   })
   
-  # output$downloadGraph <- downloadHandler(
-  #   filename = function() {
-  #     paste0("Theory Maker - ", values$current, ".html")
-  #   },
-  #   # make a copy of the file on server to download
-  #   content = function(file) {
-  #     writeLog(c("Save html: ", session$token, paste0("<a href='", values$current, ".html'>", values$current, "</a> downloaded")))
-  #     # makeToC2(tex = input$myText, sess=session$token, save = "png")
-  #     # browser()
-  #     fn <- paste0(session$token, ".", "html")
-  #     visSave(graph = values$net, file = paste0("", inputtitl, ".html"))
-  #     
-  #     
-  #     file.copy(paste0(fn), file)
-  #   }
-  # )
-  # output$HTML <- downloadHandler(
-  #   filename = function() {
-  #     paste0("Theory Maker - ", values$current, ".png")
-  #   },
-  #   # make a copy of the file on server to download
-  #   content = function(file) {
-  #     writeLog(c("Save png: ", session$token, paste0("<a href='", values$current, ".png'>", values$current, "</a> downloaded")))
-  #     # makeToC2(tex = input$myText, sess=session$token, save = "png")
-  #     # browser()
-  #     fn <- paste0(session$token, ".", "png")
-  #     
-  #     export_graph(values$graph$graph, file_name = fn, file_type = "png", width = 1800)
-  #     
-  #     file.copy(paste0(fn), file)
-  #   }
-  # )
   
   observeEvent(input$saveb,{
-    output$versions <- renderUI(if (!values$issaved) {
+    output$savedMsg <- renderUI(if (!values$issaved) {
       div()
     } else {
       div(
@@ -3327,220 +3096,9 @@ output$addNewNodeButton=renderUI({
   
   
   
-  # file upload ----
-  
-  
-  observeEvent(input$up.nodes, {
-    
-    # browser()
-    req(input$up.nodes)
-    df <- read_csv(input$up.nodes$datapath) %>%
-      bind_rows(defaultNodes %>% filter(F))
-    
-    
-    values$graf <- tbl_graph(df, values$graf %>% EE())
-    doNotification("Updated variables")
-  })
-  
-  id.finder <- function(label, node.df) {
-    sapply(label, function(x) {
-      (node.df$label == x) %>% which() %>% first()
-    })
-  }
-  
-  observeEvent(input$up.edges, {
-    req(input$up.edges)
-    max <- (values$graf %>% NN() %>% nrow()) + 1
-    
-    df <- read_csv(input$up.edges$datapath)[, ]
-    # browser()
-    
-    if (input$use.labels) {
-      df <- df %>%
-        mutate(
-          from = id.finder(from, values$graf %>% NN()),
-          to = id.finder(to, values$graf %>% NN())
-        )
-    }
-    
-    df <- df %>%
-      mutate(from = as.numeric(from), to = as.numeric(to)) %>%
-      select(one_of(xc("from to label strength trust statement"))) %>%
-      filter(from < max & to < max) %>%
-      bind_rows(defaultEdges %>% filter(F))
-    
-    
-    
-    if (select(df, from, to) %>% unlist() %>% max() > max) doNotification("You have edges which don't make sense",level=2)
-    # browser()
-    values$graf <- tbl_graph(values$graf %>% NN(), df)
-    doNotification("Updated arrows")
-  })
-  
 
-# observe import statements -----------------------------------------------
+# ++ crowsourcing / mobile interface --------------------------------------
 
-  
-  observeEvent(input$up.statements, {
-    req(input$up.statements)
-    # browser()
-    vstat <- read_csv(input$up.statements$datapath)[, ] 
-    
-    
-    # vstat <- values$statements  
-    # fs <- findset("diagramsplitColumnNames")
-    if(str_detect(colnames(vstat),"\\.") %>% any){
-      
-      
-      col <- colnames(vstat) %>%
-        str_detect("\\.") %>%
-        which %>%
-        first
-      
-      fsx= str_split(colnames(vstat)[col],"\\.")[[1]] %>% str_trim
-      
-      if(!is.na(col)){
-        vstat <- vstat %>%
-          separate(col,into=fsx,sep="\\.")
-      }
-      # values$statements <- vstat
-    } else 
-      if(str_detect(colnames(vstat),",") %>% any){
-        
-        col <- colnames(vstat) %>%
-          str_detect(",") %>%
-          which %>%
-          first
-        
-        fsx= str_split(colnames(vstat)[col],",")[[1]] %>% str_trim
-        widths <- fsx %>%  str_extract("[0-9]*$")
-        names <- fsx %>%  str_remove("[0-9]*$")
-        
-        if(!is.na(col)){
-          vstat <- vstat %>%
-            separate(col,into=names ,sep=cumsum(widths),convert=T)
-        } 
-      }
-    # %>%
-    #   bind_rows(default.statements %>% filter(F))
-    # 
-    # if (ncol(vs) > 9) vs <- vs[, 1:8]
-    colnames(vstat)[1]="text"
-      values$statements  <- vstat %>%
-      mutate(statement = row_number())
-   # <- vs
-    doNotification("Updated statements")
-    # browser()
-  })
-  
-  
-  session$onSessionEnded(function() {
-    
-  })
-  # session$onSessionEnded(stopApp)  ##remember to change this for productionnnnnnnnnnnnnnnnnnnnnnnproductionnnnnnnnnnnnnnnnnnnnnnnproductionnnnnnnnnnnnnnnnnnnnnnnproductionnnnnnnnnnnnnnnnnnnnnnnproductionnnnnnnnnnnnnnnnnnnnnnnproductionnnnnnnnnnnnnnnnnnnnnnn
-  
-  
-
-# colorLegend -------------------------------------------------------------
-
-  
-  output$colourLegend <- renderPlot({
-    emptyplot(main = "Percentage of women mentioning each factor and each link                 Percentage of younger people mentioning each factor",adj=0)
-    colorlegend(posx = c(0, 0.1), 
-      col = intpalette(c("blue", "red"), 100), 
-      zlim = c(0, 100), zval = c(0,25,50,75,100))
-    
-    colorlegend(posx = c(0.5, 0.6), 
-      col = intpalette(c("black", "white"), 100), 
-      zlim = c(0, 100), zval = c(0,25,50,75,100))
-    
-  })
-  
-  
-  
-  
-  ## Gallery ----
-  
-  # what----
-  output$gallery <- renderUI({
-    
-    if(storage=="local"){
-    details <- file.info(list.files("www", pattern = "-nodes.csv$", full.names = TRUE))
-    
-    details <- details[with(details, order(as.POSIXct(mtime))), ]
-    files <- rownames(details) %>% gsub("www/", "", .) %>% gsub("\\-nodes.csv", "", .)
-    
-    lapply(rev(files), function(x) {
-      sets=read_csv(paste0("www/",x,"-settingsGlobal.csv"))
-      desc=sets$value[sets$setting=="description"][1]
-      tagList(
-        tags$a(x, href = paste0(".?permalink=", gsub("\\.-nodes.csv$", "", x))),
-        "|",
-        desc,
-        hr()
-      )
-    })
-    } else if(storage=="dropbox"){
-      # browser()
-      details <- drop_dir("www") %>% mutate(x=as.POSIXct(client_modified)) %>% filter(str_detect(name,"-settingsGlobal\\.csv$")) %>% arrange(x)
-      
-      files <- details %>% pull("path_display") 
-doNotification("Loading file information",2)      
-      lapply(rev(files), function(x) {
-        sets=read__csv(x)
-        desc=sets$value[sets$setting=="description"][1]
-        x=gsub("/www/","",x)
-        x=x %>%  str_remove("-settingsGlobal\\.csv$")
-        tagList(
-          tags$a(x, href = paste0(".?permalink=", gsub("-settingsGlobal\\. csv$", "", x))),
-          "|",
-          desc,
-          hr()
-        )
-      })
-      
-    }
-    
-  })
-  
-  output$description=renderUI({
-    x=findset("diagramdescription")
-    if(x!="")  div(p(x),style="padding:10px;background-color:whitesmoke;margin-top:10px;border-radius:5px")
-    else ""
-  })
-  
-  # iframe----
-  # output$frame <- renderUI({
-  #   tags$iframe(src = "http://www.pogol.net/_help/index.html", height = "900px", width = "100%")
-  # })
-  # 
-  output$downloads=renderUI({
-    # browser()
-    doNotification("Creating library list")
-    if(!is.null(values$current)){
-      tagList(
-        h4("Download your csv files"),
-        hr(),
-        lapply(csvlist,function(x){
-          tagList(a(href=paste0(values$current,"-",x,".csv"),x),hr())
-        })
-      )}
-  })
-  
-  
-  # output$d3 <- renderD3({
-  #   r2d3(
-  #     runif(5, 0, .9),
-  #     script = "js/kill.js"
-  #   )
-  # })
-  
-  
-  # observeEvent(c(input$bigpicture),{
-  #   toggleClass(id="bigpicture",class = "bigpicture2")
-  #   toggleClass(id="maindivnet",class = "maindivnet2")
-  # })
-  
   observe({
     if(input$crowd){output$net2 <- renderVisNetwork({
       doNotification("render viz")
@@ -3549,116 +3107,6 @@ doNotification("Loading file information",2)
     })}
   })
   
-  # output$charts=renderPlotly({
-  #   
-  #   
-  #   nodes=values$grafAgg2 %>% NN
-  #   edges=values$grafAgg2 %>% EE
-  #   
-  #   p <- plot_ly(
-  #     type = "sankey",
-  #     orientation = "h",
-  #     
-  #     node = list(
-  #       # label = c("A1", "A2", "B1", "B2", "C1", "C2"),
-  #       # color = c("blue", "blue", "blue", "blue", "blue", "blue"),
-  #       label=nodes$label,
-  #       pad = 15,
-  #       thickness = 20,
-  #       line = list(
-  #         color = "black",
-  #         width = 0.5
-  #       )
-  #     ),
-  #     
-  #     link = list(
-  #       source = edges$from,
-  #       target = edges$to,
-  #       value =  edges$frequency
-  #     )
-  #   ) %>% 
-  #     layout(
-  #       title = "Basic Sankey Diagram",
-  #       font = list(
-  #         size = 10
-  #       )
-  #     )
-  #   p
-  # }
-  # )
-  # 
-  # output$chartgg=renderPlot({
-  #   values$grafAgg2 %>% 
-  #     ggraph(layout = 'sugiyama') + 
-  #     geom_edge_link(arrow=arrow(ends="last")) + 
-  #     geom_node_point(size = 8, colour = 'steelblue') +
-  #     geom_node_text(aes(label = label), colour = 'black', vjust = 0.4) + 
-  #     # ggtitle('Joining graphs') + 
-  #     theme_graph()
-  # })
-  # 
-  # output$ggplotly=renderPlotly({
-  #   ggp=values$grafAgg2 %>% 
-  #     ggraph(layout = 'sugiyama') + 
-  #     geom_edge_link(arrow=arrow(ends="last"),alpha=.5) + 
-  #     geom_node_point(size = 8, colour = 'steelblue',alpha=.5) +
-  #     geom_node_text(aes(label = label), colour = 'black', vjust = 0.4) + 
-  #     # ggtitle('Joining graphs') + 
-  #     theme_graph() 
-  #   ggplotly(ggp)
-  # })
-  # 
-  # 
-  # output$bar=renderPlotly({
-  #   values$grafAgg2 %>% NN %>% 
-  #     arrange(frequency) %>% 
-  #     plot_ly(x = ~label, y = ~frequency, type = 'bar', name = 'frequency') %>%
-  #     layout(yaxis = list(title = 'Count'), barmode = 'group')
-  #   
-  #   
-  #   
-  # })
-  
-  output$pivot <- renderRpivotTable({
-    # mtcars$car <- rownames(mtcars)
-    doNotification("creating pivot")
-    rpivotTable(NN(values$grafAgg2)[,1:20])
-  })  
-  
-  # output$d3 <- renderForceNetwork({
-  #   # mtcar
-  #   data(MisLinks, MisNodes)
-  #   forceNetwork(Links = MisLinks, Nodes = MisNodes, Source = "source",
-  #                Target = "target", Value = "value", NodeID = "name",
-  #                Group = "group", opacity = 0.4)
-  # })  
-  
-  
-  # output$dot=renderGrViz({
-  #   gr=create_graph(nodes_df=values$grafAgg2 %>% NN %>% 
-  #                     mutate(id=row_number()) %>% 
-  #                     mutate(fontsize=font.size*6) %>% 
-  #                     # mutate(fontcolor=font.color) %>%
-  #                     mutate(tooltip=title) %>% 
-  #                     select(-cluster),  # note clusters just break the layout
-  #                   edges_df=values$grafAgg2 %>% EE %>% 
-  #                     # mutate(fontsize=font.size*3) %>% 
-  #                     # mutate(fontcolor=font.color) %>% 
-  #                     mutate(tooltip=title) %>% 
-  #                     select(from,to)) %>% 
-  #     add_global_graph_attrs("rankdir", "LR", "graph") %>% 
-  #     add_global_graph_attrs("layout","dot","graph") %>% 
-  #     add_global_graph_attrs("shape","rectangle","node") %>% 
-  #     add_global_graph_attrs("height","0","node") %>% 
-  #     add_global_graph_attrs("ratio",as.numeric(findset("diagramHiQratio")),"graph") %>% 
-  #     add_global_graph_attrs("fontsize",as.numeric(findset("variablefont.size",global = F)),"node") %>% 
-  #     # add_global_graph_attrs("ratio",as.numeric(findset("diagramverticalSpacing"))/as.numeric(findset("diagramhorizontalSpacing")),"graph") %>% 
-  #     add_global_graph_attrs("fixedsize","false","node") 
-  #   
-  #   gr %>% generate_dot %>% grViz()
-  #   
-  #   
-  # })
   
   output$add_edges_widget2 <- renderUI({
     varlist=values$graf %>% NN() %>% pull(label) %>% unique() %>% as.character()

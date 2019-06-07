@@ -832,3 +832,6 @@ position:fixed;right:0;
 #large .selectize-input { line-height: 40px !important; }
 #large .selectize-dropdown { line-height: 30px !important; }
 
+#deleteVarForm{
+	background-color: red !important;
+}

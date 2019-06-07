@@ -1,0 +1,88 @@
+
+Loading files
+Loaded7 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+Saved
+started viz
+Produced viz
+render viz
+Saved
+starting aggregation
+cluster aggregation
+filter aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+Loading files
+Loaded3 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+Saved
+started viz
+Produced viz
+render viz
+started viz
+Produced viz
+render viz
+started viz
+Produced viz
+render viz
+started viz
+Produced viz
+render viz
+started viz
+Produced viz
+render viz
+started viz
+Produced viz
+render viz
+started viz
+Produced viz
+render viz
+started viz
+Produced viz
+render viz
+Added new node
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz

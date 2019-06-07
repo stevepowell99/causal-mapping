@@ -1,6 +1,62 @@
 # main file for combo functions
 
 
+# aggregation functions ---------------------------------------------------
+
+
+
+mutfun <- function(vec) {
+  if (allNum(vec)) {
+    sum(as.numeric(vec), na.rm = T)
+  } else {
+    first(vec)
+  }
+}
+
+catfun <- function(x) {
+  x <- na.omit(x)
+  x <- x[x != ""]
+  paste0(x, collapse = ",")
+}
+
+andfun <- function(x) {
+  x <- na.omit(x)
+  x <- x[x != ""]
+  all(as.logical(x)) %>% as.numeric
+}
+
+orfun <- function(x) {
+  x <- na.omit(x)
+  x <- x[x != ""]
+  any(as.logical(x)) %>% as.numeric
+}
+
+sumfun <- function(x) {
+  # x[is.na(x)]=0
+  # x <- sum(as.numeric(x), na.rm = T) %>% round(2)
+  # x
+  # x[1]
+  # 
+  sum(x,na.rm=T) 
+}
+
+meanfun <- function(x) {
+  # x[is.na(x)]=0
+  # x <- mean(as.numeric(x), na.rm = T) %>% round(2)
+  # x
+  # x[1]
+  mean(x,na.rm=T) 
+}
+
+# catfun=function(x)paste0(x,collapse=",")
+
+# group_if=function(df,cond,vars1,vars2){
+# dots = sapply(if(cond)vars1 else vars2, . %>% {as.formula(paste0('~', .))})
+# group_by_(df,.dots=dots)
+# }
+#
+#
+
 
 
 
