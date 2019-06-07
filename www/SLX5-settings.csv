@@ -1,0 +1,34 @@
+type,setting,value,condition,ifcolumn,comparison,filter,widget
+variable,merge,FALSE,always,label,contains,a,NA
+arrow,merge,T,always,label,contains,a,NA
+arrow,minimum.frequency,0,always,label,contains,a,NA
+variable,size,25,always,label,contains,a,NA
+variable,group,1,always,label,contains,a,NA
+variable,color.background,white,conditional on:,frequency,contains,a,NA
+variable,color.opacity,1,always,label,contains,a,NA
+variable,color.border,#41AB5D,always,label,contains,a,NA
+variable,hidden,FALSE,always,label,contains,a,NA
+variable,borderWidth,2,always,frequency,contains,a,NA
+variable,font.size,6,conditional on:,frequency,contains,a,NA
+variable,font.color,#252525,always,label,contains,a,NA
+variable,wrap,14,always,label,contains,a,NA
+variable,shape,box,always,label,contains,a,NA
+arrow,width,3,conditional on:,frequency,contains,a,NA
+arrow,dashes,FALSE,always,label,contains,a,NA
+arrow,wrap,15,always,label,contains,a,NA
+arrow,color,blue,if...,strength,<,0,NA
+arrow,color.opacity,1,always,label,equal,1,NA
+arrow,arrows.middle.enabled,FALSE,always,label,contains,a,NA
+arrow,font.color,#AAAAAA,always,label,contains,a,NA
+arrow,font.size,11,always,label,contains,a,NA
+diagram,background,#F0F0F0,always,label,equal,1,NA
+diagram,title,NA,always,label,contains,a,NA
+diagram,subtitle,NA,always,label,contains,a,NA
+diagram,layout,layout_with_sugiyama,always,label,contains,a,NA
+diagram,orientation,LR,always,label,contains,a,NA
+diagram,horizontalSpacing,9,always,label,contains,a,NA
+diagram,verticalSpacing,9,always,label,contains,a,NA
+diagram,focus,F,always,label,contains,a,NA
+diagram,physics,F,always,label,contains,a,NA
+variable,minimum.frequency,0,always,label,contains,a,NA
+variable,autogroup,FALSE,always,label,contains,a,NA

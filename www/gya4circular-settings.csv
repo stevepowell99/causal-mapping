@@ -1,0 +1,16 @@
+type,setting,value,condition,ifcolumn,comparison,filter,widget
+variable,size,25,always,label,contains,a,NA
+variable,group,1,always,label,contains,a,NA
+variable,color.background,whitesmoke,conditional on:,mean_female_mean_mean,contains,a,NA
+variable,color.opacity,1,always,label,contains,a,NA
+variable,color.border,blue,conditional on:,mean_older_mean_mean,contains,a,NA
+variable,hidden,FALSE,always,label,contains,a,NA
+variable,borderWidth,2,conditional on:,frequency,contains,a,NA
+variable,font.size,8,always,frequency,contains,a,NA
+variable,font.color,white,always,label,contains,a,NA
+variable,shape,box,always,label,contains,a,NA
+arrow,width,1,conditional on:,frequency,contains,a,NA
+arrow,color,blue,conditional on:,female_mean,equal,1,NA
+arrow,arrows.middle.enabled,FALSE,always,label,contains,a,NA
+arrow,font.color,#AAAAAA,always,label,contains,a,NA
+arrow,font.size,25,always,label,contains,a,NA

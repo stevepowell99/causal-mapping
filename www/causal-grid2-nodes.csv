@@ -1,0 +1,9 @@
+label,group,col1,cluster,value,level,fun,type,is_context,clusterLabel,xid
+zero,NA,NA,NA,NA,NA,NA,◨,NA,NA,1
+two,NA,NA,NA,NA,NA,SAME,◨,NA,NA,2
+three,NA,NA,NA,NA,NA,SAME,◨,NA,NA,3
+four,NA,NA,NA,NA,NA,OR,◨,NA,NA,4
+one,NA,NA,NA,NA,NA,NA,◨,NA,NA,5
+five,NA,NA,NA,NA,NA,NOT,◨,NA,NA,6
+six,NA,NA,NA,NA,NA,SAME,◨,NA,NA,7
+seven,NA,NA,NA,NA,NA,OR,◨,NA,NA,8

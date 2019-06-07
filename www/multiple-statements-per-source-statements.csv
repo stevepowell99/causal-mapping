@@ -1,0 +1,17 @@
+text,female,district,question,source,key5,key6,key7,statement
+I am the mother.,1,A,1,s1,NA,NA,NA,1
+I have a lot of opinions.,1,A,2,s1,NA,NA,NA,2
+I want to tell you about X,1,A,3,s1,NA,NA,NA,3
+and how X leads to Y,1,A,4,s1,NA,NA,NA,4
+I am the sister.,1,A,1,s2,NA,NA,NA,5
+I have a lot of opinions.,1,A,2,s2,NA,NA,NA,6
+I want to tell you about X,1,A,3,s2,NA,NA,NA,7
+and how X leads to Y,1,A,4,s2,NA,NA,NA,8
+I am the father.,0,B,1,s3,NA,NA,NA,9
+I have a lot of opinions.,0,B,2,s3,NA,NA,NA,10
+I want to tell you about X,0,B,3,s3,NA,NA,NA,11
+and how X leads to Z,0,B,4,s3,NA,NA,NA,12
+pfd.pdf,0,B,1,s4,NA,NA,NA,13
+I have a lot of opinions.,0,B,2,s4,NA,NA,NA,14
+I want to tell you about X,0,B,3,s4,NA,NA,NA,15
+and how X leads to Y,0,B,4,s4,NA,NA,NA,16

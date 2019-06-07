@@ -1,0 +1,4 @@
+from,to,label,strength,trust,statement,quote,full.quote,combo.type,definition.type,sensitivity,specificity,fun
+1,2,NA,0.5,0.5,4,NA,and how X leads to Y,NA,NA,NA,NA,NA
+1,3,NA,0.5,0.5,8,NA,and how X leads to Y,NA,NA,NA,NA,NA
+1,3,NA,0.5,0.5,12,NA,and how X leads to Z,NA,NA,NA,NA,NA

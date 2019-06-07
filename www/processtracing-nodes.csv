@@ -1,0 +1,5 @@
+label,group,col1,cluster,value,level,fun,type,is_context,clusterLabel,xid,details
+grade received by child in exam from high (9) to low (1),NA,NA,NA,NA,NA,NA,◪,NA,NA,1,NA
+child says they did very well -- not very well,NA,NA,NA,NA,NA,NA,◨,NA,NA,2,NA
+parent is pleased,NA,NA,NA,NA,NA,NA,◨,NA,NA,3,NA
+grandparents are pleased,NA,NA,NA,NA,NA,NA,◨,NA,NA,4,NA
