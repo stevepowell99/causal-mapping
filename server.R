@@ -2032,9 +2032,8 @@ server <- function(input, output, session) {
             # dashes = findset("arrowdashes") %>% as.logical()
           )
         
-        x <- function(){vn}  # I turned it into a function in order to be able to use throttle on it. but it didn't help
-        
-        values$net <- x#throttle(x,6000)
+
+        values$net <- vn
         
         doNotification("Produced viz")
         # browser()
@@ -2054,9 +2053,7 @@ server <- function(input, output, session) {
     doNotification("render viz")
     # browser()
     # doNotification("rendered viz")
-    if("net" %in% names(values)){
-      if(is.function(values$net))values$net() 
-    }
+    values$net
     
   })
   
@@ -2211,7 +2208,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$png,{
     
-    visSave(values$net(), "www/export.html", selfcontained = T, background = "white")
+    visSave(values$net, "www/export.html", selfcontained = T, background = "white")
     webshot::webshot("www/export.html", file = "www/export.png")
   })
   
@@ -2235,7 +2232,7 @@ server <- function(input, output, session) {
   observe({
     if(input$crowd){output$net2 <- renderVisNetwork({
       doNotification("render viz")
-      values$net()
+      values$net
       # browser()
     })}
   })
