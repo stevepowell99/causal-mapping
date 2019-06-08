@@ -69,6 +69,24 @@ if(storage=="local" | storage=="gsheets"){
 
 # functions ----------------------------------------------------------------
 
+
+## 
+prepare_vg <- function(graf){
+  graf %>% 
+    activate(nodes) %>% 
+    mutate(id = row_number(), origID = id) %>% 
+    mutate(value=as.numeric(value)) %>% 
+    mutate(value=if_else(value=="",0,value)) %>% 
+    mutate(value=replace_na(value,0)) 
+}
+
+
+
+
+
+
+
+
 mutate_if_sw=function(...)suppressMessages(mutate_if(...))
 
 doNotification <- function(text,level=1) {
