@@ -28,15 +28,18 @@ server <- function(input, output, session) {
   values$foundIDs=NULL
   
   # This keeps a record of the previous page, and so ensures that we only update
-  # the visNetwork if we transition to/from the 'Code' tab
-  page <- reactiveValues(old = "", change = 0)
+  # the visNetwork if we transition to/from the 'Code' tab.
+  # 
+  # You can change when updates happen by either updating the conditions here,
+  # or adding dependencies further down, like I have for tab$change
+  tab <- reactiveValues(old = "", change = 0)
   observeEvent(input$sides, {
-    if(page$old == "Code"){
-      page$change = page$change+1
+    if(tab$old == "Code"){
+      tab$change = tab$change+1
     } else if(input$sides == "Code"){
-      page$change = page$change+1
+      tab$change = tab$change+1
     }
-    page$old = input$sides
+    tab$old = input$sides
     
   })
   
@@ -1376,8 +1379,8 @@ server <- function(input, output, session) {
   
   observe({
     
-    # make this code run when we intentionally trigger the page$change reactive
-    page$change
+    # make this code run whenever the tab$change reactive triggers
+    tab$change
     
     # prevent this code running every time we update values
     vals <- isolate(values)
@@ -1772,20 +1775,19 @@ server <- function(input, output, session) {
   
   observe({
     
-    vga <- (req(values$grafAgg2)) 
+    vals <- isolate(values)
+    vga <- req(values$grafAgg2)
+
+    if((input$crowd)){
+      values$legend=""
+    }
     
-    if (T) {
-      
-      if((input$crowd)){
-        values$legend=""
-      }
-      
-      doNotification("started viz")
-      # browser()
-      
-      if(is.null(values$pag)){
-        values$pag=1
-      }
+    doNotification("started viz")
+    # browser()
+    
+    if(is.null(values$pag)){
+      values$pag=1
+    }
       
       vn1 <-
         visNetwork(
@@ -1805,10 +1807,10 @@ server <- function(input, output, session) {
             findset("diagramsubtitle"),
           # footer =
           #   values$legend,
-          background = findset("diagrambackground")
+          background = findset("diagrambackground", v = vals)
           ,
-          height=findset("diagramheight") %>% paste0("px"),
-          width=findset("diagramwidth") %>% paste0("px")
+          height=findset("diagramheight", v = vals) %>% paste0("px"),
+          width=findset("diagramwidth", v = vals) %>% paste0("px")
           
           # width="100%"
           # ,
@@ -1858,11 +1860,11 @@ server <- function(input, output, session) {
         #   visClusteringByGroup(groups = groups, label = "Group: ")
       }
       
-      if (findset("diagramlayout") == "layout_with_sugiyama") {
+      if (findset("diagramlayout", v = vals) == "layout_with_sugiyama") {
         vn <- vn %>%
           visIgraphLayout(layout = "layout_with_sugiyama", randomSeed = 123, smooth = T, type = "full")
         
-        if (findset("diagramorientation") %in% xc("LR RL")) {
+        if (findset("diagramorientation",v = vals) %in% xc("LR RL")) {
           # browser()
           tmp <- vn$x$nodes$x
           vn$x$nodes$x <- vn$x$nodes$y
@@ -1881,7 +1883,7 @@ server <- function(input, output, session) {
           
           
           
-        } else if (findset("diagramorientation") %in% xc("DU RL")) {
+        } else if (findset("diagramorientation", v = vals) %in% xc("DU RL")) {
           vn$x$nodes$x <- 1 - vn$x$nodes$x
           vn$x$nodes$y <- 1 - vn$x$nodes$y
         }
@@ -1892,23 +1894,21 @@ server <- function(input, output, session) {
           visIgraphLayout(layout = "layout_in_circle", randomSeed = 123, smooth = T, type = "full", physics = T)
       }
       
-      if (findset("diagramphysics") %>% as.logical()) {
+      if (findset("diagramphysics", v = vals) %>% as.logical()) {
         vn <- vn %>%
           visPhysics(barnesHut = list(avoidOverlap = .7))
       }
-      
-      
       
       vn <- vn %>%
         visNodes(
           shadow = list(enabled = T, size = 10),
           # widthConstraint=(5500/(levels+5))    , #  numeric(findset("variablewidth")) , #,300-(levels*10),#,(300*levels)-9,
-          widthConstraint=as.numeric(findset("variablewidth")) , #,300-(levels*10),#,(300*levels)-9,
+          widthConstraint=as.numeric(findset("variablewidth", v = vals)) , #,300-(levels*10),#,(300*levels)-9,
           color =
             list(
               background =
-                findset("variablecolor.background",global=F) %>% toRGB(findset("variablecolor.opacity",global=F) %>% as.numeric()),
-              border = findset("variablecolor.border",global=F)
+                findset("variablecolor.background",global=F, v = vals) %>% toRGB(findset("variablecolor.opacity",global=F, v = vals) %>% as.numeric()),
+              border = findset("variablecolor.border",global=F, v = vals)
               
               # ,
               # highlight=list(
@@ -1921,21 +1921,21 @@ server <- function(input, output, session) {
           font =
             list(
               color =
-                findset("variablefont.color",global=F),
-              size = findset("variablefont.size",global=F)
+                findset("variablefont.color",global=F, v = vals),
+              size = findset("variablefont.size",global=F, v = vals)
             ),
           hidden = F,# findset("variablehidden",global=F) %>% as.logical(),
           scaling = list(label = list(enabled = F)),
-          shape = findset("variableshape",global=F),
+          shape = findset("variableshape",global=F, v = vals),
           # shapeProperties = list("borderDashes=T"),
           group = T,#findset("variablegroup",global=F),
-          borderWidth = findset("variableborderWidth",global=F),
+          borderWidth = findset("variableborderWidth",global=F, v = vals),
           # widthConstraint=4,
           # widthConstraint = =4,
           # size =
           #   findset("variablesize",global=F),
           
-          physics = findset("diagramphysics")
+          physics = findset("diagramphysics", v = vals)
           # ,
           # ,
           # widthConstraint=10
@@ -1952,10 +1952,10 @@ server <- function(input, output, session) {
           font =
             list(
               color =
-                findset("arrowfont.color",global=F),
+                findset("arrowfont.color",global=F, v = vals),
               background =
                 "#FFFFFF80",
-              size = findset("arrowfont.size",global=F)
+              size = findset("arrowfont.size",global=F, v = vals)
             ),
           physics =
             F,
@@ -1969,15 +1969,7 @@ server <- function(input, output, session) {
       
       doNotification("Produced viz")
       
-      if (T) {
-        
-        
-
-        
-        # browser()
-        
-      }
-    }
+    
   })
   
   
