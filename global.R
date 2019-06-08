@@ -88,7 +88,11 @@ prepare_ved <- function(ved){
     mutate(definition.type = ifelse(is.na(definition.type), "", definition.type))
 }
 
-
+ved_join <- function(ved, statements){
+  ved <- ved %>%
+    left_join(statements, by = "statement")
+  ved
+}
 
 
 

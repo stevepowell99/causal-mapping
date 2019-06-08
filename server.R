@@ -27,6 +27,18 @@ server <- function(input, output, session) {
   values$issaved=F
   values$foundIDs=NULL
   
+  # This keeps a record of the previous page, and so ensures that we only update
+  # the visNetwork if we transition to/from the 'Code' tab
+  page <- reactiveValues(old = "", change = 0)
+  observeEvent(input$sides, {
+    if(page$old == "Code"){
+      page$change = page$change+1
+    } else if(input$sides == "Code"){
+      page$change = page$change+1
+    }
+    page$old = input$sides
+    
+  })
   
   inputtitl <- ""
   makeReactiveBinding("inputtitl")
@@ -1360,14 +1372,14 @@ server <- function(input, output, session) {
   
   # ++AGGREGATE ---------------------------------------------------------------------------
   # the long process of aggregating values$graf into values$grafAgg2, adding formatting etc
-  
-  
-  observeEvent(input, {
-    print("update to input")
-  })
+
   
   observe({
-    print("loop")
+    
+    page$change
+    vals <- isolate(values)
+    this_tab <- isolate(input$sides)
+    
     edges_tbl <- edges_as_tibble(req(values$graf))
     
     if (nrow(edges_tbl) > 0) {
@@ -1385,7 +1397,7 @@ server <- function(input, output, session) {
       
       # infer ----
       
-      if(findset("variableinfer", v = isolate(values)) %>% as.logical()){
+      if(findset("variableinfer", v = vals) %>% as.logical()){
         graph_values=infer(graph_values)
         legend <- paste0(legend, "</br>Causal inference carried out")
       }
@@ -1402,96 +1414,11 @@ server <- function(input, output, session) {
       
       # ved join statements--------------------------------
       
-      ved <- ved %>%
-        left_join(values$statements, by = "statement")
-      
-      # cat("refreshing")
-      if(req(input$sides)!="Code"){
-        
-        doNotification("cluster aggregation")    
-        # merge nodes by cluster -- note we don't merge arrows first ----
-        
-        if (findset("variablemerge", v = isolate(values)) %>% as.logical() & input$sides!="Code") { # need to convert to and froms in edge df
-          # browser()
-          vno <- vno %>%
-            mutate(id = row_number()) %>%
-            mutate(cluster = ifelse(cluster == "", NA, cluster)) %>%
-            group_by(cluster) %>%
-            mutate(clusterid = first(id)) %>%
-            mutate(clusterid = ifelse(is.na(cluster), id, clusterid)) %>%
-            ungroup() %>%
-            group_by(clusterid) %>%
-            mutate(clusterLength = n()) %>%
-            mutate(clusterLabel = clusterLabel %>% replaceNA()) %>%
-            mutate(label = ifelse(clusterLength < 2, label, ifelse(clusterLabel != "", clusterLabel, paste0("Cluster: ", label)))) %>%
-            # mutate(value=mean(value,na.rm=T)) %>%    
-            # mutate(valueSum=sum(value,na.rm=T)) %>%    
-            mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
-            ungroup()
-          
-          ved <- ved %>%
-            mutate(from = vno$clusterid[findfirst(from, vno$id)]) %>%
-            mutate(to = vno$clusterid[findfirst(to, vno$id)])
-          # browser()
-          tmp.graf <- tbl_graph(vno, ved) %>%
-            N_() %>%
-            filter(id == clusterid)
-          
-          vno <- tmp.graf %>% nodes_as_tibble()
-          ved <- tmp.graf %>% edges_as_tibble()
-          
-          values$tmp.graf <- tmp.graf   #for permanent cluster reduction button
-          
-          legend <- paste0(legend, "</br>Variables merged according to user-defined clusters")
-          
-        }
-        
-      # filter out some sources ----
-        
-        doNotification("filter aggregation")    
-        
-        input_vals <- isolate(input)
-        
-        for(i in names(input_vals)) {
-          if(str_detect(i,"filters")){
-            ii=str_remove(i,"filters")
-            fil=input_vals[[i]]
-            # browser()
-            if(length(fil)>0){
-              ved <- ved %>% 
-                filter(UQ(sym(ii)) %in% fil)
-              # legend <- paste0(legend, "</br>Edges filtered to show specific sources only")
-            }
-            tmp=tbl_graph(vno,ved) %>% 
-              N_() %>% 
-              filter(row_number() %in% unique(c(ved$from,ved$to)))
-            
-            vno <- tmp %>% nodes_as_tibble()
-            ved <- tmp %>% edges_as_tibble()
-            
-            # inefficient TODO we could collect them all and filter only once
-          
-          }
-          
-        }
-        
-        # rick --------------------------------------------------------------------
-        
-        if(("from" %in% colnames(ved))  &&  as.logical(findset("arrowabsence", v = isolate(values))) && input$sides!="Code"){ #todo findset
-          
-          doNotification("rick aggregation")    
-          
-          if(all(is.na(ved$statement)))ved$statement=1
-          # browser()
-          ved <- ved %>%
-            inv_multi()
-        }
-      }
-      # browser()
+      ved <- ved_join(ved, values$statements)
       
       # ved edge merge ----
       
-      if (findset("arrowmerge", v = isolate(values)) %>% as.logical() ) {
+      if (findset("arrowmerge", v = vals) %>% as.logical() ) {
         ved <- ved %>%
           group_by(from, to)
         
@@ -1521,9 +1448,9 @@ server <- function(input, output, session) {
       
       # edge minimum freq ----
       
-      if(input$sides!="Code"){
+      if(this_tab!="Code"){
         ved <- ved %>%
-          filter(frequency > findset("arrowminimum.frequency", v = isolate(values)))
+          filter(frequency > findset("arrowminimum.frequency", v = vals))
       }
       # browser()
       # cat("merge")
@@ -1532,7 +1459,7 @@ server <- function(input, output, session) {
       
       doNotification("join to edges aggregation")    
       
-      if(findset("variablejoinedges", v = isolate(values)) %>% as.logical | 
+      if(findset("variablejoinedges", v = vals) %>% as.logical | 
          values$settings %>% filter((condition!="always")) %>% nrow() %>% `>`(0) | 
          values$settingsGlobal %>% pull(value) %>% unique %>% str_detect("mean|frequency|sum") %>% any(na.rm=TRUE)
       ){ #todo, should list any functions. variablejoinedges is pointless
@@ -1611,9 +1538,9 @@ server <- function(input, output, session) {
         #
         
         # minimum freq for vars
-        mf <- findset("variableminimum.frequency", v = isolate(values)) %>% as.numeric()
+        mf <- findset("variableminimum.frequency", v = vals) %>% as.numeric()
         # browser()
-        if (input$sides!="Code" && mf > 0 ) {
+        if (this_tab!="Code" && mf > 0 ) {
           tmp <- tbl_graph(vno, ved) %>%
             N_() %>%
             filter(frequency > mf)
@@ -1676,7 +1603,7 @@ server <- function(input, output, session) {
                       if (comp == "contains") theseones <- str_detect(ifcol, row$filter)
               # browser()
               df[theseones, row$setting] <- row$value
-              df[!theseones, row$setting] <- findset(paste0(typenow, row$setting), which = "default",global = F, v = isolate(values))
+              df[!theseones, row$setting] <- findset(paste0(typenow, row$setting), which = "default",global = F, v = vals)
               
               legend <- paste0(legend, "</br>", typenow, " ", row$setting, " set to ", row$value, " if ", row$ifcolumn, " ", row$comparison, " ", row$filter, " ")
             }
@@ -1702,20 +1629,20 @@ server <- function(input, output, session) {
                 # mr=as.numeric(mr)
                 nr <- nrow(df)
                 if (str_detect(row$setting, "color") & !str_detect(row$setting, "opacity")) {
-                  df[, row$setting] <- colorRampPalette((str_split(findset(paste0("diagrampalette",palettes), v = isolate(values)),","))[[1]] %>% str_trim)(max(as.numeric(mr)))[mr]
+                  df[, row$setting] <- colorRampPalette((str_split(findset(paste0("diagrampalette",palettes), v = vals),","))[[1]] %>% str_trim)(max(as.numeric(mr)))[mr]
                   palettes=palettes+1
                 }
                 if (row$setting %in% xc("font.size")) {
-                  df[, row$setting] <- (mr + findset("variablefont.size.floor",global = T, v = isolate(values)) %>% as.numeric) * findset("variablefont.size.scale",global = T, v = isolate(values)) %>% as.numeric / nr
+                  df[, row$setting] <- (mr + findset("variablefont.size.floor",global = T, v = vals) %>% as.numeric) * findset("variablefont.size.scale",global = T, v = vals) %>% as.numeric / nr
                 }
                 if (row$setting %in% xc("size")) {
                   df[, row$setting] <- mr / nr
                 }
                 if (any(row$setting %in% xc("width"))) {
-                  df[, row$setting] <- mr * findset("arrowconditionalwidthscaling", v = isolate(values)) %>% as.numeric() / max(mr)
+                  df[, row$setting] <- mr * findset("arrowconditionalwidthscaling", v = vals) %>% as.numeric() / max(mr)
                 }
                 if (any(row$setting %in% xc(" borderWidth"))) {
-                  df[, row$setting] <- mr * findset("variableconditionalwidthscaling", v = isolate(values)) %>% as.numeric() / max(mr)
+                  df[, row$setting] <- mr * findset("variableconditionalwidthscaling", v = vals) %>% as.numeric() / max(mr)
                 }
                 if (row$setting %in% xc("color.opacity")) {
                   df[, row$setting] <- mr / max(mr)
@@ -1798,13 +1725,13 @@ server <- function(input, output, session) {
       }
       
       vno <- vno %>% 
-        mutate(title=labelmaker(findset("variabletooltip", v = isolate(values)),vno),
-               label=labelmaker(findset("variablelabel", v = isolate(values)),vno,sep=" | ")
+        mutate(title=labelmaker(findset("variabletooltip", v = vals),vno),
+               label=labelmaker(findset("variablelabel", v = vals),vno,sep=" | ")
         )
       
       ved <- ved %>% 
-        mutate(title=labelmaker(findset("arrowtooltip", v = isolate(values)),ved),
-               label=labelmaker(findset("arrowlabel", v = isolate(values)),ved,sep="\n")
+        mutate(title=labelmaker(findset("arrowtooltip", v = vals),ved),
+               label=labelmaker(findset("arrowlabel", v = vals),ved,sep="\n")
         )
       
       # # wrapping ----
@@ -1819,25 +1746,17 @@ server <- function(input, output, session) {
         mutate(label = str_replace_all(label, "///", "\n")) %>%
         mutate(label = str_trim(label))
       
-      
-      
-      
       tmp <- tbl_graph(vno, ved)
       
       # autogroup
       
-      if (findset("variableautogroup", v = isolate(values))) {
+      if (findset("variableautogroup", v = vals)) {
         tmp <- tmp %>%
           N_() %>%
           mutate(group = group_walktrap())
       }
       
-      
-      
-      values$grafAgg2 <- tmp # %>% debounce(4000)
-      
-      
-      
+      values$grafAgg2 <- tmp 
       
       # browser()
       
@@ -1862,198 +1781,197 @@ server <- function(input, output, session) {
       doNotification("started viz")
       # browser()
       
-      if(is.null(values$pag))values$pag=1
-      if (T) {
-        vn1 <-
-          visNetwork(
-            nodes =
-              vga %>%
-              activate(nodes) %>%
-              mutate(id = row_number()) %>%
-              as_tibble(),
-            edges =
-              vga %>% activate(edges) %>% 
-              as_tibble() %>% 
-              mutate(id = row_number())
-            ,
-            main =
-              findset("diagramtitle"),
-            submain =
-              findset("diagramsubtitle"),
-            # footer =
-            #   values$legend,
-            background = findset("diagrambackground")
-            ,
-            height=findset("diagramheight") %>% paste0("px"),
-            width=findset("diagramwidth") %>% paste0("px")
-            
-            # width="100%"
-            # ,
-            # height="2000px"
-            # ,
-            # width="2000px"
-          ) 
-        
-        
-        vn = vn1 %>%
-          visInteraction(
-            dragNodes = T,
-            dragView = T,
-            zoomView = T,
-            navigationButtons = F,
-            multiselect = T
-          ) %>%
-          visInteraction(
-            tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;
+      if(is.null(values$pag)){
+        values$pag=1
+      }
+      
+      vn1 <-
+        visNetwork(
+          nodes =
+            vga %>%
+            activate(nodes) %>%
+            mutate(id = row_number()) %>%
+            as_tibble(),
+          edges =
+            vga %>% activate(edges) %>% 
+            as_tibble() %>% 
+            mutate(id = row_number())
+          ,
+          main =
+            findset("diagramtitle"),
+          submain =
+            findset("diagramsubtitle"),
+          # footer =
+          #   values$legend,
+          background = findset("diagrambackground")
+          ,
+          height=findset("diagramheight") %>% paste0("px"),
+          width=findset("diagramwidth") %>% paste0("px")
+          
+          # width="100%"
+          # ,
+          # height="2000px"
+          # ,
+          # width="2000px"
+        ) 
+      
+      vn = vn1 %>%
+        visInteraction(
+          dragNodes = T,
+          dragView = T,
+          zoomView = T,
+          navigationButtons = F,
+          multiselect = T
+        ) %>%
+        visInteraction(
+          tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;
                 font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;
                 -moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;
                  border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
                  max-width:500px;word-break: break-all'
-          ) %>%
-          visOptions(
-            manipulation = F,
-            collapse = TRUE,
-            highlightNearest = list(
-              enabled = T,
-              degree = 99,
-              hover = FALSE,
-              algorithm = "hierarchical"
-            ),
-            nodesIdSelection = F
-          ) %>%
-          visConfigure(enabled = input$codeCollapse == "Advanced options",
-                       container = "advancedAnchor") %>%
-          visEvents(select = "function(edges) {
+        ) %>%
+        visOptions(
+          manipulation = F,
+          collapse = TRUE,
+          highlightNearest = list(
+            enabled = T,
+            degree = 99,
+            hover = FALSE,
+            algorithm = "hierarchical"
+          ),
+          nodesIdSelection = F
+        ) %>%
+        visConfigure(enabled = input$codeCollapse == "Advanced options",
+                     container = "advancedAnchor") %>%
+        visEvents(select = "function(edges) {
                 Shiny.onInputChange('current_edge_id', edges.edges);
                 ;}") %>%
-          visEvents(select = "function(nodes) {
+        visEvents(select = "function(nodes) {
                 Shiny.onInputChange('net_selected', nodes.nodes);
                 ;}")
-        
-        if (!all(na.omit(vga$group) == "")) {
-          # vn <- vn %>%
-          #   visGroups() %>%
-          #   visClusteringByGroup(groups = groups, label = "Group: ")
-        }
-        
-        
-        # browser()
-        
-        if (findset("diagramlayout") == "layout_with_sugiyama") {
-          vn <- vn %>%
-            visIgraphLayout(layout = "layout_with_sugiyama", randomSeed = 123, smooth = T, type = "full")
-          
-          if (T) {
-            if (findset("diagramorientation") %in% xc("LR RL")) {
-              # browser()
-              tmp <- vn$x$nodes$x
-              vn$x$nodes$x <- vn$x$nodes$y
-              vn$x$nodes$y <- tmp
-              vnxn <- vn$x$nodes
-              levels=(length(unique(vnxn$x)))
-              # b# rowser()
-              vnxn=vnxn %>% 
-                group_by(x) %>% 
-                mutate(ran=min_rank(y),y=rescale(ran,to=c(-1,1))*3.5 + rnorm(1,0,.05)) %>% 
-                ungroup()               #had to put in a tiny bit of rnorm to stop some artefacts in visnetwork when nodes have same y
-              # mutate(len=n(),ran=min_rank(y)-.5,y=ran*levels/(len*3))
-              vnxn=vnxn %>% 
-                mutate(x=x*3)
-              vn$x$nodes = vnxn
-              
-              
-              
-            } else if (findset("diagramorientation") %in% xc("DU RL")) {
-              vn$x$nodes$x <- 1 - vn$x$nodes$x
-              vn$x$nodes$y <- 1 - vn$x$nodes$y
-            }
-            
-            # browser()
-            # vn$x$nodes$x <- vn$x$nodes$x * 1
-            # vn$x$nodes$y <- vn$x$nodes$y * 2.5
-          }
-        } else {
-          vn <- vn %>%
-            visIgraphLayout(layout = "layout_in_circle", randomSeed = 123, smooth = T, type = "full", physics = T)
-        }
-        
-        
-        
-        if (findset("diagramphysics") %>% as.logical()) {
-          vn <- vn %>%
-            visPhysics(barnesHut = list(avoidOverlap = .7))
-        }
-        #    browser()
+      
+      if (!all(na.omit(vga$group) == "")) {
+        # vn <- vn %>%
+        #   visGroups() %>%
+        #   visClusteringByGroup(groups = groups, label = "Group: ")
+      }
+      
+      if (findset("diagramlayout") == "layout_with_sugiyama") {
         vn <- vn %>%
-          visNodes(
-            shadow = list(enabled = T, size = 10),
-            # widthConstraint=(5500/(levels+5))    , #  numeric(findset("variablewidth")) , #,300-(levels*10),#,(300*levels)-9,
-            widthConstraint=as.numeric(findset("variablewidth")) , #,300-(levels*10),#,(300*levels)-9,
-            color =
-              list(
-                background =
-                  findset("variablecolor.background",global=F) %>% toRGB(findset("variablecolor.opacity",global=F) %>% as.numeric()),
-                border = findset("variablecolor.border",global=F)
-                
-                # ,
-                # highlight=list(
-                #   background=findset("variablecolor.background.highlight",global=F)
-                #   ,
-                #   border=findset("variablecolor.border.highlight",global=F)
-                #
-                # )
-              ),
-            font =
-              list(
-                color =
-                  findset("variablefont.color",global=F),
-                size = findset("variablefont.size",global=F)
-              ),
-            hidden = F,# findset("variablehidden",global=F) %>% as.logical(),
-            scaling = list(label = list(enabled = F)),
-            shape = findset("variableshape",global=F),
-            # shapeProperties = list("borderDashes=T"),
-            group = T,#findset("variablegroup",global=F),
-            borderWidth = findset("variableborderWidth",global=F),
-            # widthConstraint=4,
-            # widthConstraint = =4,
-            # size =
-            #   findset("variablesize",global=F),
-            
-            physics = findset("diagramphysics")
-            # ,
-            # ,
-            # widthConstraint=10
-            
-            # widthConstraint=findset("variablewidth") %>% as.numeric # %>% ifelse(.>0,.,NA)
-          ) %>%
-          visEdges(
-            smooth = F,
-            arrowStrikethrough = F,
-            shadow =
-              list(enabled = F, size = 5),
-            # width =
-            #   findset("arrowwidth"),
-            font =
-              list(
-                color =
-                  findset("arrowfont.color",global=F),
-                background =
-                  "#FFFFFF80",
-                size = findset("arrowfont.size",global=F)
-              ),
-            physics =
-              F,
-            arrows =
-              list(to = list(enabled = TRUE), middle = list(type = "circle", scaleFactor = .5))
-            # ,
-            # dashes = findset("arrowdashes") %>% as.logical()
-          )
+          visIgraphLayout(layout = "layout_with_sugiyama", randomSeed = 123, smooth = T, type = "full")
+        
+        if (findset("diagramorientation") %in% xc("LR RL")) {
+          # browser()
+          tmp <- vn$x$nodes$x
+          vn$x$nodes$x <- vn$x$nodes$y
+          vn$x$nodes$y <- tmp
+          vnxn <- vn$x$nodes
+          levels=(length(unique(vnxn$x)))
+          # b# rowser()
+          vnxn=vnxn %>% 
+            group_by(x) %>% 
+            mutate(ran=min_rank(y),y=rescale(ran,to=c(-1,1))*3.5 + rnorm(1,0,.05)) %>% 
+            ungroup()               #had to put in a tiny bit of rnorm to stop some artefacts in visnetwork when nodes have same y
+          # mutate(len=n(),ran=min_rank(y)-.5,y=ran*levels/(len*3))
+          vnxn=vnxn %>% 
+            mutate(x=x*3)
+          vn$x$nodes = vnxn
+          
+          
+          
+        } else if (findset("diagramorientation") %in% xc("DU RL")) {
+          vn$x$nodes$x <- 1 - vn$x$nodes$x
+          vn$x$nodes$y <- 1 - vn$x$nodes$y
+        }
+        
+        
+      } else {
+        vn <- vn %>%
+          visIgraphLayout(layout = "layout_in_circle", randomSeed = 123, smooth = T, type = "full", physics = T)
+      }
+      
+      if (findset("diagramphysics") %>% as.logical()) {
+        vn <- vn %>%
+          visPhysics(barnesHut = list(avoidOverlap = .7))
+      }
+      
+      
+      
+      vn <- vn %>%
+        visNodes(
+          shadow = list(enabled = T, size = 10),
+          # widthConstraint=(5500/(levels+5))    , #  numeric(findset("variablewidth")) , #,300-(levels*10),#,(300*levels)-9,
+          widthConstraint=as.numeric(findset("variablewidth")) , #,300-(levels*10),#,(300*levels)-9,
+          color =
+            list(
+              background =
+                findset("variablecolor.background",global=F) %>% toRGB(findset("variablecolor.opacity",global=F) %>% as.numeric()),
+              border = findset("variablecolor.border",global=F)
+              
+              # ,
+              # highlight=list(
+              #   background=findset("variablecolor.background.highlight",global=F)
+              #   ,
+              #   border=findset("variablecolor.border.highlight",global=F)
+              #
+              # )
+            ),
+          font =
+            list(
+              color =
+                findset("variablefont.color",global=F),
+              size = findset("variablefont.size",global=F)
+            ),
+          hidden = F,# findset("variablehidden",global=F) %>% as.logical(),
+          scaling = list(label = list(enabled = F)),
+          shape = findset("variableshape",global=F),
+          # shapeProperties = list("borderDashes=T"),
+          group = T,#findset("variablegroup",global=F),
+          borderWidth = findset("variableborderWidth",global=F),
+          # widthConstraint=4,
+          # widthConstraint = =4,
+          # size =
+          #   findset("variablesize",global=F),
+          
+          physics = findset("diagramphysics")
+          # ,
+          # ,
+          # widthConstraint=10
+          
+          # widthConstraint=findset("variablewidth") %>% as.numeric # %>% ifelse(.>0,.,NA)
+        ) %>%
+        visEdges(
+          smooth = F,
+          arrowStrikethrough = F,
+          shadow =
+            list(enabled = F, size = 5),
+          # width =
+          #   findset("arrowwidth"),
+          font =
+            list(
+              color =
+                findset("arrowfont.color",global=F),
+              background =
+                "#FFFFFF80",
+              size = findset("arrowfont.size",global=F)
+            ),
+          physics =
+            F,
+          arrows =
+            list(to = list(enabled = TRUE), middle = list(type = "circle", scaleFactor = .5))
+          # ,
+          # dashes = findset("arrowdashes") %>% as.logical()
+        )
+      
+      values$net <- vn
+      
+      doNotification("Produced viz")
+      
+      if (T) {
+        
         
 
-        values$net <- vn
         
-        doNotification("Produced viz")
         # browser()
         
       }
