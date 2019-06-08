@@ -67,21 +67,14 @@ if(storage=="local" | storage=="gsheets"){
   }
 }
 
-
-
 # functions ----------------------------------------------------------------
 
-
 mutate_if_sw=function(...)suppressMessages(mutate_if(...))
-
-
 
 doNotification <- function(text,level=1) {
   if(level>doNotificationLevel)showNotification(text)
   write(paste0(text), paste0("","log.txt"), append = T)
 }
-
-
 
 allNum <- function(vec) {
   vec <- replaceNA(vec)
@@ -116,7 +109,6 @@ inv=function(ed){   #inverts an edgelist. For Rick's suggestion for cacluating a
   
 }
 
-
 inv_multi=function(df){   #For Rick's suggestion for cacluating a node metric
   # browser()
   stats <- df %>%
@@ -129,8 +121,6 @@ inv_multi=function(df){   #For Rick's suggestion for cacluating a node metric
   df %>% left_join(stats,by=c("from","to"))
   
 }
-
-
 
 infer=function(gr){                         # sets levels of downstream variables
   gr=gr %>% activate(nodes) %>% 
@@ -153,8 +143,6 @@ infer=function(gr){                         # sets levels of downstream variable
     pull(empty) %>% 
     which
   
-  
-  
   # ridiculous palaver cause can't call bfs directly  
   ranks=vector(length=0)
   
@@ -170,7 +158,6 @@ infer=function(gr){                         # sets levels of downstream variable
     
   }
   
-  
   # gridd=list(length=0)
   
   combs=lapply(empties,function(x)0:1) %>% expand.grid()
@@ -185,7 +172,7 @@ infer=function(gr){                         # sets levels of downstream variable
     if(length(empties)>0){
       # browser()
       row=combs[e,]
-      gr1 %>% NN ->jj
+      gr1 %>% nodes_as_tibble ->jj
       jj$level[as.numeric(names(combs))]=row
       gr1=gr1 %>% activate(nodes) %>% 
         mutate(level=unlist(jj$level))
@@ -200,19 +187,14 @@ infer=function(gr){                         # sets levels of downstream variable
         )
       
     }
-    levs=cbind(levs,(gr1 %>% NN %>% pull(level)))
+    levs=cbind(levs,(gr1 %>% nodes_as_tibble %>% pull(level)))
   }  # browser()
-  
-  
-  
+ 
   if(length(empties)>0){
     means=rowMeans(levs,na.rm=T)
     gr = gr %>% activate(nodes) %>% 
       mutate(level=means)
   } else gr = gr1
-  
-  
-  
   
   gr
 }
@@ -221,13 +203,8 @@ infer=function(gr){                         # sets levels of downstream variable
 # helpers for tidygraph
 N_ <- function(gr) gr %>% activate(nodes)
 E_ <- function(gr) gr %>% activate(edges)
-NN <- function(gr) gr %>% activate(nodes) %>% as_tibble()
-EE <- function(gr) gr %>% activate(edges) %>% as_tibble()
-
-
-
-
-
+nodes_as_tibble <- function(gr) gr %>% activate(nodes) %>% as_tibble()
+edges_as_tibble <- function(gr) gr %>% activate(edges) %>% as_tibble()
 
 findfirst <- function(vec, vec2) {
   sapply(vec, function(x) {

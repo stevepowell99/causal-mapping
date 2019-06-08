@@ -180,7 +180,7 @@ server <- function(input, output, session) {
             
             values$graf <- tbl_graph(nodes, edges)
             
-            doNotification(glue("Loaded{nrow(values$graf %>% NN)} variables from permalink"))
+            doNotification(glue("Loaded{nrow(values$graf %>% nodes_as_tibble)} variables from permalink"))
             
             # browser()
             
@@ -284,7 +284,7 @@ server <- function(input, output, session) {
     df <- read_csv(input$up.nodes$datapath) %>%
       bind_rows(defaultNodes %>% filter(F))
     
-    values$graf <- tbl_graph(df, values$graf %>% EE())
+    values$graf <- tbl_graph(df, values$graf %>% edges_as_tibble())
     doNotification("Updated variables")
   })
   
@@ -296,7 +296,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$up.edges, {
     req(input$up.edges)
-    max <- (values$graf %>% NN() %>% nrow()) + 1
+    max <- (values$graf %>% nodes_as_tibble() %>% nrow()) + 1
     
     df <- read_csv(input$up.edges$datapath)[, ]
     # browser()
@@ -304,8 +304,8 @@ server <- function(input, output, session) {
     if (input$use.labels) {
       df <- df %>%
         mutate(
-          from = id.finder(from, values$graf %>% NN()),
-          to = id.finder(to, values$graf %>% NN())
+          from = id.finder(from, values$graf %>% nodes_as_tibble()),
+          to = id.finder(to, values$graf %>% nodes_as_tibble())
         )
     }
     
@@ -319,7 +319,7 @@ server <- function(input, output, session) {
     
     if (select(df, from, to) %>% unlist() %>% max() > max) doNotification("You have edges which don't make sense",level=2)
     # browser()
-    values$graf <- tbl_graph(values$graf %>% NN(), df)
+    values$graf <- tbl_graph(values$graf %>% nodes_as_tibble(), df)
     doNotification("Updated arrows")
   })
   
@@ -503,7 +503,7 @@ server <- function(input, output, session) {
       as.numeric() %>%
       sort()
     
-    elist <- EE(values$graf)$statement %>% na.omit() %>% as.numeric()
+    elist <- edges_as_tibble(values$graf)$statement %>% na.omit() %>% as.numeric()
     
     min <- slist[sapply(slist, function(y) !(y %in% elist))] %>% min()
     
@@ -519,7 +519,7 @@ server <- function(input, output, session) {
   # 
   # 
   # observe(if(req(input$sides)=="Code"){
-  #   # vno <- req(values$grafAgg2) %>% NN
+  #   # vno <- req(values$grafAgg2) %>% nodes_as_tibble
   #   # if (as.logical(findset("diagramfocus")) & !is.null(values$pag) & nrow(vno)>0) {
   #   #   ids <- vno %>%
   #   #     mutate(sel=ifelse(str_detect(paste0(",|^", statement, ",|$"), as.character(values$pag)),T,F)) %>%
@@ -621,7 +621,7 @@ server <- function(input, output, session) {
   # Add edges widget----
   
   output$add_edges_widget <- renderUI({
-    varlist=values$graf %>% NN() %>% pull(label) %>% unique() %>% as.character()
+    varlist=values$graf %>% nodes_as_tibble() %>% pull(label) %>% unique() %>% as.character()
     varlist <- na.omit(varlist)
 
     tagList(
@@ -762,7 +762,7 @@ server <- function(input, output, session) {
       req(values$grafAgg2)
       
       if(input$selectboxvalue!=""){
-        vag <- values$grafAgg2 %>% NN
+        vag <- values$grafAgg2 %>% nodes_as_tibble
         
         ids=vag %>% 
           pull(label) %>% 
@@ -786,7 +786,7 @@ server <- function(input, output, session) {
       values$graf <- values$graf %>% 
         bind_nodes(tibble(label=input$selectboxvalue))
       
-      values$fromStack <- nrow(values$graf %>% NN)
+      values$fromStack <- nrow(values$graf %>% nodes_as_tibble)
       doNotification("Added new node",2)
     }
     
@@ -794,7 +794,7 @@ server <- function(input, output, session) {
   
   
   observeEvent(req(input$pager),{
-    vno <- req(values$grafAgg2) %>% NN
+    vno <- req(values$grafAgg2) %>% nodes_as_tibble
     # browser()
     if (!is.null(values$pag) & nrow(vno)>0) {
       ids <- vno %>%
@@ -814,10 +814,10 @@ server <- function(input, output, session) {
     if (length(req(input$net_selected))>0) {
       # browser()
       df <- values$graf %>%
-        NN() %>%
+        nodes_as_tibble() %>%
         mutate(id = row_number()) %>%
-        left_join(values$grafAgg2 %>% NN() %>% select(new = id, id = origID)) # to provide a lo,1>9okup to find original ids if the nodes have been merged
-      # df <- (values$graf %>% NN %>% mutate(id=row_number()))
+        left_join(values$grafAgg2 %>% nodes_as_tibble() %>% select(new = id, id = origID)) # to provide a lo,1>9okup to find original ids if the nodes have been merged
+      # df <- (values$graf %>% nodes_as_tibble %>% mutate(id=row_number()))
       tagList(
         if (length(input$net_selected)>0) {
           tagList(
@@ -839,7 +839,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$deleteVarForm, {
     # browser()
-    whichtarg=values$grafAgg2 %>% NN %>% 
+    whichtarg=values$grafAgg2 %>% nodes_as_tibble %>% 
       filter(row_number()==input$net_selected) %>% 
       pull(origID) 
     
@@ -972,7 +972,7 @@ server <- function(input, output, session) {
   })
   
   output$combine_button=renderUI({
-    if(!all(replace_na((NN(values$graf))$cluster,"")=="")){
+    if(!all(replace_na((nodes_as_tibble(values$graf))$cluster,"")=="")){
       div(actionButton("node_permanent_combine", "Combine clusters permanently!?"),style="margin-top:5px;")
     }
   })
@@ -983,9 +983,9 @@ server <- function(input, output, session) {
   
   output$nodeTable <- renderRHandsontable({
     # browser()
-    arrows=values$graf %>% EE %>% select(xid=from,to) %>% unlist %>% unclass() %>% as.tibble
+    arrows=values$graf %>% edges_as_tibble %>% select(xid=from,to) %>% unlist %>% unclass() %>% as.tibble
     
-    vg=values$graf %>% NN %>% 
+    vg=values$graf %>% nodes_as_tibble %>% 
       # mutate_all(replaceNA) %>% 
       mutate(xid=row_number()) %>% 
       left_join(arrows %>%  select(xid=value),by="xid") %>% 
@@ -995,7 +995,7 @@ server <- function(input, output, session) {
     
     
     if(!is.null(input$net_selected)){
-      whichtarg=values$grafAgg2 %>% NN %>% 
+      whichtarg=values$grafAgg2 %>% nodes_as_tibble %>% 
         filter(row_number()==input$net_selected) %>% 
         pull(origID) 
       # clu=vg$cluster[whichtarg]
@@ -1068,7 +1068,7 @@ server <- function(input, output, session) {
       select(-frequency) %>% 
       arrange(xid) 
     
-    values$graf <- tbl_graph(x, values$graf %>% EE()) 
+    values$graf <- tbl_graph(x, values$graf %>% edges_as_tibble()) 
     
   })
   
@@ -1088,12 +1088,12 @@ server <- function(input, output, session) {
     x <- hot_to_r(input$edgeTable) %>%
       select(-fromLabel, -toLabel)
     
-    node.ids <- values$graf %>% NN() %>% mutate(id = row_number()) %>% pull(id)
+    node.ids <- values$graf %>% nodes_as_tibble() %>% mutate(id = row_number()) %>% pull(id)
     
     x <- x %>%
       filter(from %in% node.ids & to %in% node.ids)
     
-    values$graf <- tbl_graph(values$graf %>% NN(), x)
+    values$graf <- tbl_graph(values$graf %>% nodes_as_tibble(), x)
   })
   
   output$edgeTable <- renderRHandsontable({
@@ -1104,10 +1104,10 @@ server <- function(input, output, session) {
       E_() %>%
       mutate(fromLabel = .N()$label[from], toLabel = .N()$label[to]) %>%
       select(fromLabel, toLabel, -full.quote, everything(), full.quote) %>%
-      EE() %>% 
+      edges_as_tibble() %>% 
       select(-from,-to,everything())
     
-    # vn=values$graf %>% NN 
+    # vn=values$graf %>% nodes_as_tibble 
     # 
     # # ve$from=factor(ve$from)
     # ve$from=factor(ve$from,labels=vn$label[ve$from])
@@ -1133,12 +1133,12 @@ server <- function(input, output, session) {
   })
   
   # output$overview <- renderPrint(if (!is.null(values$grafAgg2)) {
-  #   pre(str(values$grafAgg2 %>% EE()))
+  #   pre(str(values$grafAgg2 %>% edges_as_tibble()))
   # })
   # 
   output$edge2 <- renderRHandsontable(if (!is.null(values$grafAgg2)) {
     doNotification("Creating edges2 table")
-    rhandsontable(values$grafAgg2 %>% EE(), height = 700, rowHeaders = FALSE, usetypes = T) %>%
+    rhandsontable(values$grafAgg2 %>% edges_as_tibble(), height = 700, rowHeaders = FALSE, usetypes = T) %>%
       hot_context_menu(allowRowEdit = T) %>%
       hot_cols(columnSorting = TRUE) %>%
       hot_cols(fixedColumnsLeft = 1) %>%
@@ -1147,7 +1147,7 @@ server <- function(input, output, session) {
   
   output$node2 <- renderRHandsontable(if (!is.null(values$grafAgg2)) {
     doNotification("Creating nodes2 table")
-    rhandsontable(values$grafAgg2 %>% NN(), height = 700, rowHeaders = FALSE, usetypes = T) %>%
+    rhandsontable(values$grafAgg2 %>% nodes_as_tibble(), height = 700, rowHeaders = FALSE, usetypes = T) %>%
       hot_context_menu(allowRowEdit = T) %>%
       hot_cols(columnSorting = TRUE) %>%
       hot_cols(fixedColumnsLeft = 1) %>%
@@ -1316,7 +1316,7 @@ server <- function(input, output, session) {
   output$pivot <- renderRpivotTable({
     # mtcars$car <- rownames(mtcars)
     doNotification("creating pivot")
-    rpivotTable(NN(values$grafAgg2)[,1:20])
+    rpivotTable(nodes_as_tibble(values$grafAgg2)[,1:20])
   })  
   
   # ++ downloads panel  -----------------------------------------------------------
@@ -1361,8 +1361,32 @@ server <- function(input, output, session) {
   # ++AGGREGATE ---------------------------------------------------------------------------
   # the long process of aggregating values$graf into values$grafAgg2, adding formatting etc
   
-  observe(
-    if ((req(values$graf)) %>% EE %>% nrow %>% `>`(0)) {
+  observeEvent(values$graf, {
+    print("***")
+    print("values$graf new values:")
+    print(values$graf)
+    print("***")
+  })
+  
+  observeEvent(values$settings, {
+    print("***")
+    print("values$settings new values:")
+    print(values$settings)
+    print("***")
+  })
+  
+  observeEvent(values$statements, {
+    print("***")
+    print("values$statements new values:")
+    print(values$statements)
+    print("***")
+  })
+  
+  observe({
+    
+    edges_tbl <- edges_as_tibble(req(values$graf))
+    
+    if (nrow(edges_tbl > 0)) {
       
       # prepare statements, split columns ------------------------------------------------------
       
@@ -1389,9 +1413,9 @@ server <- function(input, output, session) {
         legend <- paste0(legend, "</br>Causal inference carried out")
       }
       
-      vno <- vg %>% NN() 
+      vno <- vg %>% nodes_as_tibble() 
       
-      ved <- vg %>% EE()
+      ved <- vg %>% edges_as_tibble()
       
       
       # prepare ved
@@ -1409,12 +1433,12 @@ server <- function(input, output, session) {
         left_join(values$statements, by = "statement")
       
       # cat("refreshing")
-      if(req(input$sides)!="Code"){
+      if(req(isolate(input$sides))!="Code"){
         
         doNotification("cluster aggregation")    
         # merge nodes by cluster -- note we don't merge arrows first ----
         
-        if (findset("variablemerge") %>% as.logical() & input$sides!="Code") { # need to convert to and froms in edge df
+        if (findset("variablemerge") %>% as.logical() & isolate(input$sides)!="Code") { # need to convert to and froms in edge df
           # browser()
           vno <- vno %>%
             mutate(id = row_number()) %>%
@@ -1440,8 +1464,8 @@ server <- function(input, output, session) {
             N_() %>%
             filter(id == clusterid)
           
-          vno <- tmp.graf %>% NN()
-          ved <- tmp.graf %>% EE()
+          vno <- tmp.graf %>% nodes_as_tibble()
+          ved <- tmp.graf %>% edges_as_tibble()
           
           values$tmp.graf <- tmp.graf   #for permanent cluster reduction button
           
@@ -1469,8 +1493,8 @@ server <- function(input, output, session) {
               N_() %>% 
               filter(row_number() %in% unique(c(ved$from,ved$to)))
             
-            vno <- tmp %>% NN()
-            ved <- tmp %>% EE()
+            vno <- tmp %>% nodes_as_tibble()
+            ved <- tmp %>% edges_as_tibble()
             
             # inefficient TODO we could collect them all and filter only once
           
@@ -1480,7 +1504,7 @@ server <- function(input, output, session) {
         
         # rick --------------------------------------------------------------------
         
-        if(("from" %in% colnames(ved))  &&  as.logical(findset("arrowabsence")) && input$sides!="Code"){ #todo findset
+        if(("from" %in% colnames(ved))  &&  as.logical(findset("arrowabsence")) && isolate(input$sides)!="Code"){ #todo findset
           
           doNotification("rick aggregation")    
           
@@ -1524,7 +1548,7 @@ server <- function(input, output, session) {
       
       # edge minimum freq ----
       
-      if(input$sides!="Code"){
+      if(isolate(input$sides)!="Code"){
         ved <- ved %>%
           filter(frequency > findset("arrowminimum.frequency"))
       }
@@ -1616,13 +1640,13 @@ server <- function(input, output, session) {
         # minimum freq for vars
         mf <- findset("variableminimum.frequency") %>% as.numeric()
         # browser()
-        if (input$sides!="Code" && mf > 0 ) {
+        if (isolate(input$sides)!="Code" && mf > 0 ) {
           tmp <- tbl_graph(vno, ved) %>%
             N_() %>%
             filter(frequency > mf)
           
-          vno <- tmp %>% NN()
-          ved <- tmp %>% EE()
+          vno <- tmp %>% nodes_as_tibble()
+          ved <- tmp %>% edges_as_tibble()
         }
         
       }
@@ -1845,7 +1869,9 @@ server <- function(input, output, session) {
       # browser()
       
       doNotification("Aggregated")
-    })
+    }
+  
+  })
   
   # RENDER visnetwork----
   # finally we use values$grafAgg2 to generate the viz 
@@ -2165,8 +2191,8 @@ server <- function(input, output, session) {
         
         # saveRDS(values, paste0("www/", inputtitl, ".tm"))
         
-        nodes=values$graf %>% NN
-        edges=values$graf %>% EE
+        nodes=values$graf %>% nodes_as_tibble
+        edges=values$graf %>% edges_as_tibble
         
         # browser()
         # if(storage="local"){
@@ -2239,7 +2265,7 @@ server <- function(input, output, session) {
   
   
   output$add_edges_widget2 <- renderUI({
-    varlist=values$graf %>% NN() %>% pull(label) %>% unique() %>% as.character()
+    varlist=values$graf %>% nodes_as_tibble() %>% pull(label) %>% unique() %>% as.character()
     varlist <- na.omit(varlist)
     
     tagList(
