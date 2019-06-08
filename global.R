@@ -80,6 +80,14 @@ prepare_vg <- function(graf){
     mutate(value=replace_na(value,0)) 
 }
 
+prepare_ved <- function(ved){
+  ved %>%
+    mutate_at(vars(strength, trust), funs(as.numeric)) %>%
+    mutate(combo.type = ifelse(is.na(combo.type), "", combo.type)) %>%
+    mutate(label = ifelse(is.na(label), "", label)) %>%
+    mutate(definition.type = ifelse(is.na(definition.type), "", definition.type))
+}
+
 
 
 
@@ -146,14 +154,10 @@ infer=function(gr){                         # sets levels of downstream variable
     mutate(priorLevel=level) %>% 
     mutate(xid=row_number())
   
-  
-  
   ids=gr %>% 
     activate(nodes) %>% 
     pull(source) %>% 
     which
-  
-  
   
   empties=gr %>% 
     activate(nodes) %>% 

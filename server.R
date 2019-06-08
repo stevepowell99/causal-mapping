@@ -1361,8 +1361,13 @@ server <- function(input, output, session) {
   # ++AGGREGATE ---------------------------------------------------------------------------
   # the long process of aggregating values$graf into values$grafAgg2, adding formatting etc
   
+  
+  observeEvent(input, {
+    print("update to input")
+  })
+  
   observe({
-    
+    print("loop")
     edges_tbl <- edges_as_tibble(req(values$graf))
     
     if (nrow(edges_tbl) > 0) {
@@ -1374,7 +1379,6 @@ server <- function(input, output, session) {
       
       # post-process original version
       
-      settings_values <- values$settings %>% replaceNA()
       graph_values <- prepare_vg(values$graf) 
       
       # browser()
@@ -1387,18 +1391,14 @@ server <- function(input, output, session) {
       }
       
       vno <- graph_values %>% nodes_as_tibble() 
-      
       ved <- graph_values %>% edges_as_tibble()
-      
       
       # prepare ved
       
+      
+      
       # browser()
-      ved <- ved %>%
-        mutate_at(vars(strength, trust), funs(as.numeric)) %>%
-        mutate(combo.type = ifelse(is.na(combo.type), "", combo.type)) %>%
-        mutate(label = ifelse(is.na(label), "", label)) %>%
-        mutate(definition.type = ifelse(is.na(definition.type), "", definition.type))
+      ved <- prepare_ved(ved)
       
       # ved join statements--------------------------------
       
@@ -1406,12 +1406,12 @@ server <- function(input, output, session) {
         left_join(values$statements, by = "statement")
       
       # cat("refreshing")
-      if(req(isolate(input$sides))!="Code"){
+      if(req(input$sides)!="Code"){
         
         doNotification("cluster aggregation")    
         # merge nodes by cluster -- note we don't merge arrows first ----
         
-        if (findset("variablemerge", v = isolate(values)) %>% as.logical() & isolate(input$sides)!="Code") { # need to convert to and froms in edge df
+        if (findset("variablemerge", v = isolate(values)) %>% as.logical() & input$sides!="Code") { # need to convert to and froms in edge df
           # browser()
           vno <- vno %>%
             mutate(id = row_number()) %>%
@@ -1477,7 +1477,7 @@ server <- function(input, output, session) {
         
         # rick --------------------------------------------------------------------
         
-        if(("from" %in% colnames(ved))  &&  as.logical(findset("arrowabsence", v = isolate(values))) && isolate(input$sides)!="Code"){ #todo findset
+        if(("from" %in% colnames(ved))  &&  as.logical(findset("arrowabsence", v = isolate(values))) && input$sides!="Code"){ #todo findset
           
           doNotification("rick aggregation")    
           
@@ -1521,7 +1521,7 @@ server <- function(input, output, session) {
       
       # edge minimum freq ----
       
-      if(isolate(input$sides)!="Code"){
+      if(input$sides!="Code"){
         ved <- ved %>%
           filter(frequency > findset("arrowminimum.frequency", v = isolate(values)))
       }
@@ -1613,7 +1613,7 @@ server <- function(input, output, session) {
         # minimum freq for vars
         mf <- findset("variableminimum.frequency", v = isolate(values)) %>% as.numeric()
         # browser()
-        if (isolate(input$sides)!="Code" && mf > 0 ) {
+        if (input$sides!="Code" && mf > 0 ) {
           tmp <- tbl_graph(vno, ved) %>%
             N_() %>%
             filter(frequency > mf)
@@ -1851,7 +1851,7 @@ server <- function(input, output, session) {
   
   observe({
     
-    vga <- (req(values$grafAgg2)) #%>% shiny::debounce(4000)
+    vga <- (req(values$grafAgg2)) 
     
     if (T) {
       
@@ -1895,15 +1895,34 @@ server <- function(input, output, session) {
           ) 
         
         
-        vn= vn1 %>%
-          visInteraction(dragNodes = T, dragView = T, zoomView = T, navigationButtons = F, multiselect = T) %>%
-          visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;
+        vn = vn1 %>%
+          visInteraction(
+            dragNodes = T,
+            dragView = T,
+            zoomView = T,
+            navigationButtons = F,
+            multiselect = T
+          ) %>%
+          visInteraction(
+            tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;
                 font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;
                 -moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;
                  border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
-                 max-width:500px;word-break: break-all')%>%
-          visOptions(manipulation = F, collapse = TRUE, highlightNearest = list(enabled=T,degree=99,hover=T,algorithm="hierarchical"), nodesIdSelection = F) %>%
-          visConfigure(enabled = input$codeCollapse == "Advanced options", container = "advancedAnchor") %>%
+                 max-width:500px;word-break: break-all'
+          ) %>%
+          visOptions(
+            manipulation = F,
+            collapse = TRUE,
+            highlightNearest = list(
+              enabled = T,
+              degree = 99,
+              hover = FALSE,
+              algorithm = "hierarchical"
+            ),
+            nodesIdSelection = F
+          ) %>%
+          visConfigure(enabled = input$codeCollapse == "Advanced options",
+                       container = "advancedAnchor") %>%
           visEvents(select = "function(edges) {
                 Shiny.onInputChange('current_edge_id', edges.edges);
                 ;}") %>%
@@ -2038,13 +2057,7 @@ server <- function(input, output, session) {
         # browser()
         
       }
-      
-      
-      
     }
-    
-    
-    
   })
   
   
