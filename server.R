@@ -39,7 +39,7 @@ server <- function(input, output, session) {
   #  providess the value of the setting sought. probably most ripe for 
   #  rationalisation
   
-  findset <- function(tex, which = "current",global=T,v=values) {
+  findset <- function(tex, which = "current",global=TRUE,v=values) {
     # if(tex=="diagrambackground") browser()
     if(global) {
       x <-  v$settingsGlobal
@@ -256,8 +256,8 @@ server <- function(input, output, session) {
   
   #   the default graph object with no nodes or edges
   values$graf <- tbl_graph(
-    defaultNodes%>% filter(F),
-    defaultEdges %>% filter(F)
+    defaultNodes[0,],
+    defaultEdges[0,]
   ) 
   
   # ++ Import/Statements panel -------------------------------------------------
@@ -1361,32 +1361,11 @@ server <- function(input, output, session) {
   # ++AGGREGATE ---------------------------------------------------------------------------
   # the long process of aggregating values$graf into values$grafAgg2, adding formatting etc
   
-  observeEvent(values$graf, {
-    print("***")
-    print("values$graf new values:")
-    print(values$graf)
-    print("***")
-  })
-  
-  observeEvent(values$settings, {
-    print("***")
-    print("values$settings new values:")
-    print(values$settings)
-    print("***")
-  })
-  
-  observeEvent(values$statements, {
-    print("***")
-    print("values$statements new values:")
-    print(values$statements)
-    print("***")
-  })
-  
   observe({
     
     edges_tbl <- edges_as_tibble(req(values$graf))
     
-    if (nrow(edges_tbl > 0)) {
+    if (nrow(edges_tbl) > 0) {
       
       # prepare statements, split columns ------------------------------------------------------
       
@@ -1395,27 +1374,21 @@ server <- function(input, output, session) {
       
       # post-process original version
       
-      vs <- (values$settings) %>% replaceNA()
-      
-      vg=(values$graf) %>% 
-        activate(nodes) %>% 
-        mutate(id = row_number(), origID = id) %>% 
-        mutate(value=as.numeric(value)) %>% 
-        mutate(value=if_else(value=="",0,value)) %>% 
-        mutate(value=replace_na(value,0)) 
+      settings_values <- values$settings %>% replaceNA()
+      graph_values <- prepare_vg(values$graf) 
       
       # browser()
       
       # infer ----
       
-      if(findset("variableinfer") %>% as.logical()){
-        vg=infer(vg)
+      if(findset("variableinfer", v = isolate(values)) %>% as.logical()){
+        graph_values=infer(graph_values)
         legend <- paste0(legend, "</br>Causal inference carried out")
       }
       
-      vno <- vg %>% nodes_as_tibble() 
+      vno <- graph_values %>% nodes_as_tibble() 
       
-      ved <- vg %>% edges_as_tibble()
+      ved <- graph_values %>% edges_as_tibble()
       
       
       # prepare ved
@@ -1438,7 +1411,7 @@ server <- function(input, output, session) {
         doNotification("cluster aggregation")    
         # merge nodes by cluster -- note we don't merge arrows first ----
         
-        if (findset("variablemerge") %>% as.logical() & isolate(input$sides)!="Code") { # need to convert to and froms in edge df
+        if (findset("variablemerge", v = isolate(values)) %>% as.logical() & isolate(input$sides)!="Code") { # need to convert to and froms in edge df
           # browser()
           vno <- vno %>%
             mutate(id = row_number()) %>%
@@ -1504,7 +1477,7 @@ server <- function(input, output, session) {
         
         # rick --------------------------------------------------------------------
         
-        if(("from" %in% colnames(ved))  &&  as.logical(findset("arrowabsence")) && isolate(input$sides)!="Code"){ #todo findset
+        if(("from" %in% colnames(ved))  &&  as.logical(findset("arrowabsence", v = isolate(values))) && isolate(input$sides)!="Code"){ #todo findset
           
           doNotification("rick aggregation")    
           
@@ -1518,7 +1491,7 @@ server <- function(input, output, session) {
       
       # ved edge merge ----
       
-      if (findset("arrowmerge") %>% as.logical() ) {
+      if (findset("arrowmerge", v = isolate(values)) %>% as.logical() ) {
         ved <- ved %>%
           group_by(from, to)
         
@@ -1550,7 +1523,7 @@ server <- function(input, output, session) {
       
       if(isolate(input$sides)!="Code"){
         ved <- ved %>%
-          filter(frequency > findset("arrowminimum.frequency"))
+          filter(frequency > findset("arrowminimum.frequency", v = isolate(values)))
       }
       # browser()
       # cat("merge")
@@ -1559,7 +1532,7 @@ server <- function(input, output, session) {
       
       doNotification("join to edges aggregation")    
       
-      if(findset("variablejoinedges") %>% as.logical | 
+      if(findset("variablejoinedges", v = isolate(values)) %>% as.logical | 
          values$settings %>% filter((condition!="always")) %>% nrow() %>% `>`(0) | 
          values$settingsGlobal %>% pull(value) %>% unique %>% str_detect("mean|frequency|sum") %>% any(na.rm=TRUE)
       ){ #todo, should list any functions. variablejoinedges is pointless
@@ -1638,7 +1611,7 @@ server <- function(input, output, session) {
         #
         
         # minimum freq for vars
-        mf <- findset("variableminimum.frequency") %>% as.numeric()
+        mf <- findset("variableminimum.frequency", v = isolate(values)) %>% as.numeric()
         # browser()
         if (isolate(input$sides)!="Code" && mf > 0 ) {
           tmp <- tbl_graph(vno, ved) %>%
@@ -1703,7 +1676,7 @@ server <- function(input, output, session) {
                       if (comp == "contains") theseones <- str_detect(ifcol, row$filter)
               # browser()
               df[theseones, row$setting] <- row$value
-              df[!theseones, row$setting] <- findset(paste0(typenow, row$setting), which = "default",global = F)
+              df[!theseones, row$setting] <- findset(paste0(typenow, row$setting), which = "default",global = F, v = isolate(values))
               
               legend <- paste0(legend, "</br>", typenow, " ", row$setting, " set to ", row$value, " if ", row$ifcolumn, " ", row$comparison, " ", row$filter, " ")
             }
@@ -1729,20 +1702,20 @@ server <- function(input, output, session) {
                 # mr=as.numeric(mr)
                 nr <- nrow(df)
                 if (str_detect(row$setting, "color") & !str_detect(row$setting, "opacity")) {
-                  df[, row$setting] <- colorRampPalette((str_split(findset(paste0("diagrampalette",palettes)),","))[[1]] %>% str_trim)(max(as.numeric(mr)))[mr]
+                  df[, row$setting] <- colorRampPalette((str_split(findset(paste0("diagrampalette",palettes), v = isolate(values)),","))[[1]] %>% str_trim)(max(as.numeric(mr)))[mr]
                   palettes=palettes+1
                 }
                 if (row$setting %in% xc("font.size")) {
-                  df[, row$setting] <- (mr + findset("variablefont.size.floor",global = T) %>% as.numeric) * findset("variablefont.size.scale",global = T) %>% as.numeric / nr
+                  df[, row$setting] <- (mr + findset("variablefont.size.floor",global = T, v = isolate(values)) %>% as.numeric) * findset("variablefont.size.scale",global = T, v = isolate(values)) %>% as.numeric / nr
                 }
                 if (row$setting %in% xc("size")) {
                   df[, row$setting] <- mr / nr
                 }
                 if (any(row$setting %in% xc("width"))) {
-                  df[, row$setting] <- mr * findset("arrowconditionalwidthscaling") %>% as.numeric() / max(mr)
+                  df[, row$setting] <- mr * findset("arrowconditionalwidthscaling", v = isolate(values)) %>% as.numeric() / max(mr)
                 }
                 if (any(row$setting %in% xc(" borderWidth"))) {
-                  df[, row$setting] <- mr * findset("variableconditionalwidthscaling") %>% as.numeric() / max(mr)
+                  df[, row$setting] <- mr * findset("variableconditionalwidthscaling", v = isolate(values)) %>% as.numeric() / max(mr)
                 }
                 if (row$setting %in% xc("color.opacity")) {
                   df[, row$setting] <- mr / max(mr)
@@ -1825,13 +1798,13 @@ server <- function(input, output, session) {
       }
       
       vno <- vno %>% 
-        mutate(title=labelmaker(findset("variabletooltip"),vno),
-               label=labelmaker(findset("variablelabel"),vno,sep=" | ")
+        mutate(title=labelmaker(findset("variabletooltip", v = isolate(values)),vno),
+               label=labelmaker(findset("variablelabel", v = isolate(values)),vno,sep=" | ")
         )
       
       ved <- ved %>% 
-        mutate(title=labelmaker(findset("arrowtooltip"),ved),
-               label=labelmaker(findset("arrowlabel"),ved,sep="\n")
+        mutate(title=labelmaker(findset("arrowtooltip", v = isolate(values)),ved),
+               label=labelmaker(findset("arrowlabel", v = isolate(values)),ved,sep="\n")
         )
       
       # # wrapping ----
@@ -1853,7 +1826,7 @@ server <- function(input, output, session) {
       
       # autogroup
       
-      if (findset("variableautogroup")) {
+      if (findset("variableautogroup", v = isolate(values))) {
         tmp <- tmp %>%
           N_() %>%
           mutate(group = group_walktrap())
