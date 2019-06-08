@@ -1,715 +1,3 @@
-# options -----------------------------------------------------------------
-options(shiny.port = 1111)
-doNotificationLevel=1     #notification popups. level=1 is debugging and level=2 is user.
-options(stringsAsFactors = F)
-
-
-
-
-
-# source ------------------------------------------------------------------
-
-
-source("combo_functions.r")
-
-# libs --------------------------------------------------------------------
-
-
-
-
-library(shinythemes)
-library(shinyWidgets)
-library(webshot)
-library(readxl)
-library(scales)
-library(shinyjqui)
-library(tidyr)
-library(stringr)
-library("shinyBS")
-library(shinyjs)
-library(glue)
-library(r2d3)
-library(tidyverse)
-library(rhandsontable)
-library(shinyPagerUI)
-library(networkD3)
-library(tidygraph)
-library(googledrive)
-library(googlesheets4)
-
-library(rdrop2)
-
-require(visNetwork)
-require(plotly) # rgba
-library(colourpicker)
-library(ggraph)
-library(DiagrammeR)
-library(rpivotTable)  
-library(shape)
-
-
-
-# attempt to bypass lack of local storage at shinyapps, both dropb --------
-
-
-storage <- "dropbox"
-storage <- "gsheets"
-storage <- "local"
-
-
-if(storage=="local" | storage=="gsheets"){
-  file__exists <- file.exists
-  read__csv <- read_csv
-  write__csv <- write_csv
-} else if(storage=="dropbox"){
-  file__exists <- drop_exists
-  read__csv <- drop_read_csv
-  write__csv <- function(obj,path){
-    # browser()
-    write_csv(obj,path = path)
-    drop_upload(path,"www")      # note folder is hard-coded TODO
-    file.remove(path)
-    
-  }
-}
-
-
-
-# functions ----------------------------------------------------------------
-
-
-mutate_if_sw=function(...)suppressMessages(mutate_if(...))
-
-
-
-doNotification <- function(text,level=1) {
-  if(level>doNotificationLevel)showNotification(text)
-  write(paste0(text), paste0("","log.txt"), append = T)
-}
-
-
-
-allNum <- function(vec) {
-  vec <- replaceNA(vec)
-  s <- str_detect(vec, "^[-*\\.0-9]*$")
-  all(s, na.rm = T) & !all(vec == "")
-}
-
-xc <- function(x, sep = " ") {
-  str_split(x, sep)[[1]]
-}
-
-replaceNA <- function(df) {
-  df[is.na(df)] <- ""
-  df
-}
-
-
-inv=function(ed){   #inverts an edgelist. For Rick's suggestion for cacluating a node metric
-  ed %>% 
-    select(from,to) %>% 
-    unlist %>% 
-    unique %>% 
-    expand.grid(from=.,to=.,stringsAsFactors = F) %>% 
-    bind_rows(ed) %>% 
-    select(from,to) %>% 
-    group_by(from,to) %>% 
-    mutate(n=paste0(from,to)) %>% 
-    group_by(from,to) %>% 
-    mutate(n=n()) %>% 
-    mutate(present=ifelse(n<2,0,1)) %>% 
-    select(-n)
-  
-}
-
-
-inv_multi=function(df){   #For Rick's suggestion for cacluating a node metric
-  # browser()
-  stats <- df %>%
-    split(.$statement) %>%
-    purrr::map_dfr(inv) %>% 
-    group_by(from,to) %>% 
-    mutate(absent=sum(1-present),present=sum(present),num=n(),avp=round(present/num,2),ava=round(absent/num,2)) %>% 
-    summarise_all(dplyr::first)
-  
-  df %>% left_join(stats,by=c("from","to"))
-  
-}
-
-
-
-infer=function(gr){                         # sets levels of downstream variables
-  gr=gr %>% activate(nodes) %>% 
-    mutate(source=node_is_source()) %>% 
-    mutate(priorLevel=level) %>% 
-    mutate(xid=row_number())
-  
-  
-  
-  ids=gr %>% 
-    activate(nodes) %>% 
-    pull(source) %>% 
-    which
-  
-  
-  
-  empties=gr %>% 
-    activate(nodes) %>% 
-    mutate(empty=source & is.na(level)) %>% 
-    pull(empty) %>% 
-    which
-  
-  
-  
-  # ridiculous palaver cause can't call bfs directly  
-  ranks=vector(length=0)
-  
-  for(y in ids){
-    # browser()
-    gr %>% 
-      activate(nodes) %>% 
-      mutate(rank=bfs_rank(root=y)) %>% 
-      filter(!is.na(rank)) %>% 
-      arrange(rank) %>% 
-      pull(xid) -> rk
-    ranks=c(ranks,rk[-1])
-    
-  }
-  
-  
-  # gridd=list(length=0)
-  
-  combs=lapply(empties,function(x)0:1) %>% expand.grid()
-  
-  colnames(combs)=empties
-  
-  gr1=gr 
-  
-  levs=NULL#vector(length=length(combs))
-  
-  for(e in 1:nrow(combs)){
-    if(length(empties)>0){
-      # browser()
-      row=combs[e,]
-      gr1 %>% NN ->jj
-      jj$level[as.numeric(names(combs))]=row
-      gr1=gr1 %>% activate(nodes) %>% 
-        mutate(level=unlist(jj$level))
-      
-    } 
-    for(r in ranks){
-      gr1=  gr1 %>% 
-        activate(nodes) %>% 
-        mutate(level = ifelse(r!=xid,level,
-                              do.call(.N()$fun[r],list(.N()$level[.E()$from[.E()$to==r]]))
-        )
-        )
-      
-    }
-    levs=cbind(levs,(gr1 %>% NN %>% pull(level)))
-  }  # browser()
-  
-  
-  
-  if(length(empties)>0){
-    means=rowMeans(levs,na.rm=T)
-    gr = gr %>% activate(nodes) %>% 
-      mutate(level=means)
-  } else gr = gr1
-  
-  
-  
-  
-  gr
-}
-
-
-# helpers for tidygraph
-N_ <- function(gr) gr %>% activate(nodes)
-E_ <- function(gr) gr %>% activate(edges)
-NN <- function(gr) gr %>% activate(nodes) %>% as_tibble()
-EE <- function(gr) gr %>% activate(edges) %>% as_tibble()
-
-
-
-
-
-
-findfirst <- function(vec, vec2) {
-  sapply(vec, function(x) {
-    which(x == vec2) %>% first()
-  })
-}
-
-
-
-# constants ----
-
-writeLines("", "log.txt") # just to open up a fresh file
-
-
-csvlist <- xc("nodes edges settings statements settingsGlobal")
-
-
-# generate some nice colours
-
-allcols1 <- lapply(xc("Greys Set1 Pastel1 Reds Oranges Blues Greens Purples"), function(x) RColorBrewer::brewer.pal(8, x)) %>%
-  # c(RColorBrewer::brewer.pal(8,"Pastel1"),.) %>%
-  # c(RColorBrewer::brewer.pal(8,"Set1"),.) %>%
-  c(xc("#FFFFFF black")) %>%
-  unlist()
-
-allcols2 <- lapply(xc("Greys Reds Blues Greens Oranges Purples"), function(x) RColorBrewer::brewer.pal(9, x)[c(2, 4, 6, 8)]) %>%
-  c(xc("#FFFFFF"), .) %>%
-  unlist()
-
-allcols <- allcols2
-
-allcols <- c(allcols, paste0(allcols, "55"))
-
-colnams <- lapply(xc("Grey Red Blue Green Orange Purple"), function(x) xc("light mid1 mid2 dark") %>% paste0(., " ", x)) %>%
-  c(xc("White"), .) %>%
-  unlist()
-
-names(allcols) <- c(colnams, paste0(colnams, " hazy"))
-
-shapelist <- c("box", "circle", "square", "triangle", "dot", "star", "ellipse", "database", "text", "diamond")
-
-default.statements <- data.frame(
-  "text" =
-    rep("Some text", 1),
-  "key1" =
-    rep("", 1),
-  "key2" =
-    rep("", 1),
-  "key3" =
-    rep("", 1),
-  "key4" =
-    rep("", 1),
-  "key5" =
-    rep("", 1),
-  "key6" =
-    rep("", 1),
-  "key7" =
-    rep("", 1),
-  "statement" =
-    rep(1, 1),
-  stringsAsFactors = FALSE
-)
-
-
-
-conditionlist <-
-  c("always", "if...", "conditional on:")
-
-
-
-comparisonlist <-
-  c("equal", "not equal", ">", "<", "contains")
-
-ft <- c(F, T)
-op <- (0:10) / 10
-
-valuelist <- list(
-  "-" =
-    "-",
-  "direction" =
-    c("Left-to-right" = "LR", "Right-to-left" = "RL", "Top-to-bottom" = "TB", "Bottom-to-top" = "BT"),
-  "dir" =
-    xc("forward back both"),
-  "ranksep" =
-    ((1:12) / 6)^2 %>% round(1),
-  "nodesep" =
-    xc("1 2 3 4"),
-  "borderWidth" =
-    1:9,
-  "rank" =
-    1:15,
-  "penwidth" =
-    1:15,
-  "layout" =
-    xc("dot neato twopi circo"),
-  "fixedsize" =
-    xc("true false"),
-  "fixedsize" =
-    xc("true false"),
-  "shape" =
-    shapelist,
-  "hidden" =
-    ft,
-  "dashes" =
-    ft,
-  "opacity" =
-    op,
-  "color.opacity" =
-    op,
-  "group" =
-    1:20,
-  "bgcolor" =
-    allcols,
-  "background" =
-    allcols,
-  "color" =
-    allcols,
-  "border" =
-    allcols,
-  "color.background" =
-    allcols,
-  "color.border" =
-    allcols,
-  "color.background.highlight" =
-    allcols,
-  "color.border.highlight" =
-    allcols,
-  "background" =
-    allcols,
-  "color" =
-    allcols,
-  "font.color" =
-    allcols,
-  "fillcolor" =
-    allcols,
-  "font.size" =
-    ((1:20) / 2)^2,
-  "fontname" =
-    xc("Helvetica Times Arial Courier"),
-  "font.name" =
-    xc("Helvetica Times Arial Courier"),
-  "wrap" =
-    (1:20) * 5,
-  "combo.type" =
-    xc("AND OR"),
-  "style" =
-    c("solid", "dotted", "dashed", "invisible" = "invis"),
-  "height" =
-    (1:9) / 10,
-  "size" =
-    (1:6)^2,
-  "width" =
-    1:9,
-  "font.size" =
-    1:9,
-  "label" =
-    "Placeholder for legend",
-  "labelloc" =
-    xc("b t"),
-  "labeljust" =
-    xc("l r c"),
-  "nodeSpacing" =
-    ((1:20) / 4)^2,
-  "levelSeparation" = ((1:20) / 4)^2
-)
-
-
-
-defaultSettings <- read_csv("defaultSettings.csv")
-defaultSettingsGlobal <- read_csv("defaultSettingsGlobal.csv")
-
-
-
-
-# UI ----------------------------------------------------------------------
-
-
-
-
-ui <- tagList(
-  useShinyjs(),
-  inlineCSS(list(.red = "background: snow")),
-  tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "styles/styles2.css")
-  ),
-  tags$script('
-              $(document).on("keydown", function (e) {
-              Shiny.onInputChange("keypressed", e.which);
-              });
-              '),
-  
-
-# get selected text for Code tab ------------------------------------------
-
-
-  tags$script('
-                function getSelectionText() {
-                    var text = "";
-                    if (window.getSelection) {
-                        text = window.getSelection().toString();
-                    } else if (document.selection) {
-                        text = document.selection.createRange().text;
-                    }
-                    return text;
-                }
-
-        document.onmouseup = document.onkeyup = document.onselectionchange = function() {
-            var selection = getSelectionText();
-            Shiny.onInputChange("highlightedText", selection);
-        };
-        '),
-  
-
-# fluid page --------------------------------------------------------------
-
-
-
-  fluidPage(
-    theme = shinytheme("flatly"), style = "background-color:#445544 !important;",
-    
-    
-    div(
-      id = "loading-content",
-      h2("Getting ready for causal mapping...")
-    ),
-    conditionalPanel("!input.crowd",
-                     
-                     div(
-                       div(
-                         
-                         
-                         sidebarLayout(                             #the main panels are resizable
-                           jqui_resizable(sidebarPanel(
-                             id="resizablePanel",
-                             width = 4, style =
-                               "padding:0",
-                             
-                             id = "app-content",
-                             a(h4("Causal Mapping ", style = "display:inline-block;color:white;margin-right:8px"), href = "."),
-                             img(src = "img/logo.gif", height = "20px", style = "display:inline-block;"),
-                             a(icon("question-circle"),href="http://www.pogol.net/_help/index.html", target="_blank",height = "20px", style = "display:inline-block;margin-left:20px"),
-                             
-                             hr(style = "margin-top:5px"),
-                             
-                             # alerts if user requests correct or incorrect permalink
-                             bsAlert("bsmsg"),
-                             bsAlert("found"),
-                             bsAlert("notfound"),
-                             
-                             
-                             # uiOutput("test"),
-                             
-                               uiOutput("savebut"),
-                               hr(),
-                               tabsetPanel(
-                                 id = "sides", type = "tabs", selected = "Code",
-                                 
-                                 # ui statements----
-                                 
-                                 tabPanel("",icon=icon("upload"),                        # user can upload set of statements to process, and optionally also pre-existing node and edge lists
-                                          style = glue(";border-radius:10px"),
-                                          
-                                          bsCollapse(
-                                            id = "uploads", open = "Upload statements",
-                                            bsCollapsePanel(
-                                              title = "Upload statements",
-                                              # uiOutput("statementsButton"),
-                                              fileInput("up.statements", NULL,
-                                                        multiple = FALSE, width = NULL,
-                                                        accept = c(
-                                                          "text/csv",
-                                                          "text/comma-separated-values,text/plain",
-                                                          ".csv"
-                                                        )
-                                              )
-                                            ),
-                                            bsCollapsePanel(
-                                              title = "View and edit statements",
-                                              p("Paste your statements into the space below. The table will expand if you paste more rows."),
-                                              # p("If you want more columns, right-click to create them first.")
-                                              # ,
-                                              p("The first column is the text. You can use other columns for attributes like age or gender."),
-                                              # p("You can change the column names."),
-                                              actionButton("statementsTableUp", "Update"),
-                                              rHandsontableOutput("statements")
-                                            ),
-                                            bsCollapsePanel(
-                                              "Upload variables and arrows",
-                                              fileInput("up.nodes", "Upload variables",
-                                                        multiple = FALSE, width = NULL,
-                                                        accept = c(
-                                                          "text/csv",
-                                                          "text/comma-separated-values,text/plain",
-                                                          ".csv"
-                                                        )
-                                              ),
-                                              fileInput("up.edges", "Upload arrows",
-                                                        multiple = FALSE, width = NULL,
-                                                        accept = c(
-                                                          "text/csv",
-                                                          "text/comma-separated-values,text/plain",
-                                                          ".csv"
-                                                        )
-                                              ),
-                                              checkboxInput("use.labels", "Use labels instead of row numbers")
-                                            )
-                                          )
-                                 ),
-                                 
-                                 # ui coding----                             
-                                 #  most important panel. in a state of flux at the moment. in most cases user will be looking at / scrolling through pieces of text and will "code" them aka use the information to create arrows/edges
-                                 tabPanel("",icon=icon("highlighter"),
-                                          value = "Code", style = glue("background-color:{rgb(0.99,1,0.97)};;border-radius:10px"), 
-                                          
-                                          # checkboxInput("showPage","Code one sentence")
-                                          # ,
-                                          uiOutput("pagerBig"),
-                                          uiOutput("displayStatementPanel"),
-                                          
-                                          
-                                            uiOutput("varForm"),
-                                          
-                                          bsCollapse(
-                                            id = "codeCollapse", open =
-                                              "Add arrows",
-                                            
-                                            bsCollapsePanel(
-                                              "Add arrows",
-                                              div(
-                                                uiOutput("selectbox"),
-                                                uiOutput("addNewNodeButton"),
-                                                uiOutput("add_edges_widget"),
-                                                uiOutput("combo")
-                                              )
-                                            ),
-                                            
-                                            
-                                            bsCollapsePanel(                    #this is just a utility from visnetwork which I will drop at some point
-                                              "Advanced options",
-                                              p("Development only"),
-                                              icon("exclamation-triangle"),
-                                              p(id = "advancedAnchor")
-                                            )
-                                          )
-                                 ),
-                                 tabPanel(value="Variables","",                      # user can directly edit the nodes table. still functional but will probably be dropped
-                                          style = glue("background-color:{rgb(0.99,1,0.97)};;border-radius:10px"), icon = icon("boxes"),
-                                          # h3("View and edit variables"),
-                                          div(actionButton("nodeTableUp", "Update"),style="display:inline-block"),
-                                          div(textInput("nodeTableFilter", NULL,width = "160px",placeholder="Filter..."),style="display:inline-block;margin-left:20px"),
-                                          div(checkboxInput("nodeTableAddCol", "Add columns"),style="display:inline-block;margin-left:20px"),
-                                          div(checkboxInput("nodeTableColE", "Edit columns"),style="display:inline-block;margin-left:20px"),
-                                          conditionalPanel("input.nodeTableAddCol",
-                                                           uiOutput("nodeTableAddCol")),
-                                          rHandsontableOutput("nodeTable"),
-                                          uiOutput("combine_button")
-                                   # ,
-                                   #        uiOutput("formMakr")
-                                 ),
-                                 tabPanel("",                             # user can directly edit the edges aka arrows table. still functional but will probably be dropped
-                                          value = "Arrows", style = glue("background-color:{rgb(0.99,1,0.97)};;border-radius:10px"), icon = icon("arrow-right"),
-                                          # h3("View and edit arrows"),
-                                          actionButton("edgeTableUp", "Update"),
-                                          rHandsontableOutput("edgeTable"),
-                                          div(
-                                            style = "display:inline-block;padding-left:20px;font-size:4px;width:150px",
-                                            checkboxInput("addColBut", "Edit columns")
-                                          ),
-                                          uiOutput("edgeInfo")
-                                 ),
-                                 
-                                 
-                                 # ui settings----
-                                 
-                                 tabPanel("",value="Display",    # more of a settings panel 
-                                          style = glue("background-color:{rgb(0.97,1,0.97)};;border-radius:10px"), icon = icon("palette"),
-                                          
-                                          # selectInput("layout","layout",choices=c("Sugiyama"="layout_with_sugiyama", "circle"="layout_in_circle"),selected = "layout_with_sugiyama")
-                                          # ,
-                                          uiOutput("filters"),                         # transient filters to filter out some nodes/edges, values are not stored in settings csv files
-                                          uiOutput("inputs"),                         # user-friendlier widgets which are produced instead of rows of the settings tables if user has written "slider" etc in the last column of settings tables
-                                          bsCollapse(
-                                            id = "display", open =
-                                              "Advanced",
-                                            bsCollapsePanel(
-                                              "Advanced",
-                                              actionButton("settingsTableGlobalUp","Update"),
-                                              rHandsontableOutput("settingsTableGlobal"),                         # global settings
-                                              hr(),
-                                              actionButton("settingsTableUp","Update"),
-                                              rHandsontableOutput("settingsTable"),                         # set things like size and colour of items 
-                                              hr()
-                                              # htmlOutput("overview"),
-                                              # hr()
-                                            )
-                                          ),
-                                          bsCollapsePanel(
-                                            "Easy",
-                                            actionButton("autoMerge", "Auto-suggest clusters")                         # not importatn
-                                          )
-                                   # ,
-                                 ),
-                                 tabPanel("",icon=icon("chart-pie"),                         # some additional output, not important
-                                   style = "padding:20px;background-color:white;z-index:99",
-                                   # d3Output("d3")
-                                   
-                                   bsCollapse(
-                                     bsCollapsePanel(title = "Sankey",
-                                       plotlyOutput("charts")
-                                     ),
-                                     bsCollapsePanel(title = "pivot",
-                                       rpivotTableOutput("pivot", width = "100%", height = "300px")
-                                     )
-                                   )
-                                   
-                                 ),
-                                 
-                                 tabPanel("", icon=icon("stack-overflow"),div(style = ""),                         # library of existing projects stored locally as csv files. clicking loads up the project 
-                                   style = "",
-                                   uiOutput("gallery")
-                                 ),
-                                 tabPanel("", icon=icon("download"),div(style = ""),
-                                   style = "",
-                                   uiOutput("downloads")
-                                 )
-                               )
-                             
-                           ), options = list(minHeight = 100, maxHeight = 2000,
-                                             minWidth = 200, maxWidth = 3000)),
-                           
-                           # main panel----
-                           mainPanel(
-                             
-                             width = 8, style = "border-left:2px dotted black",
-                             conditionalPanel("!input.crowd",style="background-color:white;border-radius:5px",                         # input.crowd is part of an alternative, "crowdsourced" phone-friendly version of the interface which is not important at moment
-                               
-                               uiOutput("floatingWidgets"),
-                               
-                               
-                                                         
-                                                         visNetworkOutput("net", height = "950px", width = "100%"),                         # the main network viz. 
-                                                         uiOutput("savedMsg"),
-                                                         
-                                                         tags$hr(),
-                                                         uiOutput("blog"),                          # additional narrative abou the project stored in the settings csv
-                                                         textOutput("info")
-                                              #   )
-                                              # )
-                             )
-                             ,
-                             # div(actionButton("Interrupt", "Interrupt",
-                             #                  icon = icon("exclamation-triangle"),
-                             #                  style = "background-color:pink;"
-                             # ), style = "display:inline-block;margin-left:10px"),
-                             uiOutput("description"),
-                             plotOutput("colourLegend")
-                           )
-                         )
-                       )
-                     ),
-                     div(actionButton("Interrupt", "Interrupt",
-                     ), style = "position:fixed;bottom:0;right:10px")
-    ),
-    conditionalPanel("input.crowd",
-                     uiOutput("add_edges_widget2"),
-                     visNetworkOutput("net2", height = "75vh", width = "auto")
-                     
-                     # p("lkj")
-    ),
-    div(checkboxInput("crowd","Simplified view for crowdsourcing?"),style="color:#EEFFEE;position:fixed;bottom:0")
-  )
-)
-
-
-#server----
-
 server <- function(input, output, session) {
   autoInvalidate <- reactiveTimer(2000)
   
@@ -747,10 +35,10 @@ server <- function(input, output, session) {
   
   
   
-
-# findset function to transfer user settings to values$settings -----------
+  
+  # findset function to transfer user settings to values$settings -----------
   # this is important and a bit clunky. I think it sucks in the two settings tables, combines them with defaults in case anything is missing, and then providess the value of the setting sought. probably most ripe for rationalisation
-
+  
   
   findset <- function(tex, which = "current",global=T,v=values) {
     # if(tex=="diagrambackground") browser()
@@ -854,12 +142,12 @@ server <- function(input, output, session) {
             
             
             # browser()
-              
-              
+            
+            
             if (filename != "" & !file__exists(paste0(filename,"-nodes.csv"))) {
               createAlert(session, "notfound", title = "Sorry, couldn't find that link.", content = "Let me know if you need help: steve@pogol.net", append = FALSE)
             }
-
+            
             for(fn in csvlist){
               
               
@@ -869,18 +157,18 @@ server <- function(input, output, session) {
                 
                 doNotification("Reading from google drive",2)
                 # browser()
-              fnn=paste0(filename,"-",fn) %>% str_remove("^www/")
-              fnnn=drive_find(pattern=fnn,type = "spreadsheet")[1,]
-              local_file <- drive_download(fnnn, path = tempfile(fileext= ".xlsx"))
-              read_sheet(fnnn)
-              values[[fn]] <- read_excel(local_file$local_path)   #workaround using readxl because auth not yet available on package
-              
+                fnn=paste0(filename,"-",fn) %>% str_remove("^www/")
+                fnnn=drive_find(pattern=fnn,type = "spreadsheet")[1,]
+                local_file <- drive_download(fnnn, path = tempfile(fileext= ".xlsx"))
+                read_sheet(fnnn)
+                values[[fn]] <- read_excel(local_file$local_path)   #workaround using readxl because auth not yet available on package
+                
                 doNotification("Finished reading from google drive",2)
               } else if(storage=="local"){
-              
-              if (file__exists(fnn)) {
-                values[[fn]] <- read__csv((fnn))
-              } 
+                
+                if (file__exists(fnn)) {
+                  values[[fn]] <- read__csv((fnn))
+                } 
               }
             }
             
@@ -1019,9 +307,9 @@ server <- function(input, output, session) {
   
   values$graf <- tbl_graph(defaultNodes%>% filter(F), defaultEdges %>% filter(F))  #   the default graph object with no nodes or edges
   
-
-# ++ Import/Statements panel -------------------------------------------------
-
+  
+  # ++ Import/Statements panel -------------------------------------------------
+  
   
   
   # ++create statements table to allow user edit of statements----
@@ -1140,13 +428,13 @@ server <- function(input, output, session) {
     # browser()
   })
   
-
-# ++ Code panel -----------------------------------------------------------
-
   
-
-# create values$tot -------------------------------------------------------
-
+  # ++ Code panel -----------------------------------------------------------
+  
+  
+  
+  # create values$tot -------------------------------------------------------
+  
   
   observe(({                                  #   just the total number of statements, to provide the maximum value of the pager
     if (!is.null(values$statements)) {
@@ -1242,18 +530,18 @@ server <- function(input, output, session) {
   
   # ** display statements one by one ----
   
-
-        
-      output$displayStatementPanel <- renderUI({
-          
-        tagList(
-          icon("quote-left"),
-          span(values$statements$text[values$statements$statement==values$pag], class = "textbanner", id = "textbanner"),
-          # span(add_highlight((ve$quote[ve$statement==values$pag])[1],(values$statements$text[values$statements$statement==values$pag])), class = "textbanner", id = "textbanner"),
-          hr()
-        )
-        
-        })
+  
+  
+  output$displayStatementPanel <- renderUI({
+    
+    tagList(
+      icon("quote-left"),
+      span(values$statements$text[values$statements$statement==values$pag], class = "textbanner", id = "textbanner"),
+      # span(add_highlight((ve$quote[ve$statement==values$pag])[1],(values$statements$text[values$statements$statement==values$pag])), class = "textbanner", id = "textbanner"),
+      hr()
+    )
+    
+  })
   
   observeEvent(
     {
@@ -1456,9 +744,9 @@ server <- function(input, output, session) {
   output$combo <- renderUI(if(T){
     div(if (length(input$new1_edge) > 1) {
       selectizeInput("combo", "Arrows interact?",
-        choices = c("", "AND", "OR","min","max","SAME","mean","sum"), width = "150px", selected = NULL, 
-        options =
-          list(create = T, placeholder = "", onInitialize = I('function() { this.setValue(""); }')),
+                     choices = c("", "AND", "OR","min","max","SAME","mean","sum"), width = "150px", selected = NULL, 
+                     options =
+                       list(create = T, placeholder = "", onInitialize = I('function() { this.setValue(""); }')),
       )
     })
   })
@@ -1594,9 +882,9 @@ server <- function(input, output, session) {
   })
   
   
-
-
-# widgets to edit and delete selected nodes and edges. not complete ----
+  
+  
+  # widgets to edit and delete selected nodes and edges. not complete ----
   # 
   
   output$varForm=renderUI({
@@ -1657,10 +945,10 @@ server <- function(input, output, session) {
       
       ### this will fail if duplicate labels TODO
       selectizeInput("combineSelect",
-        label = NULL, selected = NULL, multiple = T,
-        options =
-          list(create = T, placeholder = "start typing the name of the variables you want to combine", onInitialize = I('function() { this.setValue(""); }')),
-        choices = varlist
+                     label = NULL, selected = NULL, multiple = T,
+                     options =
+                       list(create = T, placeholder = "start typing the name of the variables you want to combine", onInitialize = I('function() { this.setValue(""); }')),
+                     choices = varlist
       ),
       textInput("newName", "Type a name for this new combined variable"),
       actionButton("combine", "Combine!"),
@@ -1811,10 +1099,10 @@ server <- function(input, output, session) {
     
     doNotification("Creating nodes table")
     rhandsontable(vg, rowHeaders = FALSE, selectCallback = T,
-      row_highlight=as.numeric(whichtarg)-1, 
-      col_highlight=0, 
-      row_hide=(unite(vg, "xox") %>% pull(xox) %>% str_detect(input$nodeTableFilter) %>% `!`() %>% which)-1
-      ,usetypes = T) %>%
+                  row_highlight=as.numeric(whichtarg)-1, 
+                  col_highlight=0, 
+                  row_hide=(unite(vg, "xox") %>% pull(xox) %>% str_detect(input$nodeTableFilter) %>% `!`() %>% which)-1
+                  ,usetypes = T) %>%
       hot_context_menu(allowRowEdit = F) %>%
       hot_cols(fixedColumnsLeft = 1) %>%
       hot_cols(columnSorting = T) %>%
@@ -1974,9 +1262,9 @@ server <- function(input, output, session) {
     })
   })  
   
-
-# produce user-friendlier settings widgets --------------------------------
-
+  
+  # produce user-friendlier settings widgets --------------------------------
+  
   
   observeEvent(input$settingsTableGlobalUp,{
     # browser()
@@ -2081,9 +1369,9 @@ server <- function(input, output, session) {
       visFit() 
   })
   
-
-# ++ library/gallery panel ------------------------------------------------
-
+  
+  # ++ library/gallery panel ------------------------------------------------
+  
   
   ## Gallery ----
   
@@ -2128,8 +1416,8 @@ server <- function(input, output, session) {
     
   })
   
-
-# ++ charts panel  -----------------------------------------------------------
+  
+  # ++ charts panel  -----------------------------------------------------------
   
   
   
@@ -2139,7 +1427,7 @@ server <- function(input, output, session) {
     rpivotTable(NN(values$grafAgg2)[,1:20])
   })  
   
-# ++ downloads panel  -----------------------------------------------------------
+  # ++ downloads panel  -----------------------------------------------------------
   
   
   output$downloads=renderUI({
@@ -2156,8 +1444,8 @@ server <- function(input, output, session) {
   })
   
   
-# ++ main panel  -----------------------------------------------------------
-# description below graph
+  # ++ main panel  -----------------------------------------------------------
+  # description below graph
   output$description=renderUI({
     x=findset("diagramdescription")
     if(x!="")  div(p(x),style="padding:10px;background-color:whitesmoke;margin-top:10px;border-radius:5px")
@@ -2171,12 +1459,12 @@ server <- function(input, output, session) {
   output$colourLegend <- renderPlot({
     emptyplot(main = "Percentage of women mentioning each factor and each link                 Percentage of younger people mentioning each factor",adj=0)
     colorlegend(posx = c(0, 0.1), 
-      col = intpalette(c("blue", "red"), 100), 
-      zlim = c(0, 100), zval = c(0,25,50,75,100))
+                col = intpalette(c("blue", "red"), 100), 
+                zlim = c(0, 100), zval = c(0,25,50,75,100))
     
     colorlegend(posx = c(0.5, 0.6), 
-      col = intpalette(c("black", "white"), 100), 
-      zlim = c(0, 100), zval = c(0,25,50,75,100))
+                col = intpalette(c("black", "white"), 100), 
+                zlim = c(0, 100), zval = c(0,25,50,75,100))
     
   })
   
@@ -2184,20 +1472,20 @@ server <- function(input, output, session) {
   
   
   # ++AGGREGATE ---------------------------------------------------------------------------
-# the long process of aggregating values$graf into values$grafAgg2, adding formatting etc
+  # the long process of aggregating values$graf into values$grafAgg2, adding formatting etc
   
   observe(
     if ((req(values$graf)) %>% EE %>% nrow %>% `>`(0)) {
-  
       
-
-# prepare statements, split columns ------------------------------------------------------
-
-   
-
       
-          
-  doNotification("starting aggregation")    
+      
+      # prepare statements, split columns ------------------------------------------------------
+      
+      
+      
+      
+      
+      doNotification("starting aggregation")    
       legend <- ""
       
       # post-process original version
@@ -2319,392 +1607,392 @@ server <- function(input, output, session) {
         
         if(("from" %in% colnames(ved))  &&  as.logical(findset("arrowabsence")) && input$sides!="Code"){ #todo findset
           
-        doNotification("rick aggregation")    
+          doNotification("rick aggregation")    
           
           if(all(is.na(ved$statement)))ved$statement=1
           # browser()
           ved <- ved %>%
             inv_multi()
         }
-        }
-        
-        
-        # browser()
-        
-        # ved edge merge ----
-        
-        if (findset("arrowmerge") %>% as.logical() ) {
-          ved <- ved %>%
-            group_by(from, to)
-          
-          legend <- paste0(legend, "</br>Multiple arrows between pairs of variables collapsed into one")
-          
-        } else {
-          ved <- ved %>%
-            group_by(row_number())
-        }
-        
-  
-        doNotification("merge edge aggregation")    
-        
+      }
+      
+      
+      # browser()
+      
+      # ved edge merge ----
+      
+      if (findset("arrowmerge") %>% as.logical() ) {
         ved <- ved %>%
-          mutate(statement=as.character(statement)) %>%
-          mutate(wstrength = strength * trust) 
-        # browser()
+          group_by(from, to)
         
+        legend <- paste0(legend, "</br>Multiple arrows between pairs of variables collapsed into one")
+        
+      } else {
         ved <- ved %>%
-          mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
-          mutate_if_sw(is.character, .funs = catfun) %>%
-          mutate(frequency = n()) %>% 
-          summarise_all(.funs = funs(first)) %>%
-          ungroup() %>%
-          mutate(title = paste0(frequency, gsub("[^[:alnum:][:space:]]", "", label), separate = "- "))
-        
-        
-        
-        doNotification("min freq aggregation")    
-        
-        
-        
-        # edge minimum freq ----
-        
-        if(input$sides!="Code"){
+          group_by(row_number())
+      }
+      
+      
+      doNotification("merge edge aggregation")    
+      
+      ved <- ved %>%
+        mutate(statement=as.character(statement)) %>%
+        mutate(wstrength = strength * trust) 
+      # browser()
+      
+      ved <- ved %>%
+        mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
+        mutate_if_sw(is.character, .funs = catfun) %>%
+        mutate(frequency = n()) %>% 
+        summarise_all(.funs = funs(first)) %>%
+        ungroup() %>%
+        mutate(title = paste0(frequency, gsub("[^[:alnum:][:space:]]", "", label), separate = "- "))
+      
+      
+      
+      doNotification("min freq aggregation")    
+      
+      
+      
+      # edge minimum freq ----
+      
+      if(input$sides!="Code"){
         ved <- ved %>%
           filter(frequency > findset("arrowminimum.frequency"))
-        }
-        # browser()
-        # cat("merge")
-        
-        # join edges with nodes------------------------------------------------
-        
-        doNotification("join to edges aggregation")    
-        
-        if(findset("variablejoinedges") %>% as.logical | 
-           values$settings %>% filter((condition!="always")) %>% nrow() %>% `>`(0) | 
-           values$settingsGlobal %>% pull(value) %>% unique %>% str_detect("mean|frequency|sum") %>% any(na.rm=TRUE)
-        ){ #todo, should list any functions. variablejoinedges is pointless
-          
-          # browser()
-          
-          # doNotification("merging nodes and arrows")
-          ved.from <- ved %>%
-            mutate(id = from) %>%
-            group_by(id) %>%
-            mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
-            mutate_if_sw(is.character, .funs = catfun) %>%
-            summarise_all(.funs = funs(first)) %>%
-            ungroup() %>%
-            rename_all(function(x)paste0("from.",x)) %>% 
-            rename(id=from.id)
-          
-          vno <- vno %>%
-            mutate(id = row_number()) %>%
-            left_join(ved.from, by = "id")
-          
-          ved.to <- ved %>%
-            mutate(id = to) %>%
-            group_by(id) %>%
-            mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
-            mutate_if_sw(is.character, .funs = catfun) %>%
-            summarise_all(.funs = funs(first)) %>%
-            ungroup() %>%
-            rename_all(function(x)paste0("to.",x)) %>% 
-            rename(id=to.id)
-          
-          
-          vno <- vno %>%
-            mutate(id = row_number()) %>%
-            left_join(ved.to, by = "id")
-          
-          
-          # add from and to scores for nodes
-          
-          vnofrom <- vno %>% 
-            select(starts_with("from.")) %>% 
-            select_if(is.numeric) %>% 
-            as.matrix
-          
-          vnoto <- vno %>% 
-            select(starts_with("to.")) %>% 
-            select_if(is.numeric) %>% 
-            as.matrix
-          
-          vnomean=apply(simplify2array(list(vnofrom,vnoto)),c(1,2),meanfun) %>% as.tibble()
-          vnosum=apply(simplify2array(list(vnofrom,vnoto)),c(1,2),sumfun) %>% as.tibble()
-          
-          colnames(vnomean)=str_remove_all(colnames(vnoto),"^to.") %>% paste0("mean_",.)
-          colnames(vnosum)=str_remove_all(colnames(vnoto),"^to.") %>% paste0("sum_",.)
-          
-          vno=bind_cols(vno,vnomean,vnosum)
-          
-          
-          
-          # browser()
-          vno <- vno %>%
-            ungroup() %>%
-            mutate(
-              frequency = sum_frequency_sum,
-              trust = sum_trust_sum,
-              strength = sum_strength_sum_sum,
-              wstrength = sum_wstrength_sum_sum) %>% 
-            mutate(
-              edgelabels = paste0(from.label, to.label),
-              statement = paste0(from.statement, to.statement),
-              quote = paste0(from.quote, to.quote)
-            ) 
-          
-          if("mean_key1_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key1=mean_key1_mean_mean) 
-          if("mean_key2_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key2=mean_key2_mean_mean) 
-          
-          # nsets=defaultSettings %>%
-          #   filter(type=="variable") %>%
-          #   select(setting,value)
-          #
-          
-          # minimum freq for vars
-          mf <- findset("variableminimum.frequency") %>% as.numeric()
-          # browser()
-          if (input$sides!="Code" && mf > 0 ) {
-            tmp <- tbl_graph(vno, ved) %>%
-              N_() %>%
-              filter(frequency > mf)
-            
-            vno <- tmp %>% NN()
-            ved <- tmp %>% EE()
-          }
-          
-        }
-        
-        doNotification("format aggregation")    
-        
-        
+      }
+      # browser()
+      # cat("merge")
       
-        # ...cond formatting----
+      # join edges with nodes------------------------------------------------
+      
+      doNotification("join to edges aggregation")    
+      
+      if(findset("variablejoinedges") %>% as.logical | 
+         values$settings %>% filter((condition!="always")) %>% nrow() %>% `>`(0) | 
+         values$settingsGlobal %>% pull(value) %>% unique %>% str_detect("mean|frequency|sum") %>% any(na.rm=TRUE)
+      ){ #todo, should list any functions. variablejoinedges is pointless
         
-        palettes=1
-        conds <- values$settings %>% filter((type == "variable" | type == "arrow") )
-        
-        conds[is.na(conds)] <- ""
-        
-        if (nrow(conds) > 0) {
-          
-          # see if we need to have different palettes:
-          
-          conds <- conds %>%
-            mutate(x = ifelse(str_detect(setting, "color") & condition == "conditional on:", 1, 0), palette = cumsum(x)) %>%
-            select(-x) %>%
-            filter(!is.na(condition))
-          
-          ## this is wasteful because could just do nodes once and edges once.
-          
-          
-          for (i in 1:nrow(conds)) {
-            row <- conds[i, ]
-            if (row$type == "variable") df <- vno else df <- ved
-            orig <- df
-            
-            typenow <- ifelse(row$type == "variable", "variable", "arrow")
-            
-          # browser()
-            
-            if (row$condition == "if...") {
-              if(row$ifcolumn %in% colnames(df)){
-                # browser()
-                ifcol <- df[, row$ifcolumn] %>% unlist() %>% as.vector()
-                comp <- row["comparison"] %>% unlist() %>% as.vector()
-                
-                ifcol[is.na(ifcol)] <- ""
-                
-                if (comp == "equal") {
-                  theseones <- ifcol == row$filter
-                } else
-                  if (comp == "not equal") {
-                    theseones <- ifcol != row$filter
-                  } else
-                    if (comp == ">") {
-                      theseones <- ifcol > row$filter
-                    } else
-                      if (comp == "<") {
-                        theseones <- ifcol < row$filter
-                      } else
-                        if (comp == "contains") theseones <- str_detect(ifcol, row$filter)
-                # browser()
-                df[theseones, row$setting] <- row$value
-                df[!theseones, row$setting] <- findset(paste0(typenow, row$setting), which = "default",global = F)
-                
-                legend <- paste0(legend, "</br>", typenow, " ", row$setting, " set to ", row$value, " if ", row$ifcolumn, " ", row$comparison, " ", row$filter, " ")
-              }
-            }
-            else if (row$condition == "conditional on:") {
-              if (row$ifcolumn %in% colnames(df)) {
-                
-                    # browser()
-                # browser()
-                
-                rc <- df[, row$ifcolumn]
-                if (row$setting %in% xc("label tooltip")) {
-                  df[, row$setting] <- rc
-                }
-                else if (row$setting %in% xc("frequency")) {
-                  df[, row$setting] <- as.numeric(rc)
-                }
-                else {
-                  rc[is.na(rc)] <- Inf
-                  # browser()
-                  mr <- dense_rank(unlist(rc))
-                  # mr[is.na(mr)]=""
-                  # mr=as.numeric(mr)
-                  nr <- nrow(df)
-                  if (str_detect(row$setting, "color") & !str_detect(row$setting, "opacity")) {
-                    df[, row$setting] <- colorRampPalette((str_split(findset(paste0("diagrampalette",palettes)),","))[[1]] %>% str_trim)(max(as.numeric(mr)))[mr]
-                    palettes=palettes+1
-                  }
-                  if (row$setting %in% xc("font.size")) {
-                    df[, row$setting] <- (mr + findset("variablefont.size.floor",global = T) %>% as.numeric) * findset("variablefont.size.scale",global = T) %>% as.numeric / nr
-                  }
-                  if (row$setting %in% xc("size")) {
-                    df[, row$setting] <- mr / nr
-                  }
-                  if (any(row$setting %in% xc("width"))) {
-                    df[, row$setting] <- mr * findset("arrowconditionalwidthscaling") %>% as.numeric() / max(mr)
-                  }
-                  if (any(row$setting %in% xc(" borderWidth"))) {
-                    df[, row$setting] <- mr * findset("variableconditionalwidthscaling") %>% as.numeric() / max(mr)
-                  }
-                  if (row$setting %in% xc("color.opacity")) {
-                    df[, row$setting] <- mr / max(mr)
-                  }
-                  if (row$setting %in% xc("shape")) {
-                    df[, row$setting] <- shapelist[mr]
-                  }
-                  if (row$setting %in% xc("style")) {
-                    df[, row$setting] <- xc("dotted dashed solid")[mr]
-                    if (length(unique(mr)) > 3) showNotification("I only have three styles")
-                  }
-                }
-                
-                legend <- paste0(legend, "</br>", typenow, " ", row$setting, " shows ", row$ifcolumn, "")
-              } else {
-                doNotification(paste0("there is no such column ",row$ifcolumn),2)
-              }
-            } else  {
-              # if (row$ifcolumn %in% colnames(df)) {
-              # if(row$setting == "color.background") browser()
-              rv=row$value
-              if(allNum(rv))rv=as.numeric(rv)
-              # df[, row$setting] <- rv
-              
-              
-              
-              # rc <- df[, row$ifcolumn]
-              # }else {
-              #   doNotification("there is no such column")
-              # }
-            }
-            
-            
-            if (!identical(df, orig)) {
-              if (row$type == "variable") vno <- df else ved <- df
-            }
-          }
-          
-          # browser()
-        }
-        
-        # rationalise----
-        
-        doNotification("final aggregation")    
-        
-        ved=ved %>% 
-          mutate(strength=strength_mean) %>% 
-          mutate(wstrength=wstrength_mean) 
-        # if("mean_key2_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key2=mean_key2_mean_mean) 
-        
-        
-        
-        # iconify hardcoded----
         # browser()
-        ved <- ved %>%
-          mutate(label = replace_na(label,"")) %>% 
-          mutate(label = ifelse(strength<0,paste0("🔀 ",label),label)) %>% 
-          mutate(combo.type <- replace_na(combo.type,"")) %>% 
-          mutate(arrows.middle.enabled = ifelse(combo.type == "", F, T)) %>%
-          mutate(label = paste0(label, ifelse(arrows.middle.enabled, paste0(" ", combo.type), ""))) %>%
-          mutate(dashes = definition.type != "") %>% 
-          mutate(arrows.to = definition.type != "Defined, undirected")
         
+        # doNotification("merging nodes and arrows")
+        ved.from <- ved %>%
+          mutate(id = from) %>%
+          group_by(id) %>%
+          mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
+          mutate_if_sw(is.character, .funs = catfun) %>%
+          summarise_all(.funs = funs(first)) %>%
+          ungroup() %>%
+          rename_all(function(x)paste0("from.",x)) %>% 
+          rename(id=from.id)
         
-        if (!is.null(legend)) {
-          if (legend != "") values$legend <- glue("</br><b style='font-color:red;'>Legend:</b>{legend}</br></br></br></br>")
-        }
+        vno <- vno %>%
+          mutate(id = row_number()) %>%
+          left_join(ved.from, by = "id")
+        
+        ved.to <- ved %>%
+          mutate(id = to) %>%
+          group_by(id) %>%
+          mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
+          mutate_if_sw(is.character, .funs = catfun) %>%
+          summarise_all(.funs = funs(first)) %>%
+          ungroup() %>%
+          rename_all(function(x)paste0("to.",x)) %>% 
+          rename(id=to.id)
         
         
         vno <- vno %>%
-          mutate(label = if_else(value>0,paste0(label," ♥"), label)) %>%
-          mutate(label = if_else(value<0,paste0(label," ☹"), label)) %>%
-          mutate(label = str_replace_all(label, "///", "\n")) 
+          mutate(id = row_number()) %>%
+          left_join(ved.to, by = "id")
+        
+        
+        # add from and to scores for nodes
+        
+        vnofrom <- vno %>% 
+          select(starts_with("from.")) %>% 
+          select_if(is.numeric) %>% 
+          as.matrix
+        
+        vnoto <- vno %>% 
+          select(starts_with("to.")) %>% 
+          select_if(is.numeric) %>% 
+          as.matrix
+        
+        vnomean=apply(simplify2array(list(vnofrom,vnoto)),c(1,2),meanfun) %>% as.tibble()
+        vnosum=apply(simplify2array(list(vnofrom,vnoto)),c(1,2),sumfun) %>% as.tibble()
+        
+        colnames(vnomean)=str_remove_all(colnames(vnoto),"^to.") %>% paste0("mean_",.)
+        colnames(vnosum)=str_remove_all(colnames(vnoto),"^to.") %>% paste0("sum_",.)
+        
+        vno=bind_cols(vno,vnomean,vnosum)
         
         
         
+        # browser()
+        vno <- vno %>%
+          ungroup() %>%
+          mutate(
+            frequency = sum_frequency_sum,
+            trust = sum_trust_sum,
+            strength = sum_strength_sum_sum,
+            wstrength = sum_wstrength_sum_sum) %>% 
+          mutate(
+            edgelabels = paste0(from.label, to.label),
+            statement = paste0(from.statement, to.statement),
+            quote = paste0(from.quote, to.quote)
+          ) 
         
-        labelmaker=function(tex,df,sep="<br>"){
-          x=(str_split(tex,",")[[1]]) %>% 
-            str_trim 
-          lab=""
-          for(i in x){
-            if(i %in% colnames(df))  lab=paste(lab,ifelse(i=="label","",paste0(sep,"",i,": ",collapse="")),unlist(df[,i]))
-          }
-          lab %>% 
-            str_remove_all("^  \\| details:  ")  %>% 
-            str_replace_all("\\| frequency: ","") 
-            # str_replace_all("\\| frequency: ([0-9]*)","\\(\\1\\)") 
-            
-        }
+        if("mean_key1_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key1=mean_key1_mean_mean) 
+        if("mean_key2_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key2=mean_key2_mean_mean) 
         
+        # nsets=defaultSettings %>%
+        #   filter(type=="variable") %>%
+        #   select(setting,value)
+        #
         
-        
-        vno <- vno %>% 
-          mutate(title=labelmaker(findset("variabletooltip"),vno),
-                 label=labelmaker(findset("variablelabel"),vno,sep=" | ")
-          )
-        
-        
-        ved <- ved %>% 
-          mutate(title=labelmaker(findset("arrowtooltip"),ved),
-                 label=labelmaker(findset("arrowlabel"),ved,sep="\n")
-          )
-        
-        
-        # # wrapping ----
-        # vno = vno %>%
-        #   mutate(label = str_wrap(label, findset("variablewrap")))
-        # 
-        # # ved tooltips
-        # 
-        # 
-        # 
-        ved <- ved %>%
-          mutate(label = str_replace_all(label, "///", "\n")) %>%
-          mutate(label = str_trim(label))
-        
-        
-        
-        
-        tmp <- tbl_graph(vno, ved)
-        
-        # autogroup
-        
-        if (findset("variableautogroup")) {
-          tmp <- tmp %>%
+        # minimum freq for vars
+        mf <- findset("variableminimum.frequency") %>% as.numeric()
+        # browser()
+        if (input$sides!="Code" && mf > 0 ) {
+          tmp <- tbl_graph(vno, ved) %>%
             N_() %>%
-            mutate(group = group_walktrap())
+            filter(frequency > mf)
+          
+          vno <- tmp %>% NN()
+          ved <- tmp %>% EE()
         }
         
+      }
+      
+      doNotification("format aggregation")    
+      
+      
+      
+      # ...cond formatting----
+      
+      palettes=1
+      conds <- values$settings %>% filter((type == "variable" | type == "arrow") )
+      
+      conds[is.na(conds)] <- ""
+      
+      if (nrow(conds) > 0) {
+        
+        # see if we need to have different palettes:
+        
+        conds <- conds %>%
+          mutate(x = ifelse(str_detect(setting, "color") & condition == "conditional on:", 1, 0), palette = cumsum(x)) %>%
+          select(-x) %>%
+          filter(!is.na(condition))
+        
+        ## this is wasteful because could just do nodes once and edges once.
         
         
-        values$grafAgg2 <- tmp # %>% debounce(4000)
+        for (i in 1:nrow(conds)) {
+          row <- conds[i, ]
+          if (row$type == "variable") df <- vno else df <- ved
+          orig <- df
+          
+          typenow <- ifelse(row$type == "variable", "variable", "arrow")
+          
+          # browser()
+          
+          if (row$condition == "if...") {
+            if(row$ifcolumn %in% colnames(df)){
+              # browser()
+              ifcol <- df[, row$ifcolumn] %>% unlist() %>% as.vector()
+              comp <- row["comparison"] %>% unlist() %>% as.vector()
+              
+              ifcol[is.na(ifcol)] <- ""
+              
+              if (comp == "equal") {
+                theseones <- ifcol == row$filter
+              } else
+                if (comp == "not equal") {
+                  theseones <- ifcol != row$filter
+                } else
+                  if (comp == ">") {
+                    theseones <- ifcol > row$filter
+                  } else
+                    if (comp == "<") {
+                      theseones <- ifcol < row$filter
+                    } else
+                      if (comp == "contains") theseones <- str_detect(ifcol, row$filter)
+              # browser()
+              df[theseones, row$setting] <- row$value
+              df[!theseones, row$setting] <- findset(paste0(typenow, row$setting), which = "default",global = F)
+              
+              legend <- paste0(legend, "</br>", typenow, " ", row$setting, " set to ", row$value, " if ", row$ifcolumn, " ", row$comparison, " ", row$filter, " ")
+            }
+          }
+          else if (row$condition == "conditional on:") {
+            if (row$ifcolumn %in% colnames(df)) {
+              
+              # browser()
+              # browser()
+              
+              rc <- df[, row$ifcolumn]
+              if (row$setting %in% xc("label tooltip")) {
+                df[, row$setting] <- rc
+              }
+              else if (row$setting %in% xc("frequency")) {
+                df[, row$setting] <- as.numeric(rc)
+              }
+              else {
+                rc[is.na(rc)] <- Inf
+                # browser()
+                mr <- dense_rank(unlist(rc))
+                # mr[is.na(mr)]=""
+                # mr=as.numeric(mr)
+                nr <- nrow(df)
+                if (str_detect(row$setting, "color") & !str_detect(row$setting, "opacity")) {
+                  df[, row$setting] <- colorRampPalette((str_split(findset(paste0("diagrampalette",palettes)),","))[[1]] %>% str_trim)(max(as.numeric(mr)))[mr]
+                  palettes=palettes+1
+                }
+                if (row$setting %in% xc("font.size")) {
+                  df[, row$setting] <- (mr + findset("variablefont.size.floor",global = T) %>% as.numeric) * findset("variablefont.size.scale",global = T) %>% as.numeric / nr
+                }
+                if (row$setting %in% xc("size")) {
+                  df[, row$setting] <- mr / nr
+                }
+                if (any(row$setting %in% xc("width"))) {
+                  df[, row$setting] <- mr * findset("arrowconditionalwidthscaling") %>% as.numeric() / max(mr)
+                }
+                if (any(row$setting %in% xc(" borderWidth"))) {
+                  df[, row$setting] <- mr * findset("variableconditionalwidthscaling") %>% as.numeric() / max(mr)
+                }
+                if (row$setting %in% xc("color.opacity")) {
+                  df[, row$setting] <- mr / max(mr)
+                }
+                if (row$setting %in% xc("shape")) {
+                  df[, row$setting] <- shapelist[mr]
+                }
+                if (row$setting %in% xc("style")) {
+                  df[, row$setting] <- xc("dotted dashed solid")[mr]
+                  if (length(unique(mr)) > 3) showNotification("I only have three styles")
+                }
+              }
+              
+              legend <- paste0(legend, "</br>", typenow, " ", row$setting, " shows ", row$ifcolumn, "")
+            } else {
+              doNotification(paste0("there is no such column ",row$ifcolumn),2)
+            }
+          } else  {
+            # if (row$ifcolumn %in% colnames(df)) {
+            # if(row$setting == "color.background") browser()
+            rv=row$value
+            if(allNum(rv))rv=as.numeric(rv)
+            # df[, row$setting] <- rv
+            
+            
+            
+            # rc <- df[, row$ifcolumn]
+            # }else {
+            #   doNotification("there is no such column")
+            # }
+          }
+          
+          
+          if (!identical(df, orig)) {
+            if (row$type == "variable") vno <- df else ved <- df
+          }
+        }
         
-       
+        # browser()
+      }
+      
+      # rationalise----
+      
+      doNotification("final aggregation")    
+      
+      ved=ved %>% 
+        mutate(strength=strength_mean) %>% 
+        mutate(wstrength=wstrength_mean) 
+      # if("mean_key2_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key2=mean_key2_mean_mean) 
+      
+      
+      
+      # iconify hardcoded----
+      # browser()
+      ved <- ved %>%
+        mutate(label = replace_na(label,"")) %>% 
+        mutate(label = ifelse(strength<0,paste0("🔀 ",label),label)) %>% 
+        mutate(combo.type <- replace_na(combo.type,"")) %>% 
+        mutate(arrows.middle.enabled = ifelse(combo.type == "", F, T)) %>%
+        mutate(label = paste0(label, ifelse(arrows.middle.enabled, paste0(" ", combo.type), ""))) %>%
+        mutate(dashes = definition.type != "") %>% 
+        mutate(arrows.to = definition.type != "Defined, undirected")
+      
+      
+      if (!is.null(legend)) {
+        if (legend != "") values$legend <- glue("</br><b style='font-color:red;'>Legend:</b>{legend}</br></br></br></br>")
+      }
+      
+      
+      vno <- vno %>%
+        mutate(label = if_else(value>0,paste0(label," ♥"), label)) %>%
+        mutate(label = if_else(value<0,paste0(label," ☹"), label)) %>%
+        mutate(label = str_replace_all(label, "///", "\n")) 
+      
+      
+      
+      
+      labelmaker=function(tex,df,sep="<br>"){
+        x=(str_split(tex,",")[[1]]) %>% 
+          str_trim 
+        lab=""
+        for(i in x){
+          if(i %in% colnames(df))  lab=paste(lab,ifelse(i=="label","",paste0(sep,"",i,": ",collapse="")),unlist(df[,i]))
+        }
+        lab %>% 
+          str_remove_all("^  \\| details:  ")  %>% 
+          str_replace_all("\\| frequency: ","") 
+        # str_replace_all("\\| frequency: ([0-9]*)","\\(\\1\\)") 
+        
+      }
+      
+      
+      
+      vno <- vno %>% 
+        mutate(title=labelmaker(findset("variabletooltip"),vno),
+               label=labelmaker(findset("variablelabel"),vno,sep=" | ")
+        )
+      
+      
+      ved <- ved %>% 
+        mutate(title=labelmaker(findset("arrowtooltip"),ved),
+               label=labelmaker(findset("arrowlabel"),ved,sep="\n")
+        )
+      
+      
+      # # wrapping ----
+      # vno = vno %>%
+      #   mutate(label = str_wrap(label, findset("variablewrap")))
+      # 
+      # # ved tooltips
+      # 
+      # 
+      # 
+      ved <- ved %>%
+        mutate(label = str_replace_all(label, "///", "\n")) %>%
+        mutate(label = str_trim(label))
+      
+      
+      
+      
+      tmp <- tbl_graph(vno, ved)
+      
+      # autogroup
+      
+      if (findset("variableautogroup")) {
+        tmp <- tmp %>%
+          N_() %>%
+          mutate(group = group_walktrap())
+      }
+      
+      
+      
+      values$grafAgg2 <- tmp # %>% debounce(4000)
+      
+      
       
       
       # browser()
@@ -2715,7 +2003,7 @@ server <- function(input, output, session) {
   
   
   # RENDER visnetwork----
-# finally we use values$grafAgg2 to generate the viz 
+  # finally we use values$grafAgg2 to generate the viz 
   
   observe({
     
@@ -2762,7 +2050,7 @@ server <- function(input, output, session) {
             # width="2000px"
           ) 
         
-
+        
         vn= vn1 %>%
           visInteraction(dragNodes = T, dragView = T, zoomView = T, navigationButtons = F, multiselect = T) %>%
           visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;
@@ -2794,7 +2082,7 @@ server <- function(input, output, session) {
           
           if (T) {
             if (findset("diagramorientation") %in% xc("LR RL")) {
-          # browser()
+              # browser()
               tmp <- vn$x$nodes$x
               vn$x$nodes$x <- vn$x$nodes$y
               vn$x$nodes$y <- tmp
@@ -2809,9 +2097,9 @@ server <- function(input, output, session) {
               vnxn=vnxn %>% 
                 mutate(x=x*3)
               vn$x$nodes = vnxn
-          
-          
-          
+              
+              
+              
             } else if (findset("diagramorientation") %in% xc("DU RL")) {
               vn$x$nodes$x <- 1 - vn$x$nodes$x
               vn$x$nodes$y <- 1 - vn$x$nodes$y
@@ -2832,7 +2120,7 @@ server <- function(input, output, session) {
           vn <- vn %>%
             visPhysics(barnesHut = list(avoidOverlap = .7))
         }
-    #    browser()
+        #    browser()
         vn <- vn %>%
           visNodes(
             shadow = list(enabled = T, size = 10),
@@ -2914,7 +2202,7 @@ server <- function(input, output, session) {
     
     
     
-    })
+  })
   
   
   output$net <- renderVisNetwork({
@@ -2922,15 +2210,15 @@ server <- function(input, output, session) {
     # browser()
     # doNotification("rendered viz")
     if("net" %in% names(values)){
-    if(is.function(values$net))values$net() 
-      }
+      if(is.function(values$net))values$net() 
+    }
     
   })
   
   
-
-# ++ floating widgets -----------------------------------------------------
-
+  
+  # ++ floating widgets -----------------------------------------------------
+  
   
   
   output$floatingWidgets <- renderUI({
@@ -2943,27 +2231,27 @@ server <- function(input, output, session) {
       # ),
       # actionButton("widgetsUP","Update")
       div(
-
+        
         actionButton("fontminus", "fontscale-", icon = icon("picture")),
         style = "display:inline-block;margin-right:130px;width:10px"
       ),
       div(
-
+        
         actionButton("fontplus", "fontscale+", icon = icon("picture")),
         style = "display:inline-block;margin-right:110px;width:10px"
       ),
       div(
-
+        
         actionButton("fontscaleminus", "font-", icon = icon("picture")),
         style = "display:inline-block;margin-right:90px;width:10px"
       ),
       div(
-
+        
         actionButton("fontscaleplus", "font+", icon = icon("picture")),
         style = "display:inline-block;margin-right:70px;width:10px"
       ),
       div(
-
+        
         actionButton("png", "PNG", icon = icon("picture")),
         style = "display:inline-block;margin-right:50px;width:10px"
       ),
@@ -3071,8 +2359,8 @@ server <- function(input, output, session) {
     }
   )
   
-
-# observe save png button -------------------------------------------------------------
+  
+  # observe save png button -------------------------------------------------------------
   #  saves a png and html file which are not yet downloadable
   
   
@@ -3096,9 +2384,9 @@ server <- function(input, output, session) {
   
   
   
-
-# ++ crowsourcing / mobile interface --------------------------------------
-
+  
+  # ++ crowsourcing / mobile interface --------------------------------------
+  
   observe({
     if(input$crowd){output$net2 <- renderVisNetwork({
       doNotification("render viz")
@@ -3166,7 +2454,3 @@ server <- function(input, output, session) {
   hide(id = "loading-content", anim = TRUE, animType = "fade")
   show("app-content")
 }
-
-
-# Run the application
-shinyApp(ui = ui, server = server)
