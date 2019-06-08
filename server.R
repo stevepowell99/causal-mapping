@@ -33,12 +33,11 @@ server <- function(input, output, session) {
   
   # ts <- reactiveValues(counter = 0)
   
-  
-  
-  
   # findset function to transfer user settings to values$settings -----------
-  # this is important and a bit clunky. I think it sucks in the two settings tables, combines them with defaults in case anything is missing, and then providess the value of the setting sought. probably most ripe for rationalisation
-  
+  # this is important and a bit clunky. I think it sucks in the two settings 
+  # tables, combines them with defaults in case anything is missing, and then
+  #  providess the value of the setting sought. probably most ripe for 
+  #  rationalisation
   
   findset <- function(tex, which = "current",global=T,v=values) {
     # if(tex=="diagrambackground") browser()
@@ -76,14 +75,13 @@ server <- function(input, output, session) {
   }
   
   
-  
-  observeEvent(input$Interrupt, {                         #the useful "interrupt" button in bottom righthand corner
+  #the useful "interrupt" button in bottom righthand corner
+  observeEvent(input$Interrupt, { 
     browser()
   })
   
-  
-  observeEvent(input$statementsTableUp, {                         # first of zillions of handsontables. 
-    
+  # first of zillions of handsontables.
+  observeEvent(input$statementsTableUp, {                         
     
     values$statements <-  hot_to_r(input$statements) %>%
       mutate(text = str_replace(text, "\'", "")) %>% 
@@ -94,18 +92,12 @@ server <- function(input, output, session) {
     
   })
   
-  
-  
   # update from permalink or example url; -----------
-  
   observe(isolate({
     first <- F
     
     # browser()
     query <- isolate(parseQueryString(session$clientData$url_search))
-    
-    
-    
     
     qh <- query[["help"]]
     if (!is.null(qh)) {
@@ -140,16 +132,17 @@ server <- function(input, output, session) {
             if(values$crowd) updateCheckboxInput(session,"crowd",value=T)
             filename <- paste0("www/", ql)
             
-            
             # browser()
-            
-            
             if (filename != "" & !file__exists(paste0(filename,"-nodes.csv"))) {
-              createAlert(session, "notfound", title = "Sorry, couldn't find that link.", content = "Let me know if you need help: steve@pogol.net", append = FALSE)
+              createAlert(
+                session,
+                "notfound",
+                title = "Sorry, couldn't find that link.",
+                content = "Let me know if you need help: steve@pogol.net",
+                append = FALSE)
             }
             
             for(fn in csvlist){
-              
               
               fnn=paste0(filename,"-",fn,".csv")
               
@@ -185,12 +178,7 @@ server <- function(input, output, session) {
               mutate(strength = as.numeric(strength)) %>%
               mutate(statement = as.numeric(statement))
             
-            
-            
             values$graf <- tbl_graph(nodes, edges)
-            
-            
-            
             
             doNotification(glue("Loaded{nrow(values$graf %>% NN)} variables from permalink"))
             
@@ -204,8 +192,7 @@ server <- function(input, output, session) {
             # browser()
           }
         }
-        
-        
+      
         loaded <<- T
       }
       
@@ -221,117 +208,81 @@ server <- function(input, output, session) {
   # **provide default nodes and edges if necessary ----
   
   defaultNodes <- data.frame(
-    # id =
-    #   1:2,
-    # color.background=c("","")
-    # ,
-    # color.border=c("","")
-    # ,
-    # color.highlight.border = c("","")
-    # ,
-    # color.highlight.background = c("","")
-    # ,
-    label = xc("one two"),
-    details = xc("one two")
-    # ,
-    # font.size=1:20
-    ,
-    group =
-      c("", ""),
-    col1 =
-      c("", ""),
-    cluster =
-      c("", ""),
-    # frequency="1"
-    # ,
-    value =
-      0,
-    level =
-      0,
-    fun = 
-      "sumfun",
-    type =
-      ("◨"),
-    is_context = 
-      c(F,F),
-    clusterLabel =
-      c("", ""),
-    stringsAsFactors = F
-    # ,
-    # borderWidth=1:20
-    # ,
+    # id = 1:2,
+    # color.background=c("","") ,
+    # color.border=c("","") ,
+    # color.highlight.border = c("","") ,
+    # color.highlight.background = c("","") ,
+    # font.size=1:20,
+    # frequency="1" ,
+    # borderWidth=1:20,
     # shape=rep(20,"box",20)
+    label = xc("one two"),
+    details = xc("one two"),
+    group = c("", ""),
+    col1 = c("", ""),
+    cluster = c("", ""),
+    value = 0,
+    level = 0,
+    fun = "sumfun",
+    type = ("◨"),
+    is_context = c(F,F),
+    clusterLabel = c("", ""),
+    stringsAsFactors = F
   )
   
   defaultEdges <- data.frame(
-    # id =
-    #   "1",
-    from =
-      1,
-    to =
-      2,
-    label =
-      "",
-    strength =
-      .5,
-    trust =
-      .5,
-    sensitivity =
-      .5,
-    specificity =
-      .5,
-    statement =
-      1,
-    quote =
-      "",
-    full.quote =
-      "",
-    combo.type =
-      "",
-    definition.type =
-      "",
-    # title=""
-    # ,
-    # frequency="1"
-    # ,
-    
-    # width=""
-    # ,
-    # color=""
-    # ,
-    # color.opacity=""
-    # ,
+    # id = "1",
+    from =  1,
+    to =  2,
+    label = "",
+    strength = .5,
+    trust =  .5,
+    sensitivity = .5,
+    specificity =  .5,
+    statement =  1,
+    quote =  "",
+    full.quote =  "",
+    combo.type = "",
+    definition.type =  "",
+    # title="" ,
+    # frequency="1",
+    # width="" ,
+    # color="" ,
+    # color.opacity="",
     # blah=.5
     stringsAsFactors = F
   )
   
-  values$graf <- tbl_graph(defaultNodes%>% filter(F), defaultEdges %>% filter(F))  #   the default graph object with no nodes or edges
-  
+  #   the default graph object with no nodes or edges
+  values$graf <- tbl_graph(
+    defaultNodes%>% filter(F),
+    defaultEdges %>% filter(F)
+  ) 
   
   # ++ Import/Statements panel -------------------------------------------------
   
-  
-  
   # ++create statements table to allow user edit of statements----
-  
   output$statements <- renderRHandsontable({
     
-    rhandsontable(values$statements[,], height = 700, rowHeaders = FALSE, usetypes = T) %>%
+    rhandsontable(
+      values$statements[, ],
+      height = 700,
+      rowHeaders = FALSE,
+      usetypes = T
+    ) %>%
       hot_context_menu(allowRowEdit = T, allowColEdit = T) %>%
       hot_cols(colWidths = c(400, rep(70, ncol(values$statements) - 1))) %>%
       hot_cols(fixedColumnsLeft = 1)
   })
   
   # file upload ----
-  
-  
   observeEvent(input$up.nodes, {
     
     # browser()
     req(input$up.nodes)
     df <- read_csv(input$up.nodes$datapath) %>%
       bind_rows(defaultNodes %>% filter(F))
-    
     
     values$graf <- tbl_graph(df, values$graf %>% EE())
     doNotification("Updated variables")
@@ -372,20 +323,16 @@ server <- function(input, output, session) {
     doNotification("Updated arrows")
   })
   
-  
   # observe import statements -----------------------------------------------
-  
   
   observeEvent(input$up.statements, {
     req(input$up.statements)
     # browser()
     vstat <- read_csv(input$up.statements$datapath)[, ] 
     
-    
     # vstat <- values$statements  
     # fs <- findset("diagramsplitColumnNames")
     if(str_detect(colnames(vstat),"\\.") %>% any){
-      
       
       col <- colnames(vstat) %>%
         str_detect("\\.") %>%
@@ -428,15 +375,12 @@ server <- function(input, output, session) {
     # browser()
   })
   
-  
   # ++ Code panel -----------------------------------------------------------
-  
-  
   
   # create values$tot -------------------------------------------------------
   
-  
-  observe(({                                  #   just the total number of statements, to provide the maximum value of the pager
+  #   just the total number of statements, to provide the maximum value of the pager
+  observe(({                                  
     if (!is.null(values$statements)) {
       # tot=nrow(values$statements)
       # 
@@ -459,7 +403,8 @@ server <- function(input, output, session) {
   
   # **Pager----
   
-  output$pagerBig <- renderUI({                                  #   the pager allows user to view interview statements one by one
+  #   the pager allows user to view interview statements one by one
+  output$pagerBig <- renderUI({                                  
     
     tagList(
       div(
@@ -471,15 +416,25 @@ server <- function(input, output, session) {
         style = "display:inline-block;"
       ),
       div(
-        sliderInput("timeslider", NULL, min = 0, max = values$tot, value = 0, animate = animationOptions(loop = T), ticks = F, width = "50px"),       # hilarious widget which scrolls through statements one by one   
+        # hilarious widget which scrolls through statements one by one
+        sliderInput(
+          "timeslider",
+          NULL,
+          min = 0,
+          max = values$tot,
+          value = 0,
+          animate = animationOptions(loop = T),
+          ticks = F,
+          width = "50px"
+        ),       
         style = "display:inline-block;"
       ),
-      div(if("source" %in% colnames(values$statements))actionButton("overview_col", label = "Whole source"),                                  #   if one interview source has made more than one statement, show all of them
-          style = "display:inline-block;margin-left:20px"
+      div(
+        if("source" %in% colnames(values$statements))actionButton("overview_col", label = "Whole source"),                                  #   if one interview source has made more than one statement, show all of them
+        style = "display:inline-block;margin-left:20px"
       )
     )
   })
-  
   
   values$obsList <- list()                                                #   to show all the statemtns from one source
   
@@ -501,7 +456,6 @@ server <- function(input, output, session) {
             # make sure to use <<- to update global variable obsList
             values$obsList[[btName]] <- observeEvent(input[[btName]], {
               updatePageruiInput(session,"pager",page_current = as.numeric(x))
-              
             })
           }
           
@@ -509,28 +463,17 @@ server <- function(input, output, session) {
             # actionButton(paste0("gosource",x),"Go!"),
             if(str_detect(vs$text[x],"pdf$")) {
               tags$iframe(src="pdf.pdf",style="height:800px; width:100%;scrolling=yes")
-            } else
-            {
+            } else {
               actionLink(btName,label = vs$text[x])
-            }
-            ,
+            },
             br()
           )
-        }
-        )
-        
-        
+        })
       )
     ))
   })
   
-  
-  
-  
-  
   # ** display statements one by one ----
-  
-  
   
   output$displayStatementPanel <- renderUI({
     
@@ -540,24 +483,17 @@ server <- function(input, output, session) {
       # span(add_highlight((ve$quote[ve$statement==values$pag])[1],(values$statements$text[values$statements$statement==values$pag])), class = "textbanner", id = "textbanner"),
       hr()
     )
-    
   })
   
-  observeEvent(
-    {
-      c(input$pager,input$timeslider)
-    },{
+  observeEvent({c(input$pager,input$timeslider)},{
       if (!is.null(input$pager)) {
         values$pag <- input$pager[[1]]
-        
+
         if (input$timeslider > 0 & nrow(values$statements) > 2) updatePageruiInput(session, "pager", page_current = input$timeslider)
         if(!is.null(input$pager) && !is.null(input$quote))updateTextAreaInput(session = session,inputId = "quote",value="",placeholder="quote")
       }
     })
-  
-  
-  
-  
+
   observeEvent(input$firstuncoded, {
     # browser()
     slist <- values$statements %>%
@@ -578,12 +514,7 @@ server <- function(input, output, session) {
     }
   })
   
-  
-  
-  
-  
   # focus -------------------------------------------------------------------
-  
   
   # 
   # 
@@ -665,7 +596,6 @@ server <- function(input, output, session) {
         # browser()
         if (is.null(values$graf)) values$graf <- new.graph else values$graf <- graph_join(old.graph , new.graph,by="label")
         
-        
         if(!is.null(input$combo)) {if(input$combo!="") values$graf=values$graf %>% N_ %>%
             mutate(fun=ifelse(inpto==label,input$combo,fun))
         
@@ -688,15 +618,12 @@ server <- function(input, output, session) {
     updatePageruiInput(session,inputId = "pager",page_current = as.numeric(values$pag)+1)
   })
   
-  
-  
   # Add edges widget----
   
   output$add_edges_widget <- renderUI({
     varlist=values$graf %>% NN() %>% pull(label) %>% unique() %>% as.character()
     varlist <- na.omit(varlist)
-    
-    
+
     tagList(
       div(
         div(
@@ -734,7 +661,6 @@ server <- function(input, output, session) {
       )
     )
   })
-  
   
   observeEvent(input$flip, { 
     updateSliderInput(session, inputId = "strength", value = -input$strength)
@@ -881,9 +807,6 @@ server <- function(input, output, session) {
     }
   })
   
-  
-  
-  
   # widgets to edit and delete selected nodes and edges. not complete ----
   # 
   
@@ -914,8 +837,6 @@ server <- function(input, output, session) {
     
   })
   
-  
-  
   observeEvent(input$deleteVarForm, {
     # browser()
     whichtarg=values$grafAgg2 %>% NN %>% 
@@ -927,17 +848,11 @@ server <- function(input, output, session) {
       filter(!(row_number() %in% whichtarg) )
   })
   
-  
-  
-  
-  
   # ++node/variables panel----
-  
   
   output$combineVars <- renderUI({
     varlist <- values$nodes$label %>% unique() %>% as.character()
     varlist <- na.omit(varlist)
-    
     
     tagList(
       # h5("Combine variables")
@@ -1056,14 +971,11 @@ server <- function(input, output, session) {
     
   })
   
-  
-  
   output$combine_button=renderUI({
     if(!all(replace_na((NN(values$graf))$cluster,"")=="")){
       div(actionButton("node_permanent_combine", "Combine clusters permanently!?"),style="margin-top:5px;")
     }
   })
-  
   
   observeEvent(input$node_permanent_combine,{
     values$graf <- values$tmp.graf
@@ -1160,8 +1072,6 @@ server <- function(input, output, session) {
     
   })
   
-  
-  
   # ++edge/arrows panel----
   
   output$test=renderUI({
@@ -1185,9 +1095,6 @@ server <- function(input, output, session) {
     
     values$graf <- tbl_graph(values$graf %>% NN(), x)
   })
-  
-  
-  
   
   output$edgeTable <- renderRHandsontable({
     # browser()
@@ -1247,10 +1154,7 @@ server <- function(input, output, session) {
       hot_rows(fixedRowsTop = 1)
   })
   
-  
   # ++Display / settings panel ----
-  
-  
   
   output$filters=renderUI({
     lapply(colnames(values$statements %>% select(-text)),function(y){
@@ -1262,9 +1166,7 @@ server <- function(input, output, session) {
     })
   })  
   
-  
   # produce user-friendlier settings widgets --------------------------------
-  
   
   observeEvent(input$settingsTableGlobalUp,{
     # browser()
@@ -1359,19 +1261,12 @@ server <- function(input, output, session) {
     values$settingsGlobal <- hot_to_r(input$settingsTableGlobal)
   })
   
-  
-  
-  
-  
-  
   observeEvent(input$fitaction, {               # restore network to normal zoom
     visNetworkProxy("net") %>%
       visFit() 
   })
   
-  
   # ++ library/gallery panel ------------------------------------------------
-  
   
   ## Gallery ----
   
@@ -1416,10 +1311,7 @@ server <- function(input, output, session) {
     
   })
   
-  
   # ++ charts panel  -----------------------------------------------------------
-  
-  
   
   output$pivot <- renderRpivotTable({
     # mtcars$car <- rownames(mtcars)
@@ -1428,7 +1320,6 @@ server <- function(input, output, session) {
   })  
   
   # ++ downloads panel  -----------------------------------------------------------
-  
   
   output$downloads=renderUI({
     # browser()
@@ -1442,7 +1333,6 @@ server <- function(input, output, session) {
         })
       )}
   })
-  
   
   # ++ main panel  -----------------------------------------------------------
   # description below graph
@@ -1468,22 +1358,13 @@ server <- function(input, output, session) {
     
   })
   
-  
-  
-  
   # ++AGGREGATE ---------------------------------------------------------------------------
   # the long process of aggregating values$graf into values$grafAgg2, adding formatting etc
   
   observe(
     if ((req(values$graf)) %>% EE %>% nrow %>% `>`(0)) {
       
-      
-      
       # prepare statements, split columns ------------------------------------------------------
-      
-      
-      
-      
       
       doNotification("starting aggregation")    
       legend <- ""
@@ -1522,14 +1403,10 @@ server <- function(input, output, session) {
         mutate(label = ifelse(is.na(label), "", label)) %>%
         mutate(definition.type = ifelse(is.na(definition.type), "", definition.type))
       
-      
-      
-      
       # ved join statements--------------------------------
       
       ved <- ved %>%
         left_join(values$statements, by = "statement")
-      
       
       # cat("refreshing")
       if(req(input$sides)!="Code"){
@@ -1572,11 +1449,7 @@ server <- function(input, output, session) {
           
         }
         
-        
-        
-        
-        
-        # filter out some sources ----
+      # filter out some sources ----
         
         doNotification("filter aggregation")    
         
@@ -1600,10 +1473,7 @@ server <- function(input, output, session) {
           
         }
         
-        
-        
         # rick --------------------------------------------------------------------
-        
         
         if(("from" %in% colnames(ved))  &&  as.logical(findset("arrowabsence")) && input$sides!="Code"){ #todo findset
           
@@ -1615,8 +1485,6 @@ server <- function(input, output, session) {
             inv_multi()
         }
       }
-      
-      
       # browser()
       
       # ved edge merge ----
@@ -1631,7 +1499,6 @@ server <- function(input, output, session) {
         ved <- ved %>%
           group_by(row_number())
       }
-      
       
       doNotification("merge edge aggregation")    
       
@@ -1648,11 +1515,7 @@ server <- function(input, output, session) {
         ungroup() %>%
         mutate(title = paste0(frequency, gsub("[^[:alnum:][:space:]]", "", label), separate = "- "))
       
-      
-      
       doNotification("min freq aggregation")    
-      
-      
       
       # edge minimum freq ----
       
@@ -1699,11 +1562,9 @@ server <- function(input, output, session) {
           rename_all(function(x)paste0("to.",x)) %>% 
           rename(id=to.id)
         
-        
         vno <- vno %>%
           mutate(id = row_number()) %>%
           left_join(ved.to, by = "id")
-        
         
         # add from and to scores for nodes
         
@@ -1724,8 +1585,6 @@ server <- function(input, output, session) {
         colnames(vnosum)=str_remove_all(colnames(vnoto),"^to.") %>% paste0("sum_",.)
         
         vno=bind_cols(vno,vnomean,vnosum)
-        
-        
         
         # browser()
         vno <- vno %>%
@@ -1765,8 +1624,6 @@ server <- function(input, output, session) {
       
       doNotification("format aggregation")    
       
-      
-      
       # ...cond formatting----
       
       palettes=1
@@ -1784,7 +1641,6 @@ server <- function(input, output, session) {
           filter(!is.na(condition))
         
         ## this is wasteful because could just do nodes once and edges once.
-        
         
         for (i in 1:nrow(conds)) {
           row <- conds[i, ]
@@ -1882,14 +1738,11 @@ server <- function(input, output, session) {
             if(allNum(rv))rv=as.numeric(rv)
             # df[, row$setting] <- rv
             
-            
-            
             # rc <- df[, row$ifcolumn]
             # }else {
             #   doNotification("there is no such column")
             # }
           }
-          
           
           if (!identical(df, orig)) {
             if (row$type == "variable") vno <- df else ved <- df
@@ -1908,8 +1761,6 @@ server <- function(input, output, session) {
         mutate(wstrength=wstrength_mean) 
       # if("mean_key2_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key2=mean_key2_mean_mean) 
       
-      
-      
       # iconify hardcoded----
       # browser()
       ved <- ved %>%
@@ -1921,19 +1772,14 @@ server <- function(input, output, session) {
         mutate(dashes = definition.type != "") %>% 
         mutate(arrows.to = definition.type != "Defined, undirected")
       
-      
       if (!is.null(legend)) {
         if (legend != "") values$legend <- glue("</br><b style='font-color:red;'>Legend:</b>{legend}</br></br></br></br>")
       }
-      
       
       vno <- vno %>%
         mutate(label = if_else(value>0,paste0(label," ♥"), label)) %>%
         mutate(label = if_else(value<0,paste0(label," ☹"), label)) %>%
         mutate(label = str_replace_all(label, "///", "\n")) 
-      
-      
-      
       
       labelmaker=function(tex,df,sep="<br>"){
         x=(str_split(tex,",")[[1]]) %>% 
@@ -1949,19 +1795,15 @@ server <- function(input, output, session) {
         
       }
       
-      
-      
       vno <- vno %>% 
         mutate(title=labelmaker(findset("variabletooltip"),vno),
                label=labelmaker(findset("variablelabel"),vno,sep=" | ")
         )
       
-      
       ved <- ved %>% 
         mutate(title=labelmaker(findset("arrowtooltip"),ved),
                label=labelmaker(findset("arrowlabel"),ved,sep="\n")
         )
-      
       
       # # wrapping ----
       # vno = vno %>%
@@ -1999,8 +1841,6 @@ server <- function(input, output, session) {
       
       doNotification("Aggregated")
     })
-  
-  
   
   # RENDER visnetwork----
   # finally we use values$grafAgg2 to generate the viz 
