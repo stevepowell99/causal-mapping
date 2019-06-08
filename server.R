@@ -1453,23 +1453,28 @@ server <- function(input, output, session) {
         
         doNotification("filter aggregation")    
         
-        for(i in names(input))if(str_detect(i,"filters")){
-          ii=str_remove(i,"filters")
-          fil=input[[i]]
-          # browser()
-          if(length(fil)>0){
-            ved <- ved %>% 
-              filter(UQ(sym(ii)) %in% fil)
-            # legend <- paste0(legend, "</br>Edges filtered to show specific sources only")
+        input_vals <- isolate(input)
+        
+        for(i in names(input_vals)) {
+          if(str_detect(i,"filters")){
+            ii=str_remove(i,"filters")
+            fil=input_vals[[i]]
+            # browser()
+            if(length(fil)>0){
+              ved <- ved %>% 
+                filter(UQ(sym(ii)) %in% fil)
+              # legend <- paste0(legend, "</br>Edges filtered to show specific sources only")
+            }
+            tmp=tbl_graph(vno,ved) %>% 
+              N_() %>% 
+              filter(row_number() %in% unique(c(ved$from,ved$to)))
+            
+            vno <- tmp %>% NN()
+            ved <- tmp %>% EE()
+            
+            # inefficient TODO we could collect them all and filter only once
+          
           }
-          tmp=tbl_graph(vno,ved) %>% 
-            N_() %>% 
-            filter(row_number() %in% unique(c(ved$from,ved$to)))
-          
-          vno <- tmp %>% NN()
-          ved <- tmp %>% EE()
-          
-          # inefficient TODO we could collect them all and filter only once
           
         }
         
