@@ -1376,8 +1376,13 @@ server <- function(input, output, session) {
   
   observe({
     
+    # make this code run when we intentionally trigger the page$change reactive
     page$change
+    
+    # prevent this code running every time we update values
     vals <- isolate(values)
+    
+    # prevent this code running every time we change tab
     this_tab <- isolate(input$sides)
     
     edges_tbl <- edges_as_tibble(req(values$graf))
@@ -1406,10 +1411,7 @@ server <- function(input, output, session) {
       ved <- graph_values %>% edges_as_tibble()
       
       # prepare ved
-      
-      
-      
-      # browser()
+    
       ved <- prepare_ved(ved)
       
       # ved join statements--------------------------------
@@ -2081,14 +2083,11 @@ server <- function(input, output, session) {
   # observe save button ----
   # it saves the current project as csv files
   observeEvent(
-    {c(
-      input$saveb ,
-      input$updateE_crowd
-    )}, {
+      input$saveb , ignoreInit = TRUE, {
       # browser()
       # doNotification("observing save button",7)
       
-      if ("" != (input$titl)) {
+      if ("" != input$titl) {
         inputtitl <<- gsub("[^[[:alnum:]|-]]*", "", input$titl)
         values$current <- inputtitl
         
@@ -2131,6 +2130,52 @@ server <- function(input, output, session) {
     }
   )
   
+  observeEvent(input$updateE_crowd, ignoreInit = TRUE, {
+  # browser()
+  # doNotification("observing save button",7)
+  
+  if ("" != input$titl) {
+    inputtitl <<- gsub("[^[[:alnum:]|-]]*", "", input$titl)
+    values$current <- inputtitl
+    
+    
+    # saveRDS(values, paste0("www/", inputtitl, ".tm"))
+    
+    nodes=values$graf %>% nodes_as_tibble
+    edges=values$graf %>% edges_as_tibble
+    
+    # browser()
+    # if(storage="local"){
+    if(!is.null(values$settings))write__csv(values$settings, path=paste0("www/", inputtitl, "-settings.csv"))
+    if(!is.null(values$settingsGlobal))write__csv(values$settingsGlobal, path=paste0("www/", inputtitl, "-settingsGlobal.csv"))
+    if(!is.null(values$statements))write__csv(values$statements, path=paste0("www/", inputtitl, "-statements.csv"))
+    if(!is.null(nodes))write__csv(nodes, path = paste0("www/", inputtitl, "-nodes.csv"))
+    if(!is.null(edges))write__csv(edges, path = paste0("www/", inputtitl, "-edges.csv"))
+    
+    if(storage=="gsheets"){
+      # browser()
+      doNotification("Uploading to google drive",2)
+      drive_upload(media=paste0("www/", inputtitl, "-settings.csv"),name=paste0(inputtitl,"-settings"),type="spreadsheet")
+      drive_upload(media=paste0("www/", inputtitl, "-settingsGlobal.csv"),name=paste0(inputtitl,"-settingsGlobal"),type="spreadsheet")
+      drive_upload(media=paste0("www/", inputtitl, "-statements.csv"),name=paste0(inputtitl,"-statements"),type="spreadsheet")
+      drive_upload(media=paste0("www/", inputtitl, "-nodes.csv"),name=paste0(inputtitl,"-nodes"),type="spreadsheet")
+      drive_upload(media=paste0("www/", inputtitl, "-edges.csv"),name=paste0(inputtitl,"-edges"),type="spreadsheet")
+      doNotification("Finished uploading to google drive",2)
+      
+    }
+    
+    
+    # file.copy(paste0("www/", inputtitl,".tm"),paste0("www/", inputtitl,".otm"),overwrite = T)
+    doNotification("Saved")
+    values$issaved = T
+    toggleClass("savemsg", "red")
+    delay(500, toggleClass("savemsg", "red"))
+    
+    
+    
+  }
+}
+)
   
   # observe save png button -------------------------------------------------------------
   #  saves a png and html file which are not yet downloadable
@@ -2143,13 +2188,18 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(input$saveb,{
+  observeEvent(input$saveb, ignoreInit = TRUE, {
     output$savedMsg <- renderUI(if (!values$issaved) {
       div()
     } else {
       div(
         id = "savemsg",
-        "Saved to this permanent link: ", tags$a(paste0(values$current), href = paste0("?permalink=", values$current)), style = "margin-bottom:10px"
+        "Saved to this permanent link: ",
+        tags$a(
+          paste0(values$current),
+          href = paste0("?permalink=", values$current)
+        ),
+        style = "margin-bottom:10px"
       )
     })
   })
