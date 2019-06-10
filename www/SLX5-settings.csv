@@ -10,7 +10,7 @@ variable,color.border,#41AB5D,always,label,contains,a,NA
 variable,hidden,FALSE,always,label,contains,a,NA
 variable,borderWidth,2,always,frequency,contains,a,NA
 variable,font.size,6,conditional on:,frequency,contains,a,NA
-variable,font.color,#252525,always,label,contains,a,NA
+variable,font.color,black,always,label,contains,a,NA
 variable,wrap,14,always,label,contains,a,NA
 variable,shape,box,always,label,contains,a,NA
 arrow,width,3,conditional on:,frequency,contains,a,NA
@@ -32,3 +32,4 @@ diagram,focus,F,always,label,contains,a,NA
 diagram,physics,F,always,label,contains,a,NA
 variable,minimum.frequency,0,always,label,contains,a,NA
 variable,autogroup,FALSE,always,label,contains,a,NA
+variable,margin,5,always,label,contains,a,NA

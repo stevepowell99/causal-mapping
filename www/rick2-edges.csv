@@ -1,0 +1,6 @@
+from,to,label,strength,trust,sensitivity,specificity,statement,quote,full.quote,combo.type,definition.type,fun
+1,2,NA,0.5,0.5,0.5,0.5,1,NA,NA,NA,NA,NA
+2,3,,0.5,0.5,NA,NA,1, ...   ...   ...   ...   ...   ...   ...   ...   ...   ...   ...   ...   ... one ... two,Some text,,,
+1,4,,0.5,0.5,NA,NA,1, ...   ...   ...   ...   ...   ...   ...   ...   ...   ...   ...   ...   ... one ... two,Some text,,,
+5,3,,0.5,0.5,NA,NA,1, ...   ...   ...   ...   ...   ...   ...   ...   ...   ...   ...   ...   ... one ... two,Some text,,,
+4,5,,0.5,0.5,NA,NA,1, ...   ...   ...   ...   ...   ...   ...   ...   ...   ...   ...   ...   ... one ... two,Some text,,,

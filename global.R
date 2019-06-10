@@ -68,10 +68,18 @@ if(storage=="local" | storage=="gsheets"){
 }
 
 # functions ----------------------------------------------------------------
+stripper <- function(vec) vec %>% str_remove_all("\\n|\\r") %>% str_replace_all("\\s+", " ") %>% str_replace_all("\\'", "")
 
+
+id.finder <- function(label, node.df) {
+  sapply(label, function(x) {
+    (node.df$label == x) %>% which() %>% first()
+  })
+}
 
 ## 
 prepare_vg <- function(graf){
+  # browser()
   graf %>% 
     activate(nodes) %>% 
     mutate(id = row_number(), origID = id) %>% 
@@ -295,7 +303,27 @@ default.statements <- data.frame(
 )
 
 
-
+defaultEdges <- data.frame(
+  # id = "1",
+  from =  1,
+  to =  2,
+  label = "",
+  strength = .5,
+  trust =  .5,
+  sensitivity = .5,
+  specificity =  .5,
+  statement =  1,
+  quote =  "",
+  full.quote =  "",
+  combo.type = "",
+  definition.type =  "",
+  # frequency="1",
+  # width="" ,
+  # color="" ,
+  # color.opacity="",
+  # blah=.5
+  stringsAsFactors = F
+)
 conditionlist <-
   c("always", "if...", "conditional on:")
 

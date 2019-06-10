@@ -25,7 +25,7 @@ variable,tooltip,"label,frequency,cluster,from.frequency_sum_sum,to.frequency_su
 variable,infer,FALSE,NA
 variable,label,label,NA
 arrow,label,label,NA
-arrow,tooltip,label,NA
+arrow,tooltip,frequency,NA
 variable,joinedges,T,NA
 arrow,absence,F,NA
 diagram,HiQratio,0.8,NA
@@ -36,3 +36,6 @@ diagram,splitColumnNames,NA,NA
 arrow,conditionalwidthscaling,19,NA
 variable,conditionalwidthscaling,19,NA
 variable,width,720,NA
+variable,font.size.floor,25,NA
+variable,font.size.scale,20,NA
+diagram,downarrows,TRUE,NA

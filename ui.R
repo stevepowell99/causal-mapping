@@ -108,6 +108,7 @@ ui <- tagList(
                                           ),
                                           bsCollapsePanel(
                                             "Upload variables and arrows",
+                                            p("Nodes table must contain a column called label"),
                                             fileInput("up.nodes", "Upload variables",
                                                       multiple = FALSE, width = NULL,
                                                       accept = c(
@@ -116,6 +117,7 @@ ui <- tagList(
                                                         ".csv"
                                                       )
                                             ),
+                                            p("Arrows table must contain columns from and to and optionally N"),
                                             fileInput("up.edges", "Upload arrows",
                                                       multiple = FALSE, width = NULL,
                                                       accept = c(
@@ -124,7 +126,7 @@ ui <- tagList(
                                                         ".csv"
                                                       )
                                             ),
-                                            checkboxInput("use.labels", "Use labels instead of row numbers")
+                                            checkboxInput("use.labels", "Use labels instead of row numbers",value = T)
                                           )
                                         )
                                ),
@@ -138,6 +140,8 @@ ui <- tagList(
                                         # ,
                                         uiOutput("pagerBig"),
                                         uiOutput("displayStatementPanel"),
+                                 uiOutput("testBut"),
+                                 uiOutput("edgeInfo"),
                                         
                                         
                                         uiOutput("varForm"),
@@ -187,8 +191,7 @@ ui <- tagList(
                                         div(
                                           style = "display:inline-block;padding-left:20px;font-size:4px;width:150px",
                                           checkboxInput("addColBut", "Edit columns")
-                                        ),
-                                        uiOutput("edgeInfo")
+                                        )
                                ),
                                
                                
