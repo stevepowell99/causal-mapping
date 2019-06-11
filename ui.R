@@ -73,6 +73,7 @@ ui <- tagList(
                              # uiOutput("test"),
                              
                              uiOutput("savebut"),
+                             # uiOutput("savedMsg"),
                              hr(),
                              tabsetPanel(
                                id = "sides", type = "tabs", selected = "Code",

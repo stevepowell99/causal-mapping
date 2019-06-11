@@ -1,6 +1,6 @@
 # options -----------------------------------------------------------------
 options(shiny.port = 1111)
-doNotificationLevel=0     #notification popups. level=1 is debugging and level=2 is user.
+doNotificationLevel=2     #notification popups. level=1 is debugging and level=2 is user.
 options(stringsAsFactors = F)
 
 # source ------------------------------------------------------------------
@@ -70,6 +70,8 @@ if(storage=="local" | storage=="gsheets"){
 # functions ----------------------------------------------------------------
 stripper <- function(vec) vec %>% str_remove_all("\\n|\\r") %>% str_replace_all("\\s+", " ") %>% str_replace_all("\\'", "")
 
+tolower_trim <- function(vec) vec %>% tolower() %>% str_trim %>% stripper
+tidy_colnames <- function(df) df %>%  rename_all(tolower_trim)
 
 id.finder <- function(label, node.df) {
   sapply(label, function(x) {
@@ -77,6 +79,9 @@ id.finder <- function(label, node.df) {
   })
 }
 
+
+short_sort <- function(x)  (x)%>% paste0("x") %>% as.factor() %>% as.numeric
+# like rank but with no gaps
 ## 
 prepare_vg <- function(graf){
   # browser()

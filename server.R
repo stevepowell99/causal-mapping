@@ -277,7 +277,8 @@ server <- function(input, output, session) {
     req(input$up.nodes)
     df <- read_csv(input$up.nodes$datapath,T) %>%
       bind_rows(defaultNodes %>% filter(F)) %>% 
-      mutate(label=stripper(label))
+      mutate(label=stripper(label)) %>% 
+      tidy_colnames()
     
     values$graf <- tbl_graph(df, defaultEdges)
     doNotification("Updated variables, now update your edges")
@@ -287,7 +288,8 @@ server <- function(input, output, session) {
   observeEvent(input$up.edges, {
     req(input$up.edges)
     df <- read_csv(input$up.edges$datapath)[, ] %>% 
-      mutate_all(stripper)
+      mutate_all(stripper) %>% 
+      tidy_colnames()
     
     if(is.null(input$up.nodes)){
       nodes <- tibble(label=(unique(unlist(c(df$from,df$to))))) %>% 
@@ -325,7 +327,8 @@ server <- function(input, output, session) {
   observeEvent(input$up.statements, {
     req(input$up.statements)
     # browser()
-    vstat <- read_csv(input$up.statements$datapath)[, ] 
+    vstat <- read_csv(input$up.statements$datapath)[, ]  %>% 
+      tidy_colnames()
     
     # vstat <- values$statements  
     # fs <- findset("diagramsplitColumnNames")
@@ -367,6 +370,8 @@ server <- function(input, output, session) {
     colnames(vstat)[1]="text"
     values$statements  <- vstat %>%
       mutate(statement = row_number())
+    
+    
     # <- vs
     doNotification("Updated statements")
     # browser()
@@ -427,7 +432,8 @@ server <- function(input, output, session) {
         style = "display:inline-block;"
       ),
       div(
-        if("source" %in% colnames(values$statements))actionButton("overview_col", label = "Whole source"),                                  #   if one interview source has made more than one statement, show all of them
+        # if("source" %in% colnames(values$statements))
+          actionButton("overview_col", label = "Read more"),                                  #   if one interview source has made more than one statement, show all of them
         style = "display:inline-block;margin-left:20px"
       )
     )
@@ -437,15 +443,28 @@ server <- function(input, output, session) {
   
   observeEvent(input$overview_col,{
     vs=values$statements
+    # browser()
+    
     # col=findset("diagramoverview_column")
-    if("source" %in% colnames(vs)){
-      pointer=vs$source[values$pag]
+    if(!("source" %in% colnames(vs))){
+      
+      vs$source <- 1
+    }
+    
+    vs <- vs %>% 
+      mutate(newSource=ifelse(source!=lag(source),source,"")) %>% 
+      mutate(newSource=ifelse(is.na(newSource),source,newSource))
+    
+      pointer=vs$source[req(values$pag)]
       content=vs$statement[(vs$source==pointer)]
-    } else content <- "No such column"
-    showModal(modalDialog(
-      title = "All the statements from this source",footer=NULL,easyClose = T,size="l",
+      # content=vs$statement[]
+
+      showModal(modalDialog(
+      title = "All statements",footer=NULL,easyClose = T,size="l",
       tagList(
-        lapply(content,function(x){
+        checkboxInput("showAllSources","Show all sources"),
+        lapply(seq_along(content),function(y)if(!is.na(vs$text[[y]])){
+          x <- content[[y]]
           
           btName=paste0("gosource",x)
           
@@ -455,20 +474,22 @@ server <- function(input, output, session) {
               updatePageruiInput(session,"pager",page_current = as.numeric(x))
             })
           }
-          
+    # browser()
           tagList(
+            if(vs$newSource[y]=="")div() else div(h3(paste0("Source: ",vs$newSource[y]))),
+            div(h4(paste0("Statement: ",vs$statement[y]))),
             # actionButton(paste0("gosource",x),"Go!"),
             if(str_detect(vs$text[x],"pdf$")) {
               tags$iframe(src="pdf.pdf",style="height:800px; width:100%;scrolling=yes")
             } else {
-              actionLink(btName,label = vs$text[x])
+              div(id=paste0("allStatements-",y),actionLink(btName,label = vs$text[x]))
             },
             br()
           )
         })
       )
     ))
-  })
+  },ignoreInit=T)
   
   # ** display statements one by one ----
   
@@ -885,6 +906,9 @@ server <- function(input, output, session) {
   })
   
   # ++node/variables panel----
+  
+  
+  # varSelectInput("variables", "Variable:", mtcars, multiple = TRUE) could be useful here
   
   output$combineVars <- renderUI({
     varlist <- values$nodes$label %>% unique() %>% as.character()
@@ -1797,6 +1821,28 @@ server <- function(input, output, session) {
           mutate(group = group_walktrap())
       }
       
+      # get the layout already
+      
+      layout <- create_layout(tmp, layout = 'sugiyama') %>% 
+        select(x,y,id)
+      
+      tmp <- tmp %>% activate(nodes) %>% 
+        left_join(layout,by="id")
+      
+      
+      # browser()
+      
+      tmp <-  tmp %>% activate(edges) %>% 
+        mutate(fromLevel=.N()$y[from],toLevel=.N()$y[to],notForwards=fromLevel>=toLevel) 
+      
+      # if(findset("arrownotForwards" %>% as.logical,global = T)){
+      if(T){
+        tmp <-  tmp %>% activate(edges) %>% 
+          mutate(color=if_else(notForwards,"red","blue")) %>% 
+          mutate(width=if_else(notForwards,width,width*12)) 
+        
+      }
+      
       values$grafAgg2 <- tmp 
       
       # browser()
@@ -2102,7 +2148,7 @@ server <- function(input, output, session) {
   
   output$savebut <- renderUI(div(
     div(
-      list(
+      tagList(
         
         # div(actionButton("render_button","Render"),style="display:inline-block"),
         div(textInput(
@@ -2234,19 +2280,22 @@ server <- function(input, output, session) {
   })
   
   
+  
   observeEvent(input$saveb, ignoreInit = TRUE, {
-    output$savedMsg <- renderUI(if (!values$issaved) {
-      div()
-    } else {
-      div(
-        id = "savemsg",
-        "Saved to this permanent link: ",
-        tags$a(
-          paste0(values$current),
-          href = paste0("?permalink=", values$current)
-        ),
-        style = "margin-bottom:10px"
-      )
+    output$savedMsg <- renderUI({
+      if (!values$issaved) {
+        div()
+      } else {
+        div(
+          id = "savemsg",
+          "Saved to this permanent link: ",
+          tags$a(
+            paste0(values$current),
+            href = paste0("?permalink=", values$current)
+          ),
+          style = "margin-bottom:10px"
+        )
+      }
     })
   })
   
