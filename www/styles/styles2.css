@@ -707,7 +707,7 @@ th{background-color: #ded !important}
 */
 .textbanner{
   /*padding:15px;*/
-  font-style: italic;
+  font-style: bold;
   text-indent: 15px;
   border-radius:8px;
   font-size:large;
@@ -811,20 +811,6 @@ i.glyphicon.glyphicon-play{
 .bigpicture2{
   background-color: red;
 }
-/*.modal-content{
-  width:1850px !important;
-position:fixed;right:0;
-}
-
-.modal-lg {
-    width: 1800px !important;
-}*/
-
-/*.modal-body {position:fixed;left:0;padding: 10px}
-.modal-dialog {position:fixed;left:0;width: 240px; display: inline-block; text-align: left; vertical-align: top;}
-.modal-header {position:fixed;left:0;background-color: #339FFF; border-top-left-radius: 6px; border-top-right-radius: 6px}
-.modal { text-align: right; padding-right:10px; padding-top: 24px;}
-.close { font-size: 16px}*/
 
 
 /*for the large dropdowns*/
@@ -835,3 +821,7 @@ position:fixed;right:0;
 #deleteVarForm{
 	background-color: red !important;
 }
+
+
+.textbanner a {background-color: yellow !important;color:black !important;}
+

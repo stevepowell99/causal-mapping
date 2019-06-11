@@ -433,6 +433,7 @@ server <- function(input, output, session) {
       ),
       div(
         # if("source" %in% colnames(values$statements))
+          actionButton("resetSelection", label = "Reset"),                                  
           actionButton("overview_col", label = "Read more"),                                  #   if one interview source has made more than one statement, show all of them
         style = "display:inline-block;margin-left:20px"
       )
@@ -440,6 +441,13 @@ server <- function(input, output, session) {
   })
   
   values$obsList <- list()                                                #   to show all the statemtns from one source
+  
+  # observeEvent(input$resetSelection,{
+  #   # updatePageruiInput(session=session,"pager",page_current= values$pag+1)
+  #   # updatePageruiInput(session=session,"pager",page_current= values$pag)
+  #   visNetworkProxy("net") %>% 
+  #         visSelectNodes(id=1:3)
+  # })
   
   observeEvent(input$overview_col,{
     vs=values$statements
@@ -494,10 +502,20 @@ server <- function(input, output, session) {
   # ** display statements one by one ----
   
   output$displayStatementPanel <- renderUI({
+    # browser()
+    
+    quote <- values$graf %>% edges_as_tibble() %>% 
+      filter(statement==values$pag) %>% 
+      pull(quote) %>% 
+      replace_na("")
+    
     
     tagList(
       icon("quote-left"),
-      span(values$statements$text[values$statements$statement==values$pag], class = "textbanner", id = "textbanner"),
+      values$statements$text[values$statements$statement==values$pag] %>% 
+          highlight_text(quote) %>% 
+        HTML %>% div(class = "textbanner", id = "textbanner"),
+      # span(values$statements$text[values$statements$statement==values$pag], class = "textbanner", id = "textbanner"),
       # span(add_highlight((ve$quote[ve$statement==values$pag])[1],(values$statements$text[values$statements$statement==values$pag])), class = "textbanner", id = "textbanner"),
       hr()
     )
@@ -838,7 +856,7 @@ server <- function(input, output, session) {
   #   }
   # })
   
-  observeEvent(req(input$pager),{
+  observeEvent(c(input$resetSelection,req(input$pager)),{
     vno <- req(values$grafAgg2) %>% nodes_as_tibble
     # browser()
     if(!("statement" %in% colnames(vno))) vno$statement=1
@@ -1821,7 +1839,7 @@ server <- function(input, output, session) {
           mutate(group = group_walktrap())
       }
       
-      # get the layout already
+      # get the layout already------------------------------
       
       layout <- create_layout(tmp, layout = 'sugiyama') %>% 
         select(x,y,id)
@@ -1830,7 +1848,11 @@ server <- function(input, output, session) {
         left_join(layout,by="id")
       
       
-      # browser()
+      # 
+      # ved <- ved %>% 
+      #   mutate(arrows.to.scaleFactor=12)
+      
+      
       
       tmp <-  tmp %>% activate(edges) %>% 
         mutate(fromLevel=.N()$y[from],toLevel=.N()$y[to],notForwards=fromLevel>=toLevel) 
@@ -1838,8 +1860,9 @@ server <- function(input, output, session) {
       # if(findset("arrownotForwards" %>% as.logical,global = T)){
       if(T){
         tmp <-  tmp %>% activate(edges) %>% 
-          mutate(color=if_else(notForwards,"red","blue")) %>% 
-          mutate(width=if_else(notForwards,width,width*12)) 
+          mutate(color=if_else(notForwards,"red","blue")) 
+        # %>% 
+        #   mutate(width=if_else(notForwards,width,width*12)) 
         
       }
       
@@ -1881,7 +1904,7 @@ server <- function(input, output, session) {
           edges =
             vga %>% activate(edges) %>% 
             as_tibble() %>% 
-            mutate(id = row_number())
+            mutate(id = row_number()) 
           ,
           main =
             findset("diagramtitle"),
@@ -2050,7 +2073,7 @@ server <- function(input, output, session) {
           physics =
             F,
           arrows =
-            list(to = list(enabled = TRUE), middle = list(type = "circle", scaleFactor = .5))
+            list(middle = list(type = "circle", scaleFactor = .5))
           # ,
           # dashes = findset("arrowdashes") %>% as.logical()
         )

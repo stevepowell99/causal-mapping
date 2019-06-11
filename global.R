@@ -40,6 +40,7 @@ library(ggraph)
 library(DiagrammeR)
 library(rpivotTable)  
 library(shape)
+library(stringi)   # just for highlight_text
 
 
 
@@ -107,8 +108,23 @@ ved_join <- function(ved, statements){
   ved
 }
 
+large="er asdfjk klasdf";  small="asdf"
 
-
+highlight_text <- function(large,smallvec,start="<a href='.'>",stop="</a>"){
+  
+  for(small in smallvec){
+  if(length(nchar(small))>0){
+  if(str_detect(large,small) && nchar(small)>2){
+  where <- str_locate(large,small)
+  stringi::stri_sub(large,where[1],where[1]-1)<-start
+  stringi::stri_sub(large,where[2]+13,where[2]+12)<-stop
+  large
+  } 
+    }
+  
+  }
+  large
+  }
 
 
 
