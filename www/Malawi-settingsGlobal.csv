@@ -3,7 +3,7 @@ diagram,background,white,NA
 diagram,title,NA,NA
 diagram,subtitle,NA,NA
 diagram,overview_column,NA,NA
-diagram,description,NA,NA
+diagram,description,A QuIP study.,NA
 diagram,layout,layout_with_sugiyama,NA
 diagram,orientation,LR,NA
 diagram,horizontalSpacing,25,NA
@@ -13,7 +13,7 @@ diagram,focus,TRUE,NA
 variable,autogroup,FALSE,NA
 variable,merge,FALSE,NA
 arrow,merge,TRUE,NA
-variable,minimum.frequency,5,NA
+variable,minimum.frequency,15,NA
 arrow,minimum.frequency,0,NA
 variable,infer,FALSE,NA
 arrow,absence,F,NA
@@ -23,7 +23,7 @@ variable,label,label,NA
 arrow,label,label,NA
 arrow,tooltip,"label,N_sum_sum",NA
 arrow,wrap,15,NA
-variable,wrap,8,NA
+variable,wrap,14,NA
 diagram,palette1,"#aabbaa,white",NA
 diagram,palette2,"#aabbaa,white",NA
 diagram,palette3,"gray,white",NA
@@ -35,6 +35,8 @@ diagram,width,3000,NA
 diagram,splitColumnNames,NA,NA
 arrow,conditionalwidthscaling,22,NA
 variable,conditionalwidthscaling,9,NA
-variable,width,460,NA
-variable,font.size.floor,6,NA
-variable,font.size.scale,1.4641,NA
+variable,width,333,NA
+variable,font.size.floor,16,NA
+variable,font.size.scale,5,NA
+diagram,downarrows,TRUE,NA
+arrow,notForwards,T,NA

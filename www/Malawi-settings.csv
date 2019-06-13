@@ -1,16 +1,17 @@
 type,setting,value,condition,ifcolumn,comparison,filter,widget
 variable,size,25,always,label,contains,a,NA
 variable,group,1,always,label,contains,a,NA
-variable,color.background,whitesmoke,conditional on:,mean_female_mean_mean,contains,a,NA
+variable,color.background,#F0F0F0,conditional on:,sum_N_sum_sum,contains,a,NA
 variable,color.opacity,1,always,label,contains,a,NA
-variable,color.border,blue,conditional on:,mean_older_mean_mean,contains,a,NA
+variable,color.border,green,always,sum_N_sum_sum,contains,a,NA
 variable,hidden,FALSE,always,label,contains,a,NA
-variable,borderWidth,4,always,label,contains,a,NA
-variable,font.size,25,conditional on:,frequency,contains,a,NA
-variable,font.color,white,always,label,contains,a,NA
+variable,borderWidth,0,conditional on:,frequency,contains,a,NA
+variable,font.color,black,always,label,contains,a,NA
 variable,shape,box,always,label,contains,a,NA
 arrow,width,1,conditional on:,frequency,contains,a,NA
-arrow,color,blue,conditional on:,female,equal,1,NA
+arrow,color,#EF3B2C,always,label,equal,1,NA
 arrow,arrows.middle.enabled,FALSE,always,label,contains,a,NA
 arrow,font.color,#AAAAAA,always,label,contains,a,NA
 arrow,font.size,25,always,label,contains,a,NA
+variable,font.size,44,always,label,contains,a,NA
+variable,margin,5,always,label,contains,a,NA

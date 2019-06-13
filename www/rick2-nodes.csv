@@ -1,6 +1,0 @@
-xid,label,group,col1,cluster,value,level,fun,type,is_context,clusterLabel,details
-1,income level,NA,NA,NA,0,0,NA,◨,FALSE,NA,NA
-2,quality of nutrition,NA,NA,NA,0,0,AND,◨,FALSE,NA,NA
-NA,wellbeing,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
-NA,quality of education,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
-NA,employment,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA

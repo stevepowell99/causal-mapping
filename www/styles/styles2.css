@@ -825,3 +825,5 @@ i.glyphicon.glyphicon-play{
 
 .textbanner a {background-color: yellow !important;color:black !important;}
 
+#filters {position:fixed;}
+

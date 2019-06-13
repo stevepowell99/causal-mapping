@@ -21,13 +21,22 @@ diagram,palette1,"blue,red",NA
 diagram,palette2,"blue,white,red",NA
 diagram,palette3,"green,orange",NA
 diagram,palette4,"green,white,orange",NA
-variable,tooltip,label,NA
+variable,tooltip,!label,NA
 variable,infer,FALSE,NA
-variable,label,"label, frequency",NA
-arrow,label,"frequency, num, ava",NA
-arrow,tooltip,label,NA
+variable,label,"!label, ///!frequency mentions",NA
+arrow,label,!frequency,NA
+arrow,tooltip,!label,NA
 variable,joinedges,FALSE,NA
 diagram,HiQratio,0.8,NA
 diagram,height,2000,NA
 diagram,width,3000,NA
 arrow,absence,T,NA
+diagram,palette5,"black,white",NA
+diagram,splitColumnNames,NA,NA
+arrow,conditionalwidthscaling,19,NA
+variable,conditionalwidthscaling,19,NA
+variable,width,100,NA
+variable,font.size.floor,25,NA
+variable,font.size.scale,20,NA
+diagram,downarrows,TRUE,NA
+arrow,notForwards,T,NA

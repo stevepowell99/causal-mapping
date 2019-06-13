@@ -1,8 +1,0 @@
-from,to,label,strength,trust,sensitivity,specificity,statement,quote,full.quote,combo.type,definition.type,fun
-1,2,NA,0.5,0.5,0.5,0.5,1,high,NA,NA,NA,NA
-2,3,NA,0.5,0.5,NA,NA,1,NA,Some text,NA,NA,NA
-1,4,NA,0.5,0.5,NA,NA,1,NA,Some text,NA,NA,NA
-5,3,NA,0.5,0.5,NA,NA,1,NA,Some text,NA,NA,NA
-4,5,NA,0.5,0.5,NA,NA,1,NA,Some text,NA,NA,NA
-2,5,NA,0.5,0.5,NA,NA,1,highlighted,Some text which is going to be highlighted. However ...,NA,NA,NA
-4,3,,0.5,0.5,NA,NA,1,,Some text which is going to be highlighted. However ...,,,

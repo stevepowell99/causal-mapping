@@ -1,4 +1,13 @@
-commit 0b4c79eb07fb1d539866a536a190e70a1f0a6b4f (HEAD -> master, origin/master)
+commit e710c28a322f12ed413313966fd648f97d6d1e1c (HEAD -> master, origin/master)
+Author: Steve Powell <steve@pogol.net>
+Date:   Tue Jun 11 17:11:01 2019 +0100
+
+    Highlighting of coded text; reset button
+    
+    reset button for resetting selected nodes to default for a particular statement
+    Highlighted all coded text in statement. If highlights overlap, second and later highlights are ignored
+
+commit 0b4c79eb07fb1d539866a536a190e70a1f0a6b4f
 Author: Steve Powell <steve@pogol.net>
 Date:   Tue Jun 11 11:50:20 2019 +0100
 

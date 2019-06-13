@@ -203,7 +203,7 @@ ui <- tagList(
                                         
                                         # selectInput("layout","layout",choices=c("Sugiyama"="layout_with_sugiyama", "circle"="layout_in_circle"),selected = "layout_with_sugiyama")
                                         # ,
-                                        uiOutput("filters"),                         # transient filters to filter out some nodes/edges, values are not stored in settings csv files
+                                        # uiOutput("filters"),                         # transient filters to filter out some nodes/edges, values are not stored in settings csv files
                                         uiOutput("inputs"),                         # user-friendlier widgets which are produced instead of rows of the settings tables if user has written "slider" etc in the last column of settings tables
                                         bsCollapse(
                                           id = "display", open =
@@ -241,7 +241,7 @@ ui <- tagList(
                                         
                                ),
                                
-                               tabPanel("", icon=icon("stack-overflow"),div(style = ""),                         # library of existing projects stored locally as csv files. clicking loads up the project 
+                               tabPanel("", icon=icon("warehouse"),div(style = ""),                         # library of existing projects stored locally as csv files. clicking loads up the project 
                                         style = "",
                                         uiOutput("gallery")
                                ),
@@ -261,6 +261,8 @@ ui <- tagList(
                              conditionalPanel("!input.crowd",style="background-color:white;border-radius:5px",                         # input.crowd is part of an alternative, "crowdsourced" phone-friendly version of the interface which is not important at moment
                                               
                                               uiOutput("floatingWidgets"),
+                               
+                                              uiOutput("filters"),
                                               
                                               
                                               
@@ -274,12 +276,17 @@ ui <- tagList(
                                               # )
                              )
                              ,
-                             # div(actionButton("Interrupt", "Interrupt",
-                             #                  icon = icon("exclamation-triangle"),
-                             #                  style = "background-color:pink;"
-                             # ), style = "display:inline-block;margin-left:10px"),
                              uiOutput("description"),
+                             
+                             bsCollapse(open = "Report",
+                             bsCollapsePanel("Legend",
                              plotOutput("colourLegend")
+                               ),
+                             bsCollapsePanel("Report",
+                               
+                             formattableOutput("reportTable", width = "100%", height = "0")
+                             )
+                             )
                            )
                          )
                        )

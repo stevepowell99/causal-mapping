@@ -195,6 +195,12 @@ server <- function(input, output, session) {
             
             values$graf <- tbl_graph(nodes, edges)
             
+            # values$graf=values$graf %>%
+            #   activate(nodes) %>%
+            #   filter(cluster=="r")
+            # 
+
+            
             doNotification(glue("Loaded{nrow(values$graf %>% nodes_as_tibble)} variables from permalink"))
             
             # browser()
@@ -277,7 +283,7 @@ server <- function(input, output, session) {
     req(input$up.nodes)
     df <- read_csv(input$up.nodes$datapath,T) %>%
       bind_rows(defaultNodes %>% filter(F)) %>% 
-      mutate(label=stripper(label)) %>% 
+      mutate(label=strip_symbols(label)) %>% 
       tidy_colnames()
     
     values$graf <- tbl_graph(df, defaultEdges)
@@ -288,7 +294,7 @@ server <- function(input, output, session) {
   observeEvent(input$up.edges, {
     req(input$up.edges)
     df <- read_csv(input$up.edges$datapath)[, ] %>% 
-      mutate_all(stripper) %>% 
+      mutate_all(strip_symbols) %>% 
       tidy_colnames()
     
     if(is.null(input$up.nodes)){
@@ -866,8 +872,10 @@ server <- function(input, output, session) {
         pull(sel) %>%
         which
 
+      values$fromStack=NULL
       visNetworkProxy("net") %>%
-        visSelectNodes(id = ids) 
+        visSelectNodes(id = ids)
+      
     }
   })
   
@@ -1452,6 +1460,9 @@ server <- function(input, output, session) {
     tab$change
     
     # prevent this code running every time we update values
+    
+    
+    # browser()
     vals <- isolate(values)
     
     # prevent this code running every time we change tab
@@ -1772,7 +1783,7 @@ server <- function(input, output, session) {
         mutate(wstrength=wstrength_mean) 
       # if("mean_key2_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key2=mean_key2_mean_mean) 
       
-      # iconify hardcoded----
+      # labels----
       # browser()
       ved <- ved %>%
         mutate(label = replace_na(label,"")) %>% 
@@ -1790,30 +1801,21 @@ server <- function(input, output, session) {
       vno <- vno %>%
         mutate(label = if_else(value>0,paste0(label," ♥"), label)) %>%
         mutate(label = if_else(value<0,paste0(label," ☹"), label)) %>%
-        mutate(label = str_replace_all(label, "///", "\n")) 
+        mutate(label = str_replace_all(label, "///", "<br>")) 
       
-      labelmaker=function(tex,df,sep="<br>"){
-        x=(str_split(tex,",")[[1]]) %>% 
-          str_trim 
-        lab=""
-        for(i in x){
-          if(i %in% colnames(df))  lab=paste(lab,ifelse(i=="label","",paste0(sep,"",i,": ",collapse="")),unlist(df[,i]))
-        }
-        lab %>% 
-          str_remove_all("^  \\| details:  ")  %>% 
-          str_replace_all("\\| frequency: ","") 
-        # str_replace_all("\\| frequency: ([0-9]*)","\\(\\1\\)") 
-        
-      }
       
       vno <- vno %>% 
-        mutate(title=labelmaker(findset("variabletooltip", v = vals),vno),
-               label=labelmaker(findset("variablelabel", v = vals),vno,sep=" | ")
+        mutate(label=make_labels(findset("variablelabel", v = vals),vno)
         )
       
+      vno <- vno %>% 
+        mutate(title=make_labels(findset("variabletooltip", v = vals),vno)
+        )
+      
+      
       ved <- ved %>% 
-        mutate(title=labelmaker(findset("arrowtooltip", v = vals),ved),
-               label=labelmaker(findset("arrowlabel", v = vals),ved,sep="\n")
+        mutate(title=make_labels(findset("arrowtooltip", v = vals),ved),
+               label=make_labels(findset("arrowlabel", v = vals),ved)
         )
       
       # # wrapping ----
@@ -1944,7 +1946,7 @@ server <- function(input, output, session) {
           collapse = TRUE,
           highlightNearest = list(
             enabled = T,
-            degree = if(findset("diagramdownarrows") %>% as.logical) list(from=1,to=19) else list(from=19,to=0),
+            degree = if(findset("diagramdownarrows") %>% as.logical) list(from=0,to=19) else list(from=19,to=0),
             # degree = ifelse(input$widgetDownArrows,list(from=0,to=19),list(from=19,to=0)),
             hover = T,
             labelOnly=F,
@@ -2096,12 +2098,24 @@ server <- function(input, output, session) {
   
   
   
+  # ++ report -----------------------------------------------------
+  
+  output$reportTable=renderFormattable({
+    values$net$x$nodes %>% 
+      transmute(label,frequency=replace_na(frequency,0),from=replace_na(from.frequency_sum,0),to=replace_na(to.frequency_sum,0)) %>% 
+      arrange(desc(frequency)) %>% 
+      
+      formattable(list(
+        `frequency`= color_bar("#AAEEAA"),
+        `from`= color_bar("#EEAAAA"),
+        `to`= color_bar("#AAAAEE")
+        ))
+  })
+  
   # ++ floating widgets -----------------------------------------------------
-  
-  
-  
   output$floatingWidgets <- renderUI({
     div(
+      
       # div(
       #   # icon("search-plus"),
       #   actionButton("bigpicture", label=icon("search-plus"), width = "30px"),

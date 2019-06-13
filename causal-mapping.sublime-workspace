@@ -1,0 +1,1255 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"background",
+				"background-color\tproperty"
+			],
+			[
+				"margin",
+				"margin-left\tproperty"
+			],
+			[
+				"impor",
+				"important"
+			],
+			[
+				"border",
+				"border-radius\tproperty"
+			],
+			[
+				"back",
+				"background-color\tproperty"
+			],
+			[
+				"small",
+				"x-small\tfont-size"
+			],
+			[
+				"font-s",
+				"font-size\tproperty"
+			],
+			[
+				"theorymaker",
+				"theorymaker3"
+			],
+			[
+				"pa",
+				"pawson_realistic_1997"
+			],
+			[
+				"davi",
+				"Davies2012"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"mar",
+				"margin-left"
+			],
+			[
+				"newvar",
+				"newvar2"
+			],
+			[
+				"padd",
+				"padding-bottom"
+			],
+			[
+				"bor",
+				"border-bottom"
+			],
+			[
+				"text",
+				"text-decoration"
+			],
+			[
+				"background-c",
+				"background-color"
+			],
+			[
+				"fon",
+				"font-family"
+			],
+			[
+				"built",
+				"built-texts"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 127.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"mermai",
+				"Mermaid: View In Browser"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"citershowall",
+				"Citer: Show All"
+			],
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"wr",
+				"Word Wrap: Toggle"
+			],
+			[
+				"img",
+				"MarkdownEditing: New Inline Image"
+			],
+			[
+				"paste",
+				"Preferences: Package Control Settings – Default"
+			],
+			[
+				"cit",
+				"Citer: Show All"
+			],
+			[
+				"link",
+				"MarkdownEditing: New Inline Link"
+			],
+			[
+				"wra",
+				"Word Wrap: Toggle"
+			],
+			[
+				"case",
+				"Convert Case: Lower Case"
+			],
+			[
+				"upp",
+				"Convert Case: Upper Case"
+			],
+			[
+				"imag",
+				"MarkdownEditing: New Inline Image"
+			],
+			[
+				"citer",
+				"Citer: Search"
+			],
+			[
+				"unf",
+				"Code Folding: Unfold All"
+			],
+			[
+				"all",
+				"Citer: Show All"
+			],
+			[
+				"footn",
+				"MarkdownEditing: New Footnote"
+			],
+			[
+				"unfo",
+				"Code Folding: Unfold All"
+			],
+			[
+				"unfold",
+				"Code Folding: Unfold All"
+			],
+			[
+				"caps",
+				"Convert Case: Upper Case"
+			],
+			[
+				"lin",
+				"MarkdownEditing: New Inline Link"
+			],
+			[
+				"image",
+				"MarkdownEditing: New Inline Image"
+			],
+			[
+				"li",
+				"Package Control: Install Package"
+			],
+			[
+				"markdown",
+				"Markdown Preview: Save to HTML"
+			],
+			[
+				"upper",
+				"Convert Case: Upper Case"
+			],
+			[
+				"PRV",
+				"PackageResourceViewer: Open Resource"
+			],
+			[
+				"prv",
+				"PackageResourceViewer: Open Resource"
+			],
+			[
+				"fold",
+				"Code Folding: Unfold All"
+			],
+			[
+				"oul",
+				"Browse Mode: Outline (Right)"
+			],
+			[
+				"past",
+				"Text Pastry: From 1 To X"
+			],
+			[
+				"ima",
+				"MarkdownEditing: New Inline Image"
+			],
+			[
+				"bro",
+				"Browse Mode: Right Sidebar"
+			],
+			[
+				"pastry",
+				"Text Pastry: Menu"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"upda",
+				"MarkdownTOC:Update TOC"
+			],
+			[
+				"toc",
+				"MarkdownTOC:Insert TOC"
+			],
+			[
+				"i",
+				"Package Control: Install Package"
+			],
+			[
+				"brw",
+				"Browse Mode: Right Sidebar"
+			],
+			[
+				"",
+				"Browse Mode: Right Sidebar"
+			],
+			[
+				"liln",
+				"MarkdownEditing: New Inline Link"
+			],
+			[
+				"br",
+				"Browse Mode: Right Sidebar"
+			],
+			[
+				"brow",
+				"Browse Mode: Right Sidebar"
+			],
+			[
+				"lilnk",
+				"MarkdownEditing: New Inline Link"
+			],
+			[
+				"wre",
+				"Word Wrap: Toggle"
+			],
+			[
+				"lower",
+				"Convert Case: Lower Case"
+			],
+			[
+				"search",
+				"File: Search Files"
+			],
+			[
+				"file",
+				"Quick File Move: Move Current File"
+			],
+			[
+				"side",
+				"Browse Mode: Right Sidebar"
+			],
+			[
+				"open",
+				"View: Toggle Open Files in Side Bar"
+			],
+			[
+				"dired",
+				"dired: Goto Anywhere"
+			],
+			[
+				"dire",
+				"dired"
+			],
+			[
+				"wo",
+				"Word Wrap: Toggle"
+			],
+			[
+				"w",
+				"Word Wrap: Toggle"
+			],
+			[
+				"wor",
+				"Word Wrap: Toggle"
+			],
+			[
+				"word",
+				"Word Wrap: Toggle"
+			],
+			[
+				"im",
+				"Snippet: Markdown_image_(mdi)"
+			],
+			[
+				"keym",
+				"Keymaps: Find a keymap for..."
+			],
+			[
+				"unfol",
+				"Code Folding: Unfold All"
+			],
+			[
+				"cas",
+				"Convert Case: Swap Case"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"find",
+				"SearchPanelEnhanced: Find under"
+			],
+			[
+				"bib",
+				"Set Syntax: BibTeX"
+			],
+			[
+				"termina",
+				"Preferences: Terminal Key Bindings – Default"
+			],
+			[
+				"table",
+				"Table Editor: Enable for current view"
+			],
+			[
+				"peli",
+				"Pelican: New Article (Markdown)"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"pref",
+				"Preferences: SyntaxFold Settings - User"
+			],
+			[
+				"r",
+				"R-Box Application"
+			],
+			[
+				"r-",
+				"R-Box Application"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
+				"rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"pa",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"dis",
+				"Package Control: Disable Package"
+			],
+			[
+				"disab",
+				"Package Control: Disable Package"
+			],
+			[
+				"keyb",
+				"Preferences: Key Bindings - User"
+			],
+			[
+				"Package Control: ",
+				"Package Control: List Packages"
+			],
+			[
+				"key",
+				"Keymaps: Cheat Sheet"
+			],
+			[
+				"preview",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"mkd",
+				"Build: mkdir"
+			],
+			[
+				"list",
+				"Build: List Python Files"
+			],
+			[
+				"update",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"color",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"colors",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"aca",
+				"Set Syntax: AcademicMarkdown"
+			],
+			[
+				"omni",
+				"OmniMarkupPreviewer: Preview Current Markup in Browser"
+			],
+			[
+				"omn",
+				"OmniMarkupPreviewer: Preview Current Markup in Browser"
+			],
+			[
+				"graphvi",
+				"Preview Graphviz Snippet"
+			],
+			[
+				"graphv",
+				"Preview Graphviz Snippet"
+			],
+			[
+				"graphviz",
+				"Set Syntax: Graphviz (DOT)"
+			],
+			[
+				"comment",
+				"Toggle Comment"
+			],
+			[
+				"view",
+				"Table Editor: Show demo film in new scratch view"
+			],
+			[
+				"set syntax:mar",
+				"Set Syntax: Markdown Extended"
+			],
+			[
+				"todo",
+				"Set Syntax: Todo"
+			],
+			[
+				"smart",
+				"Table Editor: Set table syntax 'MultiMarkdown' for current view"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"spell",
+				"Google Spell Check"
+			],
+			[
+				"task",
+				"Set Syntax: Tasks"
+			],
+			[
+				"markmo",
+				"Markmon launch"
+			],
+			[
+				"academ",
+				"Set Syntax: AcademicMarkdown"
+			],
+			[
+				"markm",
+				"Markmon launch"
+			],
+			[
+				"in",
+				"Package Control: Install Package"
+			],
+			[
+				"pdf and ve",
+				"Pandoc: Render Markdown to temp PDF and View"
+			],
+			[
+				"Package Control: inst",
+				"Package Control: Install Package"
+			],
+			[
+				"markdown preview:python markdown: exp",
+				"Markdown Preview: Python Markdown: Export HTML in Sublime Text"
+			],
+			[
+				"previe",
+				"Markdown Preview: Python Markdown: Preview in Browser"
+			],
+			[
+				"preveiw",
+				"Markdown Preview: Python Markdown: Preview in Browser"
+			],
+			[
+				"previ",
+				"Markdown Preview: Python Markdown: Preview in Browser"
+			],
+			[
+				"markdow",
+				"Set Syntax: Markdown"
+			],
+			[
+				"dot",
+				"Set Syntax: Graphviz (DOT)"
+			],
+			[
+				"prev",
+				"Pandoc: Render Markdown to temp PDF and View"
+			],
+			[
+				"table editor: enable for current view",
+				"Table Editor: Enable for current view"
+			],
+			[
+				"table editor: en",
+				"Table Editor: Enable for current syntax"
+			],
+			[
+				"tabl",
+				"Table Editor: Enable for current view"
+			],
+			[
+				"m",
+				"Markdown Preview: Python Markdown: Preview in Browser"
+			],
+			[
+				"mark",
+				"Markdown Preview: Python Markdown: Preview in Browser"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 360.0,
+		"history":
+		[
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read()) ",
+			"import urllib.request,os; ",
+			" import urllib.request,os; ",
+			" import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read()) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/steve/Dropbox/Projects/causal-mapping"
+	],
+	"file_history":
+	[
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/www/styles/styles2.css",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping-book/305rules-rules.md",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/ROADMAP.md",
+		"/G/My Drive/Backups/causal-mapping2/www/styles/styles2.css",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/.git/logs/HEAD",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/CHANGELOG.md",
+		"/C/Users/steve/Desktop/tinyPrograms/wlx_pdfview_109/ReadMe.txt",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping-book/rmds/_output.yml",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping-book/rmds/_bookdown.yml",
+		"/C/Users/steve/Desktop/stevekeys.ahk",
+		"/C/Users/steve/Dropbox/Projects/bsdr-quip/rick.##d",
+		"/C/Users/steve/causal-mapping/.git/MERGE_MSG",
+		"/C/Users/steve/Dropbox/Projects/TMV-Theorymaker-visnetwork/.httr-oauth",
+		"/C/Users/steve/Dropbox/Projects/TMV-Theorymaker-visnetwork/app.R",
+		"/C/Users/steve/Dropbox/www/t6-nodes.csv",
+		"/C/Users/steve/Dropbox/www/testuni2-nodes.csv",
+		"/C/Users/steve/Downloads/Book1.csv",
+		"/C/Users/steve/Dropbox/Projects/TM-help/330influences.md",
+		"/C/Users/steve/Dropbox/Projects/TM-help/305rules-rules.md",
+		"/C/Users/steve/Dropbox/Projects/TM-help/353merging.md",
+		"/C/Users/steve/Dropbox/Projects/TM-help/335contour_etc.md",
+		"/C/Program Files/zabkat/xplorer2_ult/changes.txt",
+		"/C/Program Files/zabkat/xplorer2/changes.txt",
+		"/C/Users/steve/Dropbox/Projects/TM-help/330inference.md",
+		"/C/Users/steve/Dropbox/Projects/TM-help/index.md",
+		"/C/Users/steve/AppData/Roaming/Sublime Text 3/Packages/User/Citer.sublime-settings",
+		"/C/Users/steve/Dropbox/Projects/TM-help/350metrics.md",
+		"/C/Users/steve/Dropbox/Projects/TM-help/365homogeneity.md",
+		"/C/Users/steve/Dropbox/Projects/TM-help/330inference.Rmd",
+		"/C/Users/steve/Dropbox/Projects/TM-help/300basics.Rmd",
+		"/C/Users/steve/Dropbox/Projects/TM-help/320levels.Rmd",
+		"/C/Users/steve/Dropbox/Projects/TM-help/300basics.md",
+		"/C/Users/steve/Dropbox/Projects/TM-help/rmds/300basics.Rmd",
+		"/C/Users/steve/Dropbox/Projects/TM-help/convertMermaid.r",
+		"/C/Users/steve/Dropbox/Projects/TM-help/test.md",
+		"/C/Users/steve/Dropbox/Projects/TM-help/test.Rmdkill",
+		"/C/Users/steve/Dropbox/Projects/TM-help/.Rproj.user/EFB73FB3/sources/s-46979DB4/5D850B61-contents",
+		"/C/Users/steve/Dropbox/Projects/TM-help/.Rproj.user/EFB73FB3/sources/s-46979DB4/8694E568-contents",
+		"/C/Users/steve/Dropbox/Projects/TM-help/.Rproj.user/EFB73FB3/sources/s-46979DB4/FE911783-contents",
+		"/C/Users/steve/Dropbox/Projects/TM-help/rmds/330inference.Rmd",
+		"/C/Users/steve/Dropbox/Projects/TM-help/310logic.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/300basics.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/330inference.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/200manifesto.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/362display.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/400interface.Rmd",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/styles/styles2.css",
+		"/C/Users/User/Google Drive/Projects/articles/article-contribution.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/710basics.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/310logic.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/340Aggregation.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/365Codinginteractions.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/360metrics.Rmd",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/SLP4genderMore-edges.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/SLP4genderMore-statements.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/SLX5-edges.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/SLX5-statements.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/pigs-edges.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/pigs-statements.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/pivot-edges.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/pivot-statements.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/gya4-settings.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/gya4-settingsGlobal.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/gya4-sources.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/gya4-statements.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/gya4-edges.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/gya4-nodes.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/gya4-remarks.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/defaultSettings.csv",
+		"/C/Users/User/Dropbox/Projects/TM-help/index.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/210thewhy.Rmd",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/defaultSettingsGlobal.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/SLP4genderMore-remarks.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/SLX5-remarks.csv",
+		"/C/Users/User/Dropbox/Projects/TM-help/201slides.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/_output.yml",
+		"/C/Users/User/Dropbox/Projects/TM-help/410examples.Rmd",
+		"/C/Users/User/Desktop/stevekeys.ahk",
+		"/C/Users/User/AppData/Roaming/Sublime Text 3/Packages/Package Control/Package Control.sublime-settings",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/log.txt",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/sources.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/straw-sources.csv",
+		"/C/Users/User/Google Drive/ProposalsPending/developingCountriesYears.txt",
+		"/C/Users/User/Dropbox/Projects/TM-help/365homogeneity.Rmd",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/kll-edges.csv",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/kk-submitted-edges.csv",
+		"/C/Users/User/AppData/Roaming/Sublime Text 3/Packages/User/Citer.sublime-settings",
+		"/C/Users/User/Dropbox/Projects/TM-help/_bookdown.yml",
+		"/C/Users/User/Dropbox/Projects/TM-help/300basics.md",
+		"/C/Users/User/Dropbox/Projects/TM-help/720levels.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/730inference.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/715Appearance.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/765homogeneity.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/760metrics.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/100interface.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/750puttingTogether.Rmd",
+		"/C/Users/User/Google Drive/Projects/Theorymaker-pres/slides.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/705using.Rmd",
+		"/C/Users/User/Dropbox/Projects/TMV-Theorymaker-visnetwork/www/styles/mystyles.css",
+		"/C/Users/User/Dropbox/Projects/TM-help/slides.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/makeR.r",
+		"/C/Users/User/Dropbox/Projects/TM-help/750metrics.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/755homogeneity.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/02TM3.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/35Coding2.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/50metrics.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM3/www/styles/mystyles.css",
+		"/C/Users/User/Dropbox/Projects/TM3/dot.dot",
+		"/C/Users/User/Dropbox/Projects/TM3/arrowList.csv",
+		"/C/Users/User/Dropbox/Projects/TM3/settings.csv",
+		"/C/Users/User/Dropbox/Projects/TM3/global_attrs.csv",
+		"/C/Users/User/Dropbox/Projects/TM3/edges_df.csv",
+		"/C/Users/User/Dropbox/Projects/TM3/nodes_df.csv",
+		"/C/Users/User/Dropbox/Projects/TM3/variableList.csv",
+		"/C/Users/User/Dropbox/Projects/TM3/app - Copy (2).R",
+		"/C/Users/User/Dropbox/Projects/TM-help/10basics.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/15Appearance.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/20levels.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/60CodingTips.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-help/35Coding.Rmd",
+		"/C/Program Files/Core Temp/Readme.txt",
+		"/C/Users/User/Dropbox/Projects/TM-book/80Appearance.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-book/_bookdown.yml",
+		"/C/Users/User/Dropbox/Projects/TM-book/_output.yml",
+		"/C/Users/User/Dropbox/Projects/TM-book/05using.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-book/10basics.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-book/03inference.Rmd",
+		"/C/Users/User/Dropbox/Projects/TM-book/index.Rmd"
+	],
+	"find":
+	{
+		"height": 41.0
+	},
+	"find_in_files":
+	{
+		"height": 181.0,
+		"where_history":
+		[
+			"",
+			"*csv",
+			"*Rmd",
+			"C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\FAQ.md,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\about.md,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\cheat.html,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\cheat.md,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\features.html,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\features.md,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\new-in-tm-2.md,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\robots.txt,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\whatis.md",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"stripper",
+			"textbanner",
+			"red",
+			"str",
+			"textba",
+			"'",
+			"\"",
+			"\n\n\n",
+			"\n\n\n\n\n",
+			"\n",
+			"\n# ",
+			"## ",
+			"\\",
+			"QWER",
+			"\n",
+			"x201932935230",
+			"\\",
+			"farming",
+			"\\",
+			"linkStyle default interpolate basis\n",
+			"arrow",
+			"edge",
+			"massively",
+			"0",
+			"yes/no",
+			"Y",
+			"X",
+			"Y",
+			"U1",
+			"U2",
+			"2",
+			"17",
+			"12",
+			"0",
+			"5",
+			"\"",
+			"X",
+			"radix",
+			"-",
+			"remark",
+			"\n\n",
+			"#",
+			"+",
+			"\n  ",
+			"�",
+			"\n  ",
+			"\n",
+			"X",
+			",",
+			";",
+			"  ",
+			"variables",
+			"  ",
+			"\n",
+			":",
+			"\n",
+			"axiom",
+			"Part",
+			"An",
+			"completely controls",
+			"*",
+			"\n#",
+			"c2y",
+			"c2x",
+			"see ",
+			"be ",
+			"be",
+			"Enter",
+			"color",
+			"a{",
+			"body",
+			"left",
+			"dd",
+			" :",
+			"\t",
+			"%",
+			"E ",
+			"-",
+			"fillcolor",
+			"color",
+			"grviz",
+			"width",
+			"760",
+			"!important",
+			",",
+			"\n",
+			"  ",
+			"^( *)",
+			"^(\\.*)",
+			"^(\\\\.)*",
+			"^(\\.)*",
+			"^\\.*",
+			"^.*\n\n",
+			"^\\\\.*\n\n",
+			"^\\.*\n\n",
+			".\n\n",
+			"\\",
+			")",
+			"wrap",
+			"rubri",
+			"you",
+			" ",
+			"point",
+			"Inputs",
+			"input",
+			"inputs",
+			"le;",
+			"v2",
+			"%20",
+			"adequate rather than ",
+			"structure",
+			"logical form",
+			"skill B",
+			"skill A",
+			"Vari",
+			"Variable",
+			"Level",
+			"variable",
+			"variables",
+			" ;",
+			"variable;",
+			"2}",
+			"wrap=99",
+			"wrap=33",
+			"; wrap=33",
+			"; width=3",
+			"fillcolor=whitesmoke;",
+			"Fig"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"strip_symbols",
+			"",
+			"statement",
+			"",
+			"Resources",
+			"resources",
+			"skill Z",
+			"skill Y",
+			"do op",
+			"\"",
+			"tmp",
+			"Simple Th",
+			"phase",
+			"slice",
+			"among",
+			"",
+			"ots of names",
+			"rich",
+			"Theory",
+			",",
+			"```{r ",
+			"Theorymaker",
+			"```{r ",
+			" time=",
+			"for-each",
+			"!for-each",
+			"Theorymaker Island",
+			"a Theorymaker",
+			"A Theorymaker",
+			"Theorymaker",
+			"Variable",
+			"sb;db",
+			"!Rule:incomplete",
+			"//",
+			"`edit diagram text`",
+			"edit diagram text",
+			"qualitative",
+			"Arrow",
+			"arrowdire",
+			"arrowfon",
+			"arrowwid",
+			"arrowcol",
+			"backgroundcolour",
+			"noise arrow",
+			"his book",
+			"value",
+			" factual",
+			"(Rule: ",
+			"(Definition: ",
+			",",
+			"(Values:  ",
+			"(Repeat:  ",
+			"(Rule: ",
+			"(Rule: \n\n===",
+			"yyx\n\n===",
+			"approach",
+			"'",
+			"arrow",
+			"  ",
+			" >> ",
+			";",
+			"Theory Maker",
+			"Permalink: ",
+			"",
+			"Anamaria Golemac Powell",
+			"orange",
+			"",
+			"Roboto",
+			"",
+			"target variable",
+			"#",
+			"",
+			"#pink",
+			"",
+			"→",
+			"Focus Doc",
+			"focus doc",
+			"football match",
+			"",
+			"]",
+			"^]",
+			"^[",
+			"index_files",
+			"index_figure",
+			"Section S",
+			"Program Officer",
+			"HoM",
+			"we ",
+			"",
+			"Logic Model",
+			"logic model",
+			";",
+			",cache=F}",
+			"cache=F}",
+			"logframe",
+			"Logframe",
+			"data aggregation hierarchy",
+			"logframe",
+			"Hillary: ",
+			"<<",
+			"))",
+			"((",
+			"Summarizer",
+			"Summarizers",
+			"student pro-tolerance attitudes, motivation",
+			"Activity",
+			"shape=\"box\",fillcolor=white",
+			"tolerance",
+			"chapter",
+			"Chapter",
+			"*",
+			"xxme:",
+			"myth of",
+			"logframes",
+			"logframe",
+			"logframes",
+			"@IFRC2013-2",
+			"@Cutter2008",
+			"@IFRCODI2013",
+			"@PMIIFRC2012",
+			"Peduzzi2009",
+			"IFRCODI2013",
+			"IFRC2012",
+			"FAO2008",
+			"DRRAP2013",
+			"Fitzgibbon2012",
+			"Hailu2013",
+			"p. "
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 32.0
+	},
+	"input":
+	{
+		"height": 56.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 167.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 148.0
+	},
+	"output.markdown":
+	{
+		"height": 92.0
+	},
+	"pinned_build_system": "Packages/User/rmarkdownAny.sublime-build",
+	"project": "causal-mapping.sublime-project",
+	"replace":
+	{
+		"height": 78.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"assumptio",
+				"0C6000ContextAssumption.Rmd"
+			],
+			[
+				"vague",
+				"0C0150VariablesKindsVague.Rmd"
+			],
+			[
+				"substantial",
+				"BACKGROUND: A substantial scale-up in public healt"
+			],
+			[
+				"organi",
+				"examples\\70Other uses - organigrams and more\\3000Organigrams.md"
+			],
+			[
+				"emer",
+				"Blot\\[social research]\\emerging.md"
+			],
+			[
+				"logfr",
+				"extras\\explanations\\10logframe.md"
+			],
+			[
+				"network2",
+				"extras\\explanations\\20network2.md"
+			],
+			[
+				"network",
+				"extras\\explanations\\20network.md"
+			],
+			[
+				"conse",
+				"extras\\explanations\\03consequences.md"
+			],
+			[
+				"logf",
+				"extras\\explanations\\10logframe.md"
+			],
+			[
+				"log",
+				"steve\\pogol.net.old\\taskfreak\\login.php"
+			],
+			[
+				"fea",
+				"extras\\features.md"
+			],
+			[
+				"appe",
+				"extras\\appearance.md"
+			],
+			[
+				"appea",
+				"extras\\appearance.md"
+			],
+			[
+				"abou",
+				"extras\\about.md"
+			],
+			[
+				"infl",
+				"extras\\explanations\\01influences.md"
+			],
+			[
+				"tips",
+				"extras\\tips.md"
+			],
+			[
+				"influe",
+				"extras\\explanations\\01influences.md"
+			],
+			[
+				"influ",
+				"extras\\explanations\\01influences.md"
+			],
+			[
+				"tip",
+				"extras\\tips.md"
+			],
+			[
+				"gaspedal",
+				"content\\Chapter 30 - Evidence and Indicators\\059-gas-pedals-and-school-teachers.Rmd"
+			],
+			[
+				"gaspeda",
+				"content\\Chapter 05 - Intervention and attribution\\055-gas-pedal.Rmd"
+			],
+			[
+				"monitoring",
+				"content\\Chapter 30 - Evidence and Indicators\\200-monitoring.Rmd"
+			],
+			[
+				"anec",
+				"content\\Chapter 30 - Evidence and Indicators\\anecdotes.Rmd"
+			],
+			[
+				"glass",
+				"content\\Chapter 10 - Extensions and restrictions\\022-glass.Rmd"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"C:\\Users\\User\\Dropbox\\Projects\\TM-help\\help.sublime-project"
+			],
+			[
+				"ef",
+				"~/steve@promente.net/Projects/EF-gaziantep/EF.sublime-project"
+			],
+			[
+				"pe",
+				"~/steve@promente.net/Projects/pelicanbook/pelicanbook.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"# Chapter 3: The defining strengths and fatal flaws of Logframes\n"
+			]
+		],
+		"width": 410.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+		"last_automatic_layout":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		]
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 400.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+		"max_columns": 1
+	}
+}

@@ -1,11 +1,12 @@
 # options -----------------------------------------------------------------
 options(shiny.port = 1111)
-doNotificationLevel=2     #notification popups. level=1 is debugging and level=2 is user.
+doNotificationLevel=0     #notification popups. level=1 is debugging and level=2 is user.
 options(stringsAsFactors = F)
 
 # source ------------------------------------------------------------------
 
 source("combo_functions.r")
+source("functions/find_cycles.r")
 
 # libs --------------------------------------------------------------------
 
@@ -41,7 +42,7 @@ library(DiagrammeR)
 library(rpivotTable)  
 library(shape)
 library(stringi)   # just for highlight_text
-
+library(formattable)
 
 
 # attempt to bypass lack of local storage at shinyapps, both dropb --------
@@ -69,9 +70,9 @@ if(storage=="local" | storage=="gsheets"){
 }
 
 # functions ----------------------------------------------------------------
-stripper <- function(vec) vec %>% str_remove_all("\\n|\\r") %>% str_replace_all("\\s+", " ") %>% str_replace_all("\\'", "")
+strip_symbols <- function(vec) vec %>% str_remove_all("\\n|\\r") %>% str_replace_all("\\s+", " ") %>% str_replace_all("\\'", "")
 
-tolower_trim <- function(vec) vec %>% tolower() %>% str_trim %>% stripper
+tolower_trim <- function(vec) vec %>% tolower() %>% str_trim %>% strip_symbols
 tidy_colnames <- function(df) df %>%  rename_all(tolower_trim)
 
 id.finder <- function(label, node.df) {
@@ -81,7 +82,90 @@ id.finder <- function(label, node.df) {
 }
 
 
-short_sort <- function(x)  (x)%>% paste0("x") %>% as.factor() %>% as.numeric
+
+generalise_sprintf <- function(str,tex,...){
+  
+}
+
+
+make_labels=function(tex,df,sep="<br>"){
+  
+  
+  cols <- tex %>% 
+    str_extract_all("\\!\\w*") %>% `[[`(1) %>%  
+    str_remove("!")
+  
+  tex2=tex
+  
+  # didn't need the loop but can't remember how to pass a list to sprintf TODO
+  
+  for(i in cols){
+  
+  tex2 <- str_replace(tex2,"!\\w*","%s")
+    
+     if(i %in% colnames(df))tex2 <- sprintf(tex2, unlist(df[,i]) )
+    
+  }
+  tex2
+}
+
+
+
+
+make_labelsOLD=function(tex,df,sep="<br>"){
+  x=(str_split(tex,",")[[1]]) %>% 
+    str_trim 
+  lab=""
+  for(i in x){
+    if(i %in% colnames(df))  lab=paste(lab,ifelse(i=="label","",paste0(sep,"",i,": ",collapse="")),unlist(df[,i]))
+  }
+  lab %>% 
+    str_remove_all("^  \\| details:  ")  %>% 
+    str_replace_all("\\| frequency: ","") 
+  # str_replace_all("\\| frequency: ([0-9]*)","\\(\\1\\)") 
+  
+}
+
+
+
+export_edgelist_adjacency <- function(gr){
+  gr %>% 
+    edges_as_tibble() %>% 
+    select(from,to) %>% 
+    mutate(value=1) %>% 
+    spread(from,value,fill=0)
+}
+
+find_dist <- function(gr,parent){
+  gr %>% activate(nodes) %>%
+    mutate(pars=(local_members(id,mode="in",mindist = 1)),hh= map(pars,parent),dis=node_distance_to(unlist(hh))) %>%
+    nodes_as_tibble %>%
+    select(dis)  %>% unlist(recursive = F)
+  }
+
+### given a graph, tells you the distance of a loop from each node to the xth parent.
+### these two almost works but doesn't give right results??
+
+find_dist_all <- function(gr){
+  gr <- gr %>% activate(nodes) %>%
+    mutate(id=row_number())
+  
+      # find max nr of parents
+  maxParents <- gr %>% activate(nodes) %>%
+    mutate(id=row_number(),pars=(local_members(id,mode="in",mindist = 1))) %>%
+    nodes_as_tibble %>% select(pars)  %>%
+    unlist(recursive = F) %>%
+    map(length) %>%
+    unlist %>%
+    max
+  df <- map(1:maxParents,~find_dist(gr,.)) %>% data.frame
+  colnames(df)=paste0("x",1:ncol(df))
+  df[df==Inf]=0
+  rowSums(df)
+}
+
+
+sort_short <- function(x)  (x)%>% paste0("x") %>% as.factor() %>% as.numeric
 # like rank but with no gaps
 ## 
 prepare_vg <- function(graf){
