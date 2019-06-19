@@ -122,3 +122,8 @@ Changed our custom layout algorithm so that layers with smaller numbers of varia
 
 Fixed save PNG so it saves html and png into www with correct filename, which means they are accessible as /mynetwork.png etc. 
 
+14/6/2019
+
+using github comments for most changes
+
+fixed aggregation so calculation of positions and notForwards comes before cond formatting

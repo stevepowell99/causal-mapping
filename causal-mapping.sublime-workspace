@@ -83,6 +83,43 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "server.R",
+			"settings":
+			{
+				"buffer_size": 81916,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "\n## TODO\n\nflexible syntax for labels and tooltips\n\n\nimprove settings for highlight_node, so you can zoom in on an ego network etc as rick said.\n\n\n\noptions(shiny.reactlog=TRUE) # note reactlog seems to cause an error, utf-8\n\nprofiling - currently, render button used to aggregate and to render. edges joined to nodes under certain conds, see agg section\n\nprofiling: mutate_if_sw and findset are bad\n\n\nmaybe: if conditional setting just says mean, this means mean of mean of mean stc\n\nmaybe: if conditional setting - can also say mean_mean_max_frequency or whatever. This then does this agg in aggregate on demand\n\n\nmerge in infor on respondents into first arrows table\n\n\nhave a viz with causal links in a chain - a table??\n  \n  \n\n\n\nviz related-------------\n\nnote diagram height only affects the html export\n\ndo d3!\n\nr2d3 is cool BUT EVEN R2D3 USES WEBSHOT https://rstudio.github.io/r2d3/articles/publishing.html#save_d3_png\n\nno svg export as yet! seems to be just about working upstream: https://github.com/almende/vis/issues/723, see end of that thread\n\ncan do many of the updates using classic visEdges etc but networkproxy\n\nwebshot: Unfortunately, PhantomJS is no longer being maintained. For webshot, we are planning on moving to a different headless browser in the future, but we don't have a fixed timeline for that yet.\n\nhttps://github.com/wch/webshot/issues/83 my issue\n\n\narrows - select!\n\nput more of the interactivity into proxy\n\n\"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe\" --javascript-delay 20000 http://127.0.0.1:6432/?permalink=SLP4genderMore qstring.pdf\n\nworks but it doenst pick up the actual net\n\ndecaptitated doesn't work\n\nwebshot: rubbish quality\n\nplotly png export only OK. Plotly can probably do everything though https://plot.ly/r/network-graphs/\n\nfunny, ggplotly renders ggraph better than ggraph (emojis)\n\nforcenetwork doesn't even have arrowheads and no layout\n\n\nEASY quick fixes\n\n\noverview_col for all statements from one source only works with colname \"source\"\n\nsplit notifications into needed and info\n\nfinish changing arrows from to in arrows table\n\nauto backup for when connection breaks\n\nedit columns for vars and arrows\n\nreorder table cols , seems to be bug, wrong when update table\n\nrefactor all lapply observers / buttons in combined style like obsList\n\n\nMOST GENERAL of these changes?\n\neasier to edit previous coding ... so when looking at one statement, already highlight the relevant nodes and arrows??\n\ncustom additional random icon as an option in settings e.g. conditional on project / # random colours for nominal variables\n\ncustom artithmetic e.g. trust*precision?\n\ninstead of autodetect filter widgets, could put \"filter\" in the widget column of a new setting? \n\nrestructure import: kobo data needs to restructure data anyway ie age is one q but needs to become part of respondent ID\n\nreview stats. e.g. overall key1 shd not be biassed when only a few or zero in from or to\n\nattribution to project - this is already covered!\n\ngeneral tables / charts\n\n\nbsdr would like...\n\nmove arrows or vars tab to rhs\n\n\n\n\nBUGS\n\nwhen you save under a new name, the permalink info does not change\n\n\nyou have to stop the timeslider at 1\n\nmerge/clusters:\n\nshould prioritise when doing combined merged labels\n\n\n\nNICE TO HAVE\n\njournal of changes\n\npresentation mode\n\ncustom import folder of pdfs as text?\n\nhttps://github.com/yonicd/rpdf pdfs - tried, doesnt work\n\n\n\ntransparent fading other statements is buggy because 1 is in 134 etc\n\nadd session ids eg to pagerinput\n\nlabel color opacity doesn't work if background is conditional\n\nset a column then (de)aggregate and some columns will disappear, so error\n\nif you have an if column, how does it know how to set the default value for the other arrows/variables\n\n\n\naggfun - the problem is that you can have a group in which there are just two, so it tries different strategies for different groups\n\n## overview\n\nI have most of my reactive values stored in values (  values <-reactiveValues()\n), e.g. values$graf etc, but there are a few legacy ones, `loaded` and `inputtitl`, which are introduced via `makeReactiveBinding(\"loaded\")`\n\nYou can use the app live at https://stevepowell.shinyapps.io/TMV-Theorymaker-visnetwork/\n\nThere is a setting right at the top of app.R for doNotification, which controls little notifications which appear bottom-right; setting this to 0 gives you an idea of the reactivity problems.\n\nThe basic flow is that tables for the arrows aka edges and variables aka nodes are combined into values$graf, which is a tidygraph object. The tabs \"Code\" \"Variables\" and \"Arrows\" can be used to edit this data. Then (around lines 1600 in the code) this object is broken back down into its consituent tables, merged with values$statements (from the first tab), filtered and processed mainly according to settings in the Display tab, also filtered according to any radio buttons within the Display tab (e.g. filter out all men, all older than 20 etc) and step by step converted into values$grafAgg2, which is the object from which the visualisation is constructed. The flow from values$graf to values$grafAgg2 is live, there is no actionButton. \n\nThe visualisation with visNetwork can also be post-processed using a proxy network so that the graph does not have to be re-rendered for small changes like highlighting. I did have one such observe() around lines 2323 but commented it out because it seemed to make things worse re reactivity.\n\nI tried using throttle and debounce to improve the reactivity, line 2294, but this did not seem to make any difference so I commented out the line.\n\nIf you want me to put more comments in the code, I can.\n\n",
+			"file": "ROADMAP.md",
+			"file_size": 5766,
+			"file_write_time": 132047227993047528,
+			"settings":
+			{
+				"buffer_size": 5638,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "$pars1\n[1]  2  8  9 10 11\n\n$pars2\ninteger(0)\n\n$pars3\ninteger(0)\n\n$pars4\ninteger(0)\n\n$pars5\ninteger(0)\n\n$pars6\ninteger(0)\n\n$pars7\ninteger(0)\n\n$pars8\n[1] 2 3 4 5 6\n\n$pars9\n[1] 1 2 3 7 8\n\n$pars10\ninteger(0)\n\n$pars11\ninteger(0)\n\n$pars12\n[1] 1 2 3 7 8\n\n$pars13\n[1] 2 7 8\n\n$pars14\n[1]  2  7  9 10 12 13\n",
+			"settings":
+			{
+				"buffer_size": 297,
+				"line_ending": "Windows",
+				"name": "$pars1"
+			}
+		},
+		{
+			"contents": "",
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -604,6 +641,11 @@
 	],
 	"file_history":
 	[
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/global.R",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/.Rproj.user/EFB73FB3/sources/s-C97A28A4/60217C5A-contents",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/.Rproj.user/EFB73FB3/sources/s-C97A28A4/1BE72A47-contents",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/.Rproj.user/EFB73FB3/sources/s-C97A28A4/338E8C83-contents",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/.Rproj.user/EFB73FB3/sources/s-C97A28A4/A3A24BE2-contents",
 		"/C/Users/steve/Dropbox/Projects/causal-mapping/www/styles/styles2.css",
 		"/C/Users/steve/Dropbox/Projects/causal-mapping-book/305rules-rules.md",
 		"/C/Users/steve/Dropbox/Projects/causal-mapping/ROADMAP.md",
@@ -726,16 +768,11 @@
 		"/C/Users/User/Dropbox/Projects/TM-help/35Coding.Rmd",
 		"/C/Program Files/Core Temp/Readme.txt",
 		"/C/Users/User/Dropbox/Projects/TM-book/80Appearance.Rmd",
-		"/C/Users/User/Dropbox/Projects/TM-book/_bookdown.yml",
-		"/C/Users/User/Dropbox/Projects/TM-book/_output.yml",
-		"/C/Users/User/Dropbox/Projects/TM-book/05using.Rmd",
-		"/C/Users/User/Dropbox/Projects/TM-book/10basics.Rmd",
-		"/C/Users/User/Dropbox/Projects/TM-book/03inference.Rmd",
-		"/C/Users/User/Dropbox/Projects/TM-book/index.Rmd"
+		"/C/Users/User/Dropbox/Projects/TM-book/_bookdown.yml"
 	],
 	"find":
 	{
-		"height": 41.0
+		"height": 45.0
 	},
 	"find_in_files":
 	{
@@ -754,6 +791,7 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"short_sort",
 			"stripper",
 			"textbanner",
 			"red",
@@ -880,8 +918,7 @@
 			"wrap=33",
 			"; wrap=33",
 			"; width=3",
-			"fillcolor=whitesmoke;",
-			"Fig"
+			"fillcolor=whitesmoke;"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -889,6 +926,7 @@
 		"regex": true,
 		"replace_history":
 		[
+			"sort_short",
 			"strip_symbols",
 			"",
 			"statement",
@@ -1015,8 +1053,7 @@
 			"FAO2008",
 			"DRRAP2013",
 			"Fitzgibbon2012",
-			"Hailu2013",
-			"p. "
+			"Hailu2013"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1027,14 +1064,129 @@
 	"groups":
 	[
 		{
+			"selected": 3,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "server.R",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 81916,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/R/R.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "ROADMAP.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5638,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								49,
+								49
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/MarkdownEditing/Markdown.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 297,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								297,
+								297
+							]
+						],
+						"settings":
+						{
+							"auto_name": "$pars1",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 21.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 32.0
+		"height": 36.0
 	},
 	"input":
 	{
@@ -1083,7 +1235,7 @@
 	"project": "causal-mapping.sublime-project",
 	"replace":
 	{
-		"height": 78.0
+		"height": 86.0
 	},
 	"save_all_on_build": true,
 	"select_file":

@@ -1,7 +1,7 @@
 
 render viz
 Loading files
-Loaded50 variables from permalink
+Loaded109 variables from permalink
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -36,119 +36,6 @@ started viz
 Produced viz
 render viz
 updating from settingsTableGlobal
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-Saved
-updating from settingsTable
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-updating from settingsTableGlobal
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
 starting aggregation
 merge edge aggregation
 min freq aggregation

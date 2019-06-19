@@ -23,7 +23,7 @@ diagram,palette3,"green,orange",NA
 diagram,palette4,"green,white,orange",NA
 variable,tooltip,!label,NA
 variable,infer,FALSE,NA
-variable,label,"!label, ///!frequency mentions",NA
+variable,label,"!label, !frequency mentions",NA
 arrow,label,!frequency,NA
 arrow,tooltip,!label,NA
 variable,joinedges,FALSE,NA

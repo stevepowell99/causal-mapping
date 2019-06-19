@@ -1646,6 +1646,20 @@ server <- function(input, output, session) {
       
       doNotification("format aggregation")    
       
+
+      tmp <- tbl_graph(vno, ved)
+      
+      layout <- create_layout(tmp, layout = 'sugiyama') %>% 
+        select(x,y,id)
+      
+      tmp <- tmp %>% activate(nodes) %>% 
+        left_join(layout,by="id")
+      
+      ved <- tmp %>% activate(edges) %>% 
+        mutate(fromLevel=.N()$y[from],toLevel=.N()$y[to],notForwards=fromLevel>=toLevel) %>% 
+        edges_as_tibble()
+      
+      
       # ...cond formatting----
       
       palettes=1
@@ -1843,11 +1857,6 @@ server <- function(input, output, session) {
       
       # get the layout already------------------------------
       
-      layout <- create_layout(tmp, layout = 'sugiyama') %>% 
-        select(x,y,id)
-      
-      tmp <- tmp %>% activate(nodes) %>% 
-        left_join(layout,by="id")
       
       
       # 
@@ -1856,17 +1865,15 @@ server <- function(input, output, session) {
       
       
       
-      tmp <-  tmp %>% activate(edges) %>% 
-        mutate(fromLevel=.N()$y[from],toLevel=.N()$y[to],notForwards=fromLevel>=toLevel) 
       
       # if(findset("arrownotForwards" %>% as.logical,global = T)){
-      if(T){
-        tmp <-  tmp %>% activate(edges) %>% 
-          mutate(color=if_else(notForwards,"red","blue")) 
-        # %>% 
-        #   mutate(width=if_else(notForwards,width,width*12)) 
-        
-      }
+      # if(T){
+      #   tmp <-  tmp %>% activate(edges) %>% 
+      #     mutate(color=if_else(notForwards,"red","blue")) 
+      #   # %>% 
+      #   #   mutate(width=if_else(notForwards,width,width*12)) 
+      #   
+      # }
       
       values$grafAgg2 <- tmp 
       
@@ -2058,7 +2065,7 @@ server <- function(input, output, session) {
           # widthConstraint=findset("variablewidth") %>% as.numeric # %>% ifelse(.>0,.,NA)
         ) %>%
         visEdges(
-          smooth = F,
+          smooth = T,
           arrowStrikethrough = F,
           shadow =
             list(enabled = F, size = 5),
