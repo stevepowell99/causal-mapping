@@ -1,3 +1,4 @@
+#testingbraching on newSettings
 server <- function(input, output, session) {
   autoInvalidate <- reactiveTimer(2000)
   
