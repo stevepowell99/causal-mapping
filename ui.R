@@ -1,4 +1,3 @@
-
 ui <- tagList(
   useShinyjs(),
   inlineCSS(list(.red = "background: snow")),
@@ -76,7 +75,7 @@ ui <- tagList(
                              # uiOutput("savedMsg"),
                              hr(),
                              tabsetPanel(
-                               id = "sides", type = "tabs", selected = "Code",
+                               id = "sides", type = "tabs", selected = "Display",
                                
                                # ui statements----
                                
@@ -196,10 +195,24 @@ ui <- tagList(
                                ),
                                
                                
-                               # ui settings----
+                               # ui filter----
+                               
+                               tabPanel("",value="Filter",    # more of a settings panel 
+                                        style = glue("background-color:{rgb(0.97,1,0.97)};;border-radius:10px"), icon = icon("filter"),
+                                     p()
+                                      
+                               ),
+                               
+                               # ui display----
                                
                                tabPanel("",value="Display",    # more of a settings panel 
                                         style = glue("background-color:{rgb(0.97,1,0.97)};;border-radius:10px"), icon = icon("palette"),
+                                   
+                                 uiOutput("condFormattingOutput")
+                               ),
+                               
+                               tabPanel("",value="Settings",    # more of a settings panel 
+                                        style = glue("background-color:{rgb(0.97,1,0.97)};;border-radius:10px"), icon = icon("cog"),
                                         
                                         # selectInput("layout","layout",choices=c("Sugiyama"="layout_with_sugiyama", "circle"="layout_in_circle"),selected = "layout_with_sugiyama")
                                         # ,

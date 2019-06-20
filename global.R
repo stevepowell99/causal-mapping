@@ -212,6 +212,16 @@ highlight_text <- function(large,smallvec,start="<a href='.'>",stop="</a>"){
 
 
 
+# format_edges <- function(df,input)df
+
+get_rgb_from_color_ramp <- function(mat){
+  
+}
+
+
+
+
+
 mutate_if_sw=function(...)suppressMessages(mutate_if(...))
 
 doNotification <- function(text,level=1) {
@@ -352,8 +362,47 @@ findfirst <- function(vec, vec2) {
 }
 
 
+format_nodes_and_edges <- function(df,inp,type){
+  if (type=="nodes") type_names = node_names else type_names = edge_names
+  req(inp$conditional_selector_color_background)
+  # browser()
+  for(attribute in type_names){
+    attribute_clean <- str_replace_all(attribute,"\\.","_")
+    
+    floor <- inp[[paste0("conditional_value_",attribute)]] 
+    
+    var <- inp[[paste0("conditional_var_",attribute)]] 
+    var <- df %>% pull(var)
+    if(0!=sum(as.numeric(var),na.rm=T)) var <- as.numeric(var) else var <- as.numeric(factor(var))
+    
+    if(inp[[paste0("conditional_selector_",attribute_clean)]]=="conditional on ...") {
+    ceiling <- inp[[paste0("conditional2_value_",attribute)]] 
+      if(attribute %in% conditional_attributes_color){
+        df[,attribute] <- colorRamp(
+          c(floor,ceiling))(var/max(var,na.rm=T)) %>% 
+          as.tibble %>% 
+          mutate(xxx=rgb(V1,V2,V3,maxColorValue = 255)) %>% 
+          pull(xxx)
+      } else  {
+        floor <- as.numeric(floor)
+        ceiling <- as.numeric(ceiling)
+        df[,attribute] <- (var/max(var,na.rm=T))*((ceiling-floor))  + floor
+      }
+    }
+    else {
+      
+      df[,attribute] <- floor
+    }
+  }
+  df
+}
 
 # constants ----
+
+
+node_names=xc("color.background color.border font.color font.size borderWidth")
+edge_names=xc("color font.color font.size width")
+conditional_attributes_color <- xc("font.color color.background color.border color")
 
 writeLines("", "log.txt") # just to open up a fresh file
 

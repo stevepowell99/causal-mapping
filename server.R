@@ -1,4 +1,3 @@
-#testingbraching on newSettings
 server <- function(input, output, session) {
   autoInvalidate <- reactiveTimer(2000)
   
@@ -1243,6 +1242,141 @@ server <- function(input, output, session) {
   
   # ++Display / settings panel ----
   
+  
+  output$condFormattingOutput=renderUI({
+    
+bsCollapse(open = "Variables",
+    bsCollapsePanel("Variables",
+    lapply(node_names,function(attribute){
+      
+    attribute_clean=str_replace_all(attribute,"\\.","_") # because of js condition later
+    
+    div(
+      if(attribute %in% conditional_attributes_color) div(
+        colourInput(paste0('conditional_value_', attribute),
+          label=attribute,
+          palette = "limited",
+          showColour ="background",
+          allowedCols = allcols1
+        ),
+        style="display:inline-block"
+        
+      ) else if(attribute =="font.size") div(
+        textInput(paste0('conditional_value_', attribute),attribute,value = "22")
+        ,style="display:inline-block"
+      ) else if(attribute =="borderWidth") div(
+        textInput(paste0('conditional_value_', attribute),attribute,value = "3")
+        ,style="display:inline-block"
+      )
+      ,
+      div(
+        selectInput(paste0('conditional_selector_', attribute_clean),label=NULL,choices = c("always","conditional on ..."),width="120px")
+        ,
+        style="display:inline-block"
+      ),
+      conditionalPanel(paste0('input.conditional_selector_', attribute_clean,'=="conditional on ..."'),
+        div(
+          div(
+          selectInput(paste0('conditional_var_', attribute),label=NULL,choices = c("label","frequency"),width="120px")
+          ,
+          style="display:inline-block"
+        ),
+        
+        div(
+          p("up to")
+          ,
+          style="display:inline-block"
+        ),
+        if(attribute %in% conditional_attributes_color) div(
+          colourInput(paste0('conditional2_value_', attribute),
+            label=NULL,
+            palette = "limited",
+            showColour ="background",
+            allowedCols = allcols1
+          ),
+          style="display:inline-block"
+          
+        )  else if(attribute == "font.size") div(
+          textInput(paste0('conditional2_value_', attribute),NULL,value = "22")
+          ,style="display:inline-block"
+        )  else if(attribute == "borderWidth") div(
+          textInput(paste0('conditional2_value_', attribute),NULL,value = "6")
+          ,style="display:inline-block"
+        ) 
+          ,style="display:inline-block;background-color:#EEFFEE;margin-left:50px"
+        )
+      )
+    )
+    })
+    ),
+    bsCollapsePanel("Arrows",
+      lapply(edge_names,function(attribute){
+        
+        attribute_clean=str_replace_all(attribute,"\\.","_") # because of js condition later
+        
+        div(
+          if(attribute %in% conditional_attributes_color) div(
+            colourInput(paste0('conditional_value_', attribute),
+              label=attribute,
+              palette = "limited",
+              showColour ="background",
+              allowedCols = allcols1
+            ),
+            style="display:inline-block"
+            
+          ) else if(attribute =="font.size") div(
+            textInput(paste0('conditional_value_', attribute),attribute,value = "16")
+            ,style="display:inline-block"
+          ) else if(attribute =="width") div(
+            textInput(paste0('conditional_value_', attribute),attribute,value = "3")
+            ,style="display:inline-block"
+          )
+          ,
+          div(
+            selectInput(paste0('conditional_selector_', attribute_clean),label=NULL,choices = c("always","conditional on ..."),width="120px")
+            ,
+            style="display:inline-block"
+          ),
+          conditionalPanel(paste0('input.conditional_selector_', attribute_clean,'=="conditional on ..."'),
+            div(
+              div(
+                selectInput(paste0('conditional_var_', attribute),label=NULL,choices = c("frequency","label"),width="120px")
+                ,
+                style="display:inline-block"
+              ),
+              
+              div(
+                p("up to")
+                ,
+                style="display:inline-block"
+              ),
+              if(attribute %in% conditional_attributes_color) div(
+                colourInput(paste0('conditional2_value_', attribute),
+                  label=NULL,
+                  palette = "limited",
+                  showColour ="background",
+                  allowedCols = allcols1
+                ),
+                style="display:inline-block"
+                
+              )  else if(attribute == "font.size") div(
+                textInput(paste0('conditional2_value_', attribute),NULL,value = "22")
+                ,style="display:inline-block"
+              )  else if(attribute == "width") div(
+                textInput(paste0('conditional2_value_', attribute),NULL,value = "6")
+                ,style="display:inline-block"
+              ) 
+              ,style="display:inline-block;background-color:#EEFFEE;margin-left:50px"
+            )
+          )
+        )
+      }) 
+    )
+  )
+  })
+  
+  
+  
   output$filters=renderUI({
     lapply(colnames(values$statements %>% select(-text)),function(y){
       x=values$statements[[y]]
@@ -1661,133 +1795,21 @@ server <- function(input, output, session) {
         edges_as_tibble()
       
       
-      # ...cond formatting----
+      # cond formatting------------
       
-      palettes=1
-      conds <- values$settings %>% filter((type == "variable" | type == "arrow") )
+      # ved <- ved %>% 
+      #   format_edges
       
-      conds[is.na(conds)] <- ""
+      vno <- vno %>% 
+        format_nodes_and_edges(input,type="nodes")
       
-      if (nrow(conds) > 0) {
-        
-        # see if we need to have different palettes:
-        
-        conds <- conds %>%
-          mutate(x = ifelse(str_detect(setting, "color") & condition == "conditional on:", 1, 0), palette = cumsum(x)) %>%
-          select(-x) %>%
-          filter(!is.na(condition))
-        
-        ## this is wasteful because could just do nodes once and edges once.
-        
-        for (i in 1:nrow(conds)) {
-          row <- conds[i, ]
-          if (row$type == "variable") df <- vno else df <- ved
-          orig <- df
-          
-          typenow <- ifelse(row$type == "variable", "variable", "arrow")
-          
-          # browser()
-          
-          if (row$condition == "if...") {
-            if(row$ifcolumn %in% colnames(df)){
-              # browser()
-              ifcol <- df[, row$ifcolumn] %>% unlist() %>% as.vector()
-              comp <- row["comparison"] %>% unlist() %>% as.vector()
-              
-              ifcol[is.na(ifcol)] <- ""
-              
-              if (comp == "equal") {
-                theseones <- ifcol == row$filter
-              } else
-                if (comp == "not equal") {
-                  theseones <- ifcol != row$filter
-                } else
-                  if (comp == ">") {
-                    theseones <- ifcol > row$filter
-                  } else
-                    if (comp == "<") {
-                      theseones <- ifcol < row$filter
-                    } else
-                      if (comp == "contains") theseones <- str_detect(ifcol, row$filter)
-              # browser()
-              df[theseones, row$setting] <- row$value
-              df[!theseones, row$setting] <- findset(paste0(typenow, row$setting), which = "default",global = F, v = vals)
-              
-              legend <- paste0(legend, "</br>", typenow, " ", row$setting, " set to ", row$value, " if ", row$ifcolumn, " ", row$comparison, " ", row$filter, " ")
-            }
-          }
-          else if (row$condition == "conditional on:") {
-            if (row$ifcolumn %in% colnames(df)) {
-              
-              # browser()
-              # browser()
-              
-              rc <- df[, row$ifcolumn]
-              if (row$setting %in% xc("label tooltip")) {
-                df[, row$setting] <- rc
-              }
-              else if (row$setting %in% xc("frequency")) {
-                df[, row$setting] <- as.numeric(rc)
-              }
-              else {
-                rc[is.na(rc)] <- Inf
-                # browser()
-                mr <- dense_rank(unlist(rc))
-                # mr[is.na(mr)]=""
-                # mr=as.numeric(mr)
-                nr <- nrow(df)
-                if (str_detect(row$setting, "color") & !str_detect(row$setting, "opacity")) {
-                  df[, row$setting] <- colorRampPalette((str_split(findset(paste0("diagrampalette",palettes), v = vals),","))[[1]] %>% str_trim)(max(as.numeric(mr)))[mr]
-                  palettes=palettes+1
-                }
-                if (row$setting %in% xc("font.size")) {
-                  df[, row$setting] <- (mr + findset("variablefont.size.floor",global = T, v = vals) %>% as.numeric) * findset("variablefont.size.scale",global = T, v = vals) %>% as.numeric / nr
-                }
-                if (row$setting %in% xc("size")) {
-                  df[, row$setting] <- mr / nr
-                }
-                if (any(row$setting %in% xc("width"))) {
-                  df[, row$setting] <- mr * findset("arrowconditionalwidthscaling", v = vals) %>% as.numeric() / max(mr)
-                }
-                if (any(row$setting %in% xc(" borderWidth"))) {
-                  df[, row$setting] <- mr * findset("variableconditionalwidthscaling", v = vals) %>% as.numeric() / max(mr)
-                }
-                if (row$setting %in% xc("color.opacity")) {
-                  df[, row$setting] <- mr / max(mr)
-                }
-                if (row$setting %in% xc("shape")) {
-                  df[, row$setting] <- shapelist[mr]
-                }
-                if (row$setting %in% xc("style")) {
-                  df[, row$setting] <- xc("dotted dashed solid")[mr]
-                  if (length(unique(mr)) > 3) showNotification("I only have three styles")
-                }
-              }
-              
-              legend <- paste0(legend, "</br>", typenow, " ", row$setting, " shows ", row$ifcolumn, "")
-            } else {
-              doNotification(paste0("there is no such column ",row$ifcolumn),2)
-            }
-          } else  {
-            # if (row$ifcolumn %in% colnames(df)) {
-            # if(row$setting == "color.background") browser()
-            rv=row$value
-            if(allNum(rv))rv=as.numeric(rv)
-            # df[, row$setting] <- rv
-            
-            # rc <- df[, row$ifcolumn]
-            # }else {
-            #   doNotification("there is no such column")
-            # }
-          }
-          
-          if (!identical(df, orig)) {
-            if (row$type == "variable") vno <- df else ved <- df
-          }
-        }
-        
-        # browser()
-      }
+      
+      ved <- ved %>% 
+        format_nodes_and_edges(input,type="edges")
+      
+      
+      
+      
       
       # rationalise----
       

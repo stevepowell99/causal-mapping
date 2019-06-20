@@ -20,8 +20,8 @@ diagram,overview_column,NA,NA
 variable,infer,FALSE,NA
 arrow,absence,F,NA
 variable,joinedges,FALSE,NA
-variable,tooltip,label,NA
-variable,label,label,NA
+variable,tooltip,$label,NA
+variable,label,!label,NA
 arrow,label,label,NA
 arrow,tooltip,label,NA
 diagram,palette1,"gray,white",NA
@@ -39,3 +39,4 @@ variable,width,300,NA
 variable,font.size.floor,88.57805,NA
 variable,font.size.scale,20,NA
 diagram,downarrows,TRUE,NA
+arrow,notForwards,T,NA
