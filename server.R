@@ -217,10 +217,6 @@ server <- function(input, output, session) {
             
             values$graf <- tbl_graph(nodes, edges)
             
-            # values$graf=values$graf %>%
-            #   activate(nodes) %>%
-            #   filter(cluster=="r")
-            # 
 
             
             doNotification(glue("Loaded{nrow(values$graf %>% nodes_as_tibble)} variables from permalink"))
@@ -470,12 +466,6 @@ server <- function(input, output, session) {
   
   values$obsList <- list()                                                #   to show all the statemtns from one source
   
-  # observeEvent(input$resetSelection,{
-  #   # updatePageruiInput(session=session,"pager",page_current= values$pag+1)
-  #   # updatePageruiInput(session=session,"pager",page_current= values$pag)
-  #   visNetworkProxy("net") %>% 
-  #         visSelectNodes(id=1:3)
-  # })
   
   observeEvent(input$overview_col,{
     vs=values$statements
@@ -578,24 +568,6 @@ server <- function(input, output, session) {
     }
   })
   
-  # focus -------------------------------------------------------------------
-  
-  # 
-  # 
-  # observe(if(req(input$sides)=="Code"){
-  #   # vno <- req(values$grafAgg2) %>% nodes_as_tibble
-  #   # if (as.logical(findset("diagramfocus")) & !is.null(values$pag) & nrow(vno)>0) {
-  #   #   ids <- vno %>%
-  #   #     mutate(sel=ifelse(str_detect(paste0(",|^", statement, ",|$"), as.character(values$pag)),T,F)) %>%
-  #   #     pull(sel) %>%
-  #   #     which
-  #   # 
-  #   # visNetworkProxy("net") %>%
-  #   #   visSelectNodes(id = ids)
-  #   # }
-  # 
-  #   
-  # })   
   
   
   # OLD add edges observer ----
@@ -786,11 +758,7 @@ server <- function(input, output, session) {
     # updateSelectizeInput("new1_edge","asdf")#input$selectboxvalue %>% str_trim)
   })
   
-  # observeEvent(input$selectTo,{
-  #   visNetworkProxy("net") %>% 
-  #     visSelectNodes(id=NULL)
-  #   
-  # })
+  
   observeEvent(input$selectTo,{
     # browser()
     qq <- if (!is.null(input$quote)) {
@@ -869,22 +837,9 @@ server <- function(input, output, session) {
   })
   
   
-  # observeEvent(req(input$pager),{
-  #   ved <- req(values$grafAgg2) %>% edges_as_tibble %>% mutate(id=row_number())
-  #   if (!is.null(values$pag)) {
-  # 
-  #     eids <- ved %>%
-  #       mutate(sel=ifelse(str_detect(statement, paste0("(,|^)", as.character(values$pag), "(,|$)")),T,F)) %>%
-  #       filter(sel) %>%
-  #       pull(id) 
-  #     # browser()
-  #     
-  #     visNetworkProxy("net") %>%
-  #       visSelectEdges(id = eids) 
-  #   }
-  # })
   
   observeEvent(c(input$resetSelection,req(input$pager)),{
+  # observeEvent(input$pager,{
     vno <- req(values$grafAgg2) %>% nodes_as_tibble
     # browser()
     if(!("statement" %in% colnames(vno))) vno$statement=1
@@ -1106,10 +1061,6 @@ server <- function(input, output, session) {
       whichtarg=values$grafAgg2 %>% nodes_as_tibble %>% 
         filter(row_number()==input$net_selected) %>% 
         pull(origID) 
-      # clu=vg$cluster[whichtarg]
-      # if(clu!=""){
-      #   whichtarg=
-      # } #could highlight all the rows in a cluster, but would have to allow for multiple selection already
       
     }
     else
@@ -1275,7 +1226,7 @@ server <- function(input, output, session) {
     # 
     # gr <- colnames(gr)[meaningful]
     
-    gr <- xc("label frequency sex mean_Positive_mean_mean notForwards mean_older_mean_mean mean_female_mean_mean female_mean older_mean")
+    gr <- xc("label frequency sex mean_Positive_mean_mean notForwards mean_older_mean_mean mean_female_mean_mean female_mean older_mean ava_mean avp_mean")
     
     vals <- values$settingsConditional %>% 
       mutate(type=if_else(str_detect(attribute,"node"),"node","edge"))
@@ -1466,16 +1417,6 @@ server <- function(input, output, session) {
     values$settingsGlobal <- hot_to_r(input$settingsTableGlobal)
   })
   
-  observeEvent(input$fitaction, {               # restore network to normal zoom
-    visNetworkProxy("net") %>%
-      visFit() 
-  })
-  output$testBut <- renderUI({actionButton("testBut","Edit selected arrows")})
-  observeEvent(input$testBut,{
-    visNetworkProxy("net") %>% 
-    visGetSelectedEdges(input = paste0("net_selectedEdges"))
-    
-  })
   
   # ++ library/gallery panel ------------------------------------------------
   
@@ -1612,15 +1553,69 @@ server <- function(input, output, session) {
       vno <- graph_values %>% nodes_as_tibble() 
       ved <- graph_values %>% edges_as_tibble()
       
+      
+      if (findset("variablemerge") %>% as.logical() & input$sides!="Code") { # need to convert to and froms in edge df
+
+      x <- merge_nodes(vno,ved)
+      vno <- x[[1]]
+      ved <- x[[2]]
+      }
+      
+      
+      
       # prepare ved
     
       ved <- prepare_ved(ved)
+      
+      # ved rick inv_multi --------------------------------
+      
+      if(("from" %in% colnames(ved))  &&  as.logical(findset("arrowabsence"))){ #todo findset
+        
+        doNotification("rick aggregation")    
+        
+        if(all(is.na(ved$statement)))ved$statement=1
+        # browser()
+        ved <- ved %>%
+          inv_multi()
+      }
+    
+    
       
       # ved join statements--------------------------------
       
       ved <- ved_join(ved, values$statements)
       
+      
+      
+      
+      
+      
       # ved edge merge ----
+      
+      ved <- ved %>%
+        mutate(statement=as.character(statement)) %>%
+        mutate(wstrength = strength * trust) 
+      # browser()
+      
+      
+      
+      # quip stats by question/domain---------------
+      
+      
+      if("source" %in% colnames(ved) && "question" %in% colnames(ved)){
+      
+      # browser()
+        ved <- ved %>%
+        group_by(from, to, question) %>% 
+        mutate(citation_count=length(unique(source))) %>% 
+        ungroup() %>% 
+        group_by(from, to) %>% 
+        mutate(respondent_count=length(unique(source))) %>% 
+        ungroup() %>% 
+          mutate(citation_intensity=citation_count/respondent_count)
+      
+      
+      }
       
       if (findset("arrowmerge", v = vals) %>% as.logical() ) {
         ved <- ved %>%
@@ -1635,17 +1630,23 @@ server <- function(input, output, session) {
       
       doNotification("merge edge aggregation")    
       
-      ved <- ved %>%
-        mutate(statement=as.character(statement)) %>%
-        mutate(wstrength = strength * trust) 
-      # browser()
       
       ved <- ved %>%
         mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
         mutate_if_sw(is.character, .funs = catfun) %>%
-        mutate(frequency = n()) %>% 
-        summarise_all(.funs = funs(first)) %>%
-        ungroup() %>%
+        mutate(frequency = n()) 
+      
+      
+      
+      
+      
+      ved <- ved %>% 
+        summarise_all(.funs = funs(first)) 
+
+      
+      
+      
+      ved <- ved %>% ungroup() %>%
         mutate(title = paste0(frequency, gsub("[^[:alnum:][:space:]]", "", label), separate = "- "))
       
       if("N" %in% colnames(ved)){
@@ -1859,25 +1860,6 @@ server <- function(input, output, session) {
           mutate(group = group_walktrap())
       }
       
-      # get the layout already------------------------------
-      
-      
-      
-      # 
-      # ved <- ved %>% 
-      #   mutate(arrows.to.scaleFactor=12)
-      
-      
-      
-      
-      # if(findset("arrownotForwards" %>% as.logical,global = T)){
-      # if(T){
-      #   tmp <-  tmp %>% activate(edges) %>% 
-      #     mutate(color=if_else(notForwards,"red","blue")) 
-      #   # %>% 
-      #   #   mutate(width=if_else(notForwards,width,width*12)) 
-      #   
-      # }
       
       values$grafAgg2 <- tmp 
       
@@ -1975,9 +1957,6 @@ server <- function(input, output, session) {
                 ;}")
       
       if (!all(na.omit(vga$group) == "")) {
-        # vn <- vn %>%
-        #   visGroups() %>%
-        #   visClusteringByGroup(groups = groups, label = "Group: ")
       }
       
       if (findset("diagramlayout", v = vals) == "layout_with_sugiyama") {
@@ -2409,9 +2388,70 @@ server <- function(input, output, session) {
     input$net_selectedEdges %>% paste0(collapse="; ") %>% as.character()
   })
   
+  # all the network proxy stuff-----------------
   
-  
+  observeEvent(input$fitaction, {               # restore network to normal zoom
+    visNetworkProxy("net") %>%
+      visFit() 
+  })
+  output$testBut <- renderUI({actionButton("testBut","Edit selected arrows")})
+  observeEvent(input$testBut,{
+    visNetworkProxy("net") %>% 
+      visGetSelectedEdges(input = paste0("net_selectedEdges"))
+    
+  })  
   # session$onSessionEnded(stopApp) ## TODO take out
+  
+  
+  observeEvent(input$resetSelection,{
+    updatePageruiInput(session=session,"pager",page_current= values$pag+1)
+    updatePageruiInput(session=session,"pager",page_current= values$pag)
+    visNetworkProxy("net") %>%
+          visSelectNodes(id=1:3)
+  })
+
+  # focus -------------------------------------------------------------------
+  
+  # 
+  # 
+  # observe(if(req(input$sides)=="Code"){
+  #   # vno <- req(values$grafAgg2) %>% nodes_as_tibble
+  #   # if (as.logical(findset("diagramfocus")) & !is.null(values$pag) & nrow(vno)>0) {
+  #   #   ids <- vno %>%
+  #   #     mutate(sel=ifelse(str_detect(paste0(",|^", statement, ",|$"), as.character(values$pag)),T,F)) %>%
+  #   #     pull(sel) %>%
+  #   #     which
+  #   # 
+  #   # visNetworkProxy("net") %>%
+  #   #   visSelectNodes(id = ids)
+  #   # }
+  # 
+  #   
+  # })   
+  
+  
+  
+  # observeEvent(req(input$pager),{
+  #   ved <- req(values$grafAgg2) %>% edges_as_tibble %>% mutate(id=row_number())
+  #   if (!is.null(values$pag)) {
+  # 
+  #     eids <- ved %>%
+  #       mutate(sel=ifelse(str_detect(statement, paste0("(,|^)", as.character(values$pag), "(,|$)")),T,F)) %>%
+  #       filter(sel) %>%
+  #       pull(id) 
+  #     # browser()
+  #     
+  #     visNetworkProxy("net") %>%
+  #       visSelectEdges(id = eids) 
+  #   }
+  # })
+  
+  
+  
+  
+  
+  
+  
   
   
   

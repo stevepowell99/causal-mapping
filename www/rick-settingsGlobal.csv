@@ -11,7 +11,7 @@ diagram,verticalSpacing,44,NA
 diagram,focus,TRUE,checkbox
 diagram,physics,FALSE,NA
 variable,autogroup,FALSE,NA
-variable,merge,FALSE,checkbox
+variable,merge,T,checkbox
 arrow,merge,TRUE,NA
 variable,minimum.frequency,0,slider
 arrow,minimum.frequency,0,slider
@@ -26,7 +26,7 @@ variable,infer,FALSE,NA
 variable,label,"!label, !frequency mentions",NA
 arrow,label,!frequency,NA
 arrow,tooltip,!label,NA
-variable,joinedges,FALSE,NA
+variable,joinedges,T,NA
 diagram,HiQratio,0.8,NA
 diagram,height,2000,NA
 diagram,width,3000,NA
@@ -40,3 +40,4 @@ variable,font.size.floor,25,NA
 variable,font.size.scale,20,NA
 diagram,downarrows,TRUE,NA
 arrow,notForwards,T,NA
+variable,shape,box,NA

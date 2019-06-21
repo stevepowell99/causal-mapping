@@ -19,7 +19,7 @@ diagram,description,"Preconditions for, and benefits of, an extension to the Str
 diagram,overview_column,NA,NA
 variable,infer,FALSE,NA
 arrow,absence,F,NA
-variable,joinedges,FALSE,NA
+variable,joinedges,T,NA
 variable,tooltip,!label,NA
 variable,label,!label,NA
 arrow,label,!label,NA

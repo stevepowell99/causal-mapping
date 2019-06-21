@@ -112,20 +112,6 @@ make_labels=function(tex,df,sep="<br>"){
 
 
 
-make_labelsOLD=function(tex,df,sep="<br>"){
-  x=(str_split(tex,",")[[1]]) %>% 
-    str_trim 
-  lab=""
-  for(i in x){
-    if(i %in% colnames(df))  lab=paste(lab,ifelse(i=="label","",paste0(sep,"",i,": ",collapse="")),unlist(df[,i]))
-  }
-  lab %>% 
-    str_remove_all("^  \\| details:  ")  %>% 
-    str_replace_all("\\| frequency: ","") 
-  # str_replace_all("\\| frequency: ([0-9]*)","\\(\\1\\)") 
-  
-}
-
 
 
 export_edgelist_adjacency <- function(gr){
@@ -191,6 +177,44 @@ ved_join <- function(ved, statements){
     left_join(statements, by = "statement")
   ved
 }
+
+
+merge_nodes <- function(vno,ved){
+  # browser()
+  vno <- vno %>%
+    mutate(id = row_number()) %>%
+    mutate(cluster = ifelse(cluster == "", NA, cluster)) %>%
+    group_by(cluster) %>%
+    mutate(clusterid = first(id)) %>%
+    mutate(clusterid = ifelse(is.na(cluster), id, clusterid)) %>%
+    ungroup() %>%
+    group_by(clusterid) %>%
+    mutate(clusterLength = n()) %>%
+    mutate(clusterLabel = clusterLabel %>% replaceNA()) %>%
+    mutate(label = ifelse(clusterLength < 2, label, ifelse(clusterLabel != "", clusterLabel, paste0("Cluster: ", label)))) %>%
+    # mutate(value=mean(value,na.rm=T)) %>%    
+    # mutate(valueSum=sum(value,na.rm=T)) %>%    
+    mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
+    ungroup()
+  
+  ved <- ved %>%
+    mutate(from = vno$clusterid[findfirst(from, vno$id)]) %>%
+    mutate(to = vno$clusterid[findfirst(to, vno$id)])
+  # browser()
+  tmp.graf <- tbl_graph(vno, ved) %>%
+    N_() %>%
+    filter(id == clusterid)
+  
+  vno <- tmp.graf %>% nodes_as_tibble()
+  ved <- tmp.graf %>% edges_as_tibble()
+  
+  list(vno,ved)
+  # values$tmp.graf <- tmp.graf   #for permanent cluster reduction button
+  
+  # legend <- paste0(legend, "</br>Variables merged according to user-defined clusters")
+  
+}
+
 
 large="er asdfjk klasdf";  small="asdf"
 
@@ -384,10 +408,14 @@ format_nodes_and_edges <- function(df,inp,type){
     if(inp[[paste0("conditional_selector_",attribute_clean)]]=="conditional on ...") {
     ceiling <- inp[[paste0("conditional_value2_",attribute)]] 
       if(str_detect(attribute,"color")){
-        df[,attribute_short] <- colorRamp(
-          c(floor,ceiling))(var/max(var,na.rm=T)) %>% 
+        # browser()
+        if(any(is.na(var))){
+          doNotification("Missing values for colour fade replaced with means")
+          var[is.na(var)] <- mean(var,na.rm=T)
+        }
+        df[,attribute_short] <- colorRamp(c(floor,ceiling))(var/max(var,na.rm=T)) %>% 
           as.tibble %>% 
-          mutate(xxx=rgb(V1,V2,V3,maxColorValue = 255)) %>% 
+          mutate(xxx=(rgb(V1,V2,V3,maxColorValue = 255))) %>% 
           pull(xxx)
       } else  {
         floor <- as.numeric(floor)
@@ -401,6 +429,11 @@ format_nodes_and_edges <- function(df,inp,type){
     }
   }
   df
+}
+
+make_quip_stats <- function(graf){
+  browser()
+  graf
 }
 
 

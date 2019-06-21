@@ -24,9 +24,9 @@ diagram,palette4,"green,white,orange",NA
 variable,tooltip,"frequency,cluster,from.frequency_sum_sum,to.frequency_sum_sum",NA
 variable,infer,FALSE,NA
 variable,label,!label,NA
-arrow,label,!source,NA
+arrow,label,"respondent count !respondent_count, citation count - !citation_count, source - !source",NA
 arrow,tooltip,!label,NA
-variable,joinedges,FALSE,NA
+variable,joinedges,T,NA
 arrow,absence,F,NA
 arrow,conditionalwidthscaling,19,NA
 arrow,notForwards,T,NA
