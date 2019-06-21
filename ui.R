@@ -225,9 +225,9 @@ ui <- tagList(
                                             "Advanced",
                                             actionButton("settingsTableGlobalUp","Update"),
                                             rHandsontableOutput("settingsTableGlobal"),                         # global settings
-                                            hr(),
-                                            actionButton("settingsTableUp","Update"),
-                                            rHandsontableOutput("settingsTable"),                         # set things like size and colour of items 
+                                            # hr(),
+                                            # actionButton("settingsTableUp","Update"),
+                                            # rHandsontableOutput("settingsTable"),                         # set things like size and colour of items 
                                             hr()
                                             # htmlOutput("overview"),
                                             # hr()

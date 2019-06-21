@@ -7,7 +7,7 @@ server <- function(input, output, session) {
   values$clickArrow <- F                         # no idea 
   values$crowd = F
   
-  values$settings <- defaultSettings 
+  values$settingsConditional <- defaultSettingsConditional 
   values$settingsGlobal <- defaultSettingsGlobal
   
   values$highlightedText <- ""                         # part of a system to copy any text highlighted with mouse in browser i.e. from interview quotes and insert into the edge information
@@ -54,14 +54,36 @@ server <- function(input, output, session) {
   #  providess the value of the setting sought. probably most ripe for 
   #  rationalisation
   
-  findset <- function(tex, which = "current",global=TRUE,v=values) {
+  findset <- function(tex, v=values) {
+      x <-  v$settingsGlobal %>% 
+        bind_rows(defaultSettingsGlobal) %>% 
+        group_by(type,setting) %>% 
+        summarise_all(.funs = funs(first))
+    
+      x <- x %>%
+        mutate_all(replaceNA) %>%
+        mutate(labs = paste0(type, setting)) %>%
+        filter(labs == tex) %>%
+        pull(value) %>%
+        last()
+    
+    if (is.na(x)) {
+      doNotification(paste0(x, " is not in settings"))
+      # browser()
+      
+    }
+    x
+  }
+  
+  
+  findsetOLD <- function(tex, which = "current",global=TRUE,v=values) {
     # if(tex=="diagrambackground") browser()
     if(global) {
       x <-  v$settingsGlobal
       d <-  defaultSettingsGlobal
     } else  {
       x <- v$settings
-      d <- defaultSettings
+      d <- defaultSettingsConditional
     }
     if (which == "current") {
       # browser()
@@ -1244,135 +1266,97 @@ server <- function(input, output, session) {
   
   
   output$condFormattingOutput=renderUI({
+    # browser()
+    # if(is.null(values$grafAgg2)) gr <- values$graf else gr <- values$grafAgg2
+    # gr <- gr %>% nodes_as_tibble() %>% 
+    #   select(label,everything()) 
+    # 
+    # meaningful <- gr %>% apply(2,function(x)(length(unique(x)))>1)
+    # 
+    # gr <- colnames(gr)[meaningful]
     
-bsCollapse(open = "Variables",
-    bsCollapsePanel("Variables",
-    lapply(node_names,function(attribute){
+    gr <- xc("label frequency sex mean_Positive_mean_mean notForwards mean_older_mean_mean mean_female_mean_mean female_mean older_mean")
+    
+    vals <- values$settingsConditional %>% 
+      mutate(type=if_else(str_detect(attribute,"node"),"node","edge"))
+    # browser()
+      # attrs=c(node_names,edge_names)
       
-    attribute_clean=str_replace_all(attribute,"\\.","_") # because of js condition later
+    lapply(seq_along(all_attributes),function(n){
+      thisAttribute <- all_attributes[n]
+      thisType <- ifelse(n>length(node_names),"edge","node")
+      if(is.na(thisAttribute))browser()
+      vals2 = vals %>% filter(attribute==thisAttribute) 
+    attribute_clean=str_replace_all(thisAttribute,"\\.","_") # because of js condition later
     
     div(
-      if(attribute %in% conditional_attributes_color) div(
-        colourInput(paste0('conditional_value_', attribute),
-          label=attribute,
+      
+      div(
+        p(thisAttribute,style="width:160px"),
+        style="display:inline-block;vertical-align:top"
+      ),
+      
+      div(
+        selectInput(paste0('conditional_selector_', attribute_clean),label=NULL,choices = c("always","conditional on ..."), selected =vals2 %>% pull(selector),width="120px")
+        ,
+        style="display:inline-block;vertical-align:top"
+      ),
+      
+      
+      if(thisAttribute %>% str_detect("color")) {div(
+        colourInput(paste0('conditional_value_', thisAttribute),
+          label=NULL,
           palette = "limited",
           showColour ="background",
+          value = vals2 %>% pull(value),
           allowedCols = allcols1
         ),
-        style="display:inline-block"
+        style="display:inline-block;vertical-align:top"
         
-      ) else if(attribute =="font.size") div(
-        textInput(paste0('conditional_value_', attribute),attribute,value = "22")
-        ,style="display:inline-block"
-      ) else if(attribute =="borderWidth") div(
-        textInput(paste0('conditional_value_', attribute),attribute,value = "3")
-        ,style="display:inline-block"
+      )} else div(
+        textInput(paste0('conditional_value_', thisAttribute),NULL,value =  vals2 %>% pull(value),width="120px")
+        ,style="display:inline-block;vertical-align:top"
       )
       ,
-      div(
-        selectInput(paste0('conditional_selector_', attribute_clean),label=NULL,choices = c("always","conditional on ..."),width="120px")
-        ,
-        style="display:inline-block"
-      ),
       conditionalPanel(paste0('input.conditional_selector_', attribute_clean,'=="conditional on ..."'),
         div(
           div(
-          selectInput(paste0('conditional_var_', attribute),label=NULL,choices = c("label","frequency"),width="120px")
+          selectInput(paste0('conditional_var_', thisAttribute),label=NULL,choices = gr,selected = vals2 %>% pull(var),width="120px")
+          # selectInput(paste0('conditional_var_', thisAttribute),label=NULL,choices = c("label","frequency"),selected = vals2 %>% pull(var),width="120px")
           ,
-          style="display:inline-block"
+          style="display:inline-block;vertical-align:top"
         ),
         
         div(
           p("up to")
           ,
-          style="display:inline-block"
+          style="display:inline-block;vertical-align:top"
         ),
-        if(attribute %in% conditional_attributes_color) div(
-          colourInput(paste0('conditional2_value_', attribute),
+        if(thisAttribute %>% str_detect("color")) div(
+          colourInput(paste0('conditional_value2_', thisAttribute),
             label=NULL,
             palette = "limited",
             showColour ="background",
+            value =  vals2 %>% pull(value2),
             allowedCols = allcols1
           ),
-          style="display:inline-block"
+          style="display:inline-block;vertical-align:top"
           
-        )  else if(attribute == "font.size") div(
-          textInput(paste0('conditional2_value_', attribute),NULL,value = "22")
-          ,style="display:inline-block"
-        )  else if(attribute == "borderWidth") div(
-          textInput(paste0('conditional2_value_', attribute),NULL,value = "6")
-          ,style="display:inline-block"
-        ) 
+        ) else div(
+          textInput(paste0('conditional_value2_', thisAttribute),NULL,value =  vals2 %>% pull(value2),width="120px")
+          ,style="display:inline-block;vertical-align:top"
+        )  
           ,style="display:inline-block;background-color:#EEFFEE;margin-left:50px"
         )
       )
+        ,
+        hr(style="margin:5px")
     )
     })
-    ),
-    bsCollapsePanel("Arrows",
-      lapply(edge_names,function(attribute){
-        
-        attribute_clean=str_replace_all(attribute,"\\.","_") # because of js condition later
-        
-        div(
-          if(attribute %in% conditional_attributes_color) div(
-            colourInput(paste0('conditional_value_', attribute),
-              label=attribute,
-              palette = "limited",
-              showColour ="background",
-              allowedCols = allcols1
-            ),
-            style="display:inline-block"
-            
-          ) else if(attribute =="font.size") div(
-            textInput(paste0('conditional_value_', attribute),attribute,value = "16")
-            ,style="display:inline-block"
-          ) else if(attribute =="width") div(
-            textInput(paste0('conditional_value_', attribute),attribute,value = "3")
-            ,style="display:inline-block"
-          )
-          ,
-          div(
-            selectInput(paste0('conditional_selector_', attribute_clean),label=NULL,choices = c("always","conditional on ..."),width="120px")
-            ,
-            style="display:inline-block"
-          ),
-          conditionalPanel(paste0('input.conditional_selector_', attribute_clean,'=="conditional on ..."'),
-            div(
-              div(
-                selectInput(paste0('conditional_var_', attribute),label=NULL,choices = c("frequency","label"),width="120px")
-                ,
-                style="display:inline-block"
-              ),
-              
-              div(
-                p("up to")
-                ,
-                style="display:inline-block"
-              ),
-              if(attribute %in% conditional_attributes_color) div(
-                colourInput(paste0('conditional2_value_', attribute),
-                  label=NULL,
-                  palette = "limited",
-                  showColour ="background",
-                  allowedCols = allcols1
-                ),
-                style="display:inline-block"
-                
-              )  else if(attribute == "font.size") div(
-                textInput(paste0('conditional2_value_', attribute),NULL,value = "22")
-                ,style="display:inline-block"
-              )  else if(attribute == "width") div(
-                textInput(paste0('conditional2_value_', attribute),NULL,value = "6")
-                ,style="display:inline-block"
-              ) 
-              ,style="display:inline-block;background-color:#EEFFEE;margin-left:50px"
-            )
-          )
-        )
-      }) 
-    )
-  )
+    
+    
+    
+  
   })
   
   
@@ -1382,7 +1366,7 @@ bsCollapse(open = "Variables",
       x=values$statements[[y]]
       u=unique(x) %>% na.omit()
       if(length(u)>1 & length(u)<12){
-        div(checkboxGroupButtons(paste0("filters",y),y,choices=sort(u),selected=u),style="display:inline-block")
+        div(checkboxGroupButtons(paste0("filters",y),y,choices=sort(u),selected=u),style="display:inline-block;vertical-align:top")
       }
     })
   })  
@@ -1405,7 +1389,7 @@ bsCollapse(open = "Variables",
             colourInput(paste0('input', rt),rt,
                         palette = "limited",
                         showColour ="background",
-                        value=if(is.null(findset(rt))) findset(rt,which="original") else findset(rt),
+                        value=if(is.null(findset(rt))) findset(rt) else findset(rt),
                         allowedCols = allcols1) 
           }
           else if(rg=="slider")  {
@@ -1456,26 +1440,26 @@ bsCollapse(open = "Variables",
       hot_cols(colWidths = c(80,120,250,80))
   })
   
-  output$settingsTable <- renderRHandsontable({
-    vs <- values$settings %>% mutate_all(as.character)
-    
-    ds <- defaultSettings %>% mutate_all(as.character)
-    
-    vs <- bind_rows(vs, ds) %>%
-      distinct(type, setting, .keep_all = T)
-    
-    
-    rhandsontable(vs %>%
-                    mutate(type = factor(type), condition = factor(condition, levels = c("always", "if...", "conditional on:"))), height = NULL, rowHeaders = FALSE, usetypes = T) %>%
-      hot_context_menu(allowRowEdit = T) %>%
-      hot_cols(colWidths = c(80,120,250,80))
-    
-  })
+  # output$settingsTable <- renderRHandsontable({
+  #   vs <- values$settings %>% mutate_all(as.character)
+  #   
+  #   ds <- defaultSettingsConditional %>% mutate_all(as.character)
+  #   
+  #   vs <- bind_rows(vs, ds) %>%
+  #     distinct(type, setting, .keep_all = T)
+  #   
+  #   
+  #   rhandsontable(vs %>%
+  #                   mutate(type = factor(type), condition = factor(condition, levels = c("always", "if...", "conditional on:"))), height = NULL, rowHeaders = FALSE, usetypes = T) %>%
+  #     hot_context_menu(allowRowEdit = T) %>%
+  #     hot_cols(colWidths = c(80,120,250,80))
+  #   
+  # })
   
-  observeEvent(input$settingsTableUp, {
-    doNotification("updating from settingsTable")
-    values$settings <- hot_to_r(input$settingsTable)
-  })
+  # observeEvent(input$settingsTableUp, {
+  #   doNotification("updating from settingsTable")
+  #   values$settings <- hot_to_r(input$settingsTable)
+  # })
   
   observeEvent(input$settingsTableGlobalUp, {
     doNotification("updating from settingsTableGlobal")
@@ -1683,11 +1667,8 @@ bsCollapse(open = "Variables",
       # join edges with nodes------------------------------------------------
       
       doNotification("join to edges aggregation")    
-      
-      if(findset("variablejoinedges", v = vals) %>% as.logical | 
-         values$settings %>% filter((condition!="always")) %>% nrow() %>% `>`(0) | 
-         values$settingsGlobal %>% pull(value) %>% unique %>% str_detect("mean|frequency|sum") %>% any(na.rm=TRUE)
-      ){ #todo, should list any functions. variablejoinedges is pointless
+  # browser()    
+      if(findset("variablejoinedges", v = vals) %>% as.logical){ #todo, should list any functions. variablejoinedges is pointless
         
         # browser()
         
@@ -1760,7 +1741,7 @@ bsCollapse(open = "Variables",
         if("mean_key1_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key1=mean_key1_mean_mean) 
         if("mean_key2_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key2=mean_key2_mean_mean) 
         
-        # nsets=defaultSettings %>%
+        # nsets=defaultSettingsConditional %>%
         #   filter(type=="variable") %>%
         #   select(setting,value)
         #
@@ -1801,11 +1782,11 @@ bsCollapse(open = "Variables",
       #   format_edges
       
       vno <- vno %>% 
-        format_nodes_and_edges(input,type="nodes")
+        format_nodes_and_edges(input,type="node")
       
       
       ved <- ved %>% 
-        format_nodes_and_edges(input,type="edges")
+        format_nodes_and_edges(input,type="edge")
       
       
       
@@ -1910,7 +1891,7 @@ bsCollapse(open = "Variables",
   # RENDER visnetwork----
   # finally we use values$grafAgg2 to generate the viz 
   
-  observe({
+  observe(if(!is.null(values$grafAgg2)){
     
     vals <- isolate(values)
     vga <- req(values$grafAgg2)
@@ -1955,7 +1936,7 @@ bsCollapse(open = "Variables",
           # ,
           # width="2000px"
         ) 
-      
+      # browser()
       vn = vn1 %>%
         visInteraction(
           dragNodes = T,
@@ -2047,34 +2028,34 @@ bsCollapse(open = "Variables",
           shadow = list(enabled = T, size = 10),
           # widthConstraint=(5500/(levels+5))    , #  numeric(findset("variablewidth")) , #,300-(levels*10),#,(300*levels)-9,
           widthConstraint=as.numeric(findset("variablewidth", v = vals)) , #,300-(levels*10),#,(300*levels)-9,
-          color =
-            list(
-              background =
-                findset("variablecolor.background",global=F, v = vals) %>% toRGB(findset("variablecolor.opacity",global=F, v = vals) %>% as.numeric()),
-              border = findset("variablecolor.border",global=F, v = vals)
-              
-              # ,
-              # highlight=list(
-              #   background=findset("variablecolor.background.highlight",global=F)
-              #   ,
-              #   border=findset("variablecolor.border.highlight",global=F)
-              #
-              # )
-            ),
+          # color =
+          #   list(
+          #     background =
+          #       findset("variablecolor.background",global=F, v = vals) %>% toRGB(findset("variablecolor.opacity",global=F, v = vals) %>% as.numeric()),
+          #     border = findset("variablecolor.border",global=F, v = vals)
+          #     
+          #     # ,
+          #     # highlight=list(
+          #     #   background=findset("variablecolor.background.highlight",global=F)
+          #     #   ,
+          #     #   border=findset("variablecolor.border.highlight",global=F)
+          #     #
+          #     # )
+          #   ),
           margin=32,  #list(32,9,20,9), #,   findset("variablemargin",global = T),
           # margin.bottom=22, #,   findset("variablemargin",global = T),
-          font =
-            list(
-              color =
-                findset("variablefont.color",global=F, v = vals),
-              size = findset("variablefont.size",global=F, v = vals)
-            ),
+          # font =
+          #   list(
+          #     color =
+          #       findset("variablefont.color",global=F, v = vals),
+          #     size = findset("variablefont.size",global=F, v = vals)
+          #   ),
           hidden = F,# findset("variablehidden",global=F) %>% as.logical(),
           scaling = list(label = list(enabled = F)),
-          shape = findset("variableshape",global=F, v = vals),
+          shape = findset("variableshape", v = vals),
           # shapeProperties = list("borderDashes=T"),
           group = T,#findset("variablegroup",global=F),
-          borderWidth = findset("variableborderWidth",global=F, v = vals),
+          # borderWidth = findset("variableborderWidth",global=F, v = vals),
           # widthConstraint=4,
           # widthConstraint = =4,
           # size =
@@ -2094,14 +2075,14 @@ bsCollapse(open = "Variables",
             list(enabled = F, size = 5),
           # width =
           #   findset("arrowwidth"),
-          font =
-            list(
-              color =
-                findset("arrowfont.color",global=F, v = vals),
-              background =
-                "#FFFFFF80",
-              size = findset("arrowfont.size",global=F, v = vals)
-            ),
+          # font =
+          #   list(
+          #     color =
+          #       findset("arrowfont.color",global=F, v = vals),
+          #     background =
+          #       "#FFFFFF80",
+          #     size = findset("arrowfont.size",global=F, v = vals)
+          #   ),
           physics =
             F,
           arrows =
@@ -2217,7 +2198,7 @@ bsCollapse(open = "Variables",
     div(
       tagList(
         
-        # div(actionButton("render_button","Render"),style="display:inline-block"),
+        # div(actionButton("render_button","Render"),style="display:inline-block;vertical-align:top"),
         div(textInput(
           "titl", NULL,
           value = ifelse(is.null(values$current), "", values$current), placeholder = "Title", width = "100%"
@@ -2251,9 +2232,13 @@ bsCollapse(open = "Variables",
         nodes=values$graf %>% nodes_as_tibble
         edges=values$graf %>% edges_as_tibble
         
+        
+        settingsConditional <- make_settingsConditional(input)
+        
+        
         # browser()
         # if(storage="local"){
-        if(!is.null(values$settings))write__csv(values$settings, path=paste0("www/", inputtitl, "-settings.csv"))
+        write__csv(settingsConditional, path=paste0("www/", inputtitl, "-settingsConditional.csv"))
         if(!is.null(values$settingsGlobal))write__csv(values$settingsGlobal, path=paste0("www/", inputtitl, "-settingsGlobal.csv"))
         if(!is.null(values$statements))write__csv(values$statements, path=paste0("www/", inputtitl, "-statements.csv"))
         if(!is.null(nodes))write__csv(nodes, path = paste0("www/", inputtitl, "-nodes.csv"))

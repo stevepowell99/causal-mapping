@@ -363,22 +363,28 @@ findfirst <- function(vec, vec2) {
 
 
 format_nodes_and_edges <- function(df,inp,type){
-  if (type=="nodes") type_names = node_names else type_names = edge_names
-  req(inp$conditional_selector_color_background)
+  # if (type=="nodes") \type_names = node_names else type_names = edge_names
   # browser()
-  for(attribute in type_names){
-    attribute_clean <- str_replace_all(attribute,"\\.","_")
+  # req(inp$conditional_selector_node_color.background)
+  req(inp$conditional_value_node_font.color)
+  if(type=="node")namelist <- node_names else namelist <- edge_names
+  for(attribute_short in namelist){
+    attribute <- paste0(type,"_",attribute_short)
+    attribute_clean <- attribute %>% str_replace("\\.","_")
+    
+    # attribute_stripped <- str_remove_all(attribute,"node_") %>% str_remove_all("edge_")
+    
     
     floor <- inp[[paste0("conditional_value_",attribute)]] 
     
     var <- inp[[paste0("conditional_var_",attribute)]] 
     var <- df %>% pull(var)
     if(0!=sum(as.numeric(var),na.rm=T)) var <- as.numeric(var) else var <- as.numeric(factor(var))
-    
+    # browser()
     if(inp[[paste0("conditional_selector_",attribute_clean)]]=="conditional on ...") {
-    ceiling <- inp[[paste0("conditional2_value_",attribute)]] 
-      if(attribute %in% conditional_attributes_color){
-        df[,attribute] <- colorRamp(
+    ceiling <- inp[[paste0("conditional_value2_",attribute)]] 
+      if(str_detect(attribute,"color")){
+        df[,attribute_short] <- colorRamp(
           c(floor,ceiling))(var/max(var,na.rm=T)) %>% 
           as.tibble %>% 
           mutate(xxx=rgb(V1,V2,V3,maxColorValue = 255)) %>% 
@@ -386,28 +392,59 @@ format_nodes_and_edges <- function(df,inp,type){
       } else  {
         floor <- as.numeric(floor)
         ceiling <- as.numeric(ceiling)
-        df[,attribute] <- (var/max(var,na.rm=T))*((ceiling-floor))  + floor
+        df[,attribute_short] <- (var/max(var,na.rm=T))*((ceiling-floor))  + floor
       }
     }
     else {
       
-      df[,attribute] <- floor
+      df[,attribute_short] <- floor
     }
   }
   df
 }
+
+
+
+make_settingsConditional <- function(inp){
+  # browser()
+  lis <- lapply(all_attributes,function(attribute){
+    attribute=c(
+      attribute=attribute
+      ,
+      conditional_value_=inp[[paste0('conditional_value_', attribute)]]
+      ,
+      conditional_selector_=inp[[paste0('conditional_selector_', str_replace(attribute,"\\.","_"))]]
+      ,
+      conditional_var_=inp[[paste0('conditional_var_', attribute)]]
+      ,
+      conditional_value2_=inp[[paste0('conditional_value2_', attribute)]]
+    )
+  }) 
+  
+  names(lis)=paste0("X",1:length(lis))
+  
+    liss <- bind_rows(lis)
+    # liss[nrow(liss)+1,] <- c(rep("node",length(node_names)),rep("edge",length(edge_names)))
+    lisss <- t(liss)
+    colnames(lisss) <- xc("attribute value selector var value2")
+    lisss %>% as.tibble
+}
+
 
 # constants ----
 
 
 node_names=xc("color.background color.border font.color font.size borderWidth")
 edge_names=xc("color font.color font.size width")
-conditional_attributes_color <- xc("font.color color.background color.border color")
+
+all_attributes=c(paste0("node_",node_names),paste0("edge_",edge_names))
+
+# conditional_attributes_color <- xc("font.color color.background color.border color")
 
 writeLines("", "log.txt") # just to open up a fresh file
 
 
-csvlist <- xc("nodes edges settings statements settingsGlobal")
+csvlist <- xc("nodes edges settingsConditional statements settingsGlobal")
 
 
 # generate some nice colours
@@ -579,6 +616,6 @@ valuelist <- list(
   "levelSeparation" = ((1:20) / 4)^2
 )
 
-defaultSettings <- read_csv("defaultSettings.csv")
+defaultSettingsConditional <- read_csv("defaultSettingsConditional.csv")
 defaultSettingsGlobal <- read_csv("defaultSettingsGlobal.csv")
 

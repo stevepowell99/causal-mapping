@@ -1,7 +1,6 @@
 
-render viz
 Loading files
-Loaded41 variables from permalink
+Loaded22 variables from permalink
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -128,4 +127,126 @@ Aggregated
 started viz
 Produced viz
 render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
 render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+Saved
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+Saved
+updating from settingsTableGlobal
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+Creating nodes table
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+started viz
+Produced viz

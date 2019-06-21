@@ -20,8 +20,8 @@ arrow,absence,F,NA
 variable,joinedges,FALSE,NA
 variable,tooltip,!label proportion of women: !mean_sex_mean_mean,NA
 variable,label,!label,NA
-arrow,label,label,NA
-arrow,tooltip,label,NA
+arrow,label,!label,NA
+arrow,tooltip,!label,NA
 arrow,wrap,15,NA
 variable,wrap,15,NA
 diagram,palette1,"blue,red",NA
@@ -40,3 +40,4 @@ variable,font.size.floor,80,NA
 variable,font.size.scale,25,NA
 diagram,downarrows,TRUE,NA
 arrow,notForwards,T,NA
+variable,shape,box,NA

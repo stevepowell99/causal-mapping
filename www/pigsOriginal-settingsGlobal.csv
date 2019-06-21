@@ -23,9 +23,9 @@ diagram,palette3,"green,orange",NA
 diagram,palette4,"green,white,orange",NA
 variable,tooltip,"label,frequency,cluster,from.frequency_sum_sum,to.frequency_sum_sum",NA
 variable,infer,FALSE,NA
-variable,label,label,NA
-arrow,label,label,NA
-arrow,tooltip,frequency,NA
+variable,label,!label,NA
+arrow,label,!label,NA
+arrow,tooltip,!frequency,NA
 variable,joinedges,T,NA
 arrow,absence,F,NA
 diagram,HiQratio,0.8,NA
@@ -39,3 +39,5 @@ variable,width,720,NA
 variable,font.size.floor,25,NA
 variable,font.size.scale,20,NA
 diagram,downarrows,TRUE,NA
+arrow,notForwards,T,NA
+variable,shape,box,NA
