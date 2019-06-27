@@ -12,7 +12,7 @@ diagram,focus,TRUE,checkbox
 diagram,physics,FALSE,NA
 variable,autogroup,FALSE,NA
 variable,merge,FALSE,checkbox
-arrow,merge,TRUE,NA
+arrow,merge,F,NA
 variable,minimum.frequency,0,slider
 arrow,minimum.frequency,0,slider
 arrow,wrap,15,NA

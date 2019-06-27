@@ -271,15 +271,16 @@ ui <- tagList(
                            mainPanel(
                              
                              width = 8, style = "border-left:2px dotted black",
+                             
+                             uiOutput("filters"),
                              conditionalPanel("!input.crowd",style="background-color:white;border-radius:5px",                         # input.crowd is part of an alternative, "crowdsourced" phone-friendly version of the interface which is not important at moment
                                               
                                               uiOutput("floatingWidgets"),
                                
-                                              uiOutput("filters"),
                                               
                                               
                                               
-                                              visNetworkOutput("net", height = "950px", width = "100%"),                         # the main network viz. 
+                                              withSpinner((visNetworkOutput("net", height = "950px", width = "100%")),type = 5),                         # the main network viz. 
                                               uiOutput("savedMsg"),
                                               
                                               tags$hr(),

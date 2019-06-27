@@ -127,3 +127,8 @@ Fixed save PNG so it saves html and png into www with correct filename, which me
 using github comments for most changes
 
 fixed aggregation so calculation of positions and notForwards comes before cond formatting
+
+
+
+24/6/2019 now showing separate arrows when arrowmerge=F
+

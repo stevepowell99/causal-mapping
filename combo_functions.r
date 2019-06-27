@@ -70,7 +70,7 @@ funfun=function(fun,Ep,B,s){
 
 
 
-gfun2=function(funname){
+gfun2OLD=function(funname){
   funfun(funname,scens,scens,scens) %>%
     ggplot(aes(B,E,colour=strength,group=strength))+
     geom_jitter(height = .01,width = .01)+
@@ -81,47 +81,90 @@ gfun2=function(funname){
     ggtitle(funname,sub="                           Prior value of consequence variable")
 }
 
-SAMEgravity = function(Ep,B,s=1){
-  s*B
+
+gfun1=function(funname){
+  funfun(funname,scens,scens,scens) %>%
+    filter(strength==1) %>% 
+    ggplot(aes(B,E,group=Ep,colour=Ep))+
+    # geom_point()+
+    geom_jitter(size=3,height = .005,width = .005)+
+    # geom_line(size=1)+
+    xlab("Level of influence variable")+
+    ylab("Posterior value of consequence variable")+
+    ggtitle(funname)+
+    guides(colour=guide_legend(title="Prior value of consequence variable"),reverse=T)
 }
 
 
-SA = function(Ep,B,s=1){
-  Ep+(1-Ep)*s*B
+gfun2=function(funname){
+  funfun(funname,scens,scens,scens) %>%
+    ggplot(aes(B,E,group=Ep,colour=Ep))+
+    # geom_point()+
+    geom_jitter(size=3,height = .005,width = .005)+
+    geom_line(size=1)+
+    xlab("Level of influence variable")+
+    ylab("Posterior value of consequence variable")+
+    facet_grid(.~strength)+
+    ggtitle(funname,sub="                             strength of influence")+
+    guides(colour=guide_legend(title="Prior value of consequence variable"),reverse=T)
 }
+
 
 
 NOT = function(Ep,B,s=1){
-  Ep+(1-Ep)*s*(1-B)
+  (1-B)*s + Ep*(1-s)
 }
 
 
-SQ = function(Ep,B,s=1){
-  Ep+(1-Ep)*s*B^2
+
+
+SQUARE = function(Ep,B,s=1){
+  (B^2)*s + Ep*(1-s)
 }
 
+SAME = function(Ep,B,s=1){
+  B*s + Ep*(1-s)
+}
 
+NOT = function(Ep,B,s=1){
+  (1-B)*s + Ep*(1-s)
+}
 
 NECC = function(Ep,B,s=1){
-  Ep+(1-Ep)*s*B
+  ((Ep)*B)*s + Ep*(1-s)
 }
 
-MIN = function(Ep,B,s=1){
-  pmin(Ep,B*s)
-}
-
-MIN2 = function(Ep,B,s=1){
-  pmin(Ep,B)*s
-}
-
-MAX = function(Ep,B,s=1){
-  pmax(Ep,B*s)
+SUFF = function(Ep,B,s=1){
+  (1-((Ep-1)*(B-1)))*s  + Ep*(1-s)
 }
 
 
 
-AND = function(Ep,V,s=1){
-  res = pmin(V[[1]],V[[2]])
-  Ep+(1-Ep)*s*res
-}
+# gfun2("SAME")
+# gfun2("NOT")
+# gfun2("SQUARE")
+# gfun2("NECC")
+# gfun2("SUFF")
+# 
 
+
+
+# MIN = function(Ep,B,s=1){
+#   pmin(Ep,B*s)
+# }
+# 
+# MIN2 = function(Ep,B,s=1){
+#   pmin(Ep,B)*s
+# }
+# 
+# MAX = function(Ep,B,s=1){
+#   pmax(Ep,B*s)
+# }
+# 
+# 
+# 
+# AND = function(Ep,V,s=1){
+#   res = pmin(V[[1]],V[[2]])
+#   Ep+(1-Ep)*s*res
+# }
+# 

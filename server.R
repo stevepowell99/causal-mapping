@@ -1616,6 +1616,7 @@ server <- function(input, output, session) {
       
       
       }
+        # browser()
       
       if (findset("arrowmerge", v = vals) %>% as.logical() ) {
         ved <- ved %>%
@@ -1624,7 +1625,13 @@ server <- function(input, output, session) {
         legend <- paste0(legend, "</br>Multiple arrows between pairs of variables collapsed into one")
         
       } else {
+# add different curve to each edge in coterminal sets of edges--------------
         ved <- ved %>%
+          group_by(from, to) %>% 
+          mutate(smooth.type="continuous") %>%
+          mutate(smooth.roundness=seq(from=0,to=.8,length.out = n())) %>%
+          mutate(smooth.enabled=TRUE) %>%
+          ungroup() %>% 
           group_by(row_number())
       }
       
@@ -1668,7 +1675,7 @@ server <- function(input, output, session) {
       # join edges with nodes------------------------------------------------
       
       doNotification("join to edges aggregation")    
-  # browser()    
+  # browser()
       if(findset("variablejoinedges", v = vals) %>% as.logical){ #todo, should list any functions. variablejoinedges is pointless
         
         # browser()
@@ -1838,15 +1845,12 @@ server <- function(input, output, session) {
         )
       
       # # wrapping ----
-      vno = vno %>%
-        mutate(label = str_wrap(label, findset("variablewrap")))
-      # 
-      # # ved tooltips
-      # 
+      # ved = ved %>%
       # 
       # 
       ved <- ved %>%
         mutate(label = str_replace_all(label, "///", "\n")) %>%
+        mutate(label = str_wrap(label, findset("arrowwrap"))) %>%
         mutate(label = str_replace_all(label, "NA", "")) %>%
         mutate(label = str_trim(label))
       
@@ -1961,7 +1965,7 @@ server <- function(input, output, session) {
       
       if (findset("diagramlayout", v = vals) == "layout_with_sugiyama") {
         vn <- vn %>%
-          visIgraphLayout(layout = "layout_with_sugiyama", randomSeed = 123, smooth = T, type = "full")
+          visIgraphLayout(layout = "layout_with_sugiyama", randomSeed = 123, type = "full")
         
         if (findset("diagramorientation",v = vals) %in% xc("LR RL")) {
           # browser()

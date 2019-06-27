@@ -825,7 +825,7 @@ i.glyphicon.glyphicon-play{
 
 .textbanner a {background-color: yellow !important;color:black !important;}
 
-#filters {position:fixed;}
+#filters {position:fixed;z-index: 99}
 
 .colourpicker-input {height:15px !important;}
 

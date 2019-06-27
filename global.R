@@ -5,7 +5,7 @@ options(stringsAsFactors = F)
 
 # source ------------------------------------------------------------------
 
-source("combo_functions.r")
+# source("combo_functions.r")
 source("functions/find_cycles.r")
 
 # libs --------------------------------------------------------------------
@@ -31,7 +31,7 @@ library(networkD3)
 library(tidygraph)
 library(googledrive)
 library(googlesheets4)
-
+library(shinycssloaders)
 library(rdrop2)
 
 require(visNetwork)
