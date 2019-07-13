@@ -819,7 +819,7 @@ i.glyphicon.glyphicon-play{
 #large .selectize-dropdown { line-height: 30px !important; }
 
 #deleteVarForm{
-	background-color: red !important;
+	background-color: #FFDDDD !important;
 }
 
 
@@ -830,8 +830,11 @@ i.glyphicon.glyphicon-play{
 .colourpicker-input {height:15px !important;}
 
 .selectize-input {
-    min-height: 28px;
+    min-height: 34px;
 }
-.form-control {
-    height: 28px !important;
+
+#savemsg{
+    color: white;
+    padding-left: 6px;
+    padding-top: 10px;
 }

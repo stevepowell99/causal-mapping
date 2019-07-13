@@ -132,3 +132,12 @@ fixed aggregation so calculation of positions and notForwards comes before cond 
 
 24/6/2019 now showing separate arrows when arrowmerge=F
 
+13/7/2019 using agrep for matching nodes using searchbox
+
+ensure contrasting background when showing search results
+
+stats calculation as separate function
+
+revived "saved as ..." widget
+
+fixed providing html and png on save png button

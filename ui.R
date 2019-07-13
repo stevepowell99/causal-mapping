@@ -59,7 +59,7 @@ ui <- tagList(
                              id = "app-content",
                              a(h4("Causal Mapping ", style = "display:inline-block;color:white;margin-right:8px"), href = "."),
                              img(src = "img/logo.gif", height = "20px", style = "display:inline-block;"),
-                             a(icon("question-circle"),href="http://www.pogol.net/_help/index.html", target="_blank",height = "20px", style = "display:inline-block;margin-left:20px"),
+                             a(icon("question-circle"),href="http://www.pogol.net/_causal_mapping/index.html", target="_blank",height = "20px", style = "display:inline-block;margin-left:20px"),
                              
                              hr(style = "margin-top:5px"),
                              
@@ -67,11 +67,10 @@ ui <- tagList(
                              bsAlert("bsmsg"),
                              bsAlert("found"),
                              bsAlert("notfound"),
-                             
-                             
-                             # uiOutput("test"),
-                             
+          
+                                                    # uiOutput("test"),
                              uiOutput("savebut"),
+                             uiOutput("savedMsg"),
                              # uiOutput("savedMsg"),
                              hr(),
                              tabsetPanel(
@@ -140,34 +139,20 @@ ui <- tagList(
                                         # ,
                                         uiOutput("pagerBig"),
                                         uiOutput("displayStatementPanel"),
-                                 uiOutput("testBut"),
-                                 uiOutput("edgeInfo"),
-                                        
+                                 # uiOutput("edgeBut"),
                                         
                                         uiOutput("varForm"),
-                                        
-                                        bsCollapse(
-                                          id = "codeCollapse", open =
-                                            "Add arrows",
-                                          
-                                          bsCollapsePanel(
-                                            "Add arrows",
-                                            div(
-                                              uiOutput("selectbox"),
-                                              uiOutput("addNewNodeButton"),
-                                              uiOutput("add_edges_widget"),
-                                              uiOutput("combo")
-                                            )
-                                          ),
-                                          
-                                          
-                                          bsCollapsePanel(                    #this is just a utility from visnetwork which I will drop at some point
-                                            "Advanced options",
-                                            p("Development only"),
-                                            icon("exclamation-triangle"),
-                                            p(id = "advancedAnchor")
-                                          )
-                                        )
+                                 
+                                   div(
+                                     uiOutput("selectbox"),
+                                     uiOutput("addNewNodeButton"),
+                                     uiOutput("selectBoxButtons"),
+                                     uiOutput("fromStackInfo"),
+                                     uiOutput("edgeInfo"),
+                                     uiOutput("add_edges_widget"),
+                                     uiOutput("combo"),
+                                     style="background-color:#DDFFDD;border:1px gray solid;padding:3px"
+                                   )
                                ),
                                tabPanel(value="Variables","",                      # user can directly edit the nodes table. still functional but will probably be dropped
                                         style = glue("background-color:{rgb(0.99,1,0.97)};;border-radius:10px"), icon = icon("boxes"),
@@ -236,7 +221,17 @@ ui <- tagList(
                                         bsCollapsePanel(
                                           "Easy",
                                           actionButton("autoMerge", "Auto-suggest clusters")                         # not importatn
-                                        )
+                                        ),
+                                 
+                                 bsCollapsePanel(                    #this is just a utility from visnetwork which I will drop at some point
+                                   "Advanced options",
+                                   p("Development only"),
+                                   icon("exclamation-triangle"),
+                                   p(id = "advancedAnchor")
+                                 )
+                                 
+                                 
+                                 
                                         # ,
                                ),
                                tabPanel("",icon=icon("chart-pie"),                         # some additional output, not important
@@ -281,7 +276,6 @@ ui <- tagList(
                                               
                                               
                                               withSpinner((visNetworkOutput("net", height = "950px", width = "100%")),type = 5),                         # the main network viz. 
-                                              uiOutput("savedMsg"),
                                               
                                               tags$hr(),
                                               uiOutput("blog"),                          # additional narrative abou the project stored in the settings csv

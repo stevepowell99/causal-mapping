@@ -5,7 +5,7 @@ options(stringsAsFactors = F)
 
 # source ------------------------------------------------------------------
 
-# source("combo_functions.r")
+source("combo_functions.r")
 source("functions/find_cycles.r")
 
 # libs --------------------------------------------------------------------
@@ -305,6 +305,7 @@ infer=function(gr){                         # sets levels of downstream variable
     mutate(priorLevel=level) %>% 
     mutate(xid=row_number())
   
+  # the vector of endog variables
   ids=gr %>% 
     activate(nodes) %>% 
     pull(source) %>% 
@@ -317,22 +318,25 @@ infer=function(gr){                         # sets levels of downstream variable
     which
   
   # ridiculous palaver cause can't call bfs directly  
+  # makes a long vector of all the nodes we will need to visit
   ranks=vector(length=0)
   
   for(y in ids){
     # browser()
     gr %>% 
       activate(nodes) %>% 
-      mutate(rank=bfs_rank(root=y)) %>% 
-      filter(!is.na(rank)) %>% 
-      arrange(rank) %>% 
+      mutate(rankx=bfs_rank(root=y)) %>% 
+      filter(!is.na(rankx)) %>% 
+      arrange(rankx) %>% 
       pull(xid) -> rk
+    
     ranks=c(ranks,rk[-1])
     
   }
   
+  # browser()
   # gridd=list(length=0)
-  
+  # combs for making a list of all the endogenous variables with no values set
   combs=lapply(empties,function(x)0:1) %>% expand.grid()
   
   colnames(combs)=empties
@@ -340,7 +344,7 @@ infer=function(gr){                         # sets levels of downstream variable
   gr1=gr 
   
   levs=NULL#vector(length=length(combs))
-  
+  if(nrow(combs)>0){                   # if there are any NA exog vars, we need to build a grid
   for(e in 1:nrow(combs)){
     if(length(empties)>0){
       # browser()
@@ -352,6 +356,7 @@ infer=function(gr){                         # sets levels of downstream variable
       
     } 
     for(r in ranks){
+      # browser()
       gr1=  gr1 %>% 
         activate(nodes) %>% 
         mutate(level = ifelse(r!=xid,level,
@@ -362,14 +367,33 @@ infer=function(gr){                         # sets levels of downstream variable
     }
     levs=cbind(levs,(gr1 %>% nodes_as_tibble %>% pull(level)))
   }  # browser()
- 
-  if(length(empties)>0){
-    means=rowMeans(levs,na.rm=T)
-    gr = gr %>% activate(nodes) %>% 
-      mutate(level=means)
-  } else gr = gr1
-  
-  gr
+  }
+  else {
+      # browser()
+    for(r in ranks){
+# browser()
+      gr1 =  gr1 %>% 
+        activate(nodes) %>% 
+        mutate(level = ifelse(r!=xid,level,2
+        )
+        # mutate(level = ifelse(r!=xid,level,
+        #   do.call(.N()$fun[r],list(.N()$level,c(.N()$level[.E()$from[.E()$to==r]])))
+        # )
+        )
+      
+      # gr1=gr1 %>% 
+      #   activate(nodes) %>% 
+      #   mutate(level = do())
+      
+    }
+    # levs=cbind(levs,(gr1 %>% nodes_as_tibble %>% pull(level)))
+  }
+ gr1
+    # means=rowMeans(levs,na.rm=T)
+  #   gr = gr %>% activate(nodes) %>% 
+  #     mutate(level=levs)
+  # 
+  # gr
 }
 
 
@@ -384,6 +408,85 @@ findfirst <- function(vec, vec2) {
     which(x == vec2) %>% first()
   })
 }
+
+
+
+join_nodes_and_edges <- function(vno,ved){
+  ved.from <- ved %>%
+    mutate(id = from) %>%
+    group_by(id) %>%
+    mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
+    mutate_if_sw(is.character, .funs = catfun) %>%
+    summarise_all(.funs = funs(first)) %>%
+    ungroup() %>%
+    rename_all(function(x)paste0("from.",x)) %>% 
+    rename(id=from.id)
+  
+  vno <- vno %>%
+    mutate(id = row_number()) %>%
+    left_join(ved.from, by = "id")
+  
+  ved.to <- ved %>%
+    mutate(id = to) %>%
+    group_by(id) %>%
+    mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
+    mutate_if_sw(is.character, .funs = catfun) %>%
+    summarise_all(.funs = funs(first)) %>%
+    ungroup() %>%
+    rename_all(function(x)paste0("to.",x)) %>% 
+    rename(id=to.id)
+  
+  vno <- vno %>%
+    mutate(id = row_number()) %>%
+    left_join(ved.to, by = "id")
+  
+  # add from and to scores for nodes
+  
+  vnofrom <- vno %>% 
+    select(starts_with("from.")) %>% 
+    select_if(is.numeric) %>% 
+    as.matrix
+  
+  vnoto <- vno %>% 
+    select(starts_with("to.")) %>% 
+    select_if(is.numeric) %>% 
+    as.matrix
+  
+  vnomean=apply(simplify2array(list(vnofrom,vnoto)),c(1,2),meanfun) %>% as.tibble()
+  vnosum=apply(simplify2array(list(vnofrom,vnoto)),c(1,2),sumfun) %>% as.tibble()
+  
+  colnames(vnomean)=str_remove_all(colnames(vnoto),"^to.") %>% paste0("mean_",.)
+  colnames(vnosum)=str_remove_all(colnames(vnoto),"^to.") %>% paste0("sum_",.)
+  
+  vno=bind_cols(vno,vnomean,vnosum)
+  
+  # browser()
+  vno <- vno %>%
+    ungroup() %>%
+    mutate(
+      frequency = sum_frequency_sum,
+      trust = sum_trust_sum,
+      strength = sum_strength_sum_sum,
+      wstrength = sum_wstrength_sum_sum) %>% 
+    mutate(
+      edgelabels = paste0(from.label, to.label),
+      statement = paste0(from.statement, to.statement),
+      quote = paste0(from.quote, to.quote)
+    ) 
+  
+  
+  
+  
+  if("mean_key1_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key1=mean_key1_mean_mean) 
+  if("mean_key2_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key2=mean_key2_mean_mean) 
+  
+  vno
+}
+
+
+set_text_contrast_color <- function(color) { 
+  ifelse( mean(col2rgb(color)) > 127, "black", "white") 
+} 
 
 
 format_nodes_and_edges <- function(df,inp,type){
@@ -430,6 +533,8 @@ format_nodes_and_edges <- function(df,inp,type){
   }
   df
 }
+
+
 
 make_quip_stats <- function(graf){
   browser()

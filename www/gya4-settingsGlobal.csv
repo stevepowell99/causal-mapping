@@ -22,8 +22,8 @@ arrow,absence,F,NA
 variable,joinedges,T,NA
 variable,tooltip,"!label, !frequency, female -  !mean_female_mean_mean, older -  !mean_older_mean_mean",NA
 variable,label,"!details,!frequency",NA
-arrow,label,!label,NA
-arrow,tooltip,!label,NA
+arrow,label,,NA
+arrow,tooltip,,NA
 diagram,palette1,"blue,red",NA
 diagram,palette2,"blue,red",NA
 diagram,palette3,"white,black",NA
