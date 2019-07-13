@@ -833,8 +833,17 @@ i.glyphicon.glyphicon-play{
     min-height: 34px;
 }
 
+#arrlabel{
+  vertical-align: top;
+}
+
 #savemsg{
     color: white;
     padding-left: 6px;
     padding-top: 10px;
+}
+
+
+#selectedBynet{
+margin-left:200px;
 }

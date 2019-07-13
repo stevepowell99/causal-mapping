@@ -173,7 +173,9 @@ server <- function(input, output, session) {
             # need to add any new columns
             
             nodes <- values$nodes %>% 
-              bind_rows(defaultNodes %>% filter(F))
+              bind_rows(defaultNodes %>% filter(F)) %>% 
+              mutate(cluster=replace_na(cluster,"")) %>% 
+              mutate(clusterLabel=replace_na(clusterLabel,""))
             
             edges <- values$edges %>%
               bind_rows(defaultEdges %>% filter(F)) %>%
@@ -817,8 +819,9 @@ if(req(input$selectboxvalue)!=""){
         if (length(input$net_selected)>0) {
           tagList(
             div(p("Edit: "),style="display:inline-block"),
-            if (length(input$net_selected)==1) div(textInput("editVarFormText",NULL,placeholder="label",value=df[input$net_selected,"label"]),style="display:inline-block;margin-right:5px"),
-            div(textInput("editdetails",NULL,placeholder="details",value=ifelse(length(rows$details)>1,"",rows$details)),style="display:inline-block;margin-right:5px"),
+            if (length(input$net_selected)==1) div(textInput("editVarFormText",NULL,placeholder="label",value=df[input$net_selected,"label"],width="100px"),style="display:inline-block;margin-right:5px"),
+            div(textInput("editdetails",NULL,placeholder="details",value=ifelse(length(rows$details)>1,"",rows$details),width="100px"),style="display:inline-block;margin-right:5px"),
+            div(textInput("editcluster",NULL,placeholder="cluster",value=rows$cluster %>% paste0(collapse=","),width="100px"),style="display:inline-block;margin-right:5px"),
             div(actionButton("editVarForm", "Save"),style = "display:inline-block;background-color:white;padding:10px;border-radius:5px"),
             div(actionLink("deleteVarForm", paste0("Delete: ",input$net_selected %>% paste0(collapse=";"),"?")),style = "padding:2px;display:inline-block;color:red")
           )      
@@ -831,10 +834,27 @@ if(req(input$selectboxvalue)!=""){
     
   })
   observeEvent(input$editVarForm,{
-    values$graf <- values$graf %>% 
-      activate(nodes) %>% 
-      mutate(label=if_else(row_number() %in% input$net_selected,input$editVarFormText,label)) %>%    # should not happen when more than one selected var
-      mutate(details=if_else(row_number() %in% input$net_selected,input$editdetails,details))
+    vg <- values$graf %>% 
+      activate(nodes) 
+    
+     
+    
+    if(input$editdetails!=""){
+      vg <- vg %>% 
+      mutate(details=if_else(row_number() %in% input$net_selected,input$editdetails,details)) # hmm what if details form is empty 
+    }
+    
+    if(length(input$net_selected)==1 && input$editVarFormText!=""){
+      vg <- vg %>% 
+        mutate(label=if_else(row_number() %in% input$net_selected,input$editVarFormText,label)) 
+    }
+    if(input$editcluster!=""){
+      vg <- vg %>% 
+        mutate(cluster=if_else(row_number() %in% input$net_selected,input$editcluster,cluster))  
+        
+    }
+    
+    values$graf <- vg
   })
   
   observeEvent(input$deleteVarForm, {
@@ -1253,14 +1273,27 @@ if(req(input$selectboxvalue)!=""){
   
   
   output$filters=renderUI({
-    lapply(colnames(values$statements %>% select(-text)),function(y){
+    clusters <- values$graf %>% nodes_as_tibble %>% pull(cluster) %>% unique
+
+        tagList(
+      lapply(colnames(values$statements %>% select(-text)),function(y){
       x=values$statements[[y]]
       u=unique(x) %>% na.omit()
       if(length(u)>1 & length(u)<12){
         div(checkboxGroupButtons(paste0("filters",y),y,choices=sort(u),selected=u),style="display:inline-block;vertical-align:top")
       }
     })
+      ,
+      
+      if(!is.null(clusters) && length(clusters)>1)tagList(
+        div(checkboxGroupButtons("filterscluster","cluster",choices=sort(values$graf %>% nodes_as_tibble %>% pull(cluster) %>% unique)),style="display:inline-block;vertical-align:top")
+        
+      )
+    )
   })  
+  
+  
+  ######## where is the observe event for filters, including for cluster filter?
   
   # produce user-friendlier settings widgets --------------------------------
   
@@ -1520,6 +1553,7 @@ if(req(input$selectboxvalue)!=""){
       # prepare ved
     
       ved <- prepare_ved(ved)
+      # vno <- prepare_vno(vno)
       
       # ved rick inv_multi --------------------------------
       
@@ -1844,6 +1878,7 @@ if(req(input$selectboxvalue)!=""){
                  border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
                  max-width:500px;word-break: break-all'
         ) %>%
+
         visOptions(
           manipulation = F,
           collapse = TRUE,
@@ -1917,6 +1952,13 @@ if(req(input$selectboxvalue)!=""){
         vn <- vn %>%
           visIgraphLayout(layout = "layout_in_circle", randomSeed = 123, smooth = T, type = "full", physics = T)
       }
+      
+      # rowser()
+      # if(vn$x$nodes$cluster %>% na.omit %>% length %>% `>`(0)  && input$sides=="Code")
+      #   vn <- vn %>% 
+      #   visOptions(
+      #   selectedBy=list(variable="cluster")
+      #   )
       
       if (findset("diagramphysics", v = vals) %>% as.logical()) {
         vn <- vn %>%

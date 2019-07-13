@@ -172,6 +172,12 @@ prepare_ved <- function(ved){
     mutate(definition.type = ifelse(is.na(definition.type), "", definition.type))
 }
 
+prepare_vno <- function(vno){
+  vno %>%
+    mutate(cluster = ifelse(is.na(cluster), "", cluster)) %>%
+    mutate(clusterLabel = ifelse(is.na(clusterLabel), "", clusterLabel))
+}
+
 ved_join <- function(ved, statements){
   ved <- ved %>%
     left_join(statements, by = "statement")
