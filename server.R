@@ -7,6 +7,7 @@ server <- function(input, output, session) {
   values$clickArrow <- F                         # no idea 
   values$crowd = F
   
+  
   values$settingsConditional <- defaultSettingsConditional 
   values$settingsGlobal <- defaultSettingsGlobal
   
@@ -606,9 +607,9 @@ server <- function(input, output, session) {
   })
   
   output$addNewNodeButton=renderUI({
-if(req(input$selectboxvalue)!=""){
-  if(length(valuesCoding$foundIDs)==0){
-  div(
+   if(req(input$selectboxvalue)!=""){
+   if(length(valuesCoding$foundIDs)==0){
+   div(
     actionButton("addNewNode","Add")
     ,
     style="display:inline-block"
@@ -672,7 +673,7 @@ if(req(input$selectboxvalue)!=""){
     # browser()
     
     
-    valuesCoding$fromStack <- c(input$net_selected,valuesCoding$foundIDs,valuesCoding$fromStack) %>% unique
+    valuesCoding$fromStack <- c(input$net_selected,valuesCoding$fromStack) %>% unique
     
     valuesCoding$fromStack <- valuesCoding$fromStack[valuesCoding$fromStack!=""]
     
@@ -692,6 +693,8 @@ if(req(input$selectboxvalue)!=""){
   observeEvent(input$selectTo,{
     # browser()
     # valuesCoding$readyForEndArrow <- F
+    
+    # hiddenStore <- values$net$x$nodes$hidden
     
     if (!is.null(input$quote)) {
       qq <- input$quote %>% as.character()
@@ -737,15 +740,19 @@ if(req(input$selectboxvalue)!=""){
   
   # textbox search nodes and highlights them --------------------------------
   
+
   observeEvent(c(input$selectboxvalue),{
     if(req(input$sides)=="Code"){
+      
+      # visNetworkProxy("net") %>%
+      #   visGetNodes(input="net_nodes")
       
       req(values$grafAgg2)
       
       if(input$selectboxvalue!=""  && nchar(input$selectboxvalue)>2){
         
         # browser()
-        vag <- values$grafAgg2 %>% nodes_as_tibble
+        vag <- values$graf %>% nodes_as_tibble
         
         ids=vag %>% 
           pull(label) %>% 
@@ -754,13 +761,27 @@ if(req(input$selectboxvalue)!=""){
           sapply(function(x)agrep(tolower(input$selectboxvalue),x) %>% length %>% `==`(1))  %>% 
           which %>% 
           unname
+        # browser()
+        
+        # info <- data.frame(matrix(unlist(input$net_nodes), ncol = dim(vag)[1],byrow=T),stringsAsFactors=FALSE)
+        # colnames(info) <- colnames(vag)
+        # browser()
+        wipe <- setdiff(valuesCoding$foundIDs,ids)
         
         if(length(ids) !=0 && length(ids)<nrow(vag)){
           visNetworkProxy("net") %>%
-            visSelectNodes(id=ids) 
-          
+            visUpdateNodes(tibble(id=ids,hidden=F)) 
         }
-        valuesCoding$foundIDs <- ids
+        
+        if(length(wipe)>0 ){
+          visNetworkProxy("net") %>%
+            visUpdateNodes(tibble(id=wipe,hidden=T)) 
+          }
+        
+        visNetworkProxy("net") %>%
+          visFit(animation=list(duration=500))
+        
+        valuesCoding$foundIDs <- c(valuesCoding$foundIDs,ids)
       }
     } 
   })
@@ -782,21 +803,61 @@ if(req(input$selectboxvalue)!=""){
   
   observeEvent(c(input$resetSelection,req(input$pager)),{
   # observeEvent(input$pager,{
-    vno <- req(values$grafAgg2) %>% nodes_as_tibble
+    # browser()
+    tmp <- req(values$graf)             # has to be agg2 because of statements, but shouldn't be because some missed out
+    vpag <- values$pag
+    
+    vno <- tmp %>% nodes_as_tibble
+    ved <- tmp %>% edges_as_tibble
+    
+    vf <- ved %>% 
+      group_by(from) %>% 
+      summarise(fstat=paste0(statement,collapse=",")) %>% 
+      mutate(id=from)
+    
+    vt <- ved %>% 
+      group_by(to) %>% 
+      summarise(tstat=paste0(statement,collapse=",")) %>% 
+      mutate(id=to)
+    
+    vno <- vno %>%
+      mutate(id=row_number()) %>% 
+      left_join(vf) %>%
+      left_join(vt) %>% 
+      unite("statement",c("fstat","tstat"),sep=",")
+    
+    
+    
     # browser()
     if(!("statement" %in% colnames(vno))) vno$statement=1
-    if (!is.null(values$pag) & nrow(vno)>0) {
+    if (!is.null(vpag) & nrow(vno)>0) {
       ids <- vno %>%
-        mutate(sel=ifelse(str_detect(statement, paste0("(,|^)", as.character(values$pag), "(,|$)")),T,F)) %>%
-        pull(sel) %>%
-        which
-
+        mutate(sel=ifelse(str_detect(statement, paste0("(,|^)", as.character(vpag), "(,|$)")),T,F)) %>%
+        pull(sel) 
+# browser()
+      yesids=ids %>% which
+      noids=ids %>% `!` %>% which
+      
+      
+      eids <- ved %>% 
+        mutate(hit=vpag==statement) %>% 
+        pull(hit)
+      
+      
+      yeseids=eids %>% which
+      noeids= eids %>% `!` %>% which
+      
+      
       valuesCoding$fromStack=NULL
 
-      # this doesn't work
-      visNetworkProxy("net") %>%
-      visSelectNodes(id = ids) %>% 
-        visUpdateNodes(tibble(id=1:nrow(vno),shadow.color='rgba(0,0,0,0.5)',shadow.size=10,shadow.x=5,shadow.y=5))
+      visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visUpdateNodes(nodes=tibble(id=1:nrow(vno),hidden=!ids))  %>% 
+      # visUpdateNodes(nodes=tibble(id=noids,hidden=T))  %>% 
+      visUpdateEdges(edges=tibble(id=1:nrow(ved),hidden=!eids))  %>% 
+      # visUpdateEdges(edges=tibble(id=noeids,hidden=T))  %>% 
+        visFit(animation=list(duration=500))
+      # visSelectNodes(id = ids) %>% 
+        # visUpdateNodes(tibble(id=1:nrow(vno),shadow.color='rgba(0,0,0,0.5)',shadow.size=10,shadow.x=5,shadow.y=5))
 
     }
   })
@@ -1854,8 +1915,10 @@ if(req(input$selectboxvalue)!=""){
           #   values$legend,
           background = findset("diagrambackground", v = vals)
           ,
-          height=findset("diagramheight", v = vals) %>% paste0("px"),
-          width=findset("diagramwidth", v = vals) %>% paste0("px")
+          height="2000px",
+          width="3000px"
+          # height=findset("diagramheight", v = vals) %>% paste0("px"),
+          # width=findset("diagramwidth", v = vals) %>% paste0("px")
           
           # width="100%"
           # ,
@@ -1950,7 +2013,7 @@ if(req(input$selectboxvalue)!=""){
         
       } else {
         vn <- vn %>%
-          visIgraphLayout(layout = "layout_in_circle", randomSeed = 123, smooth = T, type = "full", physics = T)
+          visIgraphLayout(layout = "layout_in_circle", randomSeed = 123, smooth = T, type = "full")
       }
       
       # rowser()
@@ -1960,10 +2023,10 @@ if(req(input$selectboxvalue)!=""){
       #   selectedBy=list(variable="cluster")
       #   )
       
-      if (findset("diagramphysics", v = vals) %>% as.logical()) {
-        vn <- vn %>%
-          visPhysics(barnesHut = list(avoidOverlap = .7))
-      }
+      # if (findset("diagramphysics", v = vals) %>% as.logical()) {
+      #   vn <- vn %>%
+      #     visPhysics(barnesHut = list(avoidOverlap = .7))
+      # }
       vn <- vn %>%
         visNodes(
           shadow = list(enabled = T, size = 10),
@@ -2015,10 +2078,10 @@ if(req(input$selectboxvalue)!=""){
       
       doNotification("Produced viz")
       
-    
+      
   })
   
-  
+  observe({
   output$net <- renderVisNetwork({
     doNotification("render viz")
     # browser()
@@ -2026,8 +2089,23 @@ if(req(input$selectboxvalue)!=""){
     values$net
     
   })
+  if (T){
+    visNetworkProxy("net") %>%
+      visUpdateNodes(nodes = tibble(id=1:20,color="red"))
+  }
+  })
   
+  # observeEvent(input$network_initialized,{
+  #   doNotification("initial")
+  #   if (T){
+  #     visNetworkProxy("net") %>%
+  #       visUpdateNodes(nodes = tibble(id=1:20,color="red"))
+  #   }
+  # })
+  # 
   
+
+
   
   # ++ report -----------------------------------------------------
   
@@ -2067,31 +2145,8 @@ if(req(input$selectboxvalue)!=""){
       ,style="z-index:999 !important")
     # h1("asdfasdfasdf")
   })
-  # 
-  # observe({
-  # })
-  
-  # observeEvent(input$fontplus,{
-  #   values$settingsGlobal=values$settingsGlobal %>% 
-  #     mutate(value=if_else(setting=="font.size.floor",as.character(as.numeric(value)*1.1),value)) 
-  # })
-  # 
-  # observeEvent(input$fontminus,{
-  #   values$settingsGlobal=values$settingsGlobal %>% 
-  #     mutate(value=if_else(setting=="font.size.floor",as.character(as.numeric(value)*.9),value)) 
-  # })
-  # 
-  # observeEvent(input$fontscaleplus,{
-  #   values$settingsGlobal=values$settingsGlobal %>% 
-  #     mutate(value=if_else(setting=="font.size.scale",as.character(as.numeric(value)*1.1),value)) 
-  # })
-  # 
-  # observeEvent(input$fontscaleminus,{
-  #   values$settingsGlobal=values$settingsGlobal %>% 
-  #     mutate(value=if_else(setting=="font.size.scale",as.character(as.numeric(value)*.9),value)) 
-  # })
-  # 
-  output$savebut <- renderUI(div(
+
+    output$savebut <- renderUI(div(
     div(
       tagList(
         
@@ -2255,7 +2310,7 @@ if(req(input$selectboxvalue)!=""){
   
   observe({
     if(input$crowd){output$net2 <- renderVisNetwork({
-      doNotification("render viz")
+      doNotification("render viz",type="error")
       values$net
       # browser()
     })}
@@ -2315,11 +2370,12 @@ if(req(input$selectboxvalue)!=""){
     if(!is.null(input$net_selectedEdges)) values$graf <- values$graf %>% activate(edges) %>% mutate(id=row_number()) %>% filter(!(id %in% input$net_selectedEdges)) %>% select(-id)
   })
   
-  # all the network proxy stuff-----------------
+  # fit-----------------
   
   observeEvent(input$fitaction, {               # restore network to normal zoom
     visNetworkProxy("net") %>%
       visFit() 
+    
   })
   
   

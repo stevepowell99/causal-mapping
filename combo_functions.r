@@ -1,4 +1,6 @@
 library(sigmoid)
+library(tidyverse)
+library(ggplot2)
 library(betareg)
 
 
@@ -134,6 +136,18 @@ get_values_from_funlist <- function(ep, df, type = "hard", summ = "mean") {
     val <- val %>%
       sum(ep)
   } else
+    if (summ == "min") {
+      val <- val %>%
+        min() %>%
+        sum(ep)
+    }
+    else
+      if (summ == "times") {
+        val <- val %>%
+          `prod`() %>%
+          sum(ep)
+      }
+    else
     if (summ == "mean") {
       val <- val %>%
         mean() %>%
@@ -219,6 +233,48 @@ gfun3=function(funname,funname2,type="hard",summ="mean"){
     guides(linetype=guide_legend(title="Strength of second influence"),reverse=F)
 }
 
+
+gfun5=function(funname,funname2,type="hard",summ="mean"){
+  funfun4(funname,funname2,type=type,summ=summ) %>%
+    group_by(B,B2,strength,strength2) %>% 
+    mutate(Em=mean(ep,na.rm=T)) %>% 
+    summarise_all(first) %>% 
+    ggplot(aes(B,B2,fill=Em))+
+    geom_tile()+
+    scale_fill_gradient2(low = muted("blue"),mid="white",high=muted("red"),midpoint=.5)+
+    facet_grid(strength2~strength,as.table=F)
+    
+}
+
+# gfun5("NECC","NECC")
 # dd <- DiscreteDistribution(supp = c(1:5)/5, prob = c(0.2, 0.2, 0.2, 0.2, 0.2))
 # 
 # NECC(dd,dd) %>% plot(to.draw.arg=c("d"))
+scens=1:20/20
+scens=0:4/4
+funz=c("PLUS","MINUS","NECC","SUFF")
+gri=expand.grid(B=scens,B2=scens,fun1=funz,fun2=funz,stringsAsFactors=F)  
+
+E <- lapply(1:nrow(gri),function(x){
+  row=gri[x,]
+  get_values_from_funlist(.5,tibble(B=c(row$B,row$B2),funname=c(row$fun1,row$fun2),strength=1:1),type="hard",summ="times")
+})
+
+gri$E=E %>% unlist
+gri$fun1 <- factor(gri$fun1,levels=funz)
+gri$fun2 <- factor(gri$fun2,levels=funz)
+
+gri <- gri %>% 
+  mutate(uncert=(ifelse(fun1=="NECC",B,0)+ifelse(fun2=="NECC",B2,0)+ifelse(fun1=="SUFF",1-B,0)+ifelse(fun2=="SUFF",1-B2,0))/2)
+
+# ggplot(gri,aes(B,B2,fill=E,size=uncert,alpha=uncert))+
+#   geom_tile(alpha=1,show.legend=F)+
+#   geom_tile(fill="grey",show.legend=F)+
+#   # geom_point(fill="grey")+
+#   scale_fill_gradient2(low = muted("blue"),mid="white",high=muted("red"),midpoint=.5)+
+#   facet_grid(fun2~fun1,as.table = F)+
+#   theme(panel.grid = element_blank())+
+#   ylab("Value of second influence variable")+
+#   xlab("Value of first influence variable")+
+#   guides(fill=guide_legend(title="Value of consequence variable",alpha=F))+
+#   ggtitle("Averaging pairs of PLUS, MINUS, NECESSARY and SUFFICIENT influences.",subtitle="Two influence variables are causally linked to a consequence variable.\nEach influence variable can have a PLUS, MINUS, NECC or SUFF influence, generating the sixteen panels. Each of the three variables can vary between 0 and 1.\nEach panel shows how the value of the consequence variable (blue to red) depends on the value of the influence variables. \nBut necessary conditions say nothing about the value of the consequence variable when the influence variable is close to 1, and with sufficient conditions we know little about the value of the consequence when the influence is close to 0. \nThis is shown by the grey haze of uncertainty, which is especially strong when one condition is necessary but another is sufficient -- a confusing and unlikely combination.\nHere, the two influences are averaged out. But other combinations are possible, for example minimum, maximum, addition, etc.")

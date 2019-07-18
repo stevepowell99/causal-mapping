@@ -1,6 +1,9 @@
 # options -----------------------------------------------------------------
 options(shiny.port = 1111)
-doNotificationLevel=0     #notification popups. level=1 is debugging and level=2 is user.
+# options(shiny.trace = T)
+options(shiny.autoreload = T)
+options(shiny.autoreload.pattern = glob2rx("ui.R|global.R|server.R"))
+doNotificationLevel=2     #notification popups. level=1 is debugging and level=2 is user.
 options(stringsAsFactors = F)
 
 # source ------------------------------------------------------------------
@@ -254,8 +257,8 @@ get_rgb_from_color_ramp <- function(mat){
 
 mutate_if_sw=function(...)suppressMessages(mutate_if(...))
 
-doNotification <- function(text,level=1) {
-  if(level>doNotificationLevel)showNotification(text)
+doNotification <- function(text,level=1,...) {
+  if(level>doNotificationLevel)showNotification(text,...)
   write(paste0(text), paste0("","log.txt"), append = T)
 }
 
