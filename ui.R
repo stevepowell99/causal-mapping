@@ -67,12 +67,14 @@ ui <- tagList(
                              bsAlert("bsmsg"),
                              bsAlert("found"),
                              bsAlert("notfound"),
+                             
           
                                                     # uiOutput("test"),
                              uiOutput("savebut"),
                              uiOutput("savedMsg"),
                              # uiOutput("savedMsg"),
                              hr(),
+                             # div(verbatimTextOutput("keypr"),style="background-color:white"),
                              tabsetPanel(
                                id = "sides", type = "tabs", selected = "Display",
                                
@@ -97,14 +99,12 @@ ui <- tagList(
                                           ),
                                           bsCollapsePanel(
                                             title = "View and edit statements",
-                                            p("Paste your statements into the space below. The table will expand if you paste more rows."),
+                                            # p("Paste your statements into the space below. The table will expand if you paste more rows."),
                                             # p("If you want more columns, right-click to create them first.")
                                             # ,
                                             p("The first column is the text. You can use other columns for attributes like age or gender."),
                                             # p("You can change the column names."),
-                                            actionButton("statementsTableUp", "Update"),
-                                            rHandsontableOutput("statements")
-                                          ),
+                                         p() ),
                                           bsCollapsePanel(
                                             "Upload variables and arrows",
                                             p("Nodes table must contain a column called label"),
@@ -266,7 +266,16 @@ ui <- tagList(
                            mainPanel(
                              
                              width = 8, style = "border-left:2px dotted black",
-                             
+                             # pushbar_deps(),
+                             # br(),
+                             # pushbar(
+                             #   
+                             #   # h4("HELLO"),
+                             #   id = "myPushbar", # add id to get event
+                               # uiOutput("push"),
+                               # from="right",
+                               # actionButton("close", "Close")
+                             # ),
                              uiOutput("filters"),
                              conditionalPanel("!input.crowd",style="background-color:white;border-radius:5px",                         # input.crowd is part of an alternative, "crowdsourced" phone-friendly version of the interface which is not important at moment
                                               
@@ -275,22 +284,29 @@ ui <- tagList(
                                               
                                               
                                               
-                                              withSpinner((visNetworkOutput("net", height = "950px", width = "100%")),type = 5),                         # the main network viz. 
+                                              withSpinner((visNetworkOutput("net", height = "950px", width = "100%")),type = 5)                         # the main network viz. 
                                               
-                                              tags$hr(),
-                                              uiOutput("blog"),                          # additional narrative abou the project stored in the settings csv
-                                              textOutput("info")
+                                 
                                               #   )
                                               # )
                              )
                              ,
-                             uiOutput("description"),
                              
                              bsCollapse(open = "Report",
-                             bsCollapsePanel("Legend",
-                             plotOutput("colourLegend")
+                               bsCollapsePanel("Statements",
+                                 uiOutput("push")
                                ),
-                             bsCollapsePanel("Report",
+                               
+                                bsCollapsePanel("Description",
+                                  uiOutput("description"),
+                                  # tags$hr(),
+                                  uiOutput("blog"),                          # additional narrative abou the project stored in the settings csv
+                                  textOutput("info")
+                                ),
+                                bsCollapsePanel("Legend",
+                                plotOutput("colourLegend")
+                                  ),
+                                bsCollapsePanel("Report",
                                
                              formattableOutput("reportTable", width = "100%", height = "0")
                              )

@@ -251,9 +251,22 @@ server <- function(input, output, session) {
   
   # ++create statements table to allow user edit of statements----
   output$statements <- renderRHandsontable({
+    vs <- values$statements
     
+    if(!is.null(input$net_selected)){
+      ids <- values$grafAgg2 %>% 
+        nodes_as_tibble() %>% 
+        filter(id==input$net_selected) %>% 
+        pull(statement) %>% 
+        str_remove_all("NA") %>% 
+        str_split(",") %>% 
+        `[[`(1)
+      
+      vs <- vs %>% 
+        filter(statement %in% ids)
+    }
     rhandsontable(
-      values$statements[, ],
+      vs,
       height = 700,
       rowHeaders = FALSE,
       usetypes = T
@@ -426,8 +439,9 @@ server <- function(input, output, session) {
       ),
       div(
         # if("source" %in% colnames(values$statements))
-          actionButton("resetSelection", label = "Reset"),                                  
-          actionButton("overview_col", label = "Read more"),                                  #   if one interview source has made more than one statement, show all of them
+          div(actionButton("resetSelection", label = "Reset"),style="display:inline-block") ,                                 
+          div(actionButton("overview_col", label = "Read more"),style="display:inline-block") ,                                 #   if one interview source has made more than one statement, show all of them
+          div(checkboxInput("onlyThisStatement", label = "Only this"),style="display:inline-block") ,                                 #   if one interview source has made more than one statement, show all of them
         style = "display:inline-block;margin-left:20px"
       )
     )
@@ -801,7 +815,7 @@ server <- function(input, output, session) {
   
   
   
-  observeEvent(c(input$resetSelection,req(input$pager)),{
+  observeEvent(c(input$resetSelection,req(input$pager),input$onlyThisStatement),{
   # observeEvent(input$pager,{
     # browser()
     tmp <- req(values$graf)             # has to be agg2 because of statements, but shouldn't be because some missed out
@@ -850,16 +864,37 @@ server <- function(input, output, session) {
       
       valuesCoding$fromStack=NULL
 
+      if(input$onlyThisStatement){
+        
+        
+      
       visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
-      visUpdateNodes(nodes=tibble(id=1:nrow(vno),hidden=!ids))  %>% 
-      # visUpdateNodes(nodes=tibble(id=noids,hidden=T))  %>% 
-      visUpdateEdges(edges=tibble(id=1:nrow(ved),hidden=!eids))  %>% 
-      # visUpdateEdges(edges=tibble(id=noeids,hidden=T))  %>% 
-        visFit(animation=list(duration=500))
+      # visUpdateNodes(nodes=tibble(id=1:nrow(vno),hidden=!ids))  %>% 
+      # visUpdateEdges(edges=tibble(id=1:nrow(ved),hidden=!eids))  %>% 
+        visSelectNodes(id=F)
+        # %>% 
+        # visFit(animation=list(duration=500))
       # visSelectNodes(id = ids) %>% 
         # visUpdateNodes(tibble(id=1:nrow(vno),shadow.color='rgba(0,0,0,0.5)',shadow.size=10,shadow.x=5,shadow.y=5))
-
-    }
+       
+    } else {
+      ids=rep(T,nrow(vno))
+      eids=rep(T,nrow(ved))
+      
+      visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+        visSelectNodes(id=yesids)
+      # %>% 
+      #   visSelectEdges(id=yeseids)
+      # %>% 
+      #   visSelectEdges(id=eids)
+      
+      
+      }
+      visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visUpdateNodes(nodes=tibble(id=1:nrow(vno),hidden=!ids))  %>% 
+      visUpdateEdges(edges=tibble(id=1:nrow(ved),hidden=!eids))  %>% 
+        visFit(animation=list(duration=500))
+      }
   })
   
   
@@ -1944,7 +1979,7 @@ server <- function(input, output, session) {
 
         visOptions(
           manipulation = F,
-          collapse = TRUE,
+          collapse = F,
           highlightNearest = list(
             enabled = T,
             degree = if(findset("diagramdownarrows") %>% as.logical) list(from=0,to=19) else list(from=19,to=0),
@@ -2140,9 +2175,11 @@ server <- function(input, output, session) {
       # div(
 
       # ,
+      # div(checkboxInput("showStatements", "Statements"), style = "display:inline-block;margin-right:80px"),
+      div(actionButton("open", "Statements"),style = "display:inline-block;margin-right:80px"),
+      
       div(actionButton("fitaction", "Fit"), style = "display:inline-block;margin-right:20px"),
-      class = "bigpicbut"
-      ,style="z-index:999 !important")
+      class = "bigpicbut" ,style="z-index:999 !important")
     # h1("asdfasdfasdf")
   })
 
@@ -2434,11 +2471,26 @@ server <- function(input, output, session) {
   # })
   
   
+  setup_pushbar() # setup
+  
+  observeEvent(input$open, {
+    pushbar_open(id = "myPushbar")
+  })  
+  
+  observeEvent(input$close, {
+    pushbar_close()
+  })  
   
   
+  output$keypr = renderPrint({
+    input$keypressed
+  })  
   
-  
-  
+  output$push=renderUI({
+    actionButton("statementsTableUp", "Update")
+    rHandsontableOutput("statements")
+    
+  })
   
   
   

@@ -847,3 +847,7 @@ i.glyphicon.glyphicon-play{
 #selectedBynet{
 margin-left:200px;
 }
+
+.pushbar.from_right{
+  width:555px !important;
+}
