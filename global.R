@@ -582,7 +582,7 @@ make_settingsConditional <- function(inp){
 refresh_and_filter_net <- function(tmp,vpag,iot){
   vno <- tmp %>% nodes_as_tibble
   ved <- tmp %>% edges_as_tibble
-  browser()
+  # browser()
   vf <- ved %>% 
     group_by(from) %>% 
     summarise(fstat=paste0(statement,collapse=",")) %>% 
@@ -597,6 +597,8 @@ refresh_and_filter_net <- function(tmp,vpag,iot){
     mutate(id=row_number()) %>% 
     left_join(vf) %>%
     left_join(vt) %>% 
+    mutate(fstat=replace_na(fstat,"")) %>% 
+    mutate(tstat=replace_na(tstat,"")) %>% 
     unite("statement",c("fstat","tstat"),sep=",")
   
   
@@ -651,9 +653,11 @@ refresh_and_filter_net <- function(tmp,vpag,iot){
       
       
     }
-    visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
-      visUpdateNodes(nodes=tibble(id=1:nrow(vno),hidden=!ids))  %>% 
-      visUpdateEdges(edges=tibble(id=1:nrow(ved),hidden=!eids))  %>% 
+    if(nrow(vno)>0) visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visUpdateNodes(nodes=tibble(id=1:nrow(vno),hidden=!ids))  
+    if(nrow(ved)>0) visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visUpdateEdges(edges=tibble(id=1:nrow(ved),hidden=!eids))  
+    visNetworkProxy("net") %>% 
       visFit(animation=list(duration=500))
   }
   

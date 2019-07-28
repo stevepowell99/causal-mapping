@@ -718,7 +718,7 @@ server <- function(input, output, session) {
     valuesCoding$fromStack <- c(ns,valuesCoding$fromStack,inpfrom) %>% unique
     
     valuesCoding$fromStack <- valuesCoding$fromStack[valuesCoding$fromStack!=""]
-    doNotification("from stack ",99)
+    # doNotification("from stack ",99)
     
     }
     
@@ -818,7 +818,7 @@ server <- function(input, output, session) {
     # valuesCoding$foundIDs <- NULL
     # visNetworkProxy("net") %>%
     #   visSetSelection(unselectAll = TRUE)
-    doNotification(paste0("sel ",input$net_selected),99)
+    # doNotification(paste0("sel ",input$net_selected),99)
     updateTextInput(session=session,"selectBoxValue",value="")
     
     tmp <- req(values$graf)             # has to be agg2 because of statements, but shouldn't be because some missed out
@@ -900,8 +900,9 @@ server <- function(input, output, session) {
   # observeEvent(input$pager,{
     # browser()
     tmp <- req(values$graf)             # has to be agg2 because of statements, but shouldn't be because some missed out
-    vpag <- values$pag
+    vpag <- input$pager[[1]]        # had to put this instead of values$pag, not sure why
     iot <- input$onlyThisStatement
+    # browser()
     refresh_and_filter_net(tmp,vpag,iot)
     
     valuesCoding$fromStack <- NULL
@@ -1832,6 +1833,7 @@ server <- function(input, output, session) {
       } else {
         vno$font.color="#333333"
         vno$font.size=66
+        ved$width=4
       }
       ### make sure text is visibile when highlighted
       vno <- vno %>% 
@@ -2047,7 +2049,7 @@ server <- function(input, output, session) {
           
           vnxn=vnxn %>% 
             group_by(x) %>% 
-            mutate(ran=min_rank(y),len=n(),y=rescale(ran,to=c(-1,1))*sqrt(len/maxLen) + rnorm(1,0,.05)) %>% 
+            mutate(ran=min_rank(y),len=n(),y=rescale(ran,to=c(-1,1))*sqrt(len/maxLen) + rnorm(1,0,.1/len)) %>% 
             ungroup()               #had to put in a tiny bit of rnorm to stop some artefacts in visnetwork when nodes have same y
           # mutate(len=n(),ran=min_rank(y)-.5,y=ran*levels/(len*3))
           vnxn=vnxn %>% 
@@ -2237,8 +2239,14 @@ server <- function(input, output, session) {
         nodes=values$graf %>% nodes_as_tibble
         edges=values$graf %>% edges_as_tibble
         
-        
-        settingsConditional <- make_settingsConditional(input)
+        # have to check if the conditinal settings tab has ever  been visited
+        if(is.null(input[[paste0('conditional_value_', all_attributes[[1]])]])) {
+          if(is.null(values$settingsConditional)) settingsConditional <- defaultSettingsConditional 
+          else 
+          settingsConditional <- values$settingsConditional 
+        }
+          else 
+          settingsConditional <- make_settingsConditional(input)
         
         
         # browser()
