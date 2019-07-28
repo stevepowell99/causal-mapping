@@ -525,11 +525,12 @@ server <- function(input, output, session) {
     )
   })
   
-  observeEvent({c(input$pager,input$timeslider)},{
-      if (F & !is.null(input$pager)) {
+  # observeEvent({c(input$pager,input$timeslider)},{
+  observeEvent({c(input$pager)},{
+      if (!is.null(input$pager)) {
         values$pag <- input$pager[[1]]
 
-        if (input$timeslider > 0 & nrow(values$statements) > 2) updatePageruiInput(session, "pager", page_current = input$timeslider)
+        # if (input$timeslider > 0 & nrow(values$statements) > 2) updatePageruiInput(session, "pager", page_current = input$timeslider)
         if(!is.null(input$pager) && !is.null(input$quote))updateTextAreaInput(session = session,inputId = "quote",value="",placeholder="quote")
       }
     })
@@ -900,7 +901,7 @@ server <- function(input, output, session) {
   # observeEvent(input$pager,{
     # browser()
     tmp <- req(values$graf)             # has to be agg2 because of statements, but shouldn't be because some missed out
-    vpag <- input$pager[[1]]        # had to put this instead of values$pag, not sure why
+    vpag <- values$pag
     iot <- input$onlyThisStatement
     # browser()
     refresh_and_filter_net(tmp,vpag,iot)
@@ -1821,7 +1822,7 @@ server <- function(input, output, session) {
       ved <- tmp %>% edges_as_tibble()
       
       
-      if(input$sides!="Code"){
+      if(!is.null(input[[paste0('conditional_value_', all_attributes[[1]])]])){  #TODO if the conditional display tab has not been loaded yet, 
       vno <- vno %>% 
         format_nodes_and_edges(input,type="node")
       
@@ -1832,7 +1833,7 @@ server <- function(input, output, session) {
       
       } else {
         vno$font.color="#333333"
-        vno$font.size=66
+        vno$font.size=44
         ved$width=4
       }
       ### make sure text is visibile when highlighted
@@ -2163,6 +2164,7 @@ server <- function(input, output, session) {
   # ++ report -----------------------------------------------------
   
   output$reportTable=renderFormattable({
+    if("frequency" %in% values$net$x$nodes){
     values$net$x$nodes %>% 
       transmute(label,frequency=replace_na(frequency,0),from=replace_na(from.frequency_sum,0),to=replace_na(to.frequency_sum,0)) %>% 
       arrange(desc(frequency)) %>% 
@@ -2171,7 +2173,14 @@ server <- function(input, output, session) {
         `frequency`= color_bar("#AAEEAA"),
         `from`= color_bar("#EEAAAA"),
         `to`= color_bar("#AAAAEE")
-        ))
+      ))
+    } else {
+      tibble(warning="You have to merge arrows with variables in order to get a report.") %>% 
+        
+        formattable(list())
+      }
+    
+      
   })
   
   # ++ floating widgets -----------------------------------------------------

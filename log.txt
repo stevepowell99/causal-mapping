@@ -1,14 +1,6 @@
 
-render viz
-Adding Node
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
+Loading files
+Loaded109 variables from permalink
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -17,7 +9,39 @@ format aggregation
 final aggregation
 Aggregated
 started viz
-NA is not in settings
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+render viz
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
 Produced viz
 render viz
 starting aggregation
@@ -25,15 +49,195 @@ merge edge aggregation
 min freq aggregation
 join to edges aggregation
 format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+Loading files
+Loaded109 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+render viz
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
 updating from settingsTableGlobal
-started viz
-NA is not in settings
-Produced viz
 starting aggregation
 merge edge aggregation
 min freq aggregation
 join to edges aggregation
 format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
 updating from settingsTableGlobal
 starting aggregation
 merge edge aggregation
@@ -43,9 +247,282 @@ format aggregation
 final aggregation
 Aggregated
 started viz
-NA is not in settings
 Produced viz
 render viz
+Saved
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+Loading files
+Loaded109 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+render viz
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+Saved
+Loading files
+Loaded109 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+render viz
+started viz
+Produced viz
+Loading files
+Loaded109 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+render viz
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+Loading files
+Loaded50 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+render viz
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+Missing values for colour fade replaced with means
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+Missing values for colour fade replaced with means
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+Missing values for colour fade replaced with means
+final aggregation
+Aggregated
+Creating edges table
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+Missing values for colour fade replaced with means
+final aggregation
+Aggregated
+Creating nodes table
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+Missing values for colour fade replaced with means
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+Missing values for colour fade replaced with means
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+Missing values for colour fade replaced with means
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+render viz
+Loading files
+Loaded50 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
+render viz
+started viz
+Produced viz
 Adding Node
 starting aggregation
 merge edge aggregation
@@ -55,59 +532,6 @@ format aggregation
 final aggregation
 Aggregated
 started viz
-NA is not in settings
-Produced viz
-render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-NA is not in settings
 Produced viz
 render viz
 starting aggregation
@@ -118,9 +542,9 @@ format aggregation
 final aggregation
 Aggregated
 started viz
-NA is not in settings
 Produced viz
 render viz
+Saved
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -129,12 +553,11 @@ format aggregation
 final aggregation
 Aggregated
 started viz
-NA is not in settings
 Produced viz
 render viz
 Saved
 Loading files
-Loaded6 variables from permalink
+Loaded51 variables from permalink
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -143,7 +566,6 @@ format aggregation
 final aggregation
 Aggregated
 started viz
-NA is not in settings
 Produced viz
 starting aggregation
 merge edge aggregation
@@ -154,9 +576,15 @@ final aggregation
 Aggregated
 render viz
 started viz
-NA is not in settings
 Produced viz
-Adding Node
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+Loading files
+Loaded51 variables from permalink
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -165,103 +593,42 @@ format aggregation
 final aggregation
 Aggregated
 started viz
-NA is not in settings
 Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+Aggregated
 render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
 started viz
-NA is not in settings
 Produced viz
-render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
 started viz
-NA is not in settings
 Produced viz
-render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
 started viz
-NA is not in settings
 Produced viz
-render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
 started viz
-NA is not in settings
 Produced viz
-render viz
-Adding Node
 starting aggregation
 merge edge aggregation
 min freq aggregation
 join to edges aggregation
 format aggregation
-final aggregation
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-Adding Node
 starting aggregation
 merge edge aggregation
 min freq aggregation
 join to edges aggregation
 format aggregation
-final aggregation
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-Adding Node
 starting aggregation
 merge edge aggregation
 min freq aggregation
 join to edges aggregation
 format aggregation
+Missing values for colour fade replaced with means
 final aggregation
 Aggregated
 started viz
-NA is not in settings
-Produced viz
-render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-NA is not in settings
 Produced viz
 render viz
 starting aggregation
@@ -272,11 +639,23 @@ format aggregation
 final aggregation
 Aggregated
 started viz
-NA is not in settings
 Produced viz
 render viz
 Loading files
-Loaded6 variables from permalink
+Loaded51 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+render viz
+Loading files
+Loaded51 variables from permalink
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -285,7 +664,6 @@ format aggregation
 final aggregation
 Aggregated
 started viz
-NA is not in settings
 Produced viz
 starting aggregation
 merge edge aggregation
@@ -296,9 +674,9 @@ final aggregation
 Aggregated
 render viz
 started viz
-NA is not in settings
 Produced viz
-Adding Node
+started viz
+Produced viz
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -307,7 +685,6 @@ format aggregation
 final aggregation
 Aggregated
 started viz
-NA is not in settings
 Produced viz
 render viz
 starting aggregation
@@ -315,22 +692,10 @@ merge edge aggregation
 min freq aggregation
 join to edges aggregation
 format aggregation
+Missing values for colour fade replaced with means
 final aggregation
 Aggregated
 started viz
-NA is not in settings
-Produced viz
-render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-NA is not in settings
 Produced viz
 render viz
 starting aggregation
@@ -338,57 +703,45 @@ merge edge aggregation
 min freq aggregation
 join to edges aggregation
 format aggregation
+Missing values for colour fade replaced with means
 final aggregation
 Aggregated
 started viz
-NA is not in settings
 Produced viz
 render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
 started viz
-NA is not in settings
 Produced viz
-render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
 started viz
-NA is not in settings
 Produced viz
-render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
 started viz
-NA is not in settings
 Produced viz
-render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
 started viz
-NA is not in settings
 Produced viz
-render viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
