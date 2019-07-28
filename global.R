@@ -579,6 +579,86 @@ make_settingsConditional <- function(inp){
 }
 
 
+refresh_and_filter_net <- function(tmp,vpag,iot){
+  vno <- tmp %>% nodes_as_tibble
+  ved <- tmp %>% edges_as_tibble
+  browser()
+  vf <- ved %>% 
+    group_by(from) %>% 
+    summarise(fstat=paste0(statement,collapse=",")) %>% 
+    mutate(id=from)
+  
+  vt <- ved %>% 
+    group_by(to) %>% 
+    summarise(tstat=paste0(statement,collapse=",")) %>% 
+    mutate(id=to)
+  
+  vno <- vno %>%
+    mutate(id=row_number()) %>% 
+    left_join(vf) %>%
+    left_join(vt) %>% 
+    unite("statement",c("fstat","tstat"),sep=",")
+  
+  
+  
+  # browser()
+  if(!("statement" %in% colnames(vno))) vno$statement=1
+  
+  if (!is.null(vpag) & nrow(vno)>0) {
+    ids <- vno %>%
+      mutate(sel=ifelse(str_detect(statement, paste0("(,|^)", as.character(vpag), "(,|$)")),T,F)) %>%
+      pull(sel) 
+    # browser()
+    yesids=ids %>% which
+    noids=ids %>% `!` %>% which
+    
+    
+    eids <- ved %>% 
+      mutate(hit=vpag==statement) %>% 
+      pull(hit)
+    
+    
+    yeseids=eids %>% which
+    noeids= eids %>% `!` %>% which
+    
+    
+    # valuesCoding$fromStack=NULL
+    
+    # if(input$onlyThisStatement){
+    if(iot){
+      
+      
+      
+      visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+        # visUpdateNodes(nodes=tibble(id=1:nrow(vno),hidden=!ids))  %>% 
+        # visUpdateEdges(edges=tibble(id=1:nrow(ved),hidden=!eids))  %>% 
+        visSetSelection(unselectAll = TRUE)
+      # %>% 
+      # visFit(animation=list(duration=500))
+      # visSelectNodes(id = ids) %>% 
+      # visUpdateNodes(tibble(id=1:nrow(vno),shadow.color='rgba(0,0,0,0.5)',shadow.size=10,shadow.x=5,shadow.y=5))
+      
+    } else {
+      ids=rep(T,nrow(vno))
+      eids=rep(T,nrow(ved))
+      
+      visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+        visSelectNodes(id=yesids)
+      # %>% 
+      #   visSelectEdges(id=yeseids)
+      # %>% 
+      #   visSelectEdges(id=eids)
+      
+      
+    }
+    visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visUpdateNodes(nodes=tibble(id=1:nrow(vno),hidden=!ids))  %>% 
+      visUpdateEdges(edges=tibble(id=1:nrow(ved),hidden=!eids))  %>% 
+      visFit(animation=list(duration=500))
+  }
+  
+}
+
 # constants ----
 
 

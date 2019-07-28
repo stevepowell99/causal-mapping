@@ -1,98 +1,23 @@
 
-render viz
 Loading files
-Loaded50 variables from permalink
+Loaded109 variables from permalink
 starting aggregation
 merge edge aggregation
 min freq aggregation
 join to edges aggregation
 format aggregation
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-Missing values for colour fade replaced with means
 final aggregation
 Aggregated
 started viz
 Produced viz
-render viz
-Loading files
-Loaded50 variables from permalink
 starting aggregation
 merge edge aggregation
 min freq aggregation
 join to edges aggregation
 format aggregation
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-Missing values for colour fade replaced with means
 final aggregation
 Aggregated
+render viz
 started viz
 Produced viz
-render viz
-Loading files
-Loaded50 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-Missing values for colour fade replaced with means
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-Loading files
-Loaded50 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-Missing values for colour fade replaced with means
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
+from stack 

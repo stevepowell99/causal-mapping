@@ -851,3 +851,22 @@ margin-left:200px;
 .pushbar.from_right{
   width:555px !important;
 }
+
+
+
+#addFrom{
+  background-color: orange;
+}
+#addTo{
+  background-color: green;
+}
+#addNode{
+  background-color: blue;
+}
+#resetSelection{
+  background-color: blue;
+}
+.btn.disabled{
+  background-color: gray !important;
+}
+

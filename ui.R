@@ -30,6 +30,12 @@ ui <- tagList(
             Shiny.onInputChange("highlightedText", selection);
         };
         '),
+  tags$script(
+    'Shiny.addCustomMessageHandler("refocus",
+                                  function(NULL) {
+                                    document.getElementById("selectBoxValue-selectized").focus();
+                                  });'
+  ),
   
   
   # fluid page --------------------------------------------------------------
@@ -76,7 +82,7 @@ ui <- tagList(
                              hr(),
                              # div(verbatimTextOutput("keypr"),style="background-color:white"),
                              tabsetPanel(
-                               id = "sides", type = "tabs", selected = "Display",
+                               id = "sides", type = "tabs", selected = "Code",
                                
                                # ui statements----
                                
@@ -144,8 +150,9 @@ ui <- tagList(
                                         uiOutput("varForm"),
                                  
                                    div(
-                                     uiOutput("selectbox"),
-                                     uiOutput("addNewNodeButton"),
+                                     # uiOutput("selectbox"),
+                                     # uiOutput("selectbox2"),
+                                     # uiOutput("addNewNodeButton"),
                                      uiOutput("selectBoxButtons"),
                                      uiOutput("fromStackInfo"),
                                      uiOutput("edgeInfo"),

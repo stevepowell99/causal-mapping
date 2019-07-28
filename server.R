@@ -14,7 +14,8 @@ server <- function(input, output, session) {
   values$highlightedText <- ""                         # part of a system to copy any text highlighted with mouse in browser i.e. from interview quotes and insert into the edge information
   
   observeEvent(input$highlightedText,{
-    if (!is.null(input$highlightedText)) if ("" != (input$highlightedText)) values$highlightedText <- paste0(values$highlightedText," ... ",input$highlightedText)
+    if (!is.null(input$highlightedText)) values$highlightedText <- input$highlightedText
+    # if (!is.null(input$highlightedText)) if ("" != (input$highlightedText)) values$highlightedText <- paste0(values$highlightedText," ... ",input$highlightedText)
   })
   
   loaded <- F                         # whether loaded from url permalink
@@ -254,6 +255,7 @@ server <- function(input, output, session) {
     vs <- values$statements
     
     if(!is.null(input$net_selected)){
+    if(""!=(input$net_selected)){
       ids <- values$grafAgg2 %>% 
         nodes_as_tibble() %>% 
         filter(id==input$net_selected) %>% 
@@ -264,6 +266,7 @@ server <- function(input, output, session) {
       
       vs <- vs %>% 
         filter(statement %in% ids)
+    }
     }
     rhandsontable(
       vs,
@@ -425,7 +428,7 @@ server <- function(input, output, session) {
       ),
       div(
         # hilarious widget which scrolls through statements one by one
-        sliderInput(
+        if(F)sliderInput(
           "timeslider",
           NULL,
           min = 0,
@@ -439,9 +442,9 @@ server <- function(input, output, session) {
       ),
       div(
         # if("source" %in% colnames(values$statements))
-          div(actionButton("resetSelection", label = "Reset"),style="display:inline-block") ,                                 
+          div(actionButton("resetSelection", label = NULL,icon=icon("refresh")),style="position:absolute;right:25px") ,                                 
           div(actionButton("overview_col", label = "Read more"),style="display:inline-block") ,                                 #   if one interview source has made more than one statement, show all of them
-          div(checkboxInput("onlyThisStatement", label = "Only this"),style="display:inline-block") ,                                 #   if one interview source has made more than one statement, show all of them
+          div(checkboxInput("onlyThisStatement", label = "Only this",value = T),style="display:inline-block") ,                                 #   if one interview source has made more than one statement, show all of them
         style = "display:inline-block;margin-left:20px"
       )
     )
@@ -523,7 +526,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent({c(input$pager,input$timeslider)},{
-      if (!is.null(input$pager)) {
+      if (F & !is.null(input$pager)) {
         values$pag <- input$pager[[1]]
 
         if (input$timeslider > 0 & nrow(values$statements) > 2) updatePageruiInput(session, "pager", page_current = input$timeslider)
@@ -555,7 +558,7 @@ server <- function(input, output, session) {
   
   
   observeEvent(input$updateE2, {
-    updateSelectizeInput(session, "new1_edge", selected = input$new2_edge)
+    ectizeInput(session, "new1_edge", selected = input$new2_edge)
   })
   
   observeEvent(input$updateE3, {
@@ -620,91 +623,134 @@ server <- function(input, output, session) {
     }
   })
   
-  output$addNewNodeButton=renderUI({
-   if(req(input$selectboxvalue)!=""){
-   if(length(valuesCoding$foundIDs)==0){
-   div(
-    actionButton("addNewNode","Add")
-    ,
-    style="display:inline-block"
-  )
-  }}
-    })
+  # output$addNewNodeButton=renderUI({
+  #  if(req(input$selectBoxValue)!=""){
+  #  if(length(valuesCoding$foundIDs)==0){
+  #  div(
+  #   actionButton("addNewNode","Add")
+  #   ,
+  #   style="display:inline-block"
+  # )
+  # }}
+  #   })
   
   
-  output$selectBoxButtons=renderUI({
-    div(tagList(
-      if(!is.null(input$net_selected)) {
-        div(actionButton("selectFrom","Start with"),style="display:inline-block")
-      }
-      ,
-      
-      # if(!is.null(input$net_selected)) {
-      #   div(actionButton("selectFromTo","Start arrow(s), finish at next selection"),style="display:inline-block")
-      # }
-      #   ,
-      
-      if(!is.null(input$net_selected) && length(valuesCoding$fromStack)>0){
-        div(actionButton("selectTo","Finish at"),style="display:inline-block")
-        # p(as.character(unlist(valuesCoding$fromStack)))
-      }
-    ),style="display:inline-block")
+  output$selectBox2Buttons=renderUI({
+    # div(tagList(
+    #   if(!is.null(input$net_selected)) {
+    #     div(actionButton("selectFrom","Start with"),style="display:inline-block")
+    #   }
+    #   ,
+    #   
+    #   # if(!is.null(input$net_selected)) {
+    #   #   div(actionButton("selectFromTo","Start arrow(s), finish at next selection"),style="display:inline-block")
+    #   # }
+    #   #   ,
+    #   
+    #   if(!is.null(input$net_selected) && length(valuesCoding$fromStack)>0){
+    #     div(actionButton("selectTo","Finish at"),style="display:inline-block")
+    #     # p(as.character(unlist(valuesCoding$fromStack)))
+    #   }
+    # ),style="display:inline-block")
   })
   
   
-  output$selectbox=renderUI({
-      varlist <- values$nodes$label %>% unique() %>% as.character()
+  output$selectBoxButtons=renderUI({
+      varlist <- values$graf %>% nodes_as_tibble() %>% pull(label) %>% unique() %>% as.character()
       varlist <- na.omit(varlist)
       
       tagList(
-      textInput("selectboxvalue","",placeholder="Type to select or add variables")
-       
+      # textInput("selectBoxValue","",placeholder="Type to select or add variables")
+        div(selectizeInput("selectBoxValue",
+          label = NULL, selected = NULL, multiple = F,
+          options =
+            list(create = T, placeholder = "Type to select or add variables", onInitialize = I('function() { this.setValue(""); }')),
+          choices = varlist,width="400px"
+        ),style="display:inline-block"),
+        # div(disabled(actionButton("addNode",NULL,icon=icon("plus"))),style="display:inline-block"),
+        div((actionButton("addFrom",NULL,icon=icon("arrow-alt-circle-right"))),style="display:inline-block"),
+        div((actionButton("addTo",NULL,icon=icon("arrow-alt-circle-right"))),style="display:inline-block")
+        
 
     )
   })
   
   
-  # observeEvent(c(input$selectFromTo),{
-  #   valuesCoding$readyForEndArrow <- T
-  # })
-  # 
-  # observeEvent(c(input$net_selected),{
-  #   if(valuesCoding$readyForEndArrow && length(valuesCoding$fromStack)>0)browser()
-  #   
-  # })
-  # 
+  
+
   
   
-  observeEvent(c(input$selectFrom,input$resetSelection,input$selectTo,input$addNewNode),{
-    if(""!=req((input$selectboxvalue))){
-      # browser()
-      updateTextInput(session=session,"selectboxvalue",value="")
+  observeEvent(c(input$addFrom),ignoreInit = TRUE,{
+    
+    ns <- input$net_selected
+    if(is.null(ns))ns <- ""
+    if(""!=(ns) | !is.null(input$selectBoxValue)){
+    # browser()
+      
+    isb=input$selectBoxValue
+    if(""==isb)isb <- NULL
+    inpfrom <- NULL
+    
+    
+    if(!is.null(isb)){
+      vg <- values$graf  
+      inpfrom <- vg %>% 
+        mutate(id=row_number()) %>% 
+        filter(label==isb) %>% 
+        pull(id)
+      
+      if(length(inpfrom)==0){
+        values$graf <- vg %>% 
+          bind_nodes(tibble(label=isb))
+        doNotification("Adding Node",2)
+        inpfrom=vg %>% nodes_as_tibble() %>% nrow() %>% `+`(1)
+        
+        tmp <- req(values$graf)             # has to be agg2 because of statements, but shouldn't be because some missed out
+        vpag <- values$pag
+        iot <- input$onlyThisStatement
+        delay(4000,refresh_and_filter_net(tmp,vpag,iot))
+        
+      }
     }
-  })
-  
-  
-  observeEvent(c(input$selectFrom,input$selectFromTo),{
+
     # browser()
     
-    
-    valuesCoding$fromStack <- c(input$net_selected,valuesCoding$fromStack) %>% unique
+    valuesCoding$fromStack <- c(ns,valuesCoding$fromStack,inpfrom) %>% unique
     
     valuesCoding$fromStack <- valuesCoding$fromStack[valuesCoding$fromStack!=""]
+    doNotification("from stack ",99)
     
-    
-    if(!is.null(valuesCoding$fromStack)){
-    visNetworkProxy("net") %>% 
-      visUpdateNodes(tibble(id=valuesCoding$fromStack,shadow.color="gold",shadow.x=0,shadow.y=0,shadow.size=50)) %>% 
-      visSelectNodes(id=F)
     }
+    
+    
     visNetworkProxy("net") %>% 
-      visSelectNodes(id=F)
+      visSetSelection(unselectAll = TRUE)
+    
+    updateSelectizeInput(session = session,inputId = "selectBoxValue",selected="")      
+    
+    session$sendCustomMessage("refocus",list(NULL)) 
     
 
   })
   
   
-  observeEvent(input$selectTo,{
+  observeEvent(c(input$selectBoxValue,input$net_selected,valuesCoding$fromStack),{
+    # browser()
+    ins=input$net_selected
+    isb=input$selectBoxValue
+    vcf=valuesCoding$fromStack
+    
+    if(is.null(ins))ins=""
+    if(is.null(isb))isb=""
+    if(is.null(vcf))vcf=""
+    if(length(vcf)==0)vcf=""
+    if((""!=(ins) | ""!=isb) & ""==(vcf)) enable("addFrom") else disable("addFrom")
+    if((""!=(ins) | ""!=isb) & ""!=(vcf)) enable("addTo") else disable("addTo")
+  })
+  
+  
+  
+  observeEvent(input$addTo,{
     # browser()
     # valuesCoding$readyForEndArrow <- F
     
@@ -718,7 +764,32 @@ server <- function(input, output, session) {
     # browser()
     
     inpfrom <- req(valuesCoding$fromStack)
+    inpto <- NULL
+    
+        # browser()
+      
+    isb <- input$selectBoxValue
+    if(isb=="") isb <- NULL
+    
+    if(!is.null(isb)){
+      
+      vg <- values$graf 
+       
+      inpto <- vg %>% 
+        mutate(id=row_number()) %>% 
+        filter(label==isb) %>% 
+        pull(id)
+      
+      if(length(inpto)==0){
+        values$graf <- vg %>% 
+          bind_nodes(tibble(label=isb))
+        doNotification("Adding Node",2)
+        inpto=vg %>% nodes_as_tibble() %>% nrow() %>% `+`(1)
+      }
+      }
+    if(is.null(inpto)){
     inpto <- req(input$net_selected)[1]
+    }
     
     newEdges <- tibble(
       from = inpfrom %>% as.integer, 
@@ -743,38 +814,44 @@ server <- function(input, output, session) {
     }
     
     valuesCoding$fromStack <- NULL
-    valuesCoding$foundIDs <- NULL
-    visNetworkProxy("net") %>% 
-      visUpdateNodes(tibble(id=as.integer(inpfrom),shadow.color='rgba(0,0,0,0.5)',shadow.size=10,shadow.x=5,shadow.y=5)) %>%   
-      visSelectNodes(id=NULL)
+    # doNotification("from stack zero",99)
+    # valuesCoding$foundIDs <- NULL
+    # visNetworkProxy("net") %>%
+    #   visSetSelection(unselectAll = TRUE)
+    doNotification(paste0("sel ",input$net_selected),99)
+    updateTextInput(session=session,"selectBoxValue",value="")
     
-    # updateTextInput(session=session,"selectboxvalue",value="")
+    tmp <- req(values$graf)             # has to be agg2 because of statements, but shouldn't be because some missed out
+    vpag <- values$pag
+    iot <- input$onlyThisStatement
+    delay(4000,refresh_and_filter_net(tmp,vpag,iot))   # TODO the 4 seconds is just a lucky guess
     
   })
   
   # textbox search nodes and highlights them --------------------------------
   
 
-  observeEvent(c(input$selectboxvalue),{
+  observeEvent(c(input$selectBoxValue),{
     if(req(input$sides)=="Code"){
       
       # visNetworkProxy("net") %>%
       #   visGetNodes(input="net_nodes")
       
-      req(values$grafAgg2)
-      
-      if(input$selectboxvalue!=""  && nchar(input$selectboxvalue)>2){
+      # req(values$grafAgg2)
+      # browser()
+      if(input$selectBoxValue!=""  && nchar(input$selectBoxValue)>2){
         
         # browser()
-        vag <- values$graf %>% nodes_as_tibble
+        vag <- values$graf %>% nodes_as_tibble %>% 
+          pull(label) 
         
-        ids=vag %>% 
-          pull(label) %>% 
-          tolower %>% 
-          # str_detect(input$selectboxvalue %>% tolower) %>% 
-          sapply(function(x)agrep(tolower(input$selectboxvalue),x) %>% length %>% `==`(1))  %>% 
-          which %>% 
-          unname
+        ids <- which(vag==input$selectBoxValue)
+        
+          # tolower %>% 
+          # str_detect(input$selectBoxValue %>% tolower) %>% 
+          # sapply(function(x)agrep(tolower(input$selectBoxValue),x) %>% length %>% `==`(1))  %>% 
+          # which %>% 
+          # unname
         # browser()
         
         # info <- data.frame(matrix(unlist(input$net_nodes), ncol = dim(vag)[1],byrow=T),stringsAsFactors=FALSE)
@@ -782,14 +859,15 @@ server <- function(input, output, session) {
         # browser()
         wipe <- setdiff(valuesCoding$foundIDs,ids)
         
-        if(length(ids) !=0 && length(ids)<nrow(vag)){
+        if(length(ids) !=0 && length(ids)<length(vag)){
           visNetworkProxy("net") %>%
-            visUpdateNodes(tibble(id=ids,hidden=F)) 
+            visUpdateNodes(tibble(id=ids,hidden=F)) %>% 
+            visSelectNodes(id = ids)
         }
         
         if(length(wipe)>0 ){
-          visNetworkProxy("net") %>%
-            visUpdateNodes(tibble(id=wipe,hidden=T)) 
+          # visNetworkProxy("net") %>%
+          #   visUpdateNodes(tibble(id=wipe,hidden=T)) 
           }
         
         visNetworkProxy("net") %>%
@@ -799,102 +877,36 @@ server <- function(input, output, session) {
       }
     } 
   })
-  
-  observeEvent(input$addNewNode,{
-    # browser()
-    if(length(valuesCoding$foundIDs)==0 && (input$selectboxvalue!="")){
-      values$graf <- values$graf %>% 
-        bind_nodes(tibble(label=input$selectboxvalue,shadow.color="gold",shadow.x=0,shadow.y=0,shadow.size=50))
-      
-      valuesCoding$fromStack <- nrow(values$graf %>% nodes_as_tibble)
-      doNotification("Added new node",2)
-      
-    }
-    
-  })
-  
-  
+  # 
+  # observeEvent(input$addNewNode,{
+  #   # browser()
+  #   if(length(valuesCoding$foundIDs)==0 && (input$selectBoxValue!="")){
+  #     values$graf <- values$graf %>% 
+  #       bind_nodes(tibble(label=input$selectBoxValue,shadow.color="gold",shadow.x=0,shadow.y=0,shadow.size=50))
+  #     
+  #     valuesCoding$fromStack <- nrow(values$graf %>% nodes_as_tibble)
+  #     doNotification("Added new node",2)
+  #     
+  #   }
+  #   
+  # })
+  # 
+  # 
   
   observeEvent(c(input$resetSelection,req(input$pager),input$onlyThisStatement),{
+    
+    
+    
   # observeEvent(input$pager,{
     # browser()
     tmp <- req(values$graf)             # has to be agg2 because of statements, but shouldn't be because some missed out
     vpag <- values$pag
+    iot <- input$onlyThisStatement
+    refresh_and_filter_net(tmp,vpag,iot)
     
-    vno <- tmp %>% nodes_as_tibble
-    ved <- tmp %>% edges_as_tibble
+    valuesCoding$fromStack <- NULL
+    updateSelectizeInput(session = session,inputId = "selectBoxValue",selected="") 
     
-    vf <- ved %>% 
-      group_by(from) %>% 
-      summarise(fstat=paste0(statement,collapse=",")) %>% 
-      mutate(id=from)
-    
-    vt <- ved %>% 
-      group_by(to) %>% 
-      summarise(tstat=paste0(statement,collapse=",")) %>% 
-      mutate(id=to)
-    
-    vno <- vno %>%
-      mutate(id=row_number()) %>% 
-      left_join(vf) %>%
-      left_join(vt) %>% 
-      unite("statement",c("fstat","tstat"),sep=",")
-    
-    
-    
-    # browser()
-    if(!("statement" %in% colnames(vno))) vno$statement=1
-    if (!is.null(vpag) & nrow(vno)>0) {
-      ids <- vno %>%
-        mutate(sel=ifelse(str_detect(statement, paste0("(,|^)", as.character(vpag), "(,|$)")),T,F)) %>%
-        pull(sel) 
-# browser()
-      yesids=ids %>% which
-      noids=ids %>% `!` %>% which
-      
-      
-      eids <- ved %>% 
-        mutate(hit=vpag==statement) %>% 
-        pull(hit)
-      
-      
-      yeseids=eids %>% which
-      noeids= eids %>% `!` %>% which
-      
-      
-      valuesCoding$fromStack=NULL
-
-      if(input$onlyThisStatement){
-        
-        
-      
-      visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
-      # visUpdateNodes(nodes=tibble(id=1:nrow(vno),hidden=!ids))  %>% 
-      # visUpdateEdges(edges=tibble(id=1:nrow(ved),hidden=!eids))  %>% 
-        visSelectNodes(id=F)
-        # %>% 
-        # visFit(animation=list(duration=500))
-      # visSelectNodes(id = ids) %>% 
-        # visUpdateNodes(tibble(id=1:nrow(vno),shadow.color='rgba(0,0,0,0.5)',shadow.size=10,shadow.x=5,shadow.y=5))
-       
-    } else {
-      ids=rep(T,nrow(vno))
-      eids=rep(T,nrow(ved))
-      
-      visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
-        visSelectNodes(id=yesids)
-      # %>% 
-      #   visSelectEdges(id=yeseids)
-      # %>% 
-      #   visSelectEdges(id=eids)
-      
-      
-      }
-      visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
-      visUpdateNodes(nodes=tibble(id=1:nrow(vno),hidden=!ids))  %>% 
-      visUpdateEdges(edges=tibble(id=1:nrow(ved),hidden=!eids))  %>% 
-        visFit(animation=list(duration=500))
-      }
   })
   
   
@@ -1701,7 +1713,7 @@ server <- function(input, output, session) {
       
       }
         # browser()
-      # ved edge merge ----
+      # ved edge merge TODO this messes up statements ---- 
       
       if (input$sides!="Code" & findset("arrowmerge", v = vals) %>% as.logical() ) {
         ved <- ved %>%
@@ -1808,6 +1820,7 @@ server <- function(input, output, session) {
       ved <- tmp %>% edges_as_tibble()
       
       
+      if(input$sides!="Code"){
       vno <- vno %>% 
         format_nodes_and_edges(input,type="node")
       
@@ -1816,7 +1829,10 @@ server <- function(input, output, session) {
         format_nodes_and_edges(input,type="edge")
       
       
-      
+      } else {
+        vno$font.color="#333333"
+        vno$font.size=66
+      }
       ### make sure text is visibile when highlighted
       vno <- vno %>% 
         mutate(color.highlight.background=set_text_contrast_color(font.color))
@@ -2176,7 +2192,7 @@ server <- function(input, output, session) {
 
       # ,
       # div(checkboxInput("showStatements", "Statements"), style = "display:inline-block;margin-right:80px"),
-      div(actionButton("open", "Statements"),style = "display:inline-block;margin-right:80px"),
+      # div(actionButton("open", "Statements"),style = "display:inline-block;margin-right:80px"),
       
       div(actionButton("fitaction", "Fit"), style = "display:inline-block;margin-right:20px"),
       class = "bigpicbut" ,style="z-index:999 !important")
@@ -2471,15 +2487,6 @@ server <- function(input, output, session) {
   # })
   
   
-  setup_pushbar() # setup
-  
-  observeEvent(input$open, {
-    pushbar_open(id = "myPushbar")
-  })  
-  
-  observeEvent(input$close, {
-    pushbar_close()
-  })  
   
   
   output$keypr = renderPrint({
