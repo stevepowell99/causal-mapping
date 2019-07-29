@@ -747,6 +747,8 @@ defaultEdges <- data.frame(
   sensitivity = .5,
   specificity =  .5,
   statement =  1,
+  package = "",
+  packageNote = "",
   quote =  "",
   full.quote =  "",
   combo.type = "",

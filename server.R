@@ -589,6 +589,8 @@ server <- function(input, output, session) {
           div(style = "display:inline-block;width:5%"),
           div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "display:inline-block;width:20%"),
           div(selectizeInput("function.type", NULL, choices = c("+", "-", "NECC","SUFF")), style = "display:inline-block;width:20%"),
+          div(textInput("package", NULL, value = "", placeholder = "package"), style = "display:inline-block;"),
+          div(textInput("packageNote", NULL, value = "", placeholder = "packageNote"), style = "display:inline-block;"),
           div(textAreaInput("quote", NULL, value = values$highlightedText, placeholder = "quote",rows=3,width="100%"), style = ""),
           style = "margin-top:20px"
           
@@ -2002,7 +2004,12 @@ server <- function(input, output, session) {
                 font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;
                 -moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;
                  border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
-                 max-width:500px;word-break: break-all'
+                 max-width:500px;word-break: break-all',
+          hoverConnectedEdges=F,
+          keyboard = T,
+          selectConnectedEdges=F	
+          
+          
         ) %>%
 
         visOptions(
@@ -2016,6 +2023,7 @@ server <- function(input, output, session) {
             labelOnly=F,
             algorithm = "hierarchical"
           ),
+          selectedBy=ifelse((vga %>% nodes_as_tibble() %>% pull(cluster) %>% `==`("") %>% all),"","cluster"),
           nodesIdSelection = F
         ) %>%
         visConfigure(enabled = input$codeCollapse == "Advanced options",
@@ -2129,10 +2137,11 @@ server <- function(input, output, session) {
           #       "#FFFFFF80",
           #     size = findset("arrowfont.size",global=F, v = vals)
           #   ),
-          physics =
-            F,
+          hoverWidth = 28,
+          physics =F,
+          # color=list(highlight="#000000"),
           arrows =
-            list(middle = list(type = "circle", scaleFactor = .5))
+            list(middle = list(type = "circle", scaleFactor = .5),from = list(type = "circle", scaleFactor = 0.2)),
           # ,
           # dashes = findset("arrowdashes") %>% as.logical()
         )

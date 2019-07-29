@@ -301,7 +301,7 @@ ui <- tagList(
                              
                              bsCollapse(open = "Report",
                                bsCollapsePanel("Statements",
-                                 uiOutput("statementsTableUp"),
+                                 
                                  uiOutput("push")
                                ),
                                
