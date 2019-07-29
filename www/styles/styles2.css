@@ -819,11 +819,74 @@ i.glyphicon.glyphicon-play{
 #large .selectize-dropdown { line-height: 30px !important; }
 
 #deleteVarForm{
-	background-color: red !important;
+	background-color: #FFDDDD !important;
 }
 
 
 .textbanner a {background-color: yellow !important;color:black !important;}
 
-#filters {position:fixed;}
+#filters {position:fixed;z-index: 99}
+
+.colourpicker-input {height:15px !important;}
+
+.selectize-input {
+    min-height: 34px;
+}
+
+#arrlabel{
+  vertical-align: top;
+}
+
+#savemsg{
+    color: white;
+    padding-left: 6px;
+    padding-top: 10px;
+}
+
+
+#selectedBynet{
+margin-left:200px;
+}
+
+.pushbar.from_right{
+  width:555px !important;
+}
+
+input[type=text] {
+  -webkit-transition: width .35s ease-in-out;
+  transition: width .35s ease-in-out;
+}
+input[type=text]:focus {
+  width: 300px;
+}
+
+#addFrom{
+  background-color: orange;
+}
+
+#addFrom:focus{
+    outline: 5px solid red;
+}
+#addFrom:hover{
+    outline: 5px solid red;
+}
+#addTo:focus{
+    outline: 5px solid red;
+}
+#addTo:hover{
+    outline: 5px solid red;
+}
+
+#addTo{
+  background-color: green;
+}
+#addNode{
+  background-color: blue;
+}
+#resetSelection{
+  background-color: blue;
+}
+.btn.disabled{
+  background-color: gray !important;
+}
 

@@ -5,3 +5,4 @@ from,to,label,strength,trust,sensitivity,specificity,statement,quote,full.quote,
 3,7,NA,0.5,0.5,NA,NA,1,NA,Some text,uncertain,NA,NA
 5,7,NA,0.5,0.5,NA,NA,1,NA,Some text,uncertain,NA,NA
 6,7,NA,0.5,0.5,NA,NA,1,NA,Some text,uncertain,NA,NA
+2,4,,0.5,0.5,NA,NA,1,,Some text,,,

@@ -1,4 +1,3 @@
-
 ui <- tagList(
   useShinyjs(),
   inlineCSS(list(.red = "background: snow")),
@@ -31,6 +30,12 @@ ui <- tagList(
             Shiny.onInputChange("highlightedText", selection);
         };
         '),
+  tags$script(
+    'Shiny.addCustomMessageHandler("refocus",
+                                  function(NULL) {
+                                    document.getElementById("selectBoxValue-selectized").focus();
+                                  });'
+  ),
   
   
   # fluid page --------------------------------------------------------------
@@ -58,9 +63,9 @@ ui <- tagList(
                                "padding:0",
                              
                              id = "app-content",
-                             a(h4("Causal Mapping ", style = "display:inline-block;color:white;margin-right:8px"), href = "."),
+                             a(h4("Causal Mapping", style = "display:inline-block;color:white;margin-right:8px"), href = "."),
                              img(src = "img/logo.gif", height = "20px", style = "display:inline-block;"),
-                             a(icon("question-circle"),href="http://www.pogol.net/_help/index.html", target="_blank",height = "20px", style = "display:inline-block;margin-left:20px"),
+                             a(icon("question-circle"),href="http://www.pogol.net/_causal_mapping/index.html", target="_blank",height = "20px", style = "display:inline-block;margin-left:20px"),
                              
                              hr(style = "margin-top:5px"),
                              
@@ -69,12 +74,13 @@ ui <- tagList(
                              bsAlert("found"),
                              bsAlert("notfound"),
                              
-                             
-                             # uiOutput("test"),
-                             
+          
+                                                    # uiOutput("test"),
                              uiOutput("savebut"),
+                             uiOutput("savedMsg"),
                              # uiOutput("savedMsg"),
                              hr(),
+                             # div(verbatimTextOutput("keypr"),style="background-color:white"),
                              tabsetPanel(
                                id = "sides", type = "tabs", selected = "Code",
                                
@@ -99,14 +105,12 @@ ui <- tagList(
                                           ),
                                           bsCollapsePanel(
                                             title = "View and edit statements",
-                                            p("Paste your statements into the space below. The table will expand if you paste more rows."),
+                                            # p("Paste your statements into the space below. The table will expand if you paste more rows."),
                                             # p("If you want more columns, right-click to create them first.")
                                             # ,
                                             p("The first column is the text. You can use other columns for attributes like age or gender."),
                                             # p("You can change the column names."),
-                                            actionButton("statementsTableUp", "Update"),
-                                            rHandsontableOutput("statements")
-                                          ),
+                                         p() ),
                                           bsCollapsePanel(
                                             "Upload variables and arrows",
                                             p("Nodes table must contain a column called label"),
@@ -141,34 +145,21 @@ ui <- tagList(
                                         # ,
                                         uiOutput("pagerBig"),
                                         uiOutput("displayStatementPanel"),
-                                 uiOutput("testBut"),
-                                 uiOutput("edgeInfo"),
-                                        
+                                 # uiOutput("edgeBut"),
                                         
                                         uiOutput("varForm"),
-                                        
-                                        bsCollapse(
-                                          id = "codeCollapse", open =
-                                            "Add arrows",
-                                          
-                                          bsCollapsePanel(
-                                            "Add arrows",
-                                            div(
-                                              uiOutput("selectbox"),
-                                              uiOutput("addNewNodeButton"),
-                                              uiOutput("add_edges_widget"),
-                                              uiOutput("combo")
-                                            )
-                                          ),
-                                          
-                                          
-                                          bsCollapsePanel(                    #this is just a utility from visnetwork which I will drop at some point
-                                            "Advanced options",
-                                            p("Development only"),
-                                            icon("exclamation-triangle"),
-                                            p(id = "advancedAnchor")
-                                          )
-                                        )
+                                 
+                                   div(
+                                     # uiOutput("selectbox"),
+                                     # uiOutput("selectbox2"),
+                                     # uiOutput("addNewNodeButton"),
+                                     uiOutput("selectBoxButtons"),
+                                     uiOutput("fromStackInfo"),
+                                     # uiOutput("edgeInfo"),
+                                     uiOutput("add_edges_widget"),
+                                     uiOutput("combo"),
+                                     style="background-color:#DDFFDD;border:1px gray solid;padding:3px"
+                                   )
                                ),
                                tabPanel(value="Variables","",                      # user can directly edit the nodes table. still functional but will probably be dropped
                                         style = glue("background-color:{rgb(0.99,1,0.97)};;border-radius:10px"), icon = icon("boxes"),
@@ -196,10 +187,24 @@ ui <- tagList(
                                ),
                                
                                
-                               # ui settings----
+                               # ui filter----
+                               
+                               tabPanel("",value="Filter",    # more of a settings panel 
+                                        style = glue("background-color:{rgb(0.97,1,0.97)};;border-radius:10px"), icon = icon("filter"),
+                                     p()
+                                      
+                               ),
+                               
+                               # ui display----
                                
                                tabPanel("",value="Display",    # more of a settings panel 
                                         style = glue("background-color:{rgb(0.97,1,0.97)};;border-radius:10px"), icon = icon("palette"),
+                                   uiOutput("upConditionalBut"),
+                                 uiOutput("condFormattingOutput")
+                               ),
+                               
+                               tabPanel("",value="Settings",    # more of a settings panel 
+                                        style = glue("background-color:{rgb(0.97,1,0.97)};;border-radius:10px"), icon = icon("cog"),
                                         
                                         # selectInput("layout","layout",choices=c("Sugiyama"="layout_with_sugiyama", "circle"="layout_in_circle"),selected = "layout_with_sugiyama")
                                         # ,
@@ -212,9 +217,9 @@ ui <- tagList(
                                             "Advanced",
                                             actionButton("settingsTableGlobalUp","Update"),
                                             rHandsontableOutput("settingsTableGlobal"),                         # global settings
-                                            hr(),
-                                            actionButton("settingsTableUp","Update"),
-                                            rHandsontableOutput("settingsTable"),                         # set things like size and colour of items 
+                                            # hr(),
+                                            # actionButton("settingsTableUp","Update"),
+                                            # rHandsontableOutput("settingsTable"),                         # set things like size and colour of items 
                                             hr()
                                             # htmlOutput("overview"),
                                             # hr()
@@ -223,7 +228,17 @@ ui <- tagList(
                                         bsCollapsePanel(
                                           "Easy",
                                           actionButton("autoMerge", "Auto-suggest clusters")                         # not importatn
-                                        )
+                                        ),
+                                 
+                                 bsCollapsePanel(                    #this is just a utility from visnetwork which I will drop at some point
+                                   "Advanced options",
+                                   p("Development only"),
+                                   icon("exclamation-triangle"),
+                                   p(id = "advancedAnchor")
+                                 )
+                                 
+                                 
+                                 
                                         # ,
                                ),
                                tabPanel("",icon=icon("chart-pie"),                         # some additional output, not important
@@ -258,31 +273,48 @@ ui <- tagList(
                            mainPanel(
                              
                              width = 8, style = "border-left:2px dotted black",
+                             # pushbar_deps(),
+                             # br(),
+                             # pushbar(
+                             #   
+                             #   # h4("HELLO"),
+                             #   id = "myPushbar", # add id to get event
+                               # uiOutput("push"),
+                               # from="right",
+                               # actionButton("close", "Close")
+                             # ),
+                             uiOutput("filters"),
                              conditionalPanel("!input.crowd",style="background-color:white;border-radius:5px",                         # input.crowd is part of an alternative, "crowdsourced" phone-friendly version of the interface which is not important at moment
                                               
                                               uiOutput("floatingWidgets"),
                                
-                                              uiOutput("filters"),
                                               
                                               
                                               
-                                              visNetworkOutput("net", height = "950px", width = "100%"),                         # the main network viz. 
-                                              uiOutput("savedMsg"),
+                                              withSpinner((visNetworkOutput("net", height = "950px", width = "100%")),type = 5)                         # the main network viz. 
                                               
-                                              tags$hr(),
-                                              uiOutput("blog"),                          # additional narrative abou the project stored in the settings csv
-                                              textOutput("info")
+                                 
                                               #   )
                                               # )
                              )
                              ,
-                             uiOutput("description"),
                              
                              bsCollapse(open = "Report",
-                             bsCollapsePanel("Legend",
-                             plotOutput("colourLegend")
+                               bsCollapsePanel("Statements",
+                                 
+                                 uiOutput("push")
                                ),
-                             bsCollapsePanel("Report",
+                               
+                                bsCollapsePanel("Description",
+                                  uiOutput("description"),
+                                  # tags$hr(),
+                                  uiOutput("blog"),                          # additional narrative abou the project stored in the settings csv
+                                  textOutput("info")
+                                ),
+                                bsCollapsePanel("Legend",
+                                plotOutput("colourLegend")
+                                  ),
+                                bsCollapsePanel("Report",
                                
                              formattableOutput("reportTable", width = "100%", height = "0")
                              )

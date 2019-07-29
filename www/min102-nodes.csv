@@ -1,0 +1,5 @@
+label,group,col1,cluster,value,is_context,clusterLabel,level,fun,type,xid,details,shadow.color,shadow.x,shadow.y,shadow.size
+xray,NA,NA,NA,NA,NA,NA,NA,sumfun,NA,NA,NA,NA,NA,NA,NA
+yahoo,NA,NA,NA,NA,NA,NA,NA,sumfun,NA,NA,NA,NA,NA,NA,NA
+zoo,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,,gold,NA,NA,NA
+castle,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,gold,0,0,50

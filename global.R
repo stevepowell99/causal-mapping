@@ -1,6 +1,9 @@
 # options -----------------------------------------------------------------
 options(shiny.port = 1111)
-doNotificationLevel=0     #notification popups. level=1 is debugging and level=2 is user.
+# options(shiny.trace = T)
+options(shiny.autoreload = T)
+options(shiny.autoreload.pattern = glob2rx("ui.R|global.R|server.R"))
+doNotificationLevel=2     #notification popups. level=1 is debugging and level=2 is user.
 options(stringsAsFactors = F)
 
 # source ------------------------------------------------------------------
@@ -13,6 +16,7 @@ source("functions/find_cycles.r")
 
 
 library(shinythemes)
+# library(pushbar)
 library(shinyWidgets)
 library(webshot)
 library(readxl)
@@ -31,7 +35,7 @@ library(networkD3)
 library(tidygraph)
 library(googledrive)
 library(googlesheets4)
-
+library(shinycssloaders)
 library(rdrop2)
 
 require(visNetwork)
@@ -112,20 +116,6 @@ make_labels=function(tex,df,sep="<br>"){
 
 
 
-make_labelsOLD=function(tex,df,sep="<br>"){
-  x=(str_split(tex,",")[[1]]) %>% 
-    str_trim 
-  lab=""
-  for(i in x){
-    if(i %in% colnames(df))  lab=paste(lab,ifelse(i=="label","",paste0(sep,"",i,": ",collapse="")),unlist(df[,i]))
-  }
-  lab %>% 
-    str_remove_all("^  \\| details:  ")  %>% 
-    str_replace_all("\\| frequency: ","") 
-  # str_replace_all("\\| frequency: ([0-9]*)","\\(\\1\\)") 
-  
-}
-
 
 
 export_edgelist_adjacency <- function(gr){
@@ -186,11 +176,55 @@ prepare_ved <- function(ved){
     mutate(definition.type = ifelse(is.na(definition.type), "", definition.type))
 }
 
+prepare_vno <- function(vno){
+  vno %>%
+    mutate(cluster = ifelse(is.na(cluster), "", cluster)) %>%
+    mutate(clusterLabel = ifelse(is.na(clusterLabel), "", clusterLabel))
+}
+
 ved_join <- function(ved, statements){
   ved <- ved %>%
     left_join(statements, by = "statement")
   ved
 }
+
+
+merge_nodes <- function(vno,ved){
+  # browser()
+  vno <- vno %>%
+    mutate(id = row_number()) %>%
+    mutate(cluster = ifelse(cluster == "", NA, cluster)) %>%
+    group_by(cluster) %>%
+    mutate(clusterid = first(id)) %>%
+    mutate(clusterid = ifelse(is.na(cluster), id, clusterid)) %>%
+    ungroup() %>%
+    group_by(clusterid) %>%
+    mutate(clusterLength = n()) %>%
+    mutate(clusterLabel = clusterLabel %>% replaceNA()) %>%
+    mutate(label = ifelse(clusterLength < 2, label, ifelse(clusterLabel != "", clusterLabel, paste0("Cluster: ", label)))) %>%
+    # mutate(value=mean(value,na.rm=T)) %>%    
+    # mutate(valueSum=sum(value,na.rm=T)) %>%    
+    mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
+    ungroup()
+  
+  ved <- ved %>%
+    mutate(from = vno$clusterid[findfirst(from, vno$id)]) %>%
+    mutate(to = vno$clusterid[findfirst(to, vno$id)])
+  # browser()
+  tmp.graf <- tbl_graph(vno, ved) %>%
+    N_() %>%
+    filter(id == clusterid)
+  
+  vno <- tmp.graf %>% nodes_as_tibble()
+  ved <- tmp.graf %>% edges_as_tibble()
+  
+  list(vno,ved)
+  # values$tmp.graf <- tmp.graf   #for permanent cluster reduction button
+  
+  # legend <- paste0(legend, "</br>Variables merged according to user-defined clusters")
+  
+}
+
 
 large="er asdfjk klasdf";  small="asdf"
 
@@ -212,10 +246,20 @@ highlight_text <- function(large,smallvec,start="<a href='.'>",stop="</a>"){
 
 
 
+# format_edges <- function(df,input)df
+
+get_rgb_from_color_ramp <- function(mat){
+  
+}
+
+
+
+
+
 mutate_if_sw=function(...)suppressMessages(mutate_if(...))
 
-doNotification <- function(text,level=1) {
-  if(level>doNotificationLevel)showNotification(text)
+doNotification <- function(text,level=1,...) {
+  if(level>doNotificationLevel)showNotification(text,...)
   write(paste0(text), paste0("","log.txt"), append = T)
 }
 
@@ -271,6 +315,7 @@ infer=function(gr){                         # sets levels of downstream variable
     mutate(priorLevel=level) %>% 
     mutate(xid=row_number())
   
+  # the vector of endog variables
   ids=gr %>% 
     activate(nodes) %>% 
     pull(source) %>% 
@@ -283,22 +328,25 @@ infer=function(gr){                         # sets levels of downstream variable
     which
   
   # ridiculous palaver cause can't call bfs directly  
+  # makes a long vector of all the nodes we will need to visit
   ranks=vector(length=0)
   
   for(y in ids){
     # browser()
     gr %>% 
       activate(nodes) %>% 
-      mutate(rank=bfs_rank(root=y)) %>% 
-      filter(!is.na(rank)) %>% 
-      arrange(rank) %>% 
+      mutate(rankx=bfs_rank(root=y)) %>% 
+      filter(!is.na(rankx)) %>% 
+      arrange(rankx) %>% 
       pull(xid) -> rk
+    
     ranks=c(ranks,rk[-1])
     
   }
   
+  # browser()
   # gridd=list(length=0)
-  
+  # combs for making a list of all the endogenous variables with no values set
   combs=lapply(empties,function(x)0:1) %>% expand.grid()
   
   colnames(combs)=empties
@@ -306,7 +354,7 @@ infer=function(gr){                         # sets levels of downstream variable
   gr1=gr 
   
   levs=NULL#vector(length=length(combs))
-  
+  if(nrow(combs)>0){                   # if there are any NA exog vars, we need to build a grid
   for(e in 1:nrow(combs)){
     if(length(empties)>0){
       # browser()
@@ -318,6 +366,7 @@ infer=function(gr){                         # sets levels of downstream variable
       
     } 
     for(r in ranks){
+      # browser()
       gr1=  gr1 %>% 
         activate(nodes) %>% 
         mutate(level = ifelse(r!=xid,level,
@@ -328,14 +377,33 @@ infer=function(gr){                         # sets levels of downstream variable
     }
     levs=cbind(levs,(gr1 %>% nodes_as_tibble %>% pull(level)))
   }  # browser()
- 
-  if(length(empties)>0){
-    means=rowMeans(levs,na.rm=T)
-    gr = gr %>% activate(nodes) %>% 
-      mutate(level=means)
-  } else gr = gr1
-  
-  gr
+  }
+  else {
+      # browser()
+    for(r in ranks){
+# browser()
+      gr1 =  gr1 %>% 
+        activate(nodes) %>% 
+        mutate(level = ifelse(r!=xid,level,2
+        )
+        # mutate(level = ifelse(r!=xid,level,
+        #   do.call(.N()$fun[r],list(.N()$level,c(.N()$level[.E()$from[.E()$to==r]])))
+        # )
+        )
+      
+      # gr1=gr1 %>% 
+      #   activate(nodes) %>% 
+      #   mutate(level = do())
+      
+    }
+    # levs=cbind(levs,(gr1 %>% nodes_as_tibble %>% pull(level)))
+  }
+ gr1
+    # means=rowMeans(levs,na.rm=T)
+  #   gr = gr %>% activate(nodes) %>% 
+  #     mutate(level=levs)
+  # 
+  # gr
 }
 
 
@@ -353,12 +421,273 @@ findfirst <- function(vec, vec2) {
 
 
 
+join_nodes_and_edges <- function(vno,ved){
+  ved.from <- ved %>%
+    mutate(id = from) %>%
+    group_by(id) %>%
+    mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
+    mutate_if_sw(is.character, .funs = catfun) %>%
+    summarise_all(.funs = funs(first)) %>%
+    ungroup() %>%
+    rename_all(function(x)paste0("from.",x)) %>% 
+    rename(id=from.id)
+  
+  vno <- vno %>%
+    mutate(id = row_number()) %>%
+    left_join(ved.from, by = "id")
+  
+  ved.to <- ved %>%
+    mutate(id = to) %>%
+    group_by(id) %>%
+    mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
+    mutate_if_sw(is.character, .funs = catfun) %>%
+    summarise_all(.funs = funs(first)) %>%
+    ungroup() %>%
+    rename_all(function(x)paste0("to.",x)) %>% 
+    rename(id=to.id)
+  
+  vno <- vno %>%
+    mutate(id = row_number()) %>%
+    left_join(ved.to, by = "id")
+  
+  # add from and to scores for nodes
+  
+  vnofrom <- vno %>% 
+    select(starts_with("from.")) %>% 
+    select_if(is.numeric) %>% 
+    as.matrix
+  
+  vnoto <- vno %>% 
+    select(starts_with("to.")) %>% 
+    select_if(is.numeric) %>% 
+    as.matrix
+  
+  vnomean=apply(simplify2array(list(vnofrom,vnoto)),c(1,2),meanfun) %>% as.tibble()
+  vnosum=apply(simplify2array(list(vnofrom,vnoto)),c(1,2),sumfun) %>% as.tibble()
+  
+  colnames(vnomean)=str_remove_all(colnames(vnoto),"^to.") %>% paste0("mean_",.)
+  colnames(vnosum)=str_remove_all(colnames(vnoto),"^to.") %>% paste0("sum_",.)
+  
+  vno=bind_cols(vno,vnomean,vnosum)
+  
+  # browser()
+  vno <- vno %>%
+    ungroup() %>%
+    mutate(
+      frequency = sum_frequency_sum,
+      trust = sum_trust_sum,
+      strength = sum_strength_sum_sum,
+      wstrength = sum_wstrength_sum_sum) %>% 
+    mutate(
+      edgelabels = paste0(from.label, to.label),
+      statement = paste0(from.statement, to.statement),
+      quote = paste0(from.quote, to.quote)
+    ) 
+  
+  
+  
+  
+  if("mean_key1_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key1=mean_key1_mean_mean) 
+  if("mean_key2_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key2=mean_key2_mean_mean) 
+  
+  vno
+}
+
+
+set_text_contrast_color <- function(color) { 
+  ifelse( mean(col2rgb(color)) > 127, "black", "white") 
+} 
+
+
+format_nodes_and_edges <- function(df,inp,type,vsc){
+  # if (type=="nodes") \type_names = node_names else type_names = edge_names
+  # browser()
+  # req(inp$conditional_selector_node_color.background)
+  # browser()
+  # req(vsc$conditional_value_node_font.color)
+  if(type=="node")namelist <- node_names else namelist <- edge_names
+  for(attribute_short in namelist){
+    attribute <- paste0(type,"_",attribute_short)
+    attribute_clean <- attribute %>% str_replace("\\.","_")
+    
+    # attribute_stripped <- str_remove_all(attribute,"node_") %>% str_remove_all("edge_")
+    
+    row <- vsc[vsc$attribute==attribute,] 
+    row_clean <- vsc[vsc$attribute==attribute_clean,] 
+    floor <- row$value
+    
+    # var <- vsc[[vsc$"var"]] 
+    var <- df %>% pull(row$var)
+    if(0!=sum(as.numeric(var),na.rm=T)) var <- as.numeric(var) else var <- as.numeric(factor(var))
+    # browser()
+    if(row$selector=="conditional on ...") {
+    ceiling <- row$value2
+      if(str_detect(attribute,"color")){
+        # browser()
+        if(any(is.na(var))){
+          doNotification("Missing values for colour fade replaced with means")
+          var[is.na(var)] <- mean(var,na.rm=T)
+        }
+        df[,attribute_short] <- colorRamp(c(floor,ceiling))(var/max(var,na.rm=T)) %>% 
+          as.tibble %>% 
+          mutate(xxx=(rgb(V1,V2,V3,maxColorValue = 255))) %>% 
+          pull(xxx)
+      } else  {
+        floor <- as.numeric(floor)
+        ceiling <- as.numeric(ceiling)
+        df[,attribute_short] <- (var/max(var,na.rm=T))*((ceiling-floor))  + floor
+      }
+    }
+    else {
+      
+      df[,attribute_short] <- floor
+    }
+  }
+  df
+}
+
+
+
+make_quip_stats <- function(graf){
+  browser()
+  graf
+}
+
+
+
+make_settingsConditional <- function(inp,vs){
+  
+  
+  # have to check if the conditinal settings tab has ever  been visited
+  if(is.null(inp[[paste0('conditional_value_', all_attributes[[1]])]])) {
+    if(is.null(vs)) defaultSettingsConditional 
+    else 
+      vs 
+  }
+  else {
+  lis <- lapply(all_attributes,function(attribute){
+    attribute=c(
+      attribute=attribute
+      ,
+      conditional_value_=inp[[paste0('conditional_value_', attribute)]]
+      ,
+      conditional_selector_=inp[[paste0('conditional_selector_', str_replace(attribute,"\\.","_"))]]
+      ,
+      conditional_var_=inp[[paste0('conditional_var_', attribute)]]
+      ,
+      conditional_value2_=inp[[paste0('conditional_value2_', attribute)]]
+    )
+    
+  }) 
+  
+  names(lis)=paste0("X",1:length(lis))
+  
+    liss <- bind_rows(lis)
+    # liss[nrow(liss)+1,] <- c(rep("node",length(node_names)),rep("edge",length(edge_names)))
+    lisss <- t(liss)
+    colnames(lisss) <- xc("attribute value selector var value2")
+    lisss %>% as.tibble
+}
+}
+
+refresh_and_filter_net <- function(tmp,vpag,iot){
+  vno <- tmp %>% nodes_as_tibble
+  ved <- tmp %>% edges_as_tibble
+  # browser()
+  vf <- ved %>% 
+    group_by(from) %>% 
+    summarise(fstat=paste0(statement,collapse=",")) %>% 
+    mutate(id=from)
+  
+  vt <- ved %>% 
+    group_by(to) %>% 
+    summarise(tstat=paste0(statement,collapse=",")) %>% 
+    mutate(id=to)
+  
+  vno <- vno %>%
+    mutate(id=row_number()) %>% 
+    left_join(vf) %>%
+    left_join(vt) %>% 
+    mutate(fstat=replace_na(fstat,"")) %>% 
+    mutate(tstat=replace_na(tstat,"")) %>% 
+    unite("statement",c("fstat","tstat"),sep=",")
+  
+  
+  
+  # browser()
+  if(!("statement" %in% colnames(vno))) vno$statement=1
+  
+  if (!is.null(vpag) & nrow(vno)>0) {
+    ids <- vno %>%
+      mutate(sel=ifelse(str_detect(statement, paste0("(,|^)", as.character(vpag), "(,|$)")),T,F)) %>%
+      pull(sel) 
+    # browser()
+    yesids=ids %>% which
+    noids=ids %>% `!` %>% which
+    
+    
+    eids <- ved %>% 
+      mutate(hit=vpag==statement) %>% 
+      pull(hit)
+    
+    
+    yeseids=eids %>% which
+    noeids= eids %>% `!` %>% which
+    
+    
+    # valuesCoding$fromStack=NULL
+    
+    # if(input$onlyThisStatement){
+    if(iot){
+      
+      
+      
+      visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+        # visUpdateNodes(nodes=tibble(id=1:nrow(vno),hidden=!ids))  %>% 
+        # visUpdateEdges(edges=tibble(id=1:nrow(ved),hidden=!eids))  %>% 
+        visSetSelection(unselectAll = TRUE)
+      # %>% 
+      # visFit(animation=list(duration=500))
+      # visSelectNodes(id = ids) %>% 
+      # visUpdateNodes(tibble(id=1:nrow(vno),shadow.color='rgba(0,0,0,0.5)',shadow.size=10,shadow.x=5,shadow.y=5))
+      
+    } else {
+      ids=rep(T,nrow(vno))
+      eids=rep(T,nrow(ved))
+      
+      visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+        visSelectNodes(id=yesids)
+      # %>% 
+      #   visSelectEdges(id=yeseids)
+      # %>% 
+      #   visSelectEdges(id=eids)
+      
+      
+    }
+    if(nrow(vno)>0) visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visUpdateNodes(nodes=tibble(id=1:nrow(vno),hidden=!ids))  
+    if(nrow(ved)>0) visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visUpdateEdges(edges=tibble(id=1:nrow(ved),hidden=!eids))  
+    visNetworkProxy("net") %>% 
+      visFit(animation=list(duration=500))
+  }
+  
+}
+
 # constants ----
+
+
+node_names=xc("color.background color.border font.color font.size borderWidth")
+edge_names=xc("color font.color font.size width")
+
+all_attributes=c(paste0("node_",node_names),paste0("edge_",edge_names))
+
+# conditional_attributes_color <- xc("font.color color.background color.border color")
 
 writeLines("", "log.txt") # just to open up a fresh file
 
 
-csvlist <- xc("nodes edges settings statements settingsGlobal")
+csvlist <- xc("nodes edges settingsConditional statements settingsGlobal")
 
 
 # generate some nice colours
@@ -418,6 +747,8 @@ defaultEdges <- data.frame(
   sensitivity = .5,
   specificity =  .5,
   statement =  1,
+  package = "",
+  packageNote = "",
   quote =  "",
   full.quote =  "",
   combo.type = "",
@@ -530,6 +861,6 @@ valuelist <- list(
   "levelSeparation" = ((1:20) / 4)^2
 )
 
-defaultSettings <- read_csv("defaultSettings.csv")
+defaultSettingsConditional <- read_csv("defaultSettingsConditional.csv")
 defaultSettingsGlobal <- read_csv("defaultSettingsGlobal.csv")
 

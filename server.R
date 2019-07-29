@@ -8,13 +8,15 @@ server <- function(input, output, session) {
   values$clickArrow <- F                         # no idea 
   values$crowd = F
   
-  values$settings <- defaultSettings 
+  
+  values$settingsConditional <- defaultSettingsConditional 
   values$settingsGlobal <- defaultSettingsGlobal
   
   values$highlightedText <- ""                         # part of a system to copy any text highlighted with mouse in browser i.e. from interview quotes and insert into the edge information
   
   observeEvent(input$highlightedText,{
-    if (!is.null(input$highlightedText)) if ("" != (input$highlightedText)) values$highlightedText <- paste0(values$highlightedText," ... ",input$highlightedText)
+    if (!is.null(input$highlightedText)) values$highlightedText <- input$highlightedText
+    # if (!is.null(input$highlightedText)) if ("" != (input$highlightedText)) values$highlightedText <- paste0(values$highlightedText," ... ",input$highlightedText)
   })
   
   loaded <- F                         # whether loaded from url permalink
@@ -23,10 +25,10 @@ server <- function(input, output, session) {
   first <- T
   makeReactiveBinding("first")
   
-  values$fromStack=NULL
-  values$toStack=NULL
+  
+  valuesCoding <- reactiveValues(fromStack=NULL,toStack=NULL,foundIDs=NULL,readyForEndArrow=F)
+
   values$issaved=F
-  values$foundIDs=NULL
   
   # This keeps a record of the previous page, and so ensures that we only update
   # the visNetwork if we transition to/from the 'Code' tab.
@@ -55,32 +57,18 @@ server <- function(input, output, session) {
   #  providess the value of the setting sought. probably most ripe for 
   #  rationalisation
   
-  findset <- function(tex, which = "current",global=TRUE,v=values) {
-    # if(tex=="diagrambackground") browser()
-    if(global) {
-      x <-  v$settingsGlobal
-      d <-  defaultSettingsGlobal
-    } else  {
-      x <- v$settings
-      d <- defaultSettings
-    }
-    if (which == "current") {
-      # browser()
-      x <- bind_rows(d ,x)
-    } else if (which == "default") {x=d}   #WTF - its right but it is stupid
+  findset <- function(tex, v=values) {
+      x <-  v$settingsGlobal %>% 
+        bind_rows(defaultSettingsGlobal) %>% 
+        group_by(type,setting) %>% 
+        summarise_all(.funs = funs(first))
     
-    inp=input[[paste0("input",tex,collapse = "")]]
-    
-    if(which!="original" & !is.null(inp)){
-      x=inp
-    } else {
       x <- x %>%
         mutate_all(replaceNA) %>%
         mutate(labs = paste0(type, setting)) %>%
         filter(labs == tex) %>%
         pull(value) %>%
         last()
-    }
     
     if (is.na(x)) {
       doNotification(paste0(x, " is not in settings"))
@@ -89,6 +77,8 @@ server <- function(input, output, session) {
     }
     x
   }
+  
+  
   
   
   #the useful "interrupt" button in bottom righthand corner
@@ -186,7 +176,9 @@ server <- function(input, output, session) {
             # need to add any new columns
             
             nodes <- values$nodes %>% 
-              bind_rows(defaultNodes %>% filter(F))
+              bind_rows(defaultNodes %>% filter(F)) %>% 
+              mutate(cluster=replace_na(cluster,"")) %>% 
+              mutate(clusterLabel=replace_na(clusterLabel,""))
             
             edges <- values$edges %>%
               bind_rows(defaultEdges %>% filter(F)) %>%
@@ -196,10 +188,6 @@ server <- function(input, output, session) {
             
             values$graf <- tbl_graph(nodes, edges)
             
-            # values$graf=values$graf %>%
-            #   activate(nodes) %>%
-            #   filter(cluster=="r")
-            # 
 
             
             doNotification(glue("Loaded{nrow(values$graf %>% nodes_as_tibble)} variables from permalink"))
@@ -265,9 +253,24 @@ server <- function(input, output, session) {
   
   # ++create statements table to allow user edit of statements----
   output$statements <- renderRHandsontable({
+    vs <- values$statements
     
+    if(!is.null(input$net_selected)){
+    if(""!=(input$net_selected)){
+      ids <- values$grafAgg2 %>% 
+        nodes_as_tibble() %>% 
+        filter(id==input$net_selected) %>% 
+        pull(statement) %>% 
+        str_remove_all("NA") %>% 
+        str_split(",") %>% 
+        `[[`(1)
+      
+      vs <- vs %>% 
+        filter(statement %in% ids)
+    }
+    }
     rhandsontable(
-      values$statements[, ],
+      vs,
       height = 700,
       rowHeaders = FALSE,
       usetypes = T
@@ -426,7 +429,7 @@ server <- function(input, output, session) {
       ),
       div(
         # hilarious widget which scrolls through statements one by one
-        sliderInput(
+        if(F)sliderInput(
           "timeslider",
           NULL,
           min = 0,
@@ -440,8 +443,9 @@ server <- function(input, output, session) {
       ),
       div(
         # if("source" %in% colnames(values$statements))
-          actionButton("resetSelection", label = "Reset"),                                  
-          actionButton("overview_col", label = "Read more"),                                  #   if one interview source has made more than one statement, show all of them
+          div(actionButton("resetSelection", label = NULL,icon=icon("refresh")),style="position:absolute;right:25px") ,                                 
+          div(actionButton("overview_col", label = "Read more"),style="display:inline-block") ,                                 #   if one interview source has made more than one statement, show all of them
+          div(checkboxInput("onlyThisStatement", label = "Only this",value = T),style="display:inline-block") ,                                 #   if one interview source has made more than one statement, show all of them
         style = "display:inline-block;margin-left:20px"
       )
     )
@@ -449,12 +453,6 @@ server <- function(input, output, session) {
   
   values$obsList <- list()                                                #   to show all the statemtns from one source
   
-  # observeEvent(input$resetSelection,{
-  #   # updatePageruiInput(session=session,"pager",page_current= values$pag+1)
-  #   # updatePageruiInput(session=session,"pager",page_current= values$pag)
-  #   visNetworkProxy("net") %>% 
-  #         visSelectNodes(id=1:3)
-  # })
   
   observeEvent(input$overview_col,{
     vs=values$statements
@@ -528,11 +526,12 @@ server <- function(input, output, session) {
     )
   })
   
-  observeEvent({c(input$pager,input$timeslider)},{
+  # observeEvent({c(input$pager,input$timeslider)},{
+  observeEvent({c(input$pager)},{
       if (!is.null(input$pager)) {
         values$pag <- input$pager[[1]]
 
-        if (input$timeslider > 0 & nrow(values$statements) > 2) updatePageruiInput(session, "pager", page_current = input$timeslider)
+        # if (input$timeslider > 0 & nrow(values$statements) > 2) updatePageruiInput(session, "pager", page_current = input$timeslider)
         if(!is.null(input$pager) && !is.null(input$quote))updateTextAreaInput(session = session,inputId = "quote",value="",placeholder="quote")
       }
     })
@@ -557,233 +556,265 @@ server <- function(input, output, session) {
     }
   })
   
-  # focus -------------------------------------------------------------------
-  
-  # 
-  # 
-  # observe(if(req(input$sides)=="Code"){
-  #   # vno <- req(values$grafAgg2) %>% nodes_as_tibble
-  #   # if (as.logical(findset("diagramfocus")) & !is.null(values$pag) & nrow(vno)>0) {
-  #   #   ids <- vno %>%
-  #   #     mutate(sel=ifelse(str_detect(paste0(",|^", statement, ",|$"), as.character(values$pag)),T,F)) %>%
-  #   #     pull(sel) %>%
-  #   #     which
-  #   # 
-  #   # visNetworkProxy("net") %>%
-  #   #   visSelectNodes(id = ids)
-  #   # }
-  # 
-  #   
-  # })   
   
   
-  # OLD add edges observer ----
-  # not using this any more but not prepared to delete it yet
-  
-  observeEvent({
-    c(
-      input$updateE3,
-      input$updateE2,
-      input$updateE,
-      input$updateE_crowd
-    )  }, {
-      
-      
-      # browser()
-      # browser()
-      
-      ### NEW
-      qq <- if (!is.null(input$quote)) {
-        input$quote %>% as.character()
-      } else qq=""
-      
-      # qq="" #FIXME
-      # browser()
-      if(!is.null(input$new1_edge)) {inpfrom <- input$new1_edge} else if(!is.null(input$new1_edge_crowd)) {inpfrom <- input$new1_edge_crowd}
-      if(!is.null(input$new2_edge)) {inpto <- input$new2_edge} else if(!is.null(input$new2_edge_crowd)) {inpto <- input$new2_edge_crowd}
-      if (length(req(inpto)) > 0 & length(req(inpfrom)) > 0) {
-        if (length(inpfrom) > 1 & length(inpto) > 1) {
-          doNotification("Only using the first of the to arrows as there is more than one from arrow")
-          inpto <- inpto[1]
-        }
-        # browser()
-        if(input$crowd){
-          trust =.5
-          strength =.5
-          label = ""
-          combo.type=""
-          definition.type=""
-          statement = 1
-          quote = qq
-          full.quote =""
-        }
-        
-        newEdges <- data.frame(
-          from = inpfrom, 
-          to = inpto,
-          trust = ifelse(input$crowd,.5,input$trust),
-          strength = ifelse(input$crowd,.5,input$strength),
-          label = ifelse(input$crowd,"",input$arrLabel),
-          fun = "",
-          combo.type = ifelse(input$crowd,"",ifelse(is.null(input$combo), "", input$combo)),
-          definition.type = ifelse(input$crowd,"",input$definition.type),
-          statement = ifelse(input$crowd,1,values$pag %>% as.integer()),
-          quote = ifelse(input$crowd,"",qq),
-          full.quote = ifelse(input$crowd,"",values$statements$text[values$statements$statement == values$pag])
-        ) 
-        
-        new.nodes <- data.frame(label = newEdges %>% select(from, to) %>% unlist() %>% unique())
-        # if(!is.null(input$combo)) new.nodes$fun=input$combo
-        new.graph <- tbl_graph(new.nodes, newEdges)
-        old.graph <- values$graf
-        # browser()
-        if (is.null(values$graf)) values$graf <- new.graph else values$graf <- graph_join(old.graph , new.graph,by="label")
-        
-        if(!is.null(input$combo)) {if(input$combo!="") values$graf=values$graf %>% N_ %>%
-            mutate(fun=ifelse(inpto==label,input$combo,fun))
-        
-        }
-        updateSelectizeInput(session, "new2_edge", selected = "")
-        # updateSelectizeInput(session,"new1_edge",selected="")
-        
-        doNotification(paste0("Creating arrows: ", paste0(input$new1_edge, collapse = ", "), " to ", paste0(input$new2_edge, collapse = " - ")))
-      }
-      else {
-        doNotification("You need to put at least one variable in each box",level=2)
-      }
-    })
   
   observeEvent(input$updateE2, {
-    updateSelectizeInput(session, "new1_edge", selected = input$new2_edge)
+    ectizeInput(session, "new1_edge", selected = input$new2_edge)
   })
   
   observeEvent(input$updateE3, {
     updatePageruiInput(session,inputId = "pager",page_current = as.numeric(values$pag)+1)
   })
   
+  
+  
+  # fromStack display
+  
+  output$fromStackInfo=renderUI({
+    if(0<length(valuesCoding$fromStack))p(paste0("Begin arrow with: ",valuesCoding$fromStack %>% paste0(collapse=", ")))
+  })
+  
+  
   # Add edges widget----
   
   output$add_edges_widget <- renderUI({
-    varlist=values$graf %>% nodes_as_tibble() %>% pull(label) %>% unique() %>% as.character()
-    varlist <- na.omit(varlist)
+    # varlist=values$graf %>% nodes_as_tibble() %>% pull(label) %>% unique() %>% as.character()
+    # varlist <- na.omit(varlist)
 
+    df <- values$graf %>%
+      edges_as_tibble() %>%
+      mutate(id = row_number()) 
+
+    ise <- input$net_selectedEdges
+    row <- df[ise,]
+    isrow <- !is.null(ise)
     tagList(
+      
       div(
+        
+        div(    if(isrow) ise %>% 
+            paste0(collapse="; ") %>% 
+            as.character() %>% 
+            paste0("Edit arrow(s): ",.) %>%  
+            tagList(
+              actionLink("deletePackage"," (Delete?)"),
+              actionLink("savePackage"," (Save?)"))
+          ),
+        
+        
         div(
-          # actionButton("updateE",
-          #              "Add",
-          #              style = "border:1px solid green;padding:15px;display:inline-block;width:7%"
-          # ),
-          # actionButton("updateE3",
-          #              "Add & next",
-          #              style = "border:1px solid green;padding:15px;display:inline-block;width:15%"
-          # ),
-          # 
-          # # actionButton("saveb2", "Save", icon = icon("save"),
-          # #              style = "border:1px solid green;padding:15px;display:inline-block;width:15%"),
-          # 
-          # actionButton("updateE2",
-          #              "Add & chain",
-          #              style = "border:1px solid green;padding:15px;display:inline-block;width:15%"
-          #),
           div(style = "display:inline-block;width:5%"),
-          div(textInput("arrLabel", NULL, value = "", placeholder = "label"), style = "display:inline-block;height:10px;width:20%"),
+          div(textInput("arrLabel", NULL, value = ifelse(ise,row$label,""), placeholder = "label"), style = "display:inline-block;"),
           div(style = "display:inline-block;width:5%"),
           div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "display:inline-block;width:20%"),
-          div(textAreaInput("quote", NULL, value = values$highlightedText, placeholder = "quote",rows=3,width="100%"), style = "")
+          div(selectizeInput("function.type", NULL, choices = c("+", "-", "NECC","SUFF")), style = "display:inline-block;width:20%"),
+          div(textInput("package", NULL, value = ifelse(ise,row$package,""), placeholder = "package"), style = "display:inline-block;"),
+          div(textInput("packageNote", NULL, value = ifelse(ise,row$packageNote,""), placeholder = "packageNote"), style = "display:inline-block;"),
+          div(textAreaInput("quote", NULL, value = values$highlightedText, placeholder = "quote",rows=3,width="100%"), style = ""),
+          style = "margin-top:20px"
+          
         ),
         div(
           id = "sliders",
-          div(actionLink("flip", "Flip"), style = "display:inline-block;"),
+          # div(actionLink("flip", "Flip"), style = "display:inline-block;"),
           div(style = "display:inline-block;width:5%"),
-          div(sliderInput("strength", "Strength", min = -1, max = 1, step = .1, value = .5, ticks = F), style = "display:inline-block;width:40%"),
+          div(sliderInput("strength", "Strength", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
           div(style = "display:inline-block;width:5%"),
-          div(sliderInput("trust", "Trust", min = 0, max = 1, step = .1, value = .5, ticks = F), style = "display:inline-block;width:40%"),
-          style = "margin-top:20px"
-        )
+          div(sliderInput("trust", "Trust", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
+          div(style = "display:inline-block;width:5%"),
+          div(sliderInput("confidence", "Confidence", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
+          style = ""
+        ),
+        style="padding:10px;background-color:#EEFFEE;border:1px solid green"
       )
     )
   })
   
-  observeEvent(input$flip, { 
-    updateSliderInput(session, inputId = "strength", value = -input$strength)
+  
+  observeEvent(input$savePackage,{
+    vg <- values$graf %>% 
+      activate(edges) 
+    
+    ise <- input$net_selectedEdges
+    
+    
+    if(input$package!=""){
+      vg <- vg %>% 
+        mutate(package=if_else(row_number() %in% ise,input$package,package)) 
+    }
+    
+    
+    if(input$packageNote!=""){
+      vg <- vg %>% 
+        mutate(packageNote=if_else(row_number() %in% ise,input$packageNote,packageNote)) 
+    }
+    
+    
+    if(input$arrLabel!=""){
+      vg <- vg %>% 
+        mutate(label=if_else(row_number() %in% ise,input$arrLabel,label)) 
+    }
+    
+    values$graf <- vg
   })
+  
+  # observeEvent(input$flip, { 
+  #   updateSliderInput(session, inputId = "strength", value = -input$strength)
+  # })
   
   
   output$combo <- renderUI(if(T){
-    div(if (length(input$new1_edge) > 1) {
-      selectizeInput("combo", "Arrows interact?",
+    if (length(valuesCoding$fromStack) > 1) {
+      div(selectizeInput("combo", "Arrows interact?",
                      choices = c("", "AND", "OR","min","max","SAME","mean","sum"), width = "150px", selected = NULL, 
                      options =
                        list(create = T, placeholder = "", onInitialize = I('function() { this.setValue(""); }')),
-      )
-    })
+      ),style="background-color:#EEFFEE;padding:10px;border:1px gray solid")
+    }
   })
   
-  output$addNewNodeButton=renderUI({
-    if( !is.null(input$selectboxvalue)){
-      if(length((values$foundIDs))==0 && input$selectboxvalue!=""){
-        actionButton(inputId = "addNewNode","Add new node")
-      }
-    }
-    
-  })  
   
-  output$selectbox=renderUI({
-      varlist <- values$nodes$label %>% unique() %>% as.character()
+  
+  output$selectBoxButtons=renderUI({
+      varlist <- values$graf %>% nodes_as_tibble() %>% pull(label) %>% unique() %>% as.character()
       varlist <- na.omit(varlist)
       
-    tagList(
-      
-      selectizeInput("notusedatmoment",
-        label = NULL, selected =  NULL, multiple = F,
-        options =
-          list(create = T, placeholder="Type to select variables in the diagram", onInitialize = I('function() { this.setValue(""); }')),
-        choices = varlist,
-        width = "100%"
-      ),
-      
-      textInput("selectboxvalue","Type to select",placeholder="Type to select variables in the diagram"),
-      
-      if(is.null(values$fromStack)) {
-        actionButton("selectFrom","Start arrow(s) with selected variables(s)")
-      } else if(!is.null(input$net_selected)){
-        actionButton("selectTo","Finish arrow(s) with the selected variable")
-        # p(as.character(unlist(values$fromStack)))
-      }
+      tagList(
+      # textInput("selectBoxValue","",placeholder="Type to select or add variables")
+        div(selectizeInput("selectBoxValue",
+          label = NULL, selected = NULL, multiple = F,
+          options =
+            list(create = T, placeholder = "Type to select or add variables", onInitialize = I('function() { this.setValue(""); }')),
+          choices = varlist,width="400px"
+        ),style="display:inline-block"),
+        # div(disabled(actionButton("addNode",NULL,icon=icon("plus"))),style="display:inline-block"),
+        div((actionButton("addFrom",NULL,icon=icon("arrow-alt-circle-right"))),style="display:inline-block"),
+        div((actionButton("addTo",NULL,icon=icon("arrow-alt-circle-right"))),style="display:inline-block")
+        
+
     )
   })
   
   
-  observeEvent(input$selectFrom,{
-    values$fromStack <- c(input$net_selected,values$foundIDs) %>% unique
-    visNetworkProxy("net") %>% 
-      visUpdateNodes(tibble(id=values$fromStack,color.background="gold"))
+  
+
+  
+  
+  observeEvent(c(input$addFrom),ignoreInit = TRUE,{
+    
+    ns <- input$net_selected
+    if(is.null(ns))ns <- ""
+    if(""!=(ns) | !is.null(input$selectBoxValue)){
+    # browser()
+      
+    isb=input$selectBoxValue
+    if(""==isb)isb <- NULL
+    inpfrom <- NULL
+    
+    
+    if(!is.null(isb)){
+      vg <- values$graf  
+      inpfrom <- vg %>% 
+        mutate(id=row_number()) %>% 
+        filter(label==isb) %>% 
+        pull(id)
+      
+      if(length(inpfrom)==0){
+        values$graf <- vg %>% 
+          bind_nodes(tibble(label=isb,cluster=""))
+        doNotification("Adding Node",2)
+        inpfrom=vg %>% nodes_as_tibble() %>% nrow() %>% `+`(1)
+        
+        tmp <- req(values$graf)             # has to be agg2 because of statements, but shouldn't be because some missed out
+        vpag <- values$pag
+        iot <- input$onlyThisStatement
+        delay(4000,refresh_and_filter_net(tmp,vpag,iot))
+        
+      }
+    }
+
+    # browser()
+    
+    valuesCoding$fromStack <- c(ns,valuesCoding$fromStack,inpfrom) %>% unique
+    
+    valuesCoding$fromStack <- valuesCoding$fromStack[valuesCoding$fromStack!=""]
+    # doNotification("from stack ",99)
+    
+    }
+    
     
     visNetworkProxy("net") %>% 
-      visSelectNodes(id=NULL)
-    # updateSelectizeInput("new1_edge","asdf")#input$selectboxvalue %>% str_trim)
+      visSetSelection(unselectAll = TRUE)
+    
+    updateSelectizeInput(session = session,inputId = "selectBoxValue",selected="")      
+    
+    session$sendCustomMessage("refocus",list(NULL)) 
+    
+
   })
   
-  # observeEvent(input$selectTo,{
-  #   visNetworkProxy("net") %>% 
-  #     visSelectNodes(id=NULL)
-  #   
-  # })
-  observeEvent(input$selectTo,{
+  
+  observeEvent(c(input$selectBoxValue,input$net_selected,valuesCoding$fromStack),{
     # browser()
-    qq <- if (!is.null(input$quote)) {
-      input$quote %>% as.character()
+    ins=input$net_selected
+    isb=input$selectBoxValue
+    vcf=valuesCoding$fromStack
+    
+    if(is.null(ins))ins=""
+    if(is.null(isb))isb=""
+    if(is.null(vcf))vcf=""
+    if(length(vcf)==0)vcf=""
+    if((""!=(ins) | ""!=isb) & ""==(vcf)) enable("addFrom") else disable("addFrom")
+    if((""!=(ins) | ""!=isb) & ""!=(vcf)) enable("addTo") else disable("addTo")
+  })
+  
+  
+  
+  observeEvent(input$addTo,{
+    # browser()
+    # valuesCoding$readyForEndArrow <- F
+    
+    # hiddenStore <- values$net$x$nodes$hidden
+    
+    if (!is.null(input$quote)) {
+      qq <- input$quote %>% as.character()
     } else qq=""
     
     # qq="" #FIXME
     # browser()
-    inpfrom <- req(values$fromStack)
+    
+    inpfrom <- req(valuesCoding$fromStack)
+    inpto <- NULL
+    
+        # browser()
+      
+    isb <- input$selectBoxValue
+    if(isb=="") isb <- NULL
+    
+    if(!is.null(isb)){
+      
+      vg <- values$graf 
+       
+      inpto <- vg %>% 
+        mutate(id=row_number()) %>% 
+        filter(label==isb) %>% 
+        pull(id)
+      
+      if(length(inpto)==0){
+        values$graf <- vg %>% 
+          bind_nodes(tibble(label=isb,cluster=""))
+        doNotification("Adding Node",2)
+        inpto=vg %>% nodes_as_tibble() %>% nrow() %>% `+`(1)
+      }
+      }
+    if(is.null(inpto)){
     inpto <- req(input$net_selected)[1]
+    }
     
     newEdges <- tibble(
-      from = inpfrom, 
-      to = inpto,
+      from = inpfrom %>% as.integer, 
+      to = inpto %>% as.integer,
       trust = ifelse(input$crowd,.5,input$trust),
       strength = ifelse(input$crowd,.5,input$strength),
       label = ifelse(input$crowd,"",input$arrLabel),
@@ -803,81 +834,101 @@ server <- function(input, output, session) {
           mutate(fun=ifelse(inpto==label,input$combo,fun))
     }
     
-    values$fromStack <- NULL
-    values$foundIDs <- NULL
-    visNetworkProxy("net") %>% 
-      visSelectNodes(id=NULL)
+    valuesCoding$fromStack <- NULL
+    # doNotification("from stack zero",99)
+    # valuesCoding$foundIDs <- NULL
+    # visNetworkProxy("net") %>%
+    #   visSetSelection(unselectAll = TRUE)
+    # doNotification(paste0("sel ",input$net_selected),99)
+    updateTextInput(session=session,"selectBoxValue",value="")
+    
+    tmp <- req(values$graf)             # has to be agg2 because of statements, but shouldn't be because some missed out
+    vpag <- values$pag
+    iot <- input$onlyThisStatement
+    delay(4000,refresh_and_filter_net(tmp,vpag,iot))   # TODO the 4 seconds is just a lucky guess
+    
   })
   
   # textbox search nodes and highlights them --------------------------------
   
-  observeEvent(c(input$selectboxvalue),{
+
+  observeEvent(c(input$selectBoxValue),{
     if(req(input$sides)=="Code"){
       
-      req(values$grafAgg2)
+      # visNetworkProxy("net") %>%
+      #   visGetNodes(input="net_nodes")
       
-      if(input$selectboxvalue!=""){
-        vag <- values$grafAgg2 %>% nodes_as_tibble
+      # req(values$grafAgg2)
+      # browser()
+      if(input$selectBoxValue!=""  && nchar(input$selectBoxValue)>2){
         
-        ids=vag %>% 
-          pull(label) %>% 
-          tolower %>% 
-          str_detect(input$selectboxvalue %>% tolower) %>% 
-          which
+        # browser()
+        vag <- values$graf %>% nodes_as_tibble %>% 
+          pull(label) 
         
-        if(length(ids) !=0 && length(ids)<nrow(vag)){
+        ids <- which(vag==input$selectBoxValue)
+        
+          # tolower %>% 
+          # str_detect(input$selectBoxValue %>% tolower) %>% 
+          # sapply(function(x)agrep(tolower(input$selectBoxValue),x) %>% length %>% `==`(1))  %>% 
+          # which %>% 
+          # unname
+        # browser()
+        
+        # info <- data.frame(matrix(unlist(input$net_nodes), ncol = dim(vag)[1],byrow=T),stringsAsFactors=FALSE)
+        # colnames(info) <- colnames(vag)
+        # browser()
+        wipe <- setdiff(valuesCoding$foundIDs,ids)
+        
+        if(length(ids) !=0 && length(ids)<length(vag)){
           visNetworkProxy("net") %>%
-            visSelectNodes(id=ids) 
-          
+            visUpdateNodes(tibble(id=ids,hidden=F)) %>% 
+            visSelectNodes(id = ids)
         }
-        values$foundIDs <- ids
+        
+        if(length(wipe)>0 ){
+          # visNetworkProxy("net") %>%
+          #   visUpdateNodes(tibble(id=wipe,hidden=T)) 
+          }
+        
+        visNetworkProxy("net") %>%
+          visFit(animation=list(duration=500))
+        
+        valuesCoding$foundIDs <- c(valuesCoding$foundIDs,ids)
       }
     } 
   })
-  
-  observeEvent(input$addNewNode,{
-    # browser()
-    if(length(values$foundIDs)==0 && (input$selectboxvalue!="")){
-      values$graf <- values$graf %>% 
-        bind_nodes(tibble(label=input$selectboxvalue))
-      
-      values$fromStack <- nrow(values$graf %>% nodes_as_tibble)
-      doNotification("Added new node",2)
-    }
-    
-  })
-  
-  
-  # observeEvent(req(input$pager),{
-  #   ved <- req(values$grafAgg2) %>% edges_as_tibble %>% mutate(id=row_number())
-  #   if (!is.null(values$pag)) {
   # 
-  #     eids <- ved %>%
-  #       mutate(sel=ifelse(str_detect(statement, paste0("(,|^)", as.character(values$pag), "(,|$)")),T,F)) %>%
-  #       filter(sel) %>%
-  #       pull(id) 
-  #     # browser()
+  # observeEvent(input$addNewNode,{
+  #   # browser()
+  #   if(length(valuesCoding$foundIDs)==0 && (input$selectBoxValue!="")){
+  #     values$graf <- values$graf %>% 
+  #       bind_nodes(tibble(label=input$selectBoxValue,shadow.color="gold",shadow.x=0,shadow.y=0,shadow.size=50))
   #     
-  #     visNetworkProxy("net") %>%
-  #       visSelectEdges(id = eids) 
+  #     valuesCoding$fromStack <- nrow(values$graf %>% nodes_as_tibble)
+  #     doNotification("Added new node",2)
+  #     
   #   }
+  #   
   # })
+  # 
+  # 
   
-  observeEvent(c(input$resetSelection,req(input$pager)),{
-    vno <- req(values$grafAgg2) %>% nodes_as_tibble
+  observeEvent(c(input$resetSelection,req(input$pager),input$onlyThisStatement),{
+    
+    
+    
+  # observeEvent(input$pager,{
     # browser()
-    if(!("statement" %in% colnames(vno))) vno$statement=1
-    if (!is.null(values$pag) & nrow(vno)>0) {
-      ids <- vno %>%
-        mutate(sel=ifelse(str_detect(statement, paste0("(,|^)", as.character(values$pag), "(,|$)")),T,F)) %>%
-        pull(sel) %>%
-        which
-
-      values$fromStack=NULL
-      visNetworkProxy("net") %>%
-        visSelectNodes(id = ids)
-      
-    }
+    tmp <- req(values$graf)             # has to be agg2 because of statements, but shouldn't be because some missed out
+    vpag <- values$pag
+    iot <- input$onlyThisStatement
+    # browser()
+    refresh_and_filter_net(tmp,vpag,iot)
+    
+    valuesCoding$fromStack <- NULL
+    updateSelectizeInput(session = session,inputId = "selectBoxValue",selected="") 
+    
   })
   
   
@@ -889,36 +940,51 @@ server <- function(input, output, session) {
       # browser()
       df <- values$graf %>%
         nodes_as_tibble() %>%
-        mutate(id = row_number()) %>%
-        left_join(values$grafAgg2 %>% nodes_as_tibble() %>% select(new = id, id = origID)) # to provide a lo,1>9okup to find original ids if the nodes have been merged
+        mutate(id = row_number()) 
+        # left_join(values$grafAgg2 %>% nodes_as_tibble() %>% select(new = id, id = origID)) # to provide a lo,1>9okup to find original ids if the nodes have been merged
       # df <- (values$graf %>% nodes_as_tibble %>% mutate(id=row_number()))
-      tagList(
+      
+      rows <- df[input$net_selected,]
+      div(tagList(
         if (length(input$net_selected)>0) {
           tagList(
-            div(
-              
-              textInput("editVarFormText","Edit",value=df[input$net_selected,"label"]),
-              actionButton("editVarForm", "Save"),
-              style = "background-color:white;padding:10px;border-radius:5px"
-            ),div(
-              span(
-                paste0("Delete variable ", input$net_selected %>% paste0(collapse=";"),"? "),
-                style="display:inline-block;margin-right:5px"
-              ),
-              actionButton("deleteVarForm", "Delete!"),
-              style = "background-color:white;padding:10px;border-radius:5px"
-            )
-          )
+            div(p("Edit: "),style="display:inline-block"),
+            if (length(input$net_selected)==1) div(textInput("editVarFormText",NULL,placeholder="label",value=df[input$net_selected,"label"],width="100px"),style="display:inline-block;margin-right:5px"),
+            div(textInput("editdetails",NULL,placeholder="details",value=ifelse(length(rows$details)>1,"",rows$details),width="100px"),style="display:inline-block;margin-right:5px"),
+            div(textInput("editcluster",NULL,placeholder="cluster",value=rows$cluster %>% paste0(collapse=","),width="100px"),style="display:inline-block;margin-right:5px"),
+            div(actionButton("editVarForm", "Save"),style = "display:inline-block;background-color:white;padding:10px;border-radius:5px"),
+            div(actionLink("deleteVarForm", paste0("Delete: ",input$net_selected %>% paste0(collapse=";"),"?")),style = "padding:2px;display:inline-block;color:red")
+          )      
         },
         hr(style="margin:2px")
+      ),style="background-color:#EEFFEE;padding:10px;border:1px green solid"
+        
       )
     }
     
   })
   observeEvent(input$editVarForm,{
-    values$graf <- values$graf %>% 
-      activate(nodes) %>% 
-      mutate(label=if_else(input$net_selected==row_number(),input$editVarFormText,label))
+    vg <- values$graf %>% 
+      activate(nodes) 
+    
+     
+    
+    if(input$editdetails!=""){
+      vg <- vg %>% 
+      mutate(details=if_else(row_number() %in% input$net_selected,input$editdetails,details)) # hmm what if details form is empty 
+    }
+    
+    if(length(input$net_selected)==1 && input$editVarFormText!=""){
+      vg <- vg %>% 
+        mutate(label=if_else(row_number() %in% input$net_selected,input$editVarFormText,label)) 
+    }
+    if(input$editcluster!=""){
+      vg <- vg %>% 
+        mutate(cluster=if_else(row_number() %in% input$net_selected,input$editcluster,cluster))  
+        
+    }
+    
+    values$graf <- vg
   })
   
   observeEvent(input$deleteVarForm, {
@@ -1085,10 +1151,6 @@ server <- function(input, output, session) {
       whichtarg=values$grafAgg2 %>% nodes_as_tibble %>% 
         filter(row_number()==input$net_selected) %>% 
         pull(origID) 
-      # clu=vg$cluster[whichtarg]
-      # if(clu!=""){
-      #   whichtarg=
-      # } #could highlight all the rows in a cluster, but would have to allow for multiple selection already
       
     }
     else
@@ -1243,15 +1305,134 @@ server <- function(input, output, session) {
   
   # ++Display / settings panel ----
   
+  
+  output$condFormattingOutput=renderUI({
+    # browser()
+    # if(is.null(values$grafAgg2)) gr <- values$graf else gr <- values$grafAgg2
+    # gr <- gr %>% nodes_as_tibble() %>% 
+    #   select(label,everything()) 
+    # 
+    # meaningful <- gr %>% apply(2,function(x)(length(unique(x)))>1)
+    # 
+    # gr <- colnames(gr)[meaningful]
+    
+    gr <- xc("label frequency sex mean_Positive_mean_mean notForwards mean_older_mean_mean mean_female_mean_mean female_mean older_mean ava_mean avp_mean")
+    
+    vals <- values$settingsConditional %>% 
+      mutate(type=if_else(str_detect(attribute,"node"),"node","edge"))
+    # browser()
+      # attrs=c(node_names,edge_names)
+      
+    lapply(seq_along(all_attributes),function(n){
+      thisAttribute <- all_attributes[n]
+      thisType <- ifelse(n>length(node_names),"edge","node")
+      if(is.na(thisAttribute))browser()
+      vals2 = vals %>% filter(attribute==thisAttribute) 
+    attribute_clean=str_replace_all(thisAttribute,"\\.","_") # because of js condition later
+    
+    div(
+      
+      div(
+        p(thisAttribute,style="width:160px"),
+        style="display:inline-block;vertical-align:top"
+      ),
+      
+      div(
+        selectInput(paste0('conditional_selector_', attribute_clean),label=NULL,choices = c("always","conditional on ..."), selected =vals2 %>% pull(selector),width="120px")
+        ,
+        style="display:inline-block;vertical-align:top"
+      ),
+      
+      
+      if(thisAttribute %>% str_detect("color")) {div(
+        colourInput(paste0('conditional_value_', thisAttribute),
+          label=NULL,
+          palette = "limited",
+          showColour ="background",
+          value = vals2 %>% pull(value),
+          allowedCols = allcols1
+        ),
+        style="display:inline-block;vertical-align:top"
+        
+      )} else div(
+        textInput(paste0('conditional_value_', thisAttribute),NULL,value =  vals2 %>% pull(value),width="120px")
+        ,style="display:inline-block;vertical-align:top"
+      )
+      ,
+      conditionalPanel(paste0('input.conditional_selector_', attribute_clean,'=="conditional on ..."'),
+        div(
+          div(
+          selectInput(paste0('conditional_var_', thisAttribute),label=NULL,choices = gr,selected = vals2 %>% pull(var),width="120px")
+          # selectInput(paste0('conditional_var_', thisAttribute),label=NULL,choices = c("label","frequency"),selected = vals2 %>% pull(var),width="120px")
+          ,
+          style="display:inline-block;vertical-align:top"
+        ),
+        
+        div(
+          p("up to")
+          ,
+          style="display:inline-block;vertical-align:top"
+        ),
+        if(thisAttribute %>% str_detect("color")) div(
+          colourInput(paste0('conditional_value2_', thisAttribute),
+            label=NULL,
+            palette = "limited",
+            showColour ="background",
+            value =  vals2 %>% pull(value2),
+            allowedCols = allcols1
+          ),
+          style="display:inline-block;vertical-align:top"
+          
+        ) else div(
+          textInput(paste0('conditional_value2_', thisAttribute),NULL,value =  vals2 %>% pull(value2),width="120px")
+          ,style="display:inline-block;vertical-align:top"
+        )  
+          ,style="display:inline-block;background-color:#EEFFEE;margin-left:50px"
+        )
+      )
+        ,
+        hr(style="margin:5px")
+    )
+    })
+    
+    
+    
+  
+  })
+  
+  
+  output$upConditionalBut <- renderUI({
+    actionButton("upConditional","Update")
+    
+  })
+  
+  observeEvent(input$upConditional,ignoreInit = T,{
+    # browser()
+    values$settingsConditional <- make_settingsConditional(input,values$settingsConditional)
+  })
+  
   output$filters=renderUI({
-    lapply(colnames(values$statements %>% select(-text)),function(y){
+    clusters <- values$graf %>% nodes_as_tibble %>% pull(cluster) %>% unique
+
+        tagList(
+      lapply(colnames(values$statements %>% select(-text)),function(y){
       x=values$statements[[y]]
       u=unique(x) %>% na.omit()
       if(length(u)>1 & length(u)<12){
-        div(checkboxGroupButtons(paste0("filters",y),y,choices=sort(u),selected=u),style="display:inline-block")
+        div(checkboxGroupButtons(paste0("filters",y),y,choices=sort(u),selected=u),style="display:inline-block;vertical-align:top")
       }
     })
+      ,
+      
+      if(!is.null(clusters) && length(clusters)>1)tagList(
+        div(checkboxGroupButtons("filterscluster","cluster",choices=sort(values$graf %>% nodes_as_tibble %>% pull(cluster) %>% unique)),style="display:inline-block;vertical-align:top")
+        
+      )
+    )
   })  
+  
+  
+  ######## where is the observe event for filters, including for cluster filter?
   
   # produce user-friendlier settings widgets --------------------------------
   
@@ -1271,7 +1452,7 @@ server <- function(input, output, session) {
             colourInput(paste0('input', rt),rt,
                         palette = "limited",
                         showColour ="background",
-                        value=if(is.null(findset(rt))) findset(rt,which="original") else findset(rt),
+                        value=if(is.null(findset(rt))) findset(rt) else findset(rt),
                         allowedCols = allcols1) 
           }
           else if(rg=="slider")  {
@@ -1322,42 +1503,32 @@ server <- function(input, output, session) {
       hot_cols(colWidths = c(80,120,250,80))
   })
   
-  output$settingsTable <- renderRHandsontable({
-    vs <- values$settings %>% mutate_all(as.character)
-    
-    ds <- defaultSettings %>% mutate_all(as.character)
-    
-    vs <- bind_rows(vs, ds) %>%
-      distinct(type, setting, .keep_all = T)
-    
-    
-    rhandsontable(vs %>%
-                    mutate(type = factor(type), condition = factor(condition, levels = c("always", "if...", "conditional on:"))), height = NULL, rowHeaders = FALSE, usetypes = T) %>%
-      hot_context_menu(allowRowEdit = T) %>%
-      hot_cols(colWidths = c(80,120,250,80))
-    
-  })
+  # output$settingsTable <- renderRHandsontable({
+  #   vs <- values$settings %>% mutate_all(as.character)
+  #   
+  #   ds <- defaultSettingsConditional %>% mutate_all(as.character)
+  #   
+  #   vs <- bind_rows(vs, ds) %>%
+  #     distinct(type, setting, .keep_all = T)
+  #   
+  #   
+  #   rhandsontable(vs %>%
+  #                   mutate(type = factor(type), condition = factor(condition, levels = c("always", "if...", "conditional on:"))), height = NULL, rowHeaders = FALSE, usetypes = T) %>%
+  #     hot_context_menu(allowRowEdit = T) %>%
+  #     hot_cols(colWidths = c(80,120,250,80))
+  #   
+  # })
   
-  observeEvent(input$settingsTableUp, {
-    doNotification("updating from settingsTable")
-    values$settings <- hot_to_r(input$settingsTable)
-  })
+  # observeEvent(input$settingsTableUp, {
+  #   doNotification("updating from settingsTable")
+  #   values$settings <- hot_to_r(input$settingsTable)
+  # })
   
   observeEvent(input$settingsTableGlobalUp, {
     doNotification("updating from settingsTableGlobal")
     values$settingsGlobal <- hot_to_r(input$settingsTableGlobal)
   })
   
-  observeEvent(input$fitaction, {               # restore network to normal zoom
-    visNetworkProxy("net") %>%
-      visFit() 
-  })
-  output$testBut <- renderUI({actionButton("testBut","Edit selected arrows")})
-  observeEvent(input$testBut,{
-    visNetworkProxy("net") %>% 
-    visGetSelectedEdges(input = paste0("net_selectedEdges"))
-    
-  })
   
   # ++ library/gallery panel ------------------------------------------------
   
@@ -1418,12 +1589,25 @@ server <- function(input, output, session) {
     # browser()
     doNotification("Creating library list")
     if(!is.null(values$current)){
+      name <- gsub("www/","",values$current)
       tagList(
-        h4("Download your csv files"),
-        hr(),
+        h4("Download your files"),
+        h5("CSV files"),
         lapply(csvlist,function(x){
-          tagList(a(href=paste0(values$current,"-",x,".csv"),x),hr())
+          tagList(a(href=paste0(name,"-",x,".csv"),x),hr())
         })
+        ,
+        h5("Graphic files"),
+        div(
+          
+          actionButton("png", "Create new files", icon = icon("picture")),
+          style = "display:inline-block;margin-right:50px;width:10px"
+        ),
+        hr(),
+        tagList(
+        a(href=paste0(name,"",".html"),"interactive html file"),hr(),
+        a(href=paste0(name,"",".png"),"high-quality png file"),hr()
+        )
       )}
   })
   
@@ -1459,6 +1643,7 @@ server <- function(input, output, session) {
     
     # make this code run whenever the tab$change reactive triggers
     tab$change
+    # SP commented out above line
     
     # prevent this code running every time we update values
     
@@ -1494,40 +1679,105 @@ server <- function(input, output, session) {
       vno <- graph_values %>% nodes_as_tibble() 
       ved <- graph_values %>% edges_as_tibble()
       
+      
+      if (findset("variablemerge") %>% as.logical() & input$sides!="Code") { # need to convert to and froms in edge df
+
+      x <- merge_nodes(vno,ved)
+      vno <- x[[1]]
+      ved <- x[[2]]
+      }
+      
+      
+      
       # prepare ved
     
       ved <- prepare_ved(ved)
+      # vno <- prepare_vno(vno)
       
+      # ved rick inv_multi --------------------------------
+      
+      if(("from" %in% colnames(ved))  &&  as.logical(findset("arrowabsence"))){ #todo findset
+        
+        doNotification("rick aggregation")    
+        
+        if(all(is.na(ved$statement)))ved$statement=1
+        # browser()
+        ved <- ved %>%
+          inv_multi()
+      }
+    
+    
       # ved join statements--------------------------------
+      # browser()
+      values$statements <- values$statements %>% mutate(source__id=row_number())
       
       ved <- ved_join(ved, values$statements)
       
-      # ved edge merge ----
       
-      if (findset("arrowmerge", v = vals) %>% as.logical() ) {
-        ved <- ved %>%
-          group_by(from, to)
-        
-        legend <- paste0(legend, "</br>Multiple arrows between pairs of variables collapsed into one")
-        
-      } else {
-        ved <- ved %>%
-          group_by(row_number())
-      }
+      saveRDS(ved,"ved")
       
-      doNotification("merge edge aggregation")    
+      
+      
       
       ved <- ved %>%
         mutate(statement=as.character(statement)) %>%
         mutate(wstrength = strength * trust) 
       # browser()
       
+      
+      
+      # quip stats by question/domain---------------
+      
+      
+      if("source" %in% colnames(ved) && "question" %in% colnames(ved)){
+      
+      # browser()
+        ved <- ved %>%
+        group_by(from, to, question) %>% 
+        mutate(citation_count=length(unique(source))) %>% 
+        ungroup() %>% 
+        group_by(from, to) %>% 
+        mutate(respondent_count=length(unique(source))) %>% 
+        ungroup() %>% 
+          mutate(citation_intensity=citation_count/respondent_count)
+      
+      
+      }
+        # browser()
+      # ved edge merge TODO this messes up statements ---- 
+      
+      if (input$sides!="Code" & findset("arrowmerge", v = vals) %>% as.logical() ) {
+        ved <- ved %>%
+          group_by(from, to)
+        
+        legend <- paste0(legend, "</br>Multiple arrows between pairs of variables collapsed into one")
+        
+      } else {
+# add different curve to each edge in coterminal sets of edges--------------
+        ved <- ved %>%
+          group_by(from, to) %>% 
+          mutate(smooth.type="continuous") %>%
+          mutate(smooth.roundness=seq(from=0,to=.8,length.out = n())) %>%
+          mutate(smooth.enabled=TRUE) %>%
+          ungroup() %>% 
+          group_by(row_number())
+      }
+      
+      doNotification("merge edge aggregation")    
+      
+      
       ved <- ved %>%
         mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
         mutate_if_sw(is.character, .funs = catfun) %>%
-        mutate(frequency = n()) %>% 
-        summarise_all(.funs = funs(first)) %>%
-        ungroup() %>%
+        mutate(frequency = n()) 
+      
+      ved <- ved %>% 
+        summarise_all(.funs = funs(first)) 
+
+      
+      
+      
+      ved <- ved %>% ungroup() %>%
         mutate(title = paste0(frequency, gsub("[^[:alnum:][:space:]]", "", label), separate = "- "))
       
       if("N" %in% colnames(ved)){
@@ -1543,112 +1793,45 @@ server <- function(input, output, session) {
         ved <- ved %>%
           filter(frequency > findset("arrowminimum.frequency", v = vals))
       }
-      # browser()
-      # cat("merge")
       
       # join edges with nodes------------------------------------------------
       
       doNotification("join to edges aggregation")    
       
-      if(findset("variablejoinedges", v = vals) %>% as.logical | 
-         values$settings %>% filter((condition!="always")) %>% nrow() %>% `>`(0) | 
-         values$settingsGlobal %>% pull(value) %>% unique %>% str_detect("mean|frequency|sum") %>% any(na.rm=TRUE)
-      ){ #todo, should list any functions. variablejoinedges is pointless
+      
+      if(findset("variablejoinedges", v = vals) %>% as.logical){ #todo, should list any functions. variablejoinedges is pointless
         
-        # browser()
+      vno <- join_nodes_and_edges(vno,ved)
+      
+          # browser()
         
         # doNotification("merging nodes and arrows")
-        ved.from <- ved %>%
-          mutate(id = from) %>%
-          group_by(id) %>%
-          mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
-          mutate_if_sw(is.character, .funs = catfun) %>%
-          summarise_all(.funs = funs(first)) %>%
-          ungroup() %>%
-          rename_all(function(x)paste0("from.",x)) %>% 
-          rename(id=from.id)
         
-        vno <- vno %>%
-          mutate(id = row_number()) %>%
-          left_join(ved.from, by = "id")
-        
-        ved.to <- ved %>%
-          mutate(id = to) %>%
-          group_by(id) %>%
-          mutate_if_sw(is.numeric, .funs = list(sum=sumfun,mean=meanfun)) %>%
-          mutate_if_sw(is.character, .funs = catfun) %>%
-          summarise_all(.funs = funs(first)) %>%
-          ungroup() %>%
-          rename_all(function(x)paste0("to.",x)) %>% 
-          rename(id=to.id)
-        
-        vno <- vno %>%
-          mutate(id = row_number()) %>%
-          left_join(ved.to, by = "id")
-        
-        # add from and to scores for nodes
-        
-        vnofrom <- vno %>% 
-          select(starts_with("from.")) %>% 
-          select_if(is.numeric) %>% 
-          as.matrix
-        
-        vnoto <- vno %>% 
-          select(starts_with("to.")) %>% 
-          select_if(is.numeric) %>% 
-          as.matrix
-        
-        vnomean=apply(simplify2array(list(vnofrom,vnoto)),c(1,2),meanfun) %>% as.tibble()
-        vnosum=apply(simplify2array(list(vnofrom,vnoto)),c(1,2),sumfun) %>% as.tibble()
-        
-        colnames(vnomean)=str_remove_all(colnames(vnoto),"^to.") %>% paste0("mean_",.)
-        colnames(vnosum)=str_remove_all(colnames(vnoto),"^to.") %>% paste0("sum_",.)
-        
-        vno=bind_cols(vno,vnomean,vnosum)
-        
-        # browser()
-        vno <- vno %>%
-          ungroup() %>%
-          mutate(
-            frequency = sum_frequency_sum,
-            trust = sum_trust_sum,
-            strength = sum_strength_sum_sum,
-            wstrength = sum_wstrength_sum_sum) %>% 
-          mutate(
-            edgelabels = paste0(from.label, to.label),
-            statement = paste0(from.statement, to.statement),
-            quote = paste0(from.quote, to.quote)
-          ) 
-        
-        
-        
-        
-        if("mean_key1_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key1=mean_key1_mean_mean) 
-        if("mean_key2_mean_mean" %in% colnames(vno))vno=vno %>% mutate(key2=mean_key2_mean_mean) 
-        
-        # nsets=defaultSettings %>%
-        #   filter(type=="variable") %>%
-        #   select(setting,value)
-        #
-        
-        # minimum freq for vars
-        mf <- findset("variableminimum.frequency", v = vals) %>% as.numeric()
-        # browser()
-        if (this_tab!="Code" && mf > 0 ) {
-          tmp <- tbl_graph(vno, ved) %>%
-            N_() %>%
-            filter(frequency > mf)
-          
-          vno <- tmp %>% nodes_as_tibble()
-          ved <- tmp %>% edges_as_tibble()
-        }
         
       }
+      
+      # minimum freq for vars
+      mf <- findset("variableminimum.frequency", v = vals) %>% as.numeric()
+      # browser()
+      if (this_tab!="Code" && mf > 0 ) {
+        tmp <- tbl_graph(vno, ved) %>%
+          N_() %>%
+          filter(frequency > mf)
+        
+        vno <- tmp %>% nodes_as_tibble()
+        ved <- tmp %>% edges_as_tibble()
+      }
+      
       
       doNotification("format aggregation")    
       
 
+      
       tmp <- tbl_graph(vno, ved)
+      # browser()
+      
+      # layout ----------------
+      
       
       layout <- create_layout(tmp, layout = 'sugiyama') %>% 
         select(x,y,id)
@@ -1656,138 +1839,43 @@ server <- function(input, output, session) {
       tmp <- tmp %>% activate(nodes) %>% 
         left_join(layout,by="id")
       
-      ved <- tmp %>% activate(edges) %>% 
-        mutate(fromLevel=.N()$y[from],toLevel=.N()$y[to],notForwards=fromLevel>=toLevel) %>% 
-        edges_as_tibble()
+      tmp <- tmp %>% activate(edges) %>% 
+        mutate(fromLevel=.N()$y[from],toLevel=.N()$y[to],notForwards=fromLevel>=toLevel) 
+      
+      # cond formatting------------
+      
+      # ved <- ved %>% 
+      #   format_edges
+      
+      vno <- tmp %>% nodes_as_tibble()
+      ved <- tmp %>% edges_as_tibble()
       
       
-      # ...cond formatting----
+      # if(!is.null(input[[paste0('conditional_value_', all_attributes[[1]])]])){  #TODO if the conditional display tab has not been loaded yet, provide some plain defaults
+      vno <- vno %>% 
+        format_nodes_and_edges(input,type="node",values$settingsConditional)
       
-      palettes=1
-      conds <- values$settings %>% filter((type == "variable" | type == "arrow") )
       
-      conds[is.na(conds)] <- ""
+      ved <- ved %>% 
+        format_nodes_and_edges(input,type="edge",values$settingsConditional)
       
-      if (nrow(conds) > 0) {
-        
-        # see if we need to have different palettes:
-        
-        conds <- conds %>%
-          mutate(x = ifelse(str_detect(setting, "color") & condition == "conditional on:", 1, 0), palette = cumsum(x)) %>%
-          select(-x) %>%
-          filter(!is.na(condition))
-        
-        ## this is wasteful because could just do nodes once and edges once.
-        
-        for (i in 1:nrow(conds)) {
-          row <- conds[i, ]
-          if (row$type == "variable") df <- vno else df <- ved
-          orig <- df
-          
-          typenow <- ifelse(row$type == "variable", "variable", "arrow")
-          
-          # browser()
-          
-          if (row$condition == "if...") {
-            if(row$ifcolumn %in% colnames(df)){
-              # browser()
-              ifcol <- df[, row$ifcolumn] %>% unlist() %>% as.vector()
-              comp <- row["comparison"] %>% unlist() %>% as.vector()
-              
-              ifcol[is.na(ifcol)] <- ""
-              
-              if (comp == "equal") {
-                theseones <- ifcol == row$filter
-              } else
-                if (comp == "not equal") {
-                  theseones <- ifcol != row$filter
-                } else
-                  if (comp == ">") {
-                    theseones <- ifcol > row$filter
-                  } else
-                    if (comp == "<") {
-                      theseones <- ifcol < row$filter
-                    } else
-                      if (comp == "contains") theseones <- str_detect(ifcol, row$filter)
-              # browser()
-              df[theseones, row$setting] <- row$value
-              df[!theseones, row$setting] <- findset(paste0(typenow, row$setting), which = "default",global = F, v = vals)
-              
-              legend <- paste0(legend, "</br>", typenow, " ", row$setting, " set to ", row$value, " if ", row$ifcolumn, " ", row$comparison, " ", row$filter, " ")
-            }
-          }
-          else if (row$condition == "conditional on:") {
-            if (row$ifcolumn %in% colnames(df)) {
-              
-              # browser()
-              # browser()
-              
-              rc <- df[, row$ifcolumn]
-              if (row$setting %in% xc("label tooltip")) {
-                df[, row$setting] <- rc
-              }
-              else if (row$setting %in% xc("frequency")) {
-                df[, row$setting] <- as.numeric(rc)
-              }
-              else {
-                rc[is.na(rc)] <- Inf
-                # browser()
-                mr <- dense_rank(unlist(rc))
-                # mr[is.na(mr)]=""
-                # mr=as.numeric(mr)
-                nr <- nrow(df)
-                if (str_detect(row$setting, "color") & !str_detect(row$setting, "opacity")) {
-                  df[, row$setting] <- colorRampPalette((str_split(findset(paste0("diagrampalette",palettes), v = vals),","))[[1]] %>% str_trim)(max(as.numeric(mr)))[mr]
-                  palettes=palettes+1
-                }
-                if (row$setting %in% xc("font.size")) {
-                  df[, row$setting] <- (mr + findset("variablefont.size.floor",global = T, v = vals) %>% as.numeric) * findset("variablefont.size.scale",global = T, v = vals) %>% as.numeric / nr
-                }
-                if (row$setting %in% xc("size")) {
-                  df[, row$setting] <- mr / nr
-                }
-                if (any(row$setting %in% xc("width"))) {
-                  df[, row$setting] <- mr * findset("arrowconditionalwidthscaling", v = vals) %>% as.numeric() / max(mr)
-                }
-                if (any(row$setting %in% xc(" borderWidth"))) {
-                  df[, row$setting] <- mr * findset("variableconditionalwidthscaling", v = vals) %>% as.numeric() / max(mr)
-                }
-                if (row$setting %in% xc("color.opacity")) {
-                  df[, row$setting] <- mr / max(mr)
-                }
-                if (row$setting %in% xc("shape")) {
-                  df[, row$setting] <- shapelist[mr]
-                }
-                if (row$setting %in% xc("style")) {
-                  df[, row$setting] <- xc("dotted dashed solid")[mr]
-                  if (length(unique(mr)) > 3) showNotification("I only have three styles")
-                }
-              }
-              
-              legend <- paste0(legend, "</br>", typenow, " ", row$setting, " shows ", row$ifcolumn, "")
-            } else {
-              doNotification(paste0("there is no such column ",row$ifcolumn),2)
-            }
-          } else  {
-            # if (row$ifcolumn %in% colnames(df)) {
-            # if(row$setting == "color.background") browser()
-            rv=row$value
-            if(allNum(rv))rv=as.numeric(rv)
-            # df[, row$setting] <- rv
-            
-            # rc <- df[, row$ifcolumn]
-            # }else {
-            #   doNotification("there is no such column")
-            # }
-          }
-          
-          if (!identical(df, orig)) {
-            if (row$type == "variable") vno <- df else ved <- df
-          }
-        }
-        
-        # browser()
-      }
+      
+      # } else {
+      #   vno$font.color="#333333"
+      #   vno$font.size=44
+      #   ved$width=4
+      # }
+      ### make sure text is visibile when highlighted
+      vno <- vno %>% 
+        mutate(color.highlight.background=set_text_contrast_color(font.color))
+      
+      
+      # margin--------
+      # browser()
+      vno <- vno %>% 
+        mutate(margin=10)  # decent approximation
+      
+      
       
       # rationalise----
       
@@ -1803,9 +1891,10 @@ server <- function(input, output, session) {
       ved <- ved %>%
         mutate(label = replace_na(label,"")) %>% 
         mutate(label = ifelse(strength<0,paste0("🔀 ",label),label)) %>% 
-        mutate(combo.type <- replace_na(combo.type,"")) %>% 
-        mutate(arrows.middle.enabled = ifelse(combo.type == "", F, T)) %>%
-        mutate(label = paste0(label, ifelse(arrows.middle.enabled, paste0(" ", combo.type), ""))) %>%
+        # mutate(combo.type <- replace_na(combo.type,"")) %>% 
+        # mutate(arrows.middle.enabled = ifelse(combo.type == "", F, T)) %>%
+        mutate(arrows.middle.enabled = F) %>%
+        # mutate(label = paste0(label, ifelse(arrows.middle.enabled, paste0(" ", combo.type), ""))) %>%
         mutate(dashes = definition.type != "") %>% 
         mutate(arrows.to = definition.type != "Defined, undirected")
       
@@ -1833,16 +1922,20 @@ server <- function(input, output, session) {
                label=make_labels(findset("arrowlabel", v = vals),ved)
         )
       
+      
+      # fontsize ceiling so it doesn't crash. doesn't take into account if there are very long words
+      # browser()
+      vno <- vno %>% 
+        mutate(font.size=round(pmin(as.numeric(font.size),as.numeric(findset("variablewidth"))/8)))
+      
+      
       # # wrapping ----
-      vno = vno %>%
-        mutate(label = str_wrap(label, findset("variablewrap")))
-      # 
-      # # ved tooltips
-      # 
+      # ved = ved %>%
       # 
       # 
       ved <- ved %>%
         mutate(label = str_replace_all(label, "///", "\n")) %>%
+        mutate(label = str_wrap(label, findset("arrowwrap"))) %>%
         mutate(label = str_replace_all(label, "NA", "")) %>%
         mutate(label = str_trim(label))
       
@@ -1856,25 +1949,6 @@ server <- function(input, output, session) {
           mutate(group = group_walktrap())
       }
       
-      # get the layout already------------------------------
-      
-      
-      
-      # 
-      # ved <- ved %>% 
-      #   mutate(arrows.to.scaleFactor=12)
-      
-      
-      
-      
-      # if(findset("arrownotForwards" %>% as.logical,global = T)){
-      # if(T){
-      #   tmp <-  tmp %>% activate(edges) %>% 
-      #     mutate(color=if_else(notForwards,"red","blue")) 
-      #   # %>% 
-      #   #   mutate(width=if_else(notForwards,width,width*12)) 
-      #   
-      # }
       
       values$grafAgg2 <- tmp 
       
@@ -1888,7 +1962,7 @@ server <- function(input, output, session) {
   # RENDER visnetwork----
   # finally we use values$grafAgg2 to generate the viz 
   
-  observe({
+  observe(if(!is.null(values$grafAgg2)){
     
     vals <- isolate(values)
     vga <- req(values$grafAgg2)
@@ -1924,8 +1998,10 @@ server <- function(input, output, session) {
           #   values$legend,
           background = findset("diagrambackground", v = vals)
           ,
-          height=findset("diagramheight", v = vals) %>% paste0("px"),
-          width=findset("diagramwidth", v = vals) %>% paste0("px")
+          height="2000px",
+          width="3000px"
+          # height=findset("diagramheight", v = vals) %>% paste0("px"),
+          # width=findset("diagramwidth", v = vals) %>% paste0("px")
           
           # width="100%"
           # ,
@@ -1933,7 +2009,6 @@ server <- function(input, output, session) {
           # ,
           # width="2000px"
         ) 
-      
       vn = vn1 %>%
         visInteraction(
           dragNodes = T,
@@ -1947,11 +2022,17 @@ server <- function(input, output, session) {
                 font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;
                 -moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;
                  border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
-                 max-width:500px;word-break: break-all'
+                 max-width:500px;word-break: break-all',
+          hoverConnectedEdges=F,
+          keyboard = F,
+          selectConnectedEdges=F	
+          
+          
         ) %>%
+
         visOptions(
           manipulation = F,
-          collapse = TRUE,
+          collapse = F,
           highlightNearest = list(
             enabled = T,
             degree = if(findset("diagramdownarrows") %>% as.logical) list(from=0,to=19) else list(from=19,to=0),
@@ -1960,6 +2041,7 @@ server <- function(input, output, session) {
             labelOnly=F,
             algorithm = "hierarchical"
           ),
+          selectedBy=if(!("cluster" %in% colnames(vga  %>% nodes_as_tibble()))) "" else ifelse((vga %>% nodes_as_tibble() %>% pull(cluster) %>% `==`("") %>% all),"","cluster"),
           nodesIdSelection = F
         ) %>%
         visConfigure(enabled = input$codeCollapse == "Advanced options",
@@ -1967,22 +2049,30 @@ server <- function(input, output, session) {
         # visEvents(select = "function(edges) {
         #         Shiny.onInputChange('current_edge_id', edges.edges);
         #         ;}") %>%
-        visEvents(select = "function(nodes) {
-                Shiny.onInputChange('net_selected', nodes.nodes);
-                ;}")
+        visEvents(select = "function(data) {
+                Shiny.onInputChange('net_selected', data.nodes);
+                Shiny.onInputChange('net_selectedEdges', data.edges);
+                ;}")        # visEvents(select = "function(nodes) {
+        #         Shiny.onInputChange('net_selected', nodes.nodes);
+        #         ;}")
       
       if (!all(na.omit(vga$group) == "")) {
-        # vn <- vn %>%
-        #   visGroups() %>%
-        #   visClusteringByGroup(groups = groups, label = "Group: ")
       }
       
+      
+      #layout ----------------
+        # browser()
+      
       if (findset("diagramlayout", v = vals) == "layout_with_sugiyama") {
+        # browser()
+        nods <- vn$x$nodes  # saving them from the previous version, as the visigraphlayout in th next step, which shouldn't be necessary, is
+        # browser()
         vn <- vn %>%
-          visIgraphLayout(layout = "layout_with_sugiyama", randomSeed = 123, smooth = T, type = "full")
+          visIgraphLayout(layout = "layout_with_sugiyama", randomSeed = 123, type = "full")
         
         if (findset("diagramorientation",v = vals) %in% xc("LR RL")) {
           # browser()
+          vn$x$nodes <- nods # transferring from above
           tmp <- vn$x$nodes$x
           vn$x$nodes$x <- vn$x$nodes$y
           vn$x$nodes$y <- tmp
@@ -1995,11 +2085,11 @@ server <- function(input, output, session) {
           
           vnxn=vnxn %>% 
             group_by(x) %>% 
-            mutate(ran=min_rank(y),len=n(),y=rescale(ran,to=c(-1,1))*3.5*sqrt(len/maxLen) + rnorm(1,0,.05)) %>% 
+            mutate(ran=min_rank(y),len=n(),y=rescale(ran,to=c(-1,1))*sqrt(len/maxLen) + rnorm(1,0,.1/len)) %>% 
             ungroup()               #had to put in a tiny bit of rnorm to stop some artefacts in visnetwork when nodes have same y
           # mutate(len=n(),ran=min_rank(y)-.5,y=ran*levels/(len*3))
           vnxn=vnxn %>% 
-            mutate(x=x*3)
+            mutate(x=1-scale(x)*1,y=scale(y))  # 1 is the proportion. not sure why i added this line
           vn$x$nodes = vnxn
           
           
@@ -2012,47 +2102,32 @@ server <- function(input, output, session) {
         
       } else {
         vn <- vn %>%
-          visIgraphLayout(layout = "layout_in_circle", randomSeed = 123, smooth = T, type = "full", physics = T)
+          visIgraphLayout(layout = "layout_in_circle", randomSeed = 123, smooth = T, type = "full")
       }
       
-      if (findset("diagramphysics", v = vals) %>% as.logical()) {
-        vn <- vn %>%
-          visPhysics(barnesHut = list(avoidOverlap = .7))
-      }
+      # rowser()
+      # if(vn$x$nodes$cluster %>% na.omit %>% length %>% `>`(0)  && input$sides=="Code")
+      #   vn <- vn %>% 
+      #   visOptions(
+      #   selectedBy=list(variable="cluster")
+      #   )
       
+      # if (findset("diagramphysics", v = vals) %>% as.logical()) {
+      #   vn <- vn %>%
+      #     visPhysics(barnesHut = list(avoidOverlap = .7))
+      # }
       vn <- vn %>%
         visNodes(
           shadow = list(enabled = T, size = 10),
-          # widthConstraint=(5500/(levels+5))    , #  numeric(findset("variablewidth")) , #,300-(levels*10),#,(300*levels)-9,
-          widthConstraint=as.numeric(findset("variablewidth", v = vals)) , #,300-(levels*10),#,(300*levels)-9,
-          color =
-            list(
-              background =
-                findset("variablecolor.background",global=F, v = vals) %>% toRGB(findset("variablecolor.opacity",global=F, v = vals) %>% as.numeric()),
-              border = findset("variablecolor.border",global=F, v = vals)
-              
-              # ,
-              # highlight=list(
-              #   background=findset("variablecolor.background.highlight",global=F)
-              #   ,
-              #   border=findset("variablecolor.border.highlight",global=F)
-              #
-              # )
-            ),
-          margin=32,  #list(32,9,20,9), #,   findset("variablemargin",global = T),
-          # margin.bottom=22, #,   findset("variablemargin",global = T),
-          font =
-            list(
-              color =
-                findset("variablefont.color",global=F, v = vals),
-              size = findset("variablefont.size",global=F, v = vals)
-            ),
+          # color = list(highlight="black"),                   
+          # color.highlight.background="white"
+          widthConstraint=as.numeric(findset("variablewidth")) , #,300-(levels*10),#,(300*levels)-9,
           hidden = F,# findset("variablehidden",global=F) %>% as.logical(),
           scaling = list(label = list(enabled = F)),
-          shape = findset("variableshape",global=F, v = vals),
+          shape = findset("variableshape", v = vals),
           # shapeProperties = list("borderDashes=T"),
           group = T,#findset("variablegroup",global=F),
-          borderWidth = findset("variableborderWidth",global=F, v = vals),
+          # borderWidth = findset("variableborderWidth",global=F, v = vals),
           # widthConstraint=4,
           # widthConstraint = =4,
           # size =
@@ -2072,18 +2147,20 @@ server <- function(input, output, session) {
             list(enabled = F, size = 5),
           # width =
           #   findset("arrowwidth"),
-          font =
-            list(
-              color =
-                findset("arrowfont.color",global=F, v = vals),
-              background =
-                "#FFFFFF80",
-              size = findset("arrowfont.size",global=F, v = vals)
-            ),
-          physics =
-            F,
+          # font =
+          #   list(
+          #     color =
+          #       findset("arrowfont.color",global=F, v = vals),
+          #     background =
+          #       "#FFFFFF80",
+          #     size = findset("arrowfont.size",global=F, v = vals)
+          #   ),
+          hoverWidth = 8,
+          selectionWidth = 8,
+          physics =F,
+          # color=list(highlight="#000000"),
           arrows =
-            list(middle = list(type = "circle", scaleFactor = .5))
+            list(middle = list(type = "circle", scaleFactor = .5),from = list(type = "circle", scaleFactor = 0.2)),
           # ,
           # dashes = findset("arrowdashes") %>% as.logical()
         )
@@ -2092,10 +2169,10 @@ server <- function(input, output, session) {
       
       doNotification("Produced viz")
       
-    
+      
   })
   
-  
+  observe({
   output$net <- renderVisNetwork({
     doNotification("render viz")
     # browser()
@@ -2103,12 +2180,28 @@ server <- function(input, output, session) {
     values$net
     
   })
+  if (T){
+    visNetworkProxy("net") %>%
+      visUpdateNodes(nodes = tibble(id=1:20,color="red"))
+  }
+  })
   
+  # observeEvent(input$network_initialized,{
+  #   doNotification("initial")
+  #   if (T){
+  #     visNetworkProxy("net") %>%
+  #       visUpdateNodes(nodes = tibble(id=1:20,color="red"))
+  #   }
+  # })
+  # 
   
+
+
   
   # ++ report -----------------------------------------------------
   
   output$reportTable=renderFormattable({
+    if("frequency" %in% colnames(values$net$x$nodes)){
     values$net$x$nodes %>% 
       transmute(label,frequency=replace_na(frequency,0),from=replace_na(from.frequency_sum,0),to=replace_na(to.frequency_sum,0)) %>% 
       arrange(desc(frequency)) %>% 
@@ -2117,7 +2210,14 @@ server <- function(input, output, session) {
         `frequency`= color_bar("#AAEEAA"),
         `from`= color_bar("#EEAAAA"),
         `to`= color_bar("#AAAAEE")
-        ))
+      ))
+    } else {
+      tibble(warning="You have to merge arrows with variables in order to get a report.") %>% 
+        
+        formattable(list())
+      }
+    
+      
   })
   
   # ++ floating widgets -----------------------------------------------------
@@ -2136,66 +2236,22 @@ server <- function(input, output, session) {
       #   checkboxInput("widgetDownArrows", "Hover arrows down"),
       #     style = "display:inline-block;margin-right:140px;width:10px"
       #   ),
-      div(
-        
-        actionButton("fontminus", "fontscale-", icon = icon("picture")),
-        style = "display:inline-block;margin-right:110px;width:10px"
-      ),
-      div(
-        
-        actionButton("fontplus", "fontscale+", icon = icon("picture")),
-        style = "display:inline-block;margin-right:100px;width:10px"
-      ),
-      div(
-        
-        actionButton("fontscaleminus", "font-", icon = icon("picture")),
-        style = "display:inline-block;margin-right:80px;width:10px"
-      ),
-      div(
-        
-        actionButton("fontscaleplus", "font+", icon = icon("picture")),
-        style = "display:inline-block;margin-right:70px;width:10px"
-      ),
-      div(
-        
-        actionButton("png", "PNG", icon = icon("picture")),
-        style = "display:inline-block;margin-right:50px;width:10px"
-      ),
+      # div(
+
       # ,
+      # div(checkboxInput("showStatements", "Statements"), style = "display:inline-block;margin-right:80px"),
+      # div(actionButton("open", "Statements"),style = "display:inline-block;margin-right:80px"),
+      
       div(actionButton("fitaction", "Fit"), style = "display:inline-block;margin-right:20px"),
-      class = "bigpicbut"
-      ,style="z-index:999 !important")
+      class = "bigpicbut" ,style="z-index:999 !important")
     # h1("asdfasdfasdf")
   })
-  # 
-  # observe({
-  # })
-  
-  observeEvent(input$fontplus,{
-    values$settingsGlobal=values$settingsGlobal %>% 
-      mutate(value=if_else(setting=="font.size.floor",as.character(as.numeric(value)*1.1),value)) 
-  })
-  
-  observeEvent(input$fontminus,{
-    values$settingsGlobal=values$settingsGlobal %>% 
-      mutate(value=if_else(setting=="font.size.floor",as.character(as.numeric(value)*.9),value)) 
-  })
-  
-  observeEvent(input$fontscaleplus,{
-    values$settingsGlobal=values$settingsGlobal %>% 
-      mutate(value=if_else(setting=="font.size.scale",as.character(as.numeric(value)*1.1),value)) 
-  })
-  
-  observeEvent(input$fontscaleminus,{
-    values$settingsGlobal=values$settingsGlobal %>% 
-      mutate(value=if_else(setting=="font.size.scale",as.character(as.numeric(value)*.9),value)) 
-  })
-  
-  output$savebut <- renderUI(div(
+
+    output$savebut <- renderUI(div(
     div(
       tagList(
         
-        # div(actionButton("render_button","Render"),style="display:inline-block"),
+        # div(actionButton("render_button","Render"),style="display:inline-block;vertical-align:top"),
         div(textInput(
           "titl", NULL,
           value = ifelse(is.null(values$current), "", values$current), placeholder = "Title", width = "100%"
@@ -2229,9 +2285,11 @@ server <- function(input, output, session) {
         nodes=values$graf %>% nodes_as_tibble
         edges=values$graf %>% edges_as_tibble
         
+        
+        
         # browser()
         # if(storage="local"){
-        if(!is.null(values$settings))write__csv(values$settings, path=paste0("www/", inputtitl, "-settings.csv"))
+        write__csv(values$settingsConditional, path=paste0("www/", inputtitl, "-settingsConditional.csv"))
         if(!is.null(values$settingsGlobal))write__csv(values$settingsGlobal, path=paste0("www/", inputtitl, "-settingsGlobal.csv"))
         if(!is.null(values$statements))write__csv(values$statements, path=paste0("www/", inputtitl, "-statements.csv"))
         if(!is.null(nodes))write__csv(nodes, path = paste0("www/", inputtitl, "-nodes.csv"))
@@ -2253,8 +2311,8 @@ server <- function(input, output, session) {
         # file.copy(paste0("www/", inputtitl,".tm"),paste0("www/", inputtitl,".otm"),overwrite = T)
         doNotification("Saved")
         values$issaved = T
-        toggleClass("savemsg", "red")
-        delay(500, toggleClass("savemsg", "red"))
+        # toggleClass("savemsg", "red")
+        # delay(500, toggleClass("savemsg", "red"))
         
         
         
@@ -2315,13 +2373,14 @@ server <- function(input, output, session) {
   
   observeEvent(input$png,{
     # browser()
+    doNotification("Saving file",2)
     fn <- paste0(input$titl,".html")
     visSave(values$net, fn, selfcontained = T)
-    doNotification("Saved file")
+    doNotification("Saved file",2)
     file.copy(fn,paste0("www/",fn),overwrite=T)             #because there is a bug with htmlwidgets saving to other directories
     file.remove(fn)
-    webshot::webshot(file=paste0("www/",fn,".html"), url = paste0("www/",input$titl,".html"))
-    doNotification(("Saved png"))
+    webshot::webshot(file=paste0("www/",input$titl,".png"), url = paste0("www/",input$titl,".html"))
+    doNotification("Saved png",2)
   })
   
   
@@ -2337,8 +2396,7 @@ server <- function(input, output, session) {
           tags$a(
             paste0(values$current),
             href = paste0("?permalink=", values$current)
-          ),
-          style = "margin-bottom:10px"
+          )
         )
       }
     })
@@ -2351,7 +2409,7 @@ server <- function(input, output, session) {
   
   observe({
     if(input$crowd){output$net2 <- renderVisNetwork({
-      doNotification("render viz")
+      doNotification("render viz",type="error")
       values$net
       # browser()
     })}
@@ -2399,12 +2457,94 @@ server <- function(input, output, session) {
   
   output$edgeInfo=renderUI({
     # input$current_edge_id %>% as.character()
-    input$net_selectedEdges %>% paste0(collapse="; ") %>% as.character()
+    # if(!is.null(input$net_selectedEdges))input$net_selectedEdges %>% 
+    #   paste0(collapse="; ") %>% 
+    #   as.character() %>% 
+    #   paste0("Edit package containing arrow(s): ",.) %>%  
+    #   tagList(actionLink("deletePackage"," (Delete?)"))
+  })
+  
+  observeEvent(input$deletePackage,{
+    # browser()
+    if(!is.null(input$net_selectedEdges)) values$graf <- values$graf %>% activate(edges) %>% mutate(id=row_number()) %>% filter(!(id %in% input$net_selectedEdges)) %>% select(-id)
+  })
+  
+  # fit-----------------
+  
+  observeEvent(input$fitaction, {               # restore network to normal zoom
+    visNetworkProxy("net") %>%
+      visFit() 
+    
   })
   
   
+  observe({
+    
+  output$testBut <- if(!is.null(input$net_selectedEdges)) renderUI({actionButton("testBut","Edit selected arrows")})  else renderUI({p()})
+    
+  })
+  
   
   # session$onSessionEnded(stopApp) ## TODO take out
+  
+  # 
+  # observeEvent(input$resetSelection,{
+  #   browser()
+  #   updatePageruiInput(session=session,"pager",page_current= values$pag+1)
+  #   updatePageruiInput(session=session,"pager",page_current= values$pag)
+  #   visNetworkProxy("net") %>%
+  #         visSelectNodes(id=NULL)
+  # })
+
+  # focus -------------------------------------------------------------------
+  
+  # 
+  # 
+  # observe(if(req(input$sides)=="Code"){
+  #   # vno <- req(values$grafAgg2) %>% nodes_as_tibble
+  #   # if (as.logical(findset("diagramfocus")) & !is.null(values$pag) & nrow(vno)>0) {
+  #   #   ids <- vno %>%
+  #   #     mutate(sel=ifelse(str_detect(paste0(",|^", statement, ",|$"), as.character(values$pag)),T,F)) %>%
+  #   #     pull(sel) %>%
+  #   #     which
+  #   # 
+  #   # visNetworkProxy("net") %>%
+  #   #   visSelectNodes(id = ids)
+  #   # }
+  # 
+  #   
+  # })   
+  
+  
+  
+  # observeEvent(req(input$pager),{
+  #   ved <- req(values$grafAgg2) %>% edges_as_tibble %>% mutate(id=row_number())
+  #   if (!is.null(values$pag)) {
+  # 
+  #     eids <- ved %>%
+  #       mutate(sel=ifelse(str_detect(statement, paste0("(,|^)", as.character(values$pag), "(,|$)")),T,F)) %>%
+  #       filter(sel) %>%
+  #       pull(id) 
+  #     # browser()
+  #     
+  #     visNetworkProxy("net") %>%
+  #       visSelectEdges(id = eids) 
+  #   }
+  # })
+  
+  
+  
+  
+  output$keypr = renderPrint({
+    input$keypressed
+  })  
+  
+  output$push=renderUI({
+    tagList(
+    actionButton("statementsTableUp", "Update"),
+    rHandsontableOutput("statements")
+    )
+  })
   
   
   

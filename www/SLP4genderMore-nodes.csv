@@ -1,51 +1,52 @@
 label,group,col1,cluster,value,clusterLabel,is_context,xid,level,fun,type,details
-STRAWBERRY LINE EXTENSION 🍓,NA,NA,NA,NA,NA,NA,1,NA,NA,NA,NA
-more connectivity between towns and villages,NA,NA,NA,NA,NA,NA,2,NA,NA,NA,NA
-more cycling,NA,NA,NA,NA,NA,NA,3,NA,NA,NA,NA
-better health,NA,NA,h,NA,NA,NA,4,NA,NA,NA,NA
-safe way to cycle,NA,NA,NA,NA,NA,NA,5,NA,NA,NA,NA
-safer way to walk,NA,NA,NA,NA,NA,NA,6,NA,NA,NA,NA
-more visitors to Clevedon,NA,NA,NA,NA,NA,NA,7,NA,NA,NA,NA
-more walking,NA,NA,NA,NA,NA,NA,8,NA,NA,NA,NA
-increased safety for cyclists,NA,NA,NA,NA,NA,NA,9,NA,NA,NA,NA
-safer & less delays for motorists,NA,NA,NA,NA,NA,NA,10,NA,NA,NA,NA
-cyclists breathe less fumes,NA,NA,NA,NA,NA,NA,11,NA,NA,NA,NA
-more income for local businesses and community,NA,NA,NA,NA,NA,NA,12,NA,NA,NA,NA
-pleasant family recreation outdoors,NA,NA,NA,NA,NA,NA,13,NA,NA,NA,NA
-cycle to catch train,NA,NA,NA,NA,NA,NA,14,NA,NA,NA,NA
-less car traffic,NA,NA,NA,NA,NA,NA,15,NA,NA,NA,NA
-young people get cycling habit,NA,NA,NA,NA,NA,NA,16,NA,NA,NA,NA
-less burden on NHS in future,NA,NA,NA,NA,NA,NA,17,NA,NA,NA,NA
+STRAWBERRY LINE EXTENSION 🍓,NA,NA,,NA,,NA,1,NA,NA,NA,NA
+more connectivity between towns and villages,NA,NA,,NA,,NA,2,NA,NA,NA,NA
+more cycling,NA,NA,,NA,,NA,3,NA,NA,NA,NA
+better health,NA,NA,h,NA,,NA,4,NA,NA,NA,NA
+safe way to cycle,NA,NA,,NA,,NA,5,NA,NA,NA,NA
+safer way to walk,NA,NA,,NA,,NA,6,NA,NA,NA,NA
+more visitors to Clevedon,NA,NA,,NA,,NA,7,NA,NA,NA,NA
+more walking,NA,NA,,NA,,NA,8,NA,NA,NA,NA
+increased safety for cyclists,NA,NA,,NA,,NA,9,NA,NA,NA,NA
+safer & less delays for motorists,NA,NA,,NA,,NA,10,NA,NA,NA,NA
+cyclists breathe less fumes,NA,NA,,NA,,NA,11,NA,NA,NA,NA
+more income for local businesses and community,NA,NA,,NA,,NA,12,NA,NA,NA,NA
+pleasant family recreation outdoors,NA,NA,,NA,,NA,13,NA,NA,NA,NA
+cycle to catch train,NA,NA,,NA,,NA,14,NA,NA,NA,NA
+less car traffic,NA,NA,,NA,,NA,15,NA,NA,NA,NA
+young people get cycling habit,NA,NA,,NA,,NA,16,NA,NA,NA,NA
+less burden on NHS in future,NA,NA,,NA,,NA,17,NA,NA,NA,NA
 (context: bus links poor and roads dangerous),NA,NA,c,NA,"(context: bus links poor, increasing need, growing populations, roads dangerous)",NA,18,NA,NA,NA,NA
-better health esp older people,NA,NA,h,NA,NA,NA,19,NA,NA,NA,NA
-more social activities esp older people,NA,NA,NA,NA,NA,NA,20,NA,NA,NA,NA
-more well-being,NA,NA,NA,NA,NA,NA,21,NA,NA,NA,NA
-complement & expand benefits of existing Strawberry Line,NA,NA,NA,NA,NA,NA,22,NA,NA,NA,NA
-reduce car trips to get on existing Strawberry Line,NA,NA,NA,NA,NA,NA,23,NA,NA,NA,NA
-safe way to cycle esp children,NA,NA,NA,NA,NA,NA,24,NA,NA,NA,NA
-more family time,NA,NA,NA,NA,NA,NA,25,NA,NA,NA,NA
-future cycling stars,NA,NA,NA,NA,NA,NA,26,NA,NA,NA,NA
-less emissions,NA,NA,NA,NA,NA,NA,27,NA,NA,NA,NA
-I will help!,NA,NA,NA,NA,NA,NA,28,NA,NA,NA,NA
-Many people will help,NA,NA,NA,NA,NA,NA,29,NA,NA,NA,NA
-safe access to facilities and employment in Clevedon,NA,NA,NA,NA,NA,NA,30,NA,NA,NA,NA
-reduce car dependence,NA,NA,NA,NA,NA,NA,31,NA,NA,NA,NA
-less road congestion for train commuters,NA,NA,NA,NA,NA,NA,32,NA,NA,NA,NA
-less car use,NA,NA,NA,NA,NA,NA,33,NA,NA,NA,NA
-visitors can reach Clevedon coast,NA,NA,NA,NA,NA,NA,34,NA,NA,NA,NA
-more use of existing SL,NA,NA,NA,NA,NA,NA,35,NA,NA,NA,NA
-better dog walking,NA,NA,NA,NA,NA,NA,36,NA,NA,NA,NA
-better fitness opportunities,NA,NA,NA,NA,NA,NA,37,NA,NA,NA,NA
-safer walking / cycling ??,NA,NA,NA,NA,NA,NA,38,NA,NA,NA,NA
-better horse-riding opportunities,NA,NA,NA,NA,NA,NA,39,NA,NA,NA,NA
-horse poo is just manure,NA,NA,NA,NA,NA,NA,40,NA,NA,NA,NA
-young people get outdoor habit,NA,NA,NA,NA,NA,NA,41,NA,NA,NA,NA
-safe environment for children,NA,NA,NA,NA,NA,NA,42,NA,NA,NA,NA
-safe and enjoyable for walking,NA,NA,NA,NA,NA,NA,43,NA,NA,NA,NA
-better connectivity for non car-owners,NA,NA,NA,NA,NA,NA,44,NA,NA,NA,NA
-visit family,NA,NA,NA,NA,NA,NA,45,NA,NA,NA,NA
-older people can keep active,NA,NA,NA,NA,NA,NA,46,NA,NA,NA,NA
-get us out more,NA,NA,NA,NA,NA,NA,47,NA,NA,NA,NA
-safer cycling,NA,NA,NA,NA,NA,NA,48,NA,NA,NA,NA
-context: bus poor; busy traffic with lorries is dangerous,NA,NA,c,NA,NA,NA,49,NA,NA,NA,NA
-context: the road is busy and dangerous,NA,NA,c,NA,NA,NA,50,NA,NA,NA,NA
+better health esp older people,NA,NA,h,NA,,NA,19,NA,NA,NA,NA
+more social activities esp older people,NA,NA,,NA,,NA,20,NA,NA,NA,NA
+more well-being,NA,NA,,NA,,NA,21,NA,NA,NA,NA
+complement & expand benefits of existing Strawberry Line,NA,NA,,NA,,NA,22,NA,NA,NA,NA
+reduce car trips to get on existing Strawberry Line,NA,NA,,NA,,NA,23,NA,NA,NA,NA
+safe way to cycle esp children,NA,NA,,NA,,NA,24,NA,NA,NA,NA
+more family time,NA,NA,,NA,,NA,25,NA,NA,NA,NA
+future cycling stars,NA,NA,,NA,,NA,26,NA,NA,NA,NA
+less emissions,NA,NA,,NA,,NA,27,NA,NA,NA,NA
+I will help!,NA,NA,,NA,,NA,28,NA,NA,NA,NA
+Many people will help,NA,NA,,NA,,NA,29,NA,NA,NA,NA
+safe access to facilities and employment in Clevedon,NA,NA,,NA,,NA,30,NA,NA,NA,NA
+reduce car dependence,NA,NA,,NA,,NA,31,NA,NA,NA,NA
+less road congestion for train commuters,NA,NA,,NA,,NA,32,NA,NA,NA,NA
+less car use,NA,NA,,NA,,NA,33,NA,NA,NA,NA
+visitors can reach Clevedon coast,NA,NA,,NA,,NA,34,NA,NA,NA,NA
+more use of existing SL,NA,NA,,NA,,NA,35,NA,NA,NA,NA
+better dog walking,NA,NA,,NA,,NA,36,NA,NA,NA,NA
+better fitness opportunities,NA,NA,,NA,,NA,37,NA,NA,NA,NA
+safer walking / cycling ??,NA,NA,,NA,,NA,38,NA,NA,NA,NA
+better horse-riding opportunities,NA,NA,,NA,,NA,39,NA,NA,NA,NA
+horse poo is just manure,NA,NA,,NA,,NA,40,NA,NA,NA,NA
+young people get outdoor habit,NA,NA,,NA,,NA,41,NA,NA,NA,NA
+safe environment for children,NA,NA,,NA,,NA,42,NA,NA,NA,NA
+safe and enjoyable for walking,NA,NA,,NA,,NA,43,NA,NA,NA,NA
+better connectivity for non car-owners,NA,NA,,NA,,NA,44,NA,NA,NA,NA
+visit family,NA,NA,,NA,,NA,45,NA,NA,NA,NA
+older people can keep active,NA,NA,,NA,,NA,46,NA,NA,NA,NA
+get us out more,NA,NA,,NA,,NA,47,NA,NA,NA,NA
+safer cycling,NA,NA,,NA,,NA,48,NA,NA,NA,NA
+context: bus poor; busy traffic with lorries is dangerous,NA,NA,c,NA,,NA,49,NA,NA,NA,NA
+context: the road is busy and dangerous,NA,NA,c,NA,,NA,50,NA,NA,NA,NA
+commuting by bike,NA,NA,,NA,,NA,NA,NA,NA,NA,NA
