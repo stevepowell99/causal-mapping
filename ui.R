@@ -155,7 +155,7 @@ ui <- tagList(
                                      # uiOutput("addNewNodeButton"),
                                      uiOutput("selectBoxButtons"),
                                      uiOutput("fromStackInfo"),
-                                     uiOutput("edgeInfo"),
+                                     # uiOutput("edgeInfo"),
                                      uiOutput("add_edges_widget"),
                                      uiOutput("combo"),
                                      style="background-color:#DDFFDD;border:1px gray solid;padding:3px"

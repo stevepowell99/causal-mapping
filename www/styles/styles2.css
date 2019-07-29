@@ -852,11 +852,31 @@ margin-left:200px;
   width:555px !important;
 }
 
-
+input[type=text] {
+  -webkit-transition: width .35s ease-in-out;
+  transition: width .35s ease-in-out;
+}
+input[type=text]:focus {
+  width: 300px;
+}
 
 #addFrom{
   background-color: orange;
 }
+
+#addFrom:focus{
+    outline: 5px solid red;
+}
+#addFrom:hover{
+    outline: 5px solid red;
+}
+#addTo:focus{
+    outline: 5px solid red;
+}
+#addTo:hover{
+    outline: 5px solid red;
+}
+
 #addTo{
   background-color: green;
 }

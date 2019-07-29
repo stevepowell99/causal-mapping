@@ -578,19 +578,38 @@ server <- function(input, output, session) {
   # Add edges widget----
   
   output$add_edges_widget <- renderUI({
-    varlist=values$graf %>% nodes_as_tibble() %>% pull(label) %>% unique() %>% as.character()
-    varlist <- na.omit(varlist)
+    # varlist=values$graf %>% nodes_as_tibble() %>% pull(label) %>% unique() %>% as.character()
+    # varlist <- na.omit(varlist)
 
+    df <- values$graf %>%
+      edges_as_tibble() %>%
+      mutate(id = row_number()) 
+
+    ise <- input$net_selectedEdges
+    row <- df[ise,]
+    isrow <- !is.null(ise)
     tagList(
+      
       div(
+        
+        div(    if(isrow) ise %>% 
+            paste0(collapse="; ") %>% 
+            as.character() %>% 
+            paste0("Edit arrow(s): ",.) %>%  
+            tagList(
+              actionLink("deletePackage"," (Delete?)"),
+              actionLink("savePackage"," (Save?)"))
+          ),
+        
+        
         div(
           div(style = "display:inline-block;width:5%"),
-          div(textInput("arrLabel", NULL, value = "", placeholder = "label"), style = "display:inline-block;"),
+          div(textInput("arrLabel", NULL, value = ifelse(ise,row$label,""), placeholder = "label"), style = "display:inline-block;"),
           div(style = "display:inline-block;width:5%"),
           div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "display:inline-block;width:20%"),
           div(selectizeInput("function.type", NULL, choices = c("+", "-", "NECC","SUFF")), style = "display:inline-block;width:20%"),
-          div(textInput("package", NULL, value = "", placeholder = "package"), style = "display:inline-block;"),
-          div(textInput("packageNote", NULL, value = "", placeholder = "packageNote"), style = "display:inline-block;"),
+          div(textInput("package", NULL, value = ifelse(ise,row$package,""), placeholder = "package"), style = "display:inline-block;"),
+          div(textInput("packageNote", NULL, value = ifelse(ise,row$packageNote,""), placeholder = "packageNote"), style = "display:inline-block;"),
           div(textAreaInput("quote", NULL, value = values$highlightedText, placeholder = "quote",rows=3,width="100%"), style = ""),
           style = "margin-top:20px"
           
@@ -611,6 +630,34 @@ server <- function(input, output, session) {
     )
   })
   
+  
+  observeEvent(input$savePackage,{
+    vg <- values$graf %>% 
+      activate(edges) 
+    
+    ise <- input$net_selectedEdges
+    
+    
+    if(input$package!=""){
+      vg <- vg %>% 
+        mutate(package=if_else(row_number() %in% ise,input$package,package)) 
+    }
+    
+    
+    if(input$packageNote!=""){
+      vg <- vg %>% 
+        mutate(packageNote=if_else(row_number() %in% ise,input$packageNote,packageNote)) 
+    }
+    
+    
+    if(input$arrLabel!=""){
+      vg <- vg %>% 
+        mutate(label=if_else(row_number() %in% ise,input$arrLabel,label)) 
+    }
+    
+    values$graf <- vg
+  })
+  
   # observeEvent(input$flip, { 
   #   updateSliderInput(session, inputId = "strength", value = -input$strength)
   # })
@@ -626,36 +673,6 @@ server <- function(input, output, session) {
     }
   })
   
-  # output$addNewNodeButton=renderUI({
-  #  if(req(input$selectBoxValue)!=""){
-  #  if(length(valuesCoding$foundIDs)==0){
-  #  div(
-  #   actionButton("addNewNode","Add")
-  #   ,
-  #   style="display:inline-block"
-  # )
-  # }}
-  #   })
-  
-  
-  output$selectBox2Buttons=renderUI({
-    # div(tagList(
-    #   if(!is.null(input$net_selected)) {
-    #     div(actionButton("selectFrom","Start with"),style="display:inline-block")
-    #   }
-    #   ,
-    #   
-    #   # if(!is.null(input$net_selected)) {
-    #   #   div(actionButton("selectFromTo","Start arrow(s), finish at next selection"),style="display:inline-block")
-    #   # }
-    #   #   ,
-    #   
-    #   if(!is.null(input$net_selected) && length(valuesCoding$fromStack)>0){
-    #     div(actionButton("selectTo","Finish at"),style="display:inline-block")
-    #     # p(as.character(unlist(valuesCoding$fromStack)))
-    #   }
-    # ),style="display:inline-block")
-  })
   
   
   output$selectBoxButtons=renderUI({
@@ -704,7 +721,7 @@ server <- function(input, output, session) {
       
       if(length(inpfrom)==0){
         values$graf <- vg %>% 
-          bind_nodes(tibble(label=isb))
+          bind_nodes(tibble(label=isb,cluster=""))
         doNotification("Adding Node",2)
         inpfrom=vg %>% nodes_as_tibble() %>% nrow() %>% `+`(1)
         
@@ -785,7 +802,7 @@ server <- function(input, output, session) {
       
       if(length(inpto)==0){
         values$graf <- vg %>% 
-          bind_nodes(tibble(label=isb))
+          bind_nodes(tibble(label=isb,cluster=""))
         doNotification("Adding Node",2)
         inpto=vg %>% nodes_as_tibble() %>% nrow() %>% `+`(1)
       }
@@ -922,8 +939,8 @@ server <- function(input, output, session) {
       # browser()
       df <- values$graf %>%
         nodes_as_tibble() %>%
-        mutate(id = row_number()) %>%
-        left_join(values$grafAgg2 %>% nodes_as_tibble() %>% select(new = id, id = origID)) # to provide a lo,1>9okup to find original ids if the nodes have been merged
+        mutate(id = row_number()) 
+        # left_join(values$grafAgg2 %>% nodes_as_tibble() %>% select(new = id, id = origID)) # to provide a lo,1>9okup to find original ids if the nodes have been merged
       # df <- (values$graf %>% nodes_as_tibble %>% mutate(id=row_number()))
       
       rows <- df[input$net_selected,]
@@ -2006,7 +2023,7 @@ server <- function(input, output, session) {
                  border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
                  max-width:500px;word-break: break-all',
           hoverConnectedEdges=F,
-          keyboard = T,
+          keyboard = F,
           selectConnectedEdges=F	
           
           
@@ -2023,7 +2040,7 @@ server <- function(input, output, session) {
             labelOnly=F,
             algorithm = "hierarchical"
           ),
-          selectedBy=ifelse((vga %>% nodes_as_tibble() %>% pull(cluster) %>% `==`("") %>% all),"","cluster"),
+          selectedBy=if(!("cluster" %in% colnames(vga  %>% nodes_as_tibble()))) "" else ifelse((vga %>% nodes_as_tibble() %>% pull(cluster) %>% `==`("") %>% all),"","cluster"),
           nodesIdSelection = F
         ) %>%
         visConfigure(enabled = input$codeCollapse == "Advanced options",
@@ -2137,7 +2154,8 @@ server <- function(input, output, session) {
           #       "#FFFFFF80",
           #     size = findset("arrowfont.size",global=F, v = vals)
           #   ),
-          hoverWidth = 28,
+          hoverWidth = 8,
+          selectionWidth = 8,
           physics =F,
           # color=list(highlight="#000000"),
           arrows =
@@ -2438,11 +2456,11 @@ server <- function(input, output, session) {
   
   output$edgeInfo=renderUI({
     # input$current_edge_id %>% as.character()
-    if(!is.null(input$net_selectedEdges))input$net_selectedEdges %>% 
-      paste0(collapse="; ") %>% 
-      as.character() %>% 
-      paste0("Edit package containing arrow(s): ",.) %>%  
-      tagList(actionLink("deletePackage"," (Delete?)"))
+    # if(!is.null(input$net_selectedEdges))input$net_selectedEdges %>% 
+    #   paste0(collapse="; ") %>% 
+    #   as.character() %>% 
+    #   paste0("Edit package containing arrow(s): ",.) %>%  
+    #   tagList(actionLink("deletePackage"," (Delete?)"))
   })
   
   observeEvent(input$deletePackage,{
