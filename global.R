@@ -499,11 +499,12 @@ set_text_contrast_color <- function(color) {
 } 
 
 
-format_nodes_and_edges <- function(df,inp,type){
+format_nodes_and_edges <- function(df,inp,type,vsc){
   # if (type=="nodes") \type_names = node_names else type_names = edge_names
   # browser()
   # req(inp$conditional_selector_node_color.background)
-  req(inp$conditional_value_node_font.color)
+  # browser()
+  # req(vsc$conditional_value_node_font.color)
   if(type=="node")namelist <- node_names else namelist <- edge_names
   for(attribute_short in namelist){
     attribute <- paste0(type,"_",attribute_short)
@@ -511,15 +512,16 @@ format_nodes_and_edges <- function(df,inp,type){
     
     # attribute_stripped <- str_remove_all(attribute,"node_") %>% str_remove_all("edge_")
     
+    row <- vsc[vsc$attribute==attribute,] 
+    row_clean <- vsc[vsc$attribute==attribute_clean,] 
+    floor <- row$value
     
-    floor <- inp[[paste0("conditional_value_",attribute)]] 
-    
-    var <- inp[[paste0("conditional_var_",attribute)]] 
-    var <- df %>% pull(var)
+    # var <- vsc[[vsc$"var"]] 
+    var <- df %>% pull(row$var)
     if(0!=sum(as.numeric(var),na.rm=T)) var <- as.numeric(var) else var <- as.numeric(factor(var))
     # browser()
-    if(inp[[paste0("conditional_selector_",attribute_clean)]]=="conditional on ...") {
-    ceiling <- inp[[paste0("conditional_value2_",attribute)]] 
+    if(row$selector=="conditional on ...") {
+    ceiling <- row$value2
       if(str_detect(attribute,"color")){
         # browser()
         if(any(is.na(var))){
@@ -553,8 +555,16 @@ make_quip_stats <- function(graf){
 
 
 
-make_settingsConditional <- function(inp){
-  # browser()
+make_settingsConditional <- function(inp,vs){
+  
+  
+  # have to check if the conditinal settings tab has ever  been visited
+  if(is.null(inp[[paste0('conditional_value_', all_attributes[[1]])]])) {
+    if(is.null(vs)) defaultSettingsConditional 
+    else 
+      vs 
+  }
+  else {
   lis <- lapply(all_attributes,function(attribute){
     attribute=c(
       attribute=attribute
@@ -567,6 +577,7 @@ make_settingsConditional <- function(inp){
       ,
       conditional_value2_=inp[[paste0('conditional_value2_', attribute)]]
     )
+    
   }) 
   
   names(lis)=paste0("X",1:length(lis))
@@ -577,7 +588,7 @@ make_settingsConditional <- function(inp){
     colnames(lisss) <- xc("attribute value selector var value2")
     lisss %>% as.tibble
 }
-
+}
 
 refresh_and_filter_net <- function(tmp,vpag,iot){
   vno <- tmp %>% nodes_as_tibble

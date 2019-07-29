@@ -199,7 +199,7 @@ ui <- tagList(
                                
                                tabPanel("",value="Display",    # more of a settings panel 
                                         style = glue("background-color:{rgb(0.97,1,0.97)};;border-radius:10px"), icon = icon("palette"),
-                                   
+                                   uiOutput("upConditionalBut"),
                                  uiOutput("condFormattingOutput")
                                ),
                                
@@ -301,6 +301,7 @@ ui <- tagList(
                              
                              bsCollapse(open = "Report",
                                bsCollapsePanel("Statements",
+                                 uiOutput("statementsTableUp"),
                                  uiOutput("push")
                                ),
                                

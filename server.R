@@ -1381,6 +1381,15 @@ server <- function(input, output, session) {
   })
   
   
+  output$upConditionalBut <- renderUI({
+    actionButton("upConditional","Update")
+    
+  })
+  
+  observeEvent(input$upConditional,ignoreInit = T,{
+    # browser()
+    values$settingsConditional <- make_settingsConditional(input,values$settingsConditional)
+  })
   
   output$filters=renderUI({
     clusters <- values$graf %>% nodes_as_tibble %>% pull(cluster) %>% unique
@@ -1822,20 +1831,20 @@ server <- function(input, output, session) {
       ved <- tmp %>% edges_as_tibble()
       
       
-      if(!is.null(input[[paste0('conditional_value_', all_attributes[[1]])]])){  #TODO if the conditional display tab has not been loaded yet, 
+      # if(!is.null(input[[paste0('conditional_value_', all_attributes[[1]])]])){  #TODO if the conditional display tab has not been loaded yet, provide some plain defaults
       vno <- vno %>% 
-        format_nodes_and_edges(input,type="node")
+        format_nodes_and_edges(input,type="node",values$settingsConditional)
       
       
       ved <- ved %>% 
-        format_nodes_and_edges(input,type="edge")
+        format_nodes_and_edges(input,type="edge",values$settingsConditional)
       
       
-      } else {
-        vno$font.color="#333333"
-        vno$font.size=44
-        ved$width=4
-      }
+      # } else {
+      #   vno$font.color="#333333"
+      #   vno$font.size=44
+      #   ved$width=4
+      # }
       ### make sure text is visibile when highlighted
       vno <- vno %>% 
         mutate(color.highlight.background=set_text_contrast_color(font.color))
@@ -2164,7 +2173,7 @@ server <- function(input, output, session) {
   # ++ report -----------------------------------------------------
   
   output$reportTable=renderFormattable({
-    if("frequency" %in% values$net$x$nodes){
+    if("frequency" %in% colnames(values$net$x$nodes)){
     values$net$x$nodes %>% 
       transmute(label,frequency=replace_na(frequency,0),from=replace_na(from.frequency_sum,0),to=replace_na(to.frequency_sum,0)) %>% 
       arrange(desc(frequency)) %>% 
@@ -2248,19 +2257,11 @@ server <- function(input, output, session) {
         nodes=values$graf %>% nodes_as_tibble
         edges=values$graf %>% edges_as_tibble
         
-        # have to check if the conditinal settings tab has ever  been visited
-        if(is.null(input[[paste0('conditional_value_', all_attributes[[1]])]])) {
-          if(is.null(values$settingsConditional)) settingsConditional <- defaultSettingsConditional 
-          else 
-          settingsConditional <- values$settingsConditional 
-        }
-          else 
-          settingsConditional <- make_settingsConditional(input)
         
         
         # browser()
         # if(storage="local"){
-        write__csv(settingsConditional, path=paste0("www/", inputtitl, "-settingsConditional.csv"))
+        write__csv(values$settingsConditional, path=paste0("www/", inputtitl, "-settingsConditional.csv"))
         if(!is.null(values$settingsGlobal))write__csv(values$settingsGlobal, path=paste0("www/", inputtitl, "-settingsGlobal.csv"))
         if(!is.null(values$statements))write__csv(values$statements, path=paste0("www/", inputtitl, "-statements.csv"))
         if(!is.null(nodes))write__csv(nodes, path = paste0("www/", inputtitl, "-nodes.csv"))
@@ -2511,9 +2512,10 @@ server <- function(input, output, session) {
   })  
   
   output$push=renderUI({
-    actionButton("statementsTableUp", "Update")
+    tagList(
+    actionButton("statementsTableUp", "Update"),
     rHandsontableOutput("statements")
-    
+    )
   })
   
   
