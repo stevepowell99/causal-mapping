@@ -615,17 +615,24 @@ server <- function(input, output, session) {
           style = "margin-top:20px"
           
         ),
-        div(
-          id = "sliders",
-          # div(actionLink("flip", "Flip"), style = "display:inline-block;"),
-          div(style = "display:inline-block;width:5%"),
-          div(sliderInput("strength", "Strength", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
-          div(style = "display:inline-block;width:5%"),
-          div(sliderInput("trust", "Trust", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
-          div(style = "display:inline-block;width:5%"),
-          div(sliderInput("confidence", "Confidence", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
-          style = ""
+        
+        bsCollapse(
+          bsCollapsePanel("Details",
+            div(
+              id = "sliders",
+              # div(actionLink("flip", "Flip"), style = "display:inline-block;"),
+              div(style = "display:inline-block;width:5%"),
+              div(sliderInput("strength", "Strength", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
+              div(style = "display:inline-block;width:5%"),
+              div(sliderInput("trust", "Trust", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
+              div(style = "display:inline-block;width:5%"),
+              div(sliderInput("confidence", "Confidence", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
+              style = ""
+            )    
+            )
         ),
+        
+        
         style="padding:10px;background-color:#EEFFEE;border:1px solid green"
       )
     )
@@ -651,12 +658,23 @@ server <- function(input, output, session) {
     }
     
     
+    if(input$quote!=""){
+      vg <- vg %>% 
+        mutate(quote=if_else(row_number() %in% ise,input$quote,quote)) 
+    }
+    
+    
     if(input$arrLabel!=""){
       vg <- vg %>% 
         mutate(label=if_else(row_number() %in% ise,input$arrLabel,label)) 
     }
     
     values$graf <- vg
+    
+    vpag <- values$pag
+    iot <- input$onlyThisStatement
+    delay(1000,refresh_and_filter_net(vg,vpag,iot))
+    
   })
   
   # observeEvent(input$flip, { 
@@ -1867,7 +1885,8 @@ server <- function(input, output, session) {
       # }
       ### make sure text is visibile when highlighted
       vno <- vno %>% 
-        mutate(color.highlight.background=set_text_contrast_color(font.color))
+        mutate(color.highlight.background=set_text_contrast_color(font.color)) %>% 
+        mutate(color.background=add_opacity_vec(color.background,.8)) 
       
       
       # margin--------
@@ -1998,8 +2017,8 @@ server <- function(input, output, session) {
           #   values$legend,
           background = findset("diagrambackground", v = vals)
           ,
-          height="2000px",
-          width="3000px"
+          height="100vh",#"2000px",
+          width="100vh",#"3000px"
           # height=findset("diagramheight", v = vals) %>% paste0("px"),
           # width=findset("diagramwidth", v = vals) %>% paste0("px")
           
@@ -2009,6 +2028,7 @@ server <- function(input, output, session) {
           # ,
           # width="2000px"
         ) 
+      
       vn = vn1 %>%
         visInteraction(
           dragNodes = T,
@@ -2024,7 +2044,7 @@ server <- function(input, output, session) {
                  border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
                  max-width:500px;word-break: break-all',
           hoverConnectedEdges=F,
-          keyboard = F,
+          keyboard = F,  # would be nice for navigation but interferes with text editing
           selectConnectedEdges=F	
           
           
@@ -2041,7 +2061,7 @@ server <- function(input, output, session) {
             labelOnly=F,
             algorithm = "hierarchical"
           ),
-          selectedBy=if(!("cluster" %in% colnames(vga  %>% nodes_as_tibble()))) "" else ifelse((vga %>% nodes_as_tibble() %>% pull(cluster) %>% `==`("") %>% all),"","cluster"),
+          selectedBy = if(!("cluster" %in% colnames(vga  %>% nodes_as_tibble()))) "" else ifelse((vga %>% nodes_as_tibble() %>% pull(cluster) %>% replace_na("") %>% `==`("") %>% all),"","cluster"),
           nodesIdSelection = F
         ) %>%
         visConfigure(enabled = input$codeCollapse == "Advanced options",
@@ -2076,6 +2096,7 @@ server <- function(input, output, session) {
           tmp <- vn$x$nodes$x
           vn$x$nodes$x <- vn$x$nodes$y
           vn$x$nodes$y <- tmp
+          # vn$x$nodes$color <- 'rgba(120,132,114,.7)'
           vnxn <- vn$x$nodes
           levels=(length(unique(vnxn$x)))
           maxLen=vnxn %>% 
@@ -2116,12 +2137,15 @@ server <- function(input, output, session) {
       #   vn <- vn %>%
       #     visPhysics(barnesHut = list(avoidOverlap = .7))
       # }
+      
+      fvw=findset("variablewidth")
+      # browser()
       vn <- vn %>%
         visNodes(
           shadow = list(enabled = T, size = 10),
-          # color = list(highlight="black"),                   
+          # color = 'rgba(120,32,14,.8)',
           # color.highlight.background="white"
-          widthConstraint=as.numeric(findset("variablewidth")) , #,300-(levels*10),#,(300*levels)-9,
+          widthConstraint=if(""==fvw) NULL else as.numeric(fvw) , #,300-(levels*10),#,(300*levels)-9,
           hidden = F,# findset("variablehidden",global=F) %>% as.logical(),
           scaling = list(label = list(enabled = F)),
           shape = findset("variableshape", v = vals),
@@ -2155,8 +2179,8 @@ server <- function(input, output, session) {
           #       "#FFFFFF80",
           #     size = findset("arrowfont.size",global=F, v = vals)
           #   ),
-          hoverWidth = 8,
-          selectionWidth = 8,
+          hoverWidth = 8 ,#'function (width) {return width*50;}',
+          selectionWidth =8 ,# sqrt(nrow(vn$x$nodes)),
           physics =F,
           # color=list(highlight="#000000"),
           arrows =

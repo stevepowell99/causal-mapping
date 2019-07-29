@@ -1,8 +1,8 @@
 attribute,value,selector,var,value2
 node_color.background,#FF7F00,always,label,#FFFFFF
-node_color.border,#FFFFFF,always,label,#FFFFFF
-node_font.color,#FFFFFF,always,label,#FFFFFF
-node_font.size,16,always,label,44
+node_color.border,whitesmoke,always,label,#FFFFFF
+node_font.color,whitesmoke,always,label,#FFFFFF
+node_font.size,22,always,label,44
 node_borderWidth,3,always,label,6
 edge_color,#984EA3,always,frequency,#FFFFFF
 edge_font.color,#4DAF4A,always,label,#FFFFFF

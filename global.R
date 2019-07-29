@@ -248,11 +248,11 @@ highlight_text <- function(large,smallvec,start="<a href='.'>",stop="</a>"){
 
 # format_edges <- function(df,input)df
 
-get_rgb_from_color_ramp <- function(mat){
-  
+add_opacity <- function(colorname,opacity){
+  col2rgb(colorname) %>% as.vector %>% c(opacity) %>% paste0(collapse=",") %>% paste0("rgba(",.,")")
 }
 
-
+add_opacity_vec <- function(colvec,opacity) sapply(colvec,add_opacity,opacity)
 
 
 

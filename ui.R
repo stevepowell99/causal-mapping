@@ -266,11 +266,10 @@ ui <- tagList(
                                )
                              )
                              
-                           ), options = list(minHeight = 100, maxHeight = 2000,
-                                             minWidth = 200, maxWidth = 3000)),
+                           )),
                            
                            # main panel----
-                           mainPanel(
+                           jqui_resizable(mainPanel(
                              
                              width = 8, style = "border-left:2px dotted black",
                              # pushbar_deps(),
@@ -291,7 +290,7 @@ ui <- tagList(
                                               
                                               
                                               
-                                              withSpinner((visNetworkOutput("net", height = "950px", width = "100%")),type = 5)                         # the main network viz. 
+                                              withSpinner(jqui_resizable(visNetworkOutput("net", height = "950px", width = "100%")),type = 5)                         # the main network viz. 
                                               
                                  
                                               #   )
@@ -319,6 +318,7 @@ ui <- tagList(
                              formattableOutput("reportTable", width = "100%", height = "0")
                              )
                              )
+                           )
                            )
                          )
                        )
