@@ -2048,9 +2048,9 @@ server <- function(input, output, session) {
           # footer =
           #   values$legend,
           background = findset("diagrambackground", v = vals)
-          ,
-          height="100vh",#"2000px",
-          width="100vh",#"3000px"
+          # ,
+          # height="100vh",#"2000px",
+          # width="100vh",#"3000px"
           # height=findset("diagramheight", v = vals) %>% paste0("px"),
           # width=findset("diagramwidth", v = vals) %>% paste0("px")
           
@@ -2198,7 +2198,7 @@ server <- function(input, output, session) {
         ) %>%
         visEdges(
           smooth = T,
-          arrowStrikethrough = F,
+          arrowStrikethrough = T,
           shadow =
             list(enabled = F, size = 5),
           # width =
@@ -2279,26 +2279,7 @@ server <- function(input, output, session) {
   # ++ floating widgets -----------------------------------------------------
   output$floatingWidgets <- renderUI({
     div(
-      
-      # div(
-      #   # icon("search-plus"),
-      #   actionButton("bigpicture", label=icon("search-plus"), width = "30px"),
-      #   # checkboxInput("bigpicture", label=icon("search-plus"), width = "30px"),
-      #   style = "display:inline-block;margin-left:10px"
-      # ),
-      # actionButton("widgetsUP","Update")
-      # div(
-      #   
-      #   checkboxInput("widgetDownArrows", "Hover arrows down"),
-      #     style = "display:inline-block;margin-right:140px;width:10px"
-      #   ),
-      # div(
-
-      # ,
-      # div(checkboxInput("showStatements", "Statements"), style = "display:inline-block;margin-right:80px"),
-      # div(actionButton("open", "Statements"),style = "display:inline-block;margin-right:80px"),
-      
-      div(actionButton("fitaction", "Fit"), style = "display:inline-block;margin-right:20px"),
+      div(actionButton("fitaction", label=NULL,icon=icon("arrows-alt")), style = "display:inline-block;margin-right:20px"),
       class = "bigpicbut" ,style="z-index:999 !important")
     # h1("asdfasdfasdf")
   })
@@ -2631,9 +2612,22 @@ server <- function(input, output, session) {
   })
   
   
+  output$widthControlOutput <- renderUI({
+    actionButton("widthControl",NULL,icon=icon("arrows-h"))
+  })
+  
+  observeEvent(input$widthControl, {
+    # shinyjs::toggle(id = "sidebar")
+    shinyjs::toggleClass("app-content", "col-sm-4")
+    shinyjs::toggleClass("mainPanel", "col-sm-8")
+    shinyjs::toggleClass("app-content", "col-sm-7")
+    shinyjs::toggleClass("mainPanel", "col-sm-5")
+  })  
+  
+  # jqui_effect('#mainPanel', effect = 'bounce') # bounces the plot
   
   
-  jqui_draggable("#sel,#chbox,#saveb")
+  # jqui_resizable("#resizablePanel,#mainPanel,#net", options = list(axis = 'x'))
   
   
   # makeReactiveBinding("inputtitl")

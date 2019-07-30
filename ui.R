@@ -53,14 +53,14 @@ ui <- tagList(
     conditionalPanel("!input.crowd",
                      
                      div(
+                       
                        div(
                          
                          
-                         sidebarLayout(                             #the main panels are resizable
-                           jqui_resizable(sidebarPanel(
-                             id="resizablePanel",
-                             width = 4, style =
-                               "padding:0",
+                         fluidRow(                             #the main panels are resizable
+                           (column(4,
+                          #   style =
+                          #     "padding:0",
                              
                              id = "app-content",
                              a(h4("Causal Mapping", style = "display:inline-block;color:white;margin-right:8px"), href = "."),
@@ -139,7 +139,7 @@ ui <- tagList(
                                # ui coding----                             
                                #  most important panel. in a state of flux at the moment. in most cases user will be looking at / scrolling through pieces of text and will "code" them aka use the information to create arrows/edges
                                tabPanel("",icon=icon("highlighter"),
-                                        value = "Code", style = glue("background-color:{rgb(0.99,1,0.97)};;border-radius:10px"), 
+                                        value = "Code", 
                                         
                                         # checkboxInput("showPage","Code one sentence")
                                         # ,
@@ -177,7 +177,7 @@ ui <- tagList(
                                         #        uiOutput("formMakr")
                                ),
                                tabPanel("",                             # user can directly edit the edges aka arrows table. still functional but will probably be dropped
-                                        value = "Arrows", style = glue("background-color:{rgb(0.99,1,0.97)};;border-radius:10px"), icon = icon("arrow-right"),
+                                        value = "Arrows", icon = icon("arrow-right"),
                                         # h3("View and edit arrows"),
                                         actionButton("edgeTableUp", "Update"),
                                         rHandsontableOutput("edgeTable"),
@@ -188,24 +188,16 @@ ui <- tagList(
                                ),
                                
                                
-                               # ui filter----
-                               
-                               tabPanel("",value="Filter",    # more of a settings panel 
-                                        style = glue("background-color:{rgb(0.97,1,0.97)};;border-radius:10px"), icon = icon("filter"),
-                                     p()
-                                      
-                               ),
-                               
                                # ui display----
                                
                                tabPanel("",value="Display",    # more of a settings panel 
-                                        style = glue("background-color:{rgb(0.97,1,0.97)};;border-radius:10px"), icon = icon("palette"),
+                                        icon = icon("palette"),
                                    uiOutput("upConditionalBut"),
                                  uiOutput("condFormattingOutput")
                                ),
                                
                                tabPanel("",value="Settings",    # more of a settings panel 
-                                        style = glue("background-color:{rgb(0.97,1,0.97)};;border-radius:10px"), icon = icon("cog"),
+                                        icon = icon("cog"),
                                         
                                         # selectInput("layout","layout",choices=c("Sugiyama"="layout_with_sugiyama", "circle"="layout_in_circle"),selected = "layout_with_sugiyama")
                                         # ,
@@ -242,20 +234,6 @@ ui <- tagList(
                                  
                                         # ,
                                ),
-                               tabPanel("",icon=icon("chart-pie"),                         # some additional output, not important
-                                        style = "padding:20px;background-color:white;z-index:99",
-                                        # d3Output("d3")
-                                        
-                                        bsCollapse(
-                                          bsCollapsePanel(title = "Sankey",
-                                                          plotlyOutput("charts")
-                                          ),
-                                          bsCollapsePanel(title = "pivot",
-                                                          rpivotTableOutput("pivot", width = "100%", height = "300px")
-                                          )
-                                        )
-                                        
-                               ),
                                
                                tabPanel("", icon=icon("warehouse"),div(style = ""),                         # library of existing projects stored locally as csv files. clicking loads up the project 
                                         style = "",
@@ -270,9 +248,9 @@ ui <- tagList(
                            )),
                            
                            # main panel----
-                           jqui_resizable(mainPanel(
-                             
-                             width = 8, style = "border-left:2px dotted black",
+                           column(8,
+                           id="mainPanel",  
+                             # style = "border-left:2px dotted black",
                              # pushbar_deps(),
                              # br(),
                              # pushbar(
@@ -284,6 +262,8 @@ ui <- tagList(
                                # actionButton("close", "Close")
                              # ),
                              uiOutput("filters"),
+                             uiOutput("widthControlOutput"),
+                             
                              conditionalPanel("!input.crowd",style="background-color:white;border-radius:5px",                         # input.crowd is part of an alternative, "crowdsourced" phone-friendly version of the interface which is not important at moment
                                               
                                               uiOutput("floatingWidgets"),
@@ -291,7 +271,7 @@ ui <- tagList(
                                               
                                               
                                               
-                                              withSpinner(jqui_resizable(visNetworkOutput("net", height = "950px", width = "100%")),type = 5)                         # the main network viz. 
+                             withSpinner(jqui_resizable(visNetworkOutput("net", height = "85vh", width="1250px")),type = 5)                         # the main network viz. 
                                               
                                  
                                               #   )
@@ -299,32 +279,32 @@ ui <- tagList(
                              )
                              ,
                              
-                             bsCollapse(open = "Report",
-                               bsCollapsePanel("Quotes",
+                             tabsetPanel(
+                               tabPanel("Quotes",
                                  
                                  uiOutput("quotesOutput")
                                ),
                                
-                               bsCollapsePanel("Statements",
+                               tabPanel("Statements",
                                  
                                  uiOutput("push")
                                ),
                                
-                                bsCollapsePanel("Description",
+                                tabPanel("Description",
                                   uiOutput("description"),
                                   # tags$hr(),
                                   uiOutput("blog"),                          # additional narrative abou the project stored in the settings csv
                                   textOutput("info")
                                 ),
-                                bsCollapsePanel("Legend",
+                                tabPanel("Legend",
                                 plotOutput("colourLegend")
                                   ),
-                                bsCollapsePanel("Report",
+                                tabPanel("Report",
                                
                              formattableOutput("reportTable", width = "100%", height = "0")
                              )
                              )
-                           )
+                           
                            )
                          )
                        )

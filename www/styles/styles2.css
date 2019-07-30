@@ -1,8 +1,5 @@
-#mc_embed_signup h2 {
-    font-weight: bold;
-    padding: 0;
-    margin: 0 0;
-    font-size: 1em;
+body {
+    margin: 10px;
 }
 
 #signup{
@@ -469,16 +466,6 @@ background-color:aliceblue;
 }
 
 
-  .col2 {
-    columns: 2 200px;         /* number of columns and width in pixels*/
-    -webkit-columns: 2 200px; /* chrome, safari */
-    -moz-columns: 2 200px;    /* firefox */
-  }
-  .col3 {
-    columns: 3 150px;
-    -webkit-columns: 3 150px;
-    -moz-columns: 3 150px;
-  }
 
 code {
 -webkit-column-break-inside: avoid;
@@ -498,14 +485,6 @@ padding: 4px;
 vertical-align:top;
 }
 
-
-
-/*NEWNEW*/
-
-/*.irs-grid-pol {display: none;}
-.irs-with-grid {width:70%;}
-.shiny-input-container{width:70%;}*/
-/*.shiny-input-container:not(.shiny-input-container-inline){width:70%;margin:0 40px;padding:0 40px;}*/
 
 
 #base1slider, #shape1slider, #threshold1{
@@ -528,13 +507,6 @@ vertical-align:top;
   background-color: whitesmoke !important;
 }
 
-.col-sm-4 ,.col-sm-8 ,.col-sm-3 ,.col-sm-1{
-  padding: 10px 10px 10px 30px !important;
-}
-
-.col-sm-8 {
-  background-color: white;
-}
 /*
 label {
   font-size: 20px !important;
@@ -649,12 +621,6 @@ left:-800px;
 .nav-tabs{
   border-bottom: none !important;
   background-color: #556655 !important;
-}
-
-.tab-pane{
-  border-radius: 4px !important;
-  background-color: white !important;
-  padding: 20px !important;
 }
 
 #contentButton{
@@ -852,11 +818,11 @@ margin-left:200px;
   width:555px !important;
 }
 
-input[type=text] {
+input[type=xxtext] {
   -webkit-transition: width .35s ease-in-out;
   transition: width .35s ease-in-out;
 }
-input[type=text]:focus {
+input[type=xxtext]:focus {
   width: 300px;
   z-index: 999;
 }
@@ -891,3 +857,40 @@ input[type=text]:focus {
   background-color: gray !important;
 }
 
+.col-sm-8,.col-sm-3 {
+  background-color: white  !important;
+  padding-left:8 !important;
+}
+
+.col-sm-5 {
+  background-color: white  !important;
+  padding-left:8 !important;
+}
+
+#widthControl{
+      position: absolute;
+    right: 20px;
+    top: 58px;
+    z-index: 99;
+}
+
+
+.tab-pane{
+  border-radius: 4px !important;
+  background-color: white !important;
+  padding: 20px !important;
+}
+  .xxxxcol2 {
+    columns: 2 200px;         /* number of columns and width in pixels*/
+    -webkit-columns: 2 200px; /* chrome, safari */
+    -moz-columns: 2 200px;    /* firefox */
+  }
+  .xxxcol3 {
+    columns: 3 150px;
+    -webkit-columns: 3 150px;
+    -moz-columns: 3 150px;
+  }
+
+#add_edges_widget .shiny-input-container{
+  width: 100% !important;
+}
