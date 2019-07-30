@@ -147,7 +147,26 @@ server <- function(input, output, session) {
                 content = "Let me know if you need help: steve@pogol.net",
                 append = FALSE)
             }
-            
+            # browser()
+            if (filename != "" & file__exists(paste0(filename,"-recovery-nodes.csv"))) {
+              if(T){             # TODO introduce a test for newer
+              createAlert(
+                session,
+                "recoveryNewer",
+                title = "There is a newer recovery version of this project",
+                content = paste0("<a href=?permalink=",ql,"-recovery>Click here to restore, then save under a new name</a>"),append = FALSE)
+            }
+            }
+            if(grepl("-recovery",filename)) {
+              if(T){
+              createAlert(
+                session,
+                "recoveryVersion",
+                title = "You are working on a recovery version of this project",
+                content = "You are advised to save under a new name when you are satisfied with the project."
+              )
+            }
+            }
             for(fn in csvlist){
               
               fnn=paste0(filename,"-",fn,".csv")
@@ -280,7 +299,7 @@ server <- function(input, output, session) {
       hot_cols(fixedColumnsLeft = 1)
   })
   
-  # file upload ----
+  
   observeEvent(input$up.nodes, {
     
     # browser()
@@ -630,33 +649,30 @@ server <- function(input, output, session) {
           style = "margin-top:20px"
           
         ),
+        checkboxInput("edgeDetails","Details",value = F),
         
-        bsCollapse(
-          bsCollapsePanel("Details",
+        conditionalPanel("input.edgeDetails",
+          #open="Details",
             tagList(
-            div(
-              div(style = "display:inline-block;width:5%"),
-              div(textInput("arrLabel", NULL, value = ifelse(ise,row$label,""), placeholder = "label"), style = "display:inline-block;"),
-              div(style = "display:inline-block;width:5%"),
-              div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "display:inline-block;width:20%"),
-              div(selectizeInput("function.type", NULL, choices = c("+", "-", "NECC","SUFF")), style = "display:inline-block;width:20%"),
-              div(textInput("package", NULL, value = ifelse(ise,row$package,""), placeholder = "package"), style = "display:inline-block;"),
-              div(textInput("packageNote", NULL, value = ifelse(ise,row$packageNote,""), placeholder = "packageNote"), style = "display:inline-block;"),
-              div(textAreaInput("quote", NULL, value = values$highlightedText, placeholder = "quote",rows=3,width="100%"), style = ""),
-              style = "margin-top:20px"
+              div(
+                div(textInput("arrLabel", NULL, value = ifelse(ise,row$label,""), placeholder = "label"), style = "display:inline-block;"),
+                div(style = "display:inline-block;width:5%"),
+                div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "display:inline-block;width:20%"),
+                div(selectizeInput("function.type", NULL, choices = c("+", "-", "NECC","SUFF")), style = "display:inline-block;width:20%"),
+                div(textInput("package", NULL, value = ifelse(ise,row$package,""), placeholder = "package"), style = "display:inline-block;"),
+                div(textInput("packageNote", NULL, value = ifelse(ise,row$packageNote,""), placeholder = "packageNote"), style = "display:inline-block;")
+              ),
               
-            ),
             div(
               id = "sliders",
-              # div(actionLink("flip", "Flip"), style = "display:inline-block;"),
               div(style = "display:inline-block;width:5%"),
               div(sliderInput("strength", "Strength", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
               div(style = "display:inline-block;width:5%"),
               div(sliderInput("trust", "Trust", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
               div(style = "display:inline-block;width:5%"),
+              
               div(sliderInput("confidence", "Confidence", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
               style = ""
-            )
             )
             )
         ),
@@ -2319,18 +2335,20 @@ server <- function(input, output, session) {
         
         # saveRDS(values, paste0("www/", inputtitl, ".tm"))
         
-        nodes=values$graf %>% nodes_as_tibble
-        edges=values$graf %>% edges_as_tibble
+        values$nodes=values$graf %>% nodes_as_tibble
+        values$edges=values$graf %>% edges_as_tibble
         
-        
+        for(c in csvlist){
+          write__csv(values[[c]],path=paste0("www/", inputtitl, "-",c,".csv"))
+        }
         
         # browser()
         # if(storage="local"){
-        write__csv(values$settingsConditional, path=paste0("www/", inputtitl, "-settingsConditional.csv"))
-        if(!is.null(values$settingsGlobal))write__csv(values$settingsGlobal, path=paste0("www/", inputtitl, "-settingsGlobal.csv"))
-        if(!is.null(values$statements))write__csv(values$statements, path=paste0("www/", inputtitl, "-statements.csv"))
-        if(!is.null(nodes))write__csv(nodes, path = paste0("www/", inputtitl, "-nodes.csv"))
-        if(!is.null(edges))write__csv(edges, path = paste0("www/", inputtitl, "-edges.csv"))
+        # write__csv(values$settingsConditional, path=paste0("www/", inputtitl, "-settingsConditional.csv"))
+        # if(!is.null(values$settingsGlobal))write__csv(values$settingsGlobal, path=paste0("www/", inputtitl, "-settingsGlobal.csv"))
+        # if(!is.null(values$statements))write__csv(values$statements, path=paste0("www/", inputtitl, "-statements.csv"))
+        # if(!is.null(nodes))write__csv(nodes, path = paste0("www/", inputtitl, "-nodes.csv"))
+        # if(!is.null(edges))write__csv(edges, path = paste0("www/", inputtitl, "-edges.csv"))
         
         if(storage=="gsheets"){
           # browser()
@@ -2356,7 +2374,26 @@ server <- function(input, output, session) {
       }
     }
   )
-  
+
+ # save recovery versions of tables --------------
+ observe({
+        
+   if ("" != req(input$titl)) {
+          inputtitl <<- gsub("[^[[:alnum:]|-]]*", "", input$titl)
+          
+          values$nodes=req(values$graf) %>% nodes_as_tibble
+          values$edges=req(values$graf) %>% edges_as_tibble
+          
+          for(c in csvlist){
+            if(!is.null(values[[c]]))write__csv(values[[c]],path=paste0("www/", inputtitl, "-recovery-",c,".csv"))
+          }
+
+          
+          
+        }
+      }
+    )
+    
   observeEvent(input$updateE_crowd, ignoreInit = TRUE, {
   # browser()
   # doNotification("observing save button",7)

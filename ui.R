@@ -73,6 +73,8 @@ ui <- tagList(
                              bsAlert("bsmsg"),
                              bsAlert("found"),
                              bsAlert("notfound"),
+                             bsAlert("recoveryNewer"),
+                             bsAlert("recoveryVersion"),
                              
           
                                                     # uiOutput("test"),
@@ -263,6 +265,8 @@ ui <- tagList(
                              # ),
                              uiOutput("filters"),
                              uiOutput("widthControlOutput"),
+                             bsTooltip("widthControlOutput", "title", placement = "bottom", trigger = "hover",
+                               options = NULL),
                              
                              conditionalPanel("!input.crowd",style="background-color:white;border-radius:5px",                         # input.crowd is part of an alternative, "crowdsourced" phone-friendly version of the interface which is not important at moment
                                               
