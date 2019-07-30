@@ -35,10 +35,11 @@ diagram,width,3000,NA
 diagram,splitColumnNames,NA,NA
 arrow,conditionalwidthscaling,19,NA
 variable,conditionalwidthscaling,19,NA
-variable,width,450,NA
+variable,width,400,NA
 variable,font.size.floor,51.1421315724,NA
 variable,font.size.scale,25,NA
 arrow,notForwards,T,NA
 diagram,downarrows,TRUE,NA
 variable,shape,box,NA
+variable,opacity,.4,NA
 diagram,codingfocus,T,NA

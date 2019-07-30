@@ -154,7 +154,8 @@ ui <- tagList(
                                      # uiOutput("selectbox2"),
                                      # uiOutput("addNewNodeButton"),
                                      uiOutput("selectBoxButtons"),
-                                     uiOutput("fromStackInfo"),
+                                     # uiOutput("fromStackInfo"),
+                                     uiOutput("combineLink"),
                                      # uiOutput("edgeInfo"),
                                      uiOutput("add_edges_widget"),
                                      uiOutput("combo"),
@@ -299,6 +300,11 @@ ui <- tagList(
                              ,
                              
                              bsCollapse(open = "Report",
+                               bsCollapsePanel("Quotes",
+                                 
+                                 uiOutput("quotesOutput")
+                               ),
+                               
                                bsCollapsePanel("Statements",
                                  
                                  uiOutput("push")

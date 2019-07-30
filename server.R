@@ -560,7 +560,7 @@ server <- function(input, output, session) {
   
   
   observeEvent(input$updateE2, {
-    ectizeInput(session, "new1_edge", selected = input$new2_edge)
+    selectizeInput(session, "new1_edge", selected = input$new2_edge)
   })
   
   observeEvent(input$updateE3, {
@@ -572,7 +572,29 @@ server <- function(input, output, session) {
   # fromStack display
   
   output$fromStackInfo=renderUI({
-    if(0<length(valuesCoding$fromStack))p(paste0("Begin arrow with: ",valuesCoding$fromStack %>% paste0(collapse=", ")))
+   })
+  
+  
+  output$combineLink=renderUI({
+    ins <- input$net_selected
+    vfs <- valuesCoding$fromStack
+ tagList(
+    if(0<length(vfs)){
+      div(paste0(paste0("From: ",vfs %>% paste0(collapse=", ")),
+        if(!is.null(ins)) paste0(", To? ",ins[[1]])
+      ),style="display:inline-block")
+    }
+    ,
+    
+       if(0<length(vfs) & !is.null(ins)){
+         if(vfs!=ins){
+      div(actionLink("combineLink",label = "Recode ?"),style="display:inline-block")
+}  }
+   )
+ })
+  
+  observeEvent(input$combineLink,{
+    doNotification("Not implemented yet",9)
   })
   
   
@@ -604,13 +626,6 @@ server <- function(input, output, session) {
         
         
         div(
-          div(style = "display:inline-block;width:5%"),
-          div(textInput("arrLabel", NULL, value = ifelse(ise,row$label,""), placeholder = "label"), style = "display:inline-block;"),
-          div(style = "display:inline-block;width:5%"),
-          div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "display:inline-block;width:20%"),
-          div(selectizeInput("function.type", NULL, choices = c("+", "-", "NECC","SUFF")), style = "display:inline-block;width:20%"),
-          div(textInput("package", NULL, value = ifelse(ise,row$package,""), placeholder = "package"), style = "display:inline-block;"),
-          div(textInput("packageNote", NULL, value = ifelse(ise,row$packageNote,""), placeholder = "packageNote"), style = "display:inline-block;"),
           div(textAreaInput("quote", NULL, value = values$highlightedText, placeholder = "quote",rows=3,width="100%"), style = ""),
           style = "margin-top:20px"
           
@@ -618,6 +633,19 @@ server <- function(input, output, session) {
         
         bsCollapse(
           bsCollapsePanel("Details",
+            tagList(
+            div(
+              div(style = "display:inline-block;width:5%"),
+              div(textInput("arrLabel", NULL, value = ifelse(ise,row$label,""), placeholder = "label"), style = "display:inline-block;"),
+              div(style = "display:inline-block;width:5%"),
+              div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "display:inline-block;width:20%"),
+              div(selectizeInput("function.type", NULL, choices = c("+", "-", "NECC","SUFF")), style = "display:inline-block;width:20%"),
+              div(textInput("package", NULL, value = ifelse(ise,row$package,""), placeholder = "package"), style = "display:inline-block;"),
+              div(textInput("packageNote", NULL, value = ifelse(ise,row$packageNote,""), placeholder = "packageNote"), style = "display:inline-block;"),
+              div(textAreaInput("quote", NULL, value = values$highlightedText, placeholder = "quote",rows=3,width="100%"), style = ""),
+              style = "margin-top:20px"
+              
+            ),
             div(
               id = "sliders",
               # div(actionLink("flip", "Flip"), style = "display:inline-block;"),
@@ -628,7 +656,8 @@ server <- function(input, output, session) {
               div(style = "display:inline-block;width:5%"),
               div(sliderInput("confidence", "Confidence", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
               style = ""
-            )    
+            )
+            )
             )
         ),
         
@@ -1698,7 +1727,7 @@ server <- function(input, output, session) {
       ved <- graph_values %>% edges_as_tibble()
       
       
-      if (findset("variablemerge") %>% as.logical() & input$sides!="Code") { # need to convert to and froms in edge df
+      if (findset("variablemerge") %>% as.logical() & this_tab!="Code") { # need to convert to and froms in edge df
 
       x <- merge_nodes(vno,ved)
       vno <- x[[1]]
@@ -1764,7 +1793,7 @@ server <- function(input, output, session) {
         # browser()
       # ved edge merge TODO this messes up statements ---- 
       
-      if (input$sides!="Code" & findset("arrowmerge", v = vals) %>% as.logical() ) {
+      if (this_tab!="Code" & findset("arrowmerge", v = vals) %>% as.logical() ) {
         ved <- ved %>%
           group_by(from, to)
         
@@ -1869,7 +1898,7 @@ server <- function(input, output, session) {
       ved <- tmp %>% edges_as_tibble()
       
       
-      # if(!is.null(input[[paste0('conditional_value_', all_attributes[[1]])]])){  #TODO if the conditional display tab has not been loaded yet, provide some plain defaults
+      if(this_tab!="Code"){  #TODO if the conditional display tab has not been loaded yet, provide some plain defaults
       vno <- vno %>% 
         format_nodes_and_edges(input,type="node",values$settingsConditional)
       
@@ -1878,15 +1907,18 @@ server <- function(input, output, session) {
         format_nodes_and_edges(input,type="edge",values$settingsConditional)
       
       
-      # } else {
-      #   vno$font.color="#333333"
-      #   vno$font.size=44
-      #   ved$width=4
-      # }
+      } else {
+        # browser()
+        vno$font.color="#eeffee"
+        vno$color.background="#aaaaaa"
+        vno$font.size=44
+        
+        ved$width=3
+      }
       ### make sure text is visibile when highlighted
       vno <- vno %>% 
         mutate(color.highlight.background=set_text_contrast_color(font.color)) %>% 
-        mutate(color.background=add_opacity_vec(color.background,.8)) 
+        mutate(color.background=add_opacity_vec(color.background,as.numeric(findset("variableopacity", v = vals)))) 
       
       
       # margin--------
@@ -2567,6 +2599,34 @@ server <- function(input, output, session) {
     tagList(
     actionButton("statementsTableUp", "Update"),
     rHandsontableOutput("statements")
+    )
+  })
+  
+  
+  output$quotesOutput=renderUI({
+    ins <- input$net_selected
+    inse <- input$net_selectedEdges
+    if(!is.null(ins)){
+      quotes <- values$net$x$nodes %>% 
+        filter(id %in% ins) %>% 
+        pull(quote) %>% 
+        str_remove_all(",NA") %>% 
+        paste0(collapse="; ")
+      }
+    
+    else if(!is.null(inse)){
+      quotes <- values$net$x$edges %>% 
+        filter(id %in% ins) %>% 
+        pull(quote) %>% 
+        str_remove_all(",NA") %>% 
+        paste0(collapse="; ")
+    }
+    else quotes <- "Click on a variable or arrow to see the quotes"
+    
+    tagList(
+      icon("quote-left"),
+      quotes %>% 
+        HTML %>% div(class = "quotes")
     )
   })
   
