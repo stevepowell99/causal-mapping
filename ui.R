@@ -275,7 +275,7 @@ ui <- tagList(
                                               
                                               
                                               
-                             withSpinner(jqui_resizable(visNetworkOutput("net", height = "85vh", width="1250px")),type = 5)                         # the main network viz. 
+                             withSpinner((visNetworkOutput("net", height = "85vh", width="1250px")),type = 5)                         # the main network viz. 
                                               
                                  
                                               #   )

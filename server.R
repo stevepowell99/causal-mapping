@@ -136,6 +136,7 @@ server <- function(input, output, session) {
             
             values$crowd=str_detect(ql,"-crowd")
             if(values$crowd) updateCheckboxInput(session,"crowd",value=T)
+      
             filename <- paste0("www/", ql)
             
             # browser()
@@ -149,11 +150,14 @@ server <- function(input, output, session) {
             }
             # browser()
             if (filename != "" & file__exists(paste0(filename,"-recovery-nodes.csv"))) {
-              if(T){             # TODO introduce a test for newer
+                 rectime <- file.info(paste0(filename,"-recovery-nodes.csv"))$mtime %>% as.numeric()
+                maintime <- file.info(paste0(filename,"-nodes.csv"))$mtime %>%  as.numeric()
+                
+              if(rectime>maintime){             # TODO introduce a test for newer
               createAlert(
                 session,
                 "recoveryNewer",
-                title = "There is a newer recovery version of this project",
+                title = "There is a recovery version of this project which is newer",
                 content = paste0("<a href=?permalink=",ql,"-recovery>Click here to restore, then save under a new name</a>"),append = FALSE)
             }
             }
@@ -163,7 +167,7 @@ server <- function(input, output, session) {
                 session,
                 "recoveryVersion",
                 title = "You are working on a recovery version of this project",
-                content = "You are advised to save under a new name when you are satisfied with the project."
+                content = "Check the project then save under a new name"
               )
             }
             }
@@ -2654,11 +2658,12 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$widthControl, {
-    # shinyjs::toggle(id = "sidebar")
-    shinyjs::toggleClass("app-content", "col-sm-4")
-    shinyjs::toggleClass("mainPanel", "col-sm-8")
-    shinyjs::toggleClass("app-content", "col-sm-7")
-    shinyjs::toggleClass("mainPanel", "col-sm-5")
+
+    toggleClass("app-content", "col7")
+    toggleClass("mainPanel", "col5")
+    # toggleClass("maindivnet", "maindivnet-small")
+    # toggleClass("graphnet", "maindivnet-small")
+    toggleClass("net", "maindivnet-small")
   })  
   
   # jqui_effect('#mainPanel', effect = 'bounce') # bounces the plot

@@ -894,3 +894,21 @@ input[type=xxtext]:focus {
 #add_edges_widget .shiny-input-container{
   width: 100% !important;
 }
+
+
+.alert a{
+  color: white;
+}
+
+.maindivnet-small{
+  width: 100% !important;
+}
+
+.col7{
+  width: 60% !important;
+}
+
+.col5{
+  width: 40% !important;
+}
+
