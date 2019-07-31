@@ -818,13 +818,12 @@ margin-left:200px;
   width:555px !important;
 }
 
-input[type=xxtext] {
-  -webkit-transition: width .35s ease-in-out;
-  transition: width .35s ease-in-out;
+#varForm input[type=text] {
+  -webkit-transition: width .155s ease-in-out;
+  transition: width .155s ease-in-out;
 }
-input[type=xxtext]:focus {
-  width: 300px;
-  z-index: 999;
+#varForm input[type=text]:focus {
+  width: 500px;
 }
 
 #addFrom{

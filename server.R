@@ -148,17 +148,19 @@ server <- function(input, output, session) {
                 content = "Let me know if you need help: steve@pogol.net",
                 append = FALSE)
             }
-            # browser()
+            # browser()   TODO this just checks nodes. should check all
             if (filename != "" & file__exists(paste0(filename,"-recovery-nodes.csv"))) {
+                 recfile <- read.csv(paste0(filename,"-recovery-nodes.csv"))
+                mainfile <- read.csv(paste0(filename,"-nodes.csv"))
                  rectime <- file.info(paste0(filename,"-recovery-nodes.csv"))$mtime %>% as.numeric()
                 maintime <- file.info(paste0(filename,"-nodes.csv"))$mtime %>%  as.numeric()
                 
-              if(rectime>maintime){             # TODO introduce a test for newer
+              if(rectime>maintime & !identical(recfile,mainfile)){             # TODO this shouldn't be necc, but sometimes app saves tables without any changes
               createAlert(
                 session,
                 "recoveryNewer",
                 title = "There is a recovery version of this project which is newer",
-                content = paste0("<a href=?permalink=",ql,"-recovery>Click here to restore, then save under a new name</a>"),append = FALSE)
+                content = paste0("<a href=?permalink=",ql,"-recovery>Click here to restore</a>"),append = FALSE)
             }
             }
             if(grepl("-recovery",filename)) {
@@ -482,38 +484,40 @@ server <- function(input, output, session) {
     # browser()
     
     # col=findset("diagramoverview_column")
-    if(!("source" %in% colnames(vs))){
+    if(!("source__id" %in% colnames(vs))){
       
-      vs$source <- 1
+      vs$source__id <- 1
     }
     
     vs <- vs %>% 
-      mutate(newSource=ifelse(source!=lag(source),source,"")) %>% 
-      mutate(newSource=ifelse(is.na(newSource),source,newSource))
+      mutate(newSource=ifelse(source__id!=lag(source__id),source__id,"")) %>% 
+      mutate(newSource=ifelse(is.na(newSource),source__id,newSource))
     
-      pointer=vs$source[req(values$pag)]
-      content=vs$statement[(vs$source==pointer)]
+      pointer=vs$source__id[req(values$pag)]
+      content=vs$statement[(vs$source__id==pointer)]
       # content=vs$statement[]
 
       showModal(modalDialog(
       title = "All statements",footer=NULL,easyClose = T,size="l",
       tagList(
-        checkboxInput("showAllSources","Show all sources"),
+        # checkboxInput("showAllSources","Show all sources"),
         lapply(seq_along(content),function(y)if(!is.na(vs$text[[y]])){
           x <- content[[y]]
           
           btName=paste0("gosource",x)
           
-          if (T|is.null(values$obsList[[btName]])) {
+          if (T) {
             # make sure to use <<- to update global variable obsList
             values$obsList[[btName]] <- observeEvent(input[[btName]], {
               updatePageruiInput(session,"pager",page_current = as.numeric(x))
+              removeModal(session = getDefaultReactiveDomain())
+              
             })
           }
     # browser()
           tagList(
-            if(vs$newSource[y]=="")div() else div(h3(paste0("Source: ",vs$newSource[y]))),
-            div(h4(paste0("Statement: ",vs$statement[y]))),
+            if(vs$newSource[y]=="")div() else div(h3(paste0("Source: ",pointer))),
+            div(h4(paste0("Statement: ",vs$statement[x]))),
             # actionButton(paste0("gosource",x),"Go!"),
             if(str_detect(vs$text[x],"pdf$")) {
               tags$iframe(src="pdf.pdf",style="height:800px; width:100%;scrolling=yes")
@@ -617,7 +621,23 @@ server <- function(input, output, session) {
  })
   
   observeEvent(input$combineLink,{
-    doNotification("Not implemented yet",9)
+    # browser()
+    vfs <- req(valuesCoding$fromStack) %>% as.numeric()
+    ins <- req(input$net_selected[[1]]) %>% as.numeric()
+    
+    ved <- values$graf %>% 
+      edges_as_tibble()
+    
+    
+    ved <- ved %>% 
+      mutate(thisStatement = (ved$statement == values$pag | !input$onlyThisStatement)) %>% 
+      mutate(from=ifelse(thisStatement & from %in% vfs,ins,from)) %>% 
+      mutate(to=  ifelse(thisStatement & to %in% vfs,ins,to))
+    
+    values$graf <- 
+      tbl_graph(values$graf %>% nodes_as_tibble(),ved)  # kinda stupid not to use tidygraph functions
+    
+    doNotification("Recoded",9)
   })
   
   
@@ -1015,10 +1035,10 @@ server <- function(input, output, session) {
       div(tagList(
         if (length(input$net_selected)>0) {
           tagList(
-            div(p("Edit: "),style="display:inline-block"),
-            if (length(input$net_selected)==1) div(textInput("editVarFormText",NULL,placeholder="label",value=df[input$net_selected,"label"],width="100px"),style="display:inline-block;margin-right:5px"),
-            div(textInput("editdetails",NULL,placeholder="details",value=ifelse(length(rows$details)>1,"",rows$details),width="100px"),style="display:inline-block;margin-right:5px"),
-            div(textInput("editcluster",NULL,placeholder="cluster",value=rows$cluster %>% paste0(collapse=","),width="100px"),style="display:inline-block;margin-right:5px"),
+            div(p("Edit: "),style="display:inline-block;width:5%"),
+            if (length(input$net_selected)==1) div(textInput("editVarFormText",NULL,placeholder="label",value=df[input$net_selected,"label"],width="95%"),style="display:inline-block;"),
+            div(textInput("editdetails",NULL,placeholder="details",value=ifelse(length(rows$details)>1,"",rows$details),width="95%"),style="display:inline-block;"),
+            div(textInput("editcluster",NULL,placeholder="cluster",value=rows$cluster %>% paste0(collapse=","),width="95%"),style="display:inline-block"),
             div(actionButton("editVarForm", "Save"),style = "display:inline-block;background-color:white;padding:10px;border-radius:5px"),
             div(actionLink("deleteVarForm", paste0("Delete: ",input$net_selected %>% paste0(collapse=";"),"?")),style = "padding:2px;display:inline-block;color:red")
           )      
@@ -1776,7 +1796,7 @@ server <- function(input, output, session) {
     
       # ved join statements--------------------------------
       # browser()
-      values$statements <- values$statements %>% mutate(source__id=row_number())
+      if(is.null(values$statements$source__id)) values$statements <- values$statements %>% mutate(source__id=row_number())
       
       ved <- ved_join(ved, values$statements)
       
