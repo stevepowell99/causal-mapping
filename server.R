@@ -16,6 +16,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$highlightedText,{
     if (!is.null(input$highlightedText)) values$highlightedText <- input$highlightedText
+    if(input$sides=="Code") updateTextAreaInput(session,"quote",value = values$highlightedText)
     # if (!is.null(input$highlightedText)) if ("" != (input$highlightedText)) values$highlightedText <- paste0(values$highlightedText," ... ",input$highlightedText)
   })
   
@@ -625,19 +626,24 @@ server <- function(input, output, session) {
     vfs <- req(valuesCoding$fromStack) %>% as.numeric()
     ins <- req(input$net_selected[[1]]) %>% as.numeric()
     
+    vpag <- values$pag
+    iot <- input$onlyThisStatement
+    
     ved <- values$graf %>% 
       edges_as_tibble()
     
     
     ved <- ved %>% 
-      mutate(thisStatement = (ved$statement == values$pag | !input$onlyThisStatement)) %>% 
+      mutate(thisStatement = (ved$statement == vpag | !iot)) %>% 
       mutate(from=ifelse(thisStatement & from %in% vfs,ins,from)) %>% 
       mutate(to=  ifelse(thisStatement & to %in% vfs,ins,to))
     
     values$graf <- 
       tbl_graph(values$graf %>% nodes_as_tibble(),ved)  # kinda stupid not to use tidygraph functions
     
-    doNotification("Recoded",9)
+    
+    delay(1000,refresh_and_filter_net(values$graf,vpag,iot))
+    doNotification("Recoded variable(s)",9)
   })
   
   
@@ -669,7 +675,7 @@ server <- function(input, output, session) {
         
         
         div(
-          div(textAreaInput("quote", NULL, value = values$highlightedText, placeholder = "quote",rows=3,width="100%"), style = ""),
+          div(textAreaInput("quote", NULL, value = ifelse(ise,row$quote,""), placeholder = "quote",rows=3,width="100%"), style = ""),
           style = "margin-top:20px"
           
         ),
@@ -1011,10 +1017,10 @@ server <- function(input, output, session) {
     vpag <- values$pag
     iot <- input$onlyThisStatement
     # browser()
-    refresh_and_filter_net(tmp,vpag,iot)
-    
     valuesCoding$fromStack <- NULL
     updateSelectizeInput(session = session,inputId = "selectBoxValue",selected="") 
+    
+    refresh_and_filter_net(tmp,vpag,iot)
     
   })
   
@@ -2318,9 +2324,9 @@ server <- function(input, output, session) {
   
   # ++ floating widgets -----------------------------------------------------
   output$floatingWidgets <- renderUI({
-    div(
-      div(actionButton("fitaction", label=NULL,icon=icon("arrows-alt")), style = "display:inline-block;margin-right:20px"),
-      class = "bigpicbut" ,style="z-index:999 !important")
+    # div(
+      # div(actionButton("fitaction", label=NULL,icon=icon("arrows-alt")), style = "display:inline-block;margin-right:20px"),
+      # class = "bigpicbut" ,style="z-index:999 !important")
     # h1("asdfasdfasdf")
   })
 

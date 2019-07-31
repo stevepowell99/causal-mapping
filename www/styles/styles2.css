@@ -152,89 +152,6 @@ width:250%;
     top: 15px;
 }
  
-.image-lightbox img {
-    /* Inherit the width and height from the parent element */
-    width: inherit;
-    height: inherit;
-}
- 
-.holder {
-    /* The width and height, you can change these */
-    width: 80%;
-    /* Float left, so everything aligns right   float: left;*/
-  
-    margin-bottom: 20px ;
-    margin-left: 0 ;
-}
- 
-.image-lightbox {
-    /* Inherit width and height from the .holder */
-    width: inherit;
-    height: inherit;
-    padding: 10px;
-
-    /* Position absolutely so we can zoom it out later */
-    position: relative;
-    top: 0;
-    font-family: Arial, sans-serif;
-    /* Transitions to provide some eye candy */
-    -webkit-transition: all ease-in 0.5s;
-    -moz-transition: all ease-in 0.5s;
-    -ms-transition: all ease-in 0.5s;
-    -o-transition: all ease-in 0.5s;
-}
- 
-.image-lightbox span {
-    display: none;
-}
- 
-.image-lightbox .expand {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
- 
-.image-lightbox .close {
-    position: absolute;
-    width: 20px; height: 20px;
-    right: 20px; top: 20px;
-}
- 
-.image-lightbox .close a {
-    height: auto; width: auto;
-    padding: 5px 10px;
-    color: #fff;
-    text-decoration: none;
-    background: #22272c;
-    box-shadow: inset 0px 24px 20px -15px rgba(255, 255, 255, 0.1), inset 0px 0px 10px rgba(0,0,0,0.4), 0px 0px 30px rgba(255,255,255,0.4);
-    border-radius: 5px;
-    font-weight: bold;
-    float: right;
-}
- 
-.close a:hover {
-    box-shadow: inset 0px -24px 20px -15px rgba(255, 255, 255, 0.01), inset 0px 0px 10px rgba(0,0,0,0.4), 0px 0px 20px rgba(255,255,255,0.4);
-}
- 
-div[id^=image]:target {
-    width: 100%;
-    z-index: 5000;
-    position:fixed;
-    top: 1px;
-    right: 0px;
-}
-div[id^=image]:target .close {
-    display: block;
-}
- 
-div[id^=image]:target .expand {
-    display: none;
-}
- 
-
-p > img {width:100% !important;vertical-align:top !important}
 
 
 .modal-lg {
@@ -321,24 +238,6 @@ blockquote p {font-size:14pt  !important;background-color:ghostwhite !important;
     padding: 5px;
     color: orange}
 
-#gallerycheckdiv{
-  background-color:whitesmoke;
-  border-radius: 5px; 
-  padding: 3px;
-    border: 1px solid;
-    border-color: #E3E3E3;
--moz-border-radius: 5px; 
--webkit-border-radius: 5px;
-color:darksalmon;
-font-size:12pt;
-}
-
-
-#editcheckdiv{
-color:darkgreen;
-text-align:right;
-font-size:12pt;
-}
 
 .video{
 margin-top:20px;
@@ -358,30 +257,7 @@ content: "[close]";
 
 
 
-#example{background-color:aliceblue}
-#autosavebutton{display:inline}
 
-#gsholder{text-align:right;position:absolute;right:30px;top:10px;colour:gray;display:inline-flex}
-#clear_search{margin-top:12px;color:orange}
-#gallerySearch{margin-top:15px;margin-bottom:12px;}
-#screencheck{}
-
-#examples{
-background-color: snow;
-padding-top:15px;
-}
-
-.gallerymain{
-
-background-color:aliceblue;
-}
-
-#gallery{
-
-margin-bottom:100px;
-margin-top:20px;
-;
-}
 
 
 .text div {
@@ -397,14 +273,7 @@ width: 50px;
 display:inline;
 }
 
-.galimage img {
-display:inline;
-}
 
-
-.gallink{
-padding:8px;
-}
 
 
 .action-button img:hover {
@@ -445,26 +314,6 @@ display:inline-block;
 }
 
 
-.galholder {
-display:inline-block;
-width:260px ;
-overflow: hidden;
-border: 1px solid lightgray;
-vertical-align:top;
-padding: 6px;
-margin: 2px;
-}
-.onlytext {
-display:inline-block;
-width:260px ;
-overflow: hidden;
-border: 1px solid lightgray;
-vertical-align:top;
-padding: 6px;
-margin: 2px;
-background-color:aliceblue;
-}
-
 
 
 code {
@@ -487,30 +336,8 @@ vertical-align:top;
 
 
 
-#base1slider, #shape1slider, #threshold1{
-  margin-left:200px !important;
-}
 
-#intervention1 .noUi-handle-lower, #intervention2 .noUi-handle-lower{
-  background-color: blue !important
-}
 
-.inf2, .container-fluid{
-  background-color: whitesmoke !important;
-}
-
-.corner{
-  background-color: white !important;
-}
-
-#rightcorner{
-  background-color: whitesmoke !important;
-}
-
-/*
-label {
-  font-size: 20px !important;
-}*/
 
 .modal-body{
   font-size: 16px;
@@ -654,23 +481,6 @@ a:hover{color:green !important;}
 
 th{background-color: #ded !important}
 
-/*.selectize-input{
-  background-color: #787 !important;
-  color:white !important;
-}*/
-
-/*
-.vis-configuration-wrapper{
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    background: white;
-    border: 3px solid gray;
-    box-shadow: inset 0px 24px 20px -15px rgba(255, 255, 255, 0.1), inset 0px 0px 10px rgba(0,0,0,0.4), 0px 0px 30px rgba(255,255,255,0.4);
-    padding: 5px;
-
-}
-*/
 .textbanner{
   /*padding:15px;*/
   font-style: bold;
@@ -781,8 +591,9 @@ i.glyphicon.glyphicon-play{
 
 /*for the large dropdowns*/
 
-#large .selectize-input { line-height: 40px !important; }
-#large .selectize-dropdown { line-height: 30px !important; }
+.selectize-input    {line-height:  16px !important;  min-height: 45px !important; }
+.selectize-dropdown {line-height:  16px !important;  min-height: 35px !important; }
+.item {font-size: 18px; }
 
 #deleteVarForm{
 	background-color: #FFDDDD !important;
@@ -795,9 +606,7 @@ i.glyphicon.glyphicon-play{
 
 .colourpicker-input {height:15px !important;}
 
-.selectize-input {
-    min-height: 34px;
-}
+
 
 #arrlabel{
   vertical-align: top;
@@ -869,7 +678,7 @@ margin-left:200px;
 #widthControl{
       position: absolute;
     right: 20px;
-    top: 58px;
+    top: 30px;
     z-index: 99;
 }
 
