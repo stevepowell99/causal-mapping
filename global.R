@@ -591,6 +591,8 @@ make_settingsConditional <- function(inp,vs){
 }
 
 refresh_and_filter_net <- function(tmp,vpag,iot){
+  
+  
   vno <- tmp %>% nodes_as_tibble
   ved <- tmp %>% edges_as_tibble
   # browser()
@@ -664,12 +666,14 @@ refresh_and_filter_net <- function(tmp,vpag,iot){
       
       
     }
-    if(nrow(vno)>0) visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+     if(nrow(vno)>0) visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
       visUpdateNodes(nodes=tibble(id=1:nrow(vno),hidden=!ids))  
     if(nrow(ved)>0) visNetworkProxy("net") %>%                                        # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
       visUpdateEdges(edges=tibble(id=1:nrow(ved),hidden=!eids))  
     visNetworkProxy("net") %>% 
-      visFit(animation=list(duration=500))
+      visFit(animation=list(duration=500)) %>% 
+      visSetSelection(unselectAll = TRUE) %>% 
+      visSelectNodes(id=F)
   }
   
 }

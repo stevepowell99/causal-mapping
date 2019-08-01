@@ -27,7 +27,7 @@ server <- function(input, output, session) {
   makeReactiveBinding("first")
   
   
-  valuesCoding <- reactiveValues(fromStack=NULL,toStack=NULL,foundIDs=NULL,readyForEndArrow=F)
+  valuesCoding <- reactiveValues(fromStack=NULL,toStack=NULL,foundIDs=NULL,readyForEndArrow=F,nodeSelected=NULL,edgeSelected=NULL)
 
   values$issaved=F
   
@@ -274,6 +274,28 @@ server <- function(input, output, session) {
     defaultNodes[0,],
     defaultEdges[0,]
   ) 
+
+  
+  
+  # observing edge and node selections --------------------------------------
+  
+  # this is necessary because you can't programmatically deselect, you have to actually click  
+  
+  observeEvent(input$net_selected,{
+    # browser()
+    valuesCoding$nodesSelected <- input$net_selected
+  })
+  
+  
+  observe({
+  if(is.null(input$net_selected))    valuesCoding$nodesSelected <- NULL
+  })# this is necessary when user clicks on canvas to deselect a node
+  
+  
+  observeEvent(input$net_selectedEdges,{
+    valuesCoding$edgesSelected <- input$net_selectedEdges
+  })
+  
   
   # ++ Import/Statements panel -------------------------------------------------
   
@@ -281,11 +303,11 @@ server <- function(input, output, session) {
   output$statements <- renderRHandsontable({
     vs <- values$statements
     
-    if(!is.null(input$net_selected)){
-    if(""!=(input$net_selected)){
+    if(!is.null(valuesCoding$nodesSelected)){
+    if(""!=(valuesCoding$nodesSelected)){
       ids <- values$grafAgg2 %>% 
         nodes_as_tibble() %>% 
-        filter(id==input$net_selected) %>% 
+        filter(id==valuesCoding$nodesSelected) %>% 
         pull(statement) %>% 
         str_remove_all("NA") %>% 
         str_split(",") %>% 
@@ -604,7 +626,7 @@ server <- function(input, output, session) {
   
   
   output$combineLink=renderUI({
-    ins <- input$net_selected
+    ins <- valuesCoding$nodesSelected
     vfs <- valuesCoding$fromStack
  tagList(
     if(0<length(vfs)){
@@ -624,7 +646,7 @@ server <- function(input, output, session) {
   observeEvent(input$combineLink,{
     # browser()
     vfs <- req(valuesCoding$fromStack) %>% as.numeric()
-    ins <- req(input$net_selected[[1]]) %>% as.numeric()
+    ins <- req(valuesCoding$nodesSelected[[1]]) %>% as.numeric()
     
     vpag <- values$pag
     iot <- input$onlyThisStatement
@@ -644,6 +666,9 @@ server <- function(input, output, session) {
     
     delay(1000,refresh_and_filter_net(values$graf,vpag,iot))
     doNotification("Recoded variable(s)",9)
+    valuesCoding$nodesSelected <- NULL
+    valuesCoding$edgesSelected <- NULL
+    
   })
   
   
@@ -657,7 +682,7 @@ server <- function(input, output, session) {
       edges_as_tibble() %>%
       mutate(id = row_number()) 
 
-    ise <- input$net_selectedEdges
+    ise <- valuesCoding$edgesSelected
     row <- df[ise,]
     isrow <- !is.null(ise)
     tagList(
@@ -718,7 +743,7 @@ server <- function(input, output, session) {
     vg <- values$graf %>% 
       activate(edges) 
     
-    ise <- input$net_selectedEdges
+    ise <- valuesCoding$edgesSelected
     
     
     if(input$package!=""){
@@ -796,7 +821,7 @@ server <- function(input, output, session) {
   
   observeEvent(c(input$addFrom),ignoreInit = TRUE,{
     
-    ns <- input$net_selected
+    ns <- valuesCoding$nodesSelected
     if(is.null(ns))ns <- ""
     if(""!=(ns) | !is.null(input$selectBoxValue)){
     # browser()
@@ -848,9 +873,9 @@ server <- function(input, output, session) {
   })
   
   
-  observeEvent(c(input$selectBoxValue,input$net_selected,valuesCoding$fromStack),{
+  observeEvent(c(input$selectBoxValue,valuesCoding$nodesSelected,valuesCoding$fromStack),{
     # browser()
-    ins=input$net_selected
+    ins=valuesCoding$nodesSelected
     isb=input$selectBoxValue
     vcf=valuesCoding$fromStack
     
@@ -902,7 +927,7 @@ server <- function(input, output, session) {
       }
       }
     if(is.null(inpto)){
-    inpto <- req(input$net_selected)[1]
+    inpto <- req(valuesCoding$nodesSelected)[1]
     }
     
     newEdges <- tibble(
@@ -932,13 +957,16 @@ server <- function(input, output, session) {
     # valuesCoding$foundIDs <- NULL
     # visNetworkProxy("net") %>%
     #   visSetSelection(unselectAll = TRUE)
-    # doNotification(paste0("sel ",input$net_selected),99)
+    # doNotification(paste0("sel ",valuesCoding$nodesSelected),99)
     updateTextInput(session=session,"selectBoxValue",value="")
     
     tmp <- req(values$graf)             # has to be agg2 because of statements, but shouldn't be because some missed out
     vpag <- values$pag
     iot <- input$onlyThisStatement
     delay(4000,refresh_and_filter_net(tmp,vpag,iot))   # TODO the 4 seconds is just a lucky guess
+    valuesCoding$nodesSelected <- NULL
+    valuesCoding$edgesSelected <- NULL
+    
     
   })
   
@@ -1029,7 +1057,7 @@ server <- function(input, output, session) {
   # 
   
   output$varForm=renderUI({
-    if (length(req(input$net_selected))>0) {
+    if (length(req(valuesCoding$nodesSelected))>0) {
       # browser()
       df <- values$graf %>%
         nodes_as_tibble() %>%
@@ -1037,16 +1065,16 @@ server <- function(input, output, session) {
         # left_join(values$grafAgg2 %>% nodes_as_tibble() %>% select(new = id, id = origID)) # to provide a lo,1>9okup to find original ids if the nodes have been merged
       # df <- (values$graf %>% nodes_as_tibble %>% mutate(id=row_number()))
       
-      rows <- df[input$net_selected,]
+      rows <- df[valuesCoding$nodesSelected,]
       div(tagList(
-        if (length(input$net_selected)>0) {
+        if (length(valuesCoding$nodesSelected)>0) {
           tagList(
             div(p("Edit: "),style="display:inline-block;width:5%"),
-            if (length(input$net_selected)==1) div(textInput("editVarFormText",NULL,placeholder="label",value=df[input$net_selected,"label"],width="95%"),style="display:inline-block;"),
+            if (length(valuesCoding$nodesSelected)==1) div(textInput("editVarFormText",NULL,placeholder="label",value=df[valuesCoding$nodesSelected,"label"],width="95%"),style="display:inline-block;"),
             div(textInput("editdetails",NULL,placeholder="details",value=ifelse(length(rows$details)>1,"",rows$details),width="95%"),style="display:inline-block;"),
             div(textInput("editcluster",NULL,placeholder="cluster",value=rows$cluster %>% paste0(collapse=","),width="95%"),style="display:inline-block"),
             div(actionButton("editVarForm", "Save"),style = "display:inline-block;background-color:white;padding:10px;border-radius:5px"),
-            div(actionLink("deleteVarForm", paste0("Delete: ",input$net_selected %>% paste0(collapse=";"),"?")),style = "padding:2px;display:inline-block;color:red")
+            div(actionLink("deleteVarForm", paste0("Delete: ",valuesCoding$nodesSelected %>% paste0(collapse=";"),"?")),style = "padding:2px;display:inline-block;color:red")
           )      
         },
         hr(style="margin:2px")
@@ -1064,16 +1092,16 @@ server <- function(input, output, session) {
     
     if(input$editdetails!=""){
       vg <- vg %>% 
-      mutate(details=if_else(row_number() %in% input$net_selected,input$editdetails,details)) # hmm what if details form is empty 
+      mutate(details=if_else(row_number() %in% valuesCoding$nodesSelected,input$editdetails,details)) # hmm what if details form is empty 
     }
     
-    if(length(input$net_selected)==1 && input$editVarFormText!=""){
+    if(length(valuesCoding$nodesSelected)==1 && input$editVarFormText!=""){
       vg <- vg %>% 
-        mutate(label=if_else(row_number() %in% input$net_selected,input$editVarFormText,label)) 
+        mutate(label=if_else(row_number() %in% valuesCoding$nodesSelected,input$editVarFormText,label)) 
     }
     if(input$editcluster!=""){
       vg <- vg %>% 
-        mutate(cluster=if_else(row_number() %in% input$net_selected,input$editcluster,cluster))  
+        mutate(cluster=if_else(row_number() %in% valuesCoding$nodesSelected,input$editcluster,cluster))  
         
     }
     
@@ -1083,7 +1111,7 @@ server <- function(input, output, session) {
   observeEvent(input$deleteVarForm, {
     # browser()
     whichtarg=values$grafAgg2 %>% nodes_as_tibble %>% 
-      filter(row_number()==input$net_selected) %>% 
+      filter(row_number()==valuesCoding$nodesSelected) %>% 
       pull(origID) 
     
     values$graf <- values$graf %>%
@@ -1240,9 +1268,9 @@ server <- function(input, output, session) {
       summarise_all(last)
     
     
-    if(!is.null(input$net_selected)){
+    if(!is.null(valuesCoding$nodesSelected)){
       whichtarg=values$grafAgg2 %>% nodes_as_tibble %>% 
-        filter(row_number()==input$net_selected) %>% 
+        filter(row_number()==valuesCoding$nodesSelected) %>% 
         pull(origID) 
       
     }
@@ -1321,7 +1349,7 @@ server <- function(input, output, session) {
       req(input$nodeTable_select$select$r) %>% as.character() %>% p()
     )
     
-    # div(paste0(input$net_selected,"--",input$current_edge_id),style="background:white")
+    # div(paste0(valuesCoding$nodesSelected,"--",input$current_edge_id),style="background:white")
   })
   
   observeEvent(input$edgeTableUp, {
@@ -2150,7 +2178,9 @@ server <- function(input, output, session) {
         visEvents(select = "function(data) {
                 Shiny.onInputChange('net_selected', data.nodes);
                 Shiny.onInputChange('net_selectedEdges', data.edges);
-                ;}")        # visEvents(select = "function(nodes) {
+                ;}") 
+      
+      # visEvents(select = "function(nodes) {
         #         Shiny.onInputChange('net_selected', nodes.nodes);
         #         ;}")
       
@@ -2536,7 +2566,7 @@ server <- function(input, output, session) {
           ",style="color:white;margin:30px"),
       div(
         selectizeInput("new1_edge_crowd",
-                       label = NULL, selected = if (values$clickArrow) input$net_selected else NULL, multiple = F,
+                       label = NULL, selected = if (values$clickArrow) valuesCoding$nodesSelected else NULL, multiple = F,
                        options =
                          list(create = T, placeholder = "start typing the name of the thing at the start of the arrow(s)", onInitialize = I('function() { this.setValue(""); }')),
                        choices = varlist,
@@ -2561,7 +2591,7 @@ server <- function(input, output, session) {
   
   output$edgeInfo=renderUI({
     # input$current_edge_id %>% as.character()
-    # if(!is.null(input$net_selectedEdges))input$net_selectedEdges %>% 
+    # if(!is.null(valuesCoding$edgesSelected))valuesCoding$edgesSelected %>% 
     #   paste0(collapse="; ") %>% 
     #   as.character() %>% 
     #   paste0("Edit package containing arrow(s): ",.) %>%  
@@ -2570,7 +2600,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$deletePackage,{
     # browser()
-    if(!is.null(input$net_selectedEdges)) values$graf <- values$graf %>% activate(edges) %>% mutate(id=row_number()) %>% filter(!(id %in% input$net_selectedEdges)) %>% select(-id)
+    if(!is.null(valuesCoding$edgesSelected)) values$graf <- values$graf %>% activate(edges) %>% mutate(id=row_number()) %>% filter(!(id %in% valuesCoding$edgesSelected)) %>% select(-id)
   })
   
   # fit-----------------
@@ -2584,7 +2614,7 @@ server <- function(input, output, session) {
   
   observe({
     
-  output$testBut <- if(!is.null(input$net_selectedEdges)) renderUI({actionButton("testBut","Edit selected arrows")})  else renderUI({p()})
+  output$testBut <- if(!is.null(valuesCoding$edgesSelected)) renderUI({actionButton("testBut","Edit selected arrows")})  else renderUI({p()})
     
   })
   
@@ -2652,8 +2682,8 @@ server <- function(input, output, session) {
   
   
   output$quotesOutput=renderUI({
-    ins <- input$net_selected
-    inse <- input$net_selectedEdges
+    ins <- valuesCoding$nodesSelected
+    inse <- valuesCoding$edgesSelected
     if(!is.null(ins)){
       quotes <- values$net$x$nodes %>% 
         filter(id %in% ins) %>% 
