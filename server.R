@@ -285,6 +285,10 @@ server <- function(input, output, session) {
     # browser()
     valuesCoding$nodesSelected <- input$net_selected
   })
+  observeEvent(input$net_selectedEdges,{
+    # browser()
+    valuesCoding$edgesSelected <- input$net_selectedEdges
+  })
   
   
   observe({
@@ -1110,9 +1114,10 @@ server <- function(input, output, session) {
   
   observeEvent(input$deleteVarForm, {
     # browser()
-    whichtarg=values$grafAgg2 %>% nodes_as_tibble %>% 
-      filter(row_number()==valuesCoding$nodesSelected) %>% 
-      pull(origID) 
+    whichtarg=values$graf %>% nodes_as_tibble %>% 
+      mutate(id=row_number()) %>% 
+      filter(id %in% valuesCoding$nodesSelected) %>% 
+      pull(id) 
     
     values$graf <- values$graf %>%
       activate(nodes) %>%
@@ -2603,13 +2608,26 @@ server <- function(input, output, session) {
     if(!is.null(valuesCoding$edgesSelected)) values$graf <- values$graf %>% activate(edges) %>% mutate(id=row_number()) %>% filter(!(id %in% valuesCoding$edgesSelected)) %>% select(-id)
   })
   
-  # fit-----------------
   
-  observeEvent(input$fitaction, {               # restore network to normal zoom
-    visNetworkProxy("net") %>%
-      visFit() 
+  observeEvent(valuesCoding$edgesSelected,{
+    # browser()
     
+    vce <- valuesCoding$edgesSelected
+    
+    targetStatement <- values$graf %>% 
+      edges_as_tibble() %>% 
+      filter(vce==row_number()) %>% 
+      pull(statement)
+    
+    if(!is.null(vce) & !input$onlyThisStatement) updatePageruiInput(session,"pager",page_current=as.numeric(targetStatement))
   })
+  
+  
+  # observeEvent(input$fitaction, {               # restore network to normal zoom
+  #   visNetworkProxy("net") %>%
+  #     visFit() 
+  #   
+  # })
   
   
   observe({
