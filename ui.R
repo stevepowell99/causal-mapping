@@ -93,9 +93,8 @@ ui <- tagList(
                                tabPanel("",icon=icon("upload"),                        # user can upload set of statements to process, and optionally also pre-existing node and edge lists
                                         style = glue(";border-radius:10px"),
                                         
-                                        bsCollapse(
-                                          id = "uploads", open = "Upload statements",
-                                          bsCollapsePanel(
+                                        bs_accordion(id = "uploads") %>% 
+                                   bs_append(
                                             title = "Upload statements",
                                             # uiOutput("statementsButton"),
                                             fileInput("up.statements", NULL,
@@ -106,16 +105,16 @@ ui <- tagList(
                                                         ".csv"
                                                       )
                                             )
-                                          ),
-                                          bsCollapsePanel(
+                                          ) %>% 
+                                   bs_append(
                                             title = "View and edit statements",
                                             # p("Paste your statements into the space below. The table will expand if you paste more rows."),
                                             # p("If you want more columns, right-click to create them first.")
                                             # ,
                                             p("The first column is the text. You can use other columns for attributes like age or gender."),
                                             # p("You can change the column names."),
-                                         p() ),
-                                          bsCollapsePanel(
+                                         p() ) %>% 
+                                   bs_append(
                                             "Upload variables and arrows",
                                             p("Nodes table must contain a column called label"),
                                             fileInput("up.nodes", "Upload variables",
@@ -137,7 +136,6 @@ ui <- tagList(
                                             ),
                                             checkboxInput("use.labels", "Use labels instead of row numbers",value = T)
                                           )
-                                        )
                                ),
                                
                                # ui coding----                             
@@ -207,10 +205,8 @@ ui <- tagList(
                                         # ,
                                         # uiOutput("filters"),                         # transient filters to filter out some nodes/edges, values are not stored in settings csv files
                                         uiOutput("inputs"),                         # user-friendlier widgets which are produced instead of rows of the settings tables if user has written "slider" etc in the last column of settings tables
-                                        bsCollapse(
-                                          id = "display", open =
-                                            "Advanced",
-                                          bsCollapsePanel(
+                                        bs_accordion(id = "display") %>% 
+                                          bs_append(
                                             "Advanced",
                                             actionButton("settingsTableGlobalUp","Update"),
                                             rHandsontableOutput("settingsTableGlobal"),                         # global settings
@@ -220,14 +216,12 @@ ui <- tagList(
                                             hr()
                                             # htmlOutput("overview"),
                                             # hr()
-                                          )
-                                        ),
-                                        bsCollapsePanel(
+                                          ) %>% 
+                                        bs_append(
                                           "Easy",
                                           actionButton("autoMerge", "Auto-suggest clusters")                         # not importatn
-                                        ),
-                                 
-                                 bsCollapsePanel(                    #this is just a utility from visnetwork which I will drop at some point
+                                        ) %>% 
+                                   bs_append(                    #this is just a utility from visnetwork which I will drop at some point
                                    "Advanced options",
                                    p("Development only"),
                                    icon("exclamation-triangle"),

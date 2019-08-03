@@ -1,5 +1,20 @@
 
 render viz
+render viz
+render viz
+render viz
+render viz
+render viz
+Creating edges table
+render viz
+render viz
+render viz
+render viz
+Loading files
+Loaded0 variables from permalink
+render viz
+Loading files
+render viz
 Loading files
 Loaded53 variables from permalink
 starting aggregation
@@ -14,56 +29,3 @@ Produced viz
 render viz
 started viz
 Produced viz
-render viz
-Loading files
-Loaded53 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-render viz
-Loading files
-Loaded53 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-started viz
-Produced viz
-Loading files
-Loaded53 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz
-started viz
-Produced viz
-Recoded variable(s)
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-Aggregated
-started viz
-Produced viz
-render viz

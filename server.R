@@ -495,7 +495,7 @@ server <- function(input, output, session) {
       ),
       div(
         # if("source" %in% colnames(values$statements))
-          div(actionButton("resetSelection", label = NULL,icon=icon("refresh")),style="position:absolute;right:25px") ,                                 
+          div(actionButton("resetSelection", label = NULL,icon=icon("refresh")),style="position:absolute;right:25px") %>% bs_embed_tooltip("Reset the view for this statement"),                                 
           div(actionButton("overview_col", label = "Read more"),style="display:inline-block") ,                                 #   if one interview source has made more than one statement, show all of them
           div(checkboxInput("onlyThisStatement", label = "Only this",value = T),style="display:inline-block") ,                                 #   if one interview source has made more than one statement, show all of them
         style = "display:inline-block;margin-left:20px"
@@ -705,7 +705,8 @@ server <- function(input, output, session) {
         
         
         div(
-          div(textAreaInput("quote", NULL, value = ifelse(ise,row$quote,""), placeholder = "quote",rows=3,width="100%"), style = ""),
+          div(textAreaInput("quote", NULL, value = ifelse(ise,row$quote,""), placeholder = "quote",rows=3,width="100%"), style = "")%>%
+            bs_embed_tooltip(title = if(T)("If you select text in the Statement panel above using your mouse, it will appear here. You can also edit this text.")),
           style = "margin-top:20px"
           
         ),
@@ -2733,7 +2734,7 @@ server <- function(input, output, session) {
   
   
   output$widthControlOutput <- renderUI({
-    actionButton("widthControl",NULL,icon=icon("arrows-h"))
+    actionButton("widthControl",NULL,icon=icon("arrows-h")) %>% bs_embed_tooltip("Change the width of the panels")
   })
   
   observeEvent(input$widthControl, {
@@ -2746,7 +2747,6 @@ server <- function(input, output, session) {
   })  
   
   # jqui_effect('#mainPanel', effect = 'bounce') # bounces the plot
-  
   
   # jqui_resizable("#resizablePanel,#mainPanel,#net", options = list(axis = 'x'))
 
