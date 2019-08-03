@@ -1,5 +1,6 @@
 ui <- tagList(
   useShinyjs(),
+  use_bs_tooltip(),
   inlineCSS(list(.red = "background: snow")),
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "styles/styles2.css")
@@ -78,7 +79,8 @@ ui <- tagList(
                              
           
                                                     # uiOutput("test"),
-                             uiOutput("savebut"),
+                             uiOutput("savebut") %>%
+                               bs_embed_tooltip(title = "Save a version"),
                              uiOutput("savedMsg"),
                              # uiOutput("savedMsg"),
                              hr(),

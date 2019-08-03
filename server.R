@@ -638,16 +638,16 @@ server <- function(input, output, session) {
         if(!is.null(ins)) paste0(", To? ",ins[[1]])
       ),style="display:inline-block")
     }
-    ,
-    
-       if(0<length(vfs) & !is.null(ins)){
-         if(vfs!=ins){
-      div(actionLink("combineLink",label = "Recode ?"),style="display:inline-block")
-}  }
+#     ,
+#     
+#        if(0<length(vfs) & !is.null(ins)){
+#          if(vfs!=ins){
+#       div(actionLink("combineLink",label = "Recode ?"),style="display:inline-block")
+# }  }
    )
  })
   
-  observeEvent(input$combineLink,{
+  observeEvent(input$recodeButton,{
     # browser()
     vfs <- req(valuesCoding$fromStack) %>% as.numeric()
     ins <- req(valuesCoding$nodesSelected[[1]]) %>% as.numeric()
@@ -672,6 +672,7 @@ server <- function(input, output, session) {
     doNotification("Recoded variable(s)",9)
     valuesCoding$nodesSelected <- NULL
     valuesCoding$edgesSelected <- NULL
+    valuesCoding$fromStack <- NULL
     
   })
   
@@ -811,8 +812,11 @@ server <- function(input, output, session) {
           choices = varlist,width="400px"
         ),style="display:inline-block"),
         # div(disabled(actionButton("addNode",NULL,icon=icon("plus"))),style="display:inline-block"),
-        div((actionButton("addFrom",NULL,icon=icon("arrow-alt-circle-right"))),style="display:inline-block"),
-        div((actionButton("addTo",NULL,icon=icon("arrow-alt-circle-right"))),style="display:inline-block")
+        div((actionButton("addFrom","↦")),style="display:inline-block"),
+        div((actionButton("addTo","⭲")),style="display:inline-block"),
+        div(style="display:inline-block;margin-left:5px"),
+        div(actionButton("recodeButton","≕") %>%
+            bs_embed_tooltip(title = "Recode the variables in the from box into the currently selected variable"),style="display:inline-block")
         
 
     )
@@ -889,6 +893,7 @@ server <- function(input, output, session) {
     if(length(vcf)==0)vcf=""
     if((""!=(ins) | ""!=isb) & ""==(vcf)) enable("addFrom") else disable("addFrom")
     if((""!=(ins) | ""!=isb) & ""!=(vcf)) enable("addTo") else disable("addTo")
+    if((""!=(ins) | ""!=isb) & ""!=(vcf)) enable("recodeButton") else disable("recodeButton")
   })
   
   
@@ -2744,8 +2749,7 @@ server <- function(input, output, session) {
   
   
   # jqui_resizable("#resizablePanel,#mainPanel,#net", options = list(axis = 'x'))
-  
-  
+
   # makeReactiveBinding("inputtitl")
   # browser()
   hide(id = "loading-content", anim = TRUE, animType = "fade")

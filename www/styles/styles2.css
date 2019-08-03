@@ -640,21 +640,28 @@ margin-left:200px;
 }
 
 #addFrom:focus{
-    outline: 5px solid red;
+    border: 3px solid red;border-radius: 5px;
 }
 #addFrom:hover{
-    outline: 5px solid red;
+    border: 3px solid red;border-radius: 5px;
 }
 #addTo:focus{
-    outline: 5px solid red;
+    border: 3px solid red;border-radius: 5px;
 }
 #addTo:hover{
-    outline: 5px solid red;
+    border: 3px solid red;border-radius: 5px;
 }
 
 #addTo{
   background-color: green;
 }
+
+#recodeButton{
+  background-color: blue;
+}
+
+
+
 #addNode{
   background-color: blue;
 }
