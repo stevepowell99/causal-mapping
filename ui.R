@@ -5,6 +5,10 @@ ui <- tagList(
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "styles/styles2.css")
   ),
+
+# keypress, not used at moment --------------------------------------------
+
+
   tags$script('
               $(document).on("keydown", function (e) {
               Shiny.onInputChange("keypressed", e.which);
@@ -31,7 +35,12 @@ ui <- tagList(
             Shiny.onInputChange("highlightedText", selection);
         };
         '),
-  tags$script(
+
+# refocus for selectize input ---------------------------------------------
+
+
+  
+    tags$script(
     'Shiny.addCustomMessageHandler("refocus",
                                   function(NULL) {
                                     document.getElementById("selectBoxValue-selectized").focus();
@@ -58,10 +67,8 @@ ui <- tagList(
                        div(
                          
                          
-                         fluidRow(                             #the main panels are resizable
+                         fluidRow(
                            (column(4,
-                          #   style =
-                          #     "padding:0",
                              
                              id = "app-content",
                              a(h4("Causal Mapping", style = "display:inline-block;color:white;margin-right:8px"), href = "."),
@@ -78,13 +85,10 @@ ui <- tagList(
                              bsAlert("recoveryVersion"),
                              
           
-                                                    # uiOutput("test"),
                              uiOutput("savebut") %>%
                                bs_embed_tooltip(title = "Save a version"),
                              uiOutput("savedMsg"),
-                             # uiOutput("savedMsg"),
                              hr(),
-                             # div(verbatimTextOutput("keypr"),style="background-color:white"),
                              tabsetPanel(
                                id = "sides", type = "tabs", selected = "Code",
                                
@@ -96,7 +100,6 @@ ui <- tagList(
                                         bs_accordion(id = "uploads") %>% 
                                    bs_append(
                                             title = "Upload statements",
-                                            # uiOutput("statementsButton"),
                                             fileInput("up.statements", NULL,
                                                       multiple = FALSE, width = NULL,
                                                       accept = c(
@@ -108,11 +111,7 @@ ui <- tagList(
                                           ) %>% 
                                    bs_append(
                                             title = "View and edit statements",
-                                            # p("Paste your statements into the space below. The table will expand if you paste more rows."),
-                                            # p("If you want more columns, right-click to create them first.")
-                                            # ,
                                             p("The first column is the text. You can use other columns for attributes like age or gender."),
-                                            # p("You can change the column names."),
                                          p() ) %>% 
                                    bs_append(
                                             "Upload variables and arrows",
@@ -139,26 +138,18 @@ ui <- tagList(
                                ),
                                
                                # ui coding----                             
-                               #  most important panel. in a state of flux at the moment. in most cases user will be looking at / scrolling through pieces of text and will "code" them aka use the information to create arrows/edges
+                               #  most important panel. in most cases user will be looking at / scrolling through pieces of text and will "code" them aka use the information to create arrows/edges
                                tabPanel("",icon=icon("highlighter"),
                                         value = "Code", 
                                         
-                                        # checkboxInput("showPage","Code one sentence")
-                                        # ,
                                         uiOutput("pagerBig"),
                                         uiOutput("displayStatementPanel"),
-                                 # uiOutput("edgeBut"),
                                         
                                         uiOutput("varForm"),
                                  
                                    div(
-                                     # uiOutput("selectbox"),
-                                     # uiOutput("selectbox2"),
-                                     # uiOutput("addNewNodeButton"),
                                      uiOutput("selectBoxButtons"),
-                                     # uiOutput("fromStackInfo"),
                                      uiOutput("combineLink"),
-                                     # uiOutput("edgeInfo"),
                                      uiOutput("add_edges_widget"),
                                      uiOutput("combo"),
                                      style="background-color:#DDFFDD;border:1px gray solid;padding:3px"
@@ -166,7 +157,6 @@ ui <- tagList(
                                ),
                                tabPanel(value="Variables","",                      # user can directly edit the nodes table. still functional but will probably be dropped
                                         style = glue("background-color:{rgb(0.99,1,0.97)};;border-radius:10px"), icon = icon("boxes"),
-                                        # h3("View and edit variables"),
                                         div(actionButton("nodeTableUp", "Update"),style="display:inline-block"),
                                         div(textInput("nodeTableFilter", NULL,width = "160px",placeholder="Filter..."),style="display:inline-block;margin-left:20px"),
                                         div(checkboxInput("nodeTableAddCol", "Add columns"),style="display:inline-block;margin-left:20px"),
@@ -175,12 +165,9 @@ ui <- tagList(
                                                          uiOutput("nodeTableAddCol")),
                                         rHandsontableOutput("nodeTable"),
                                         uiOutput("combine_button")
-                                        # ,
-                                        #        uiOutput("formMakr")
                                ),
                                tabPanel("",                             # user can directly edit the edges aka arrows table. still functional but will probably be dropped
                                         value = "Arrows", icon = icon("arrow-right"),
-                                        # h3("View and edit arrows"),
                                         actionButton("edgeTableUp", "Update"),
                                         rHandsontableOutput("edgeTable"),
                                         div(
@@ -192,30 +179,23 @@ ui <- tagList(
                                
                                # ui display----
                                
-                               tabPanel("",value="Display",    # more of a settings panel 
+                               tabPanel("",value="Display",    # conditional formatting 
                                         icon = icon("palette"),
                                    uiOutput("upConditionalBut"),
                                  uiOutput("condFormattingOutput")
                                ),
                                
-                               tabPanel("",value="Settings",    # more of a settings panel 
+                               tabPanel("",value="Settings",    #  settings panel 
                                         icon = icon("cog"),
                                         
-                                        # selectInput("layout","layout",choices=c("Sugiyama"="layout_with_sugiyama", "circle"="layout_in_circle"),selected = "layout_with_sugiyama")
-                                        # ,
-                                        # uiOutput("filters"),                         # transient filters to filter out some nodes/edges, values are not stored in settings csv files
-                                        uiOutput("inputs"),                         # user-friendlier widgets which are produced instead of rows of the settings tables if user has written "slider" etc in the last column of settings tables
-                                        bs_accordion(id = "display") %>% 
+                                        uiOutput("inputs"),                         # probably will not use these
+                                        bs_accordion(id = "otherSettings") %>% 
                                           bs_append(
-                                            "Advanced",
+                                            "Advanced",tagList(
                                             actionButton("settingsTableGlobalUp","Update"),
                                             rHandsontableOutput("settingsTableGlobal"),                         # global settings
-                                            # hr(),
-                                            # actionButton("settingsTableUp","Update"),
-                                            # rHandsontableOutput("settingsTable"),                         # set things like size and colour of items 
                                             hr()
-                                            # htmlOutput("overview"),
-                                            # hr()
+                                            )
                                           ) %>% 
                                         bs_append(
                                           "Easy",
@@ -230,7 +210,6 @@ ui <- tagList(
                                  
                                  
                                  
-                                        # ,
                                ),
                                
                                tabPanel("", icon=icon("warehouse"),div(style = ""),                         # library of existing projects stored locally as csv files. clicking loads up the project 
@@ -248,17 +227,6 @@ ui <- tagList(
                            # main panel----
                            column(8,
                            id="mainPanel",  
-                             # style = "border-left:2px dotted black",
-                             # pushbar_deps(),
-                             # br(),
-                             # pushbar(
-                             #   
-                             #   # h4("HELLO"),
-                             #   id = "myPushbar", # add id to get event
-                               # uiOutput("push"),
-                               # from="right",
-                               # actionButton("close", "Close")
-                             # ),
                              uiOutput("filters"),
                              uiOutput("widthControlOutput"),
                              bsTooltip("widthControlOutput", "title", placement = "bottom", trigger = "hover",
@@ -274,8 +242,6 @@ ui <- tagList(
                              withSpinner((visNetworkOutput("net", height = "85vh", width="1250px")),type = 5)                         # the main network viz. 
                                               
                                  
-                                              #   )
-                                              # )
                              )
                              ,
                              
@@ -291,9 +257,8 @@ ui <- tagList(
                                ),
                                
                                 tabPanel("Description",
-                                  uiOutput("description"),
-                                  # tags$hr(),
-                                  uiOutput("blog"),                          # additional narrative abou the project stored in the settings csv
+                                  uiOutput("description"),# additional narrative abou the project stored in the settings csv
+                                  uiOutput("blog"),                          
                                   textOutput("info")
                                 ),
                                 tabPanel("Legend",
@@ -309,8 +274,7 @@ ui <- tagList(
                          )
                        )
                      ),
-                     div(actionButton("Interrupt", "Interrupt",
-                     ), style = "position:fixed;bottom:0;right:10px")
+                     div(actionButton("Interrupt", "Interrupt"), style = "position:fixed;bottom:0;right:10px")
     ),
     conditionalPanel("input.crowd",
                      uiOutput("add_edges_widget2"),
