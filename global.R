@@ -2,7 +2,7 @@
 options(shiny.port = 1111)
 options(shiny.autoreload = T)
 options(shiny.autoreload.pattern = glob2rx("ui.R|global.R|server.R"))
-doNotificationLevel <- 2 # notification popups. level=1 is debugging and level=2 is user.
+doNotificationLevel <- 0 # notification popups. level=1 is debugging and level=2 is user.
 options(stringsAsFactors = F)
 
 # source ------------------------------------------------------------------

@@ -213,4 +213,5 @@ from,to,label,strength,trust,sensitivity,specificity,statement,quote,full.quote,
 84,108,NA,NA,NA,NA,NA,4,NA,NA,NA,NA,2,NA,NA,NA
 85,109,NA,NA,NA,NA,NA,4,NA,NA,NA,NA,1,NA,NA,NA
 86,109,NA,NA,NA,NA,NA,4,NA,NA,NA,NA,1,NA,NA,NA
-110,110,,0.5,0.5,NA,NA,1,,"Here are some issues for you! Just let me know which ones youd like to work on. Some are pretty easy I think. Some are more a question of asking for your advice.",,,NA,NA,NA,
+110,110,NA,0.5,0.5,NA,NA,1,NA,"Here are some issues for you! Just let me know which ones youd like to work on. Some are pretty easy I think. Some are more a question of asking for your advice.",NA,NA,NA,NA,NA,NA
+110,111,,0.5,0.5,NA,NA,1,,"Here are some issues for you! Just let me know which ones youd like to work on. Some are pretty easy I think. Some are more a question of asking for your advice.",,,NA,NA,NA,

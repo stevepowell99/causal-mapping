@@ -108,12 +108,11 @@ server <- function(input, output, session) {
       qe <- query[["example"]]
 
       if (!is.null(qe)) ql <- qe
-      ql=tolower(ql)
+      # ql=tolower(ql)
 
 
       if (T) {
         values$current <- ql
-
         if (!is.null(ql)) {
           if (!loaded) {
             doNotification("Loading files", 2)
@@ -153,6 +152,8 @@ server <- function(input, output, session) {
                 )
               }
             }
+            
+            doNotification("checking recovery versions")
             
             if (grepl("-recovery", filename)) {
               if (T) {
@@ -1711,7 +1712,7 @@ server <- function(input, output, session) {
       ved <- ved_join(ved, values$statements)
 
 
-      saveRDS(ved, "ved")
+      # saveRDS(ved, "ved")
 
 
 
@@ -1787,7 +1788,7 @@ server <- function(input, output, session) {
       if (this_tab != "Code") {
         ved <- ved %>%
           filter(frequency > findset("arrowminimum.frequency", v = vals))
-      }
+      
 
       # join edges with nodes------------------------------------------------
 
@@ -1813,6 +1814,7 @@ server <- function(input, output, session) {
 
         vno <- tmp %>% nodes_as_tibble()
         ved <- tmp %>% edges_as_tibble()
+      }
       }
 
 
