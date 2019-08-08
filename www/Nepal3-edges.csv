@@ -1,0 +1,728 @@
+from,to,label,strength,trust,sensitivity,specificity,statement,quote,source,question,domain,attribution,full.quote,combo.type,definition.type,package,packageNote,fun
+1,100,NA,NA,NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,100,NA,NA,NA,NA,NA,2,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+2,102,NA,NA,NA,NA,NA,3,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+23,68,NA,NA,NA,NA,NA,4,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+3,68,NA,NA,NA,NA,NA,4,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+45,120,NA,NA,NA,NA,NA,4,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,5,"We have to buy everything for survival may be these days we can spend money on good clothing and meat products. But otherwise I do not think much has changed so not sure. [For driver see answer to E1: We, all family member go to labour work. Especially we go to work in construction site.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,104,NA,NA,NA,NA,NA,6,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,104,NA,NA,NA,NA,NA,6,"Beside that we used to farm vegetables, wheat and paddy for own consumption but now we have left agriculture because husband and son go for the labour work, one son is in abroad and one son and daughter in law is busy on their shop so we now have left agriculture because of less man power...[see answer to C5: As we have left agriculture there is no production these days.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,104,NA,NA,NA,NA,NA,6,"Beside that we used to farm vegetables, wheat and paddy for own consumption but now we have left agriculture because husband and son go for the labour work, one son is in abroad and one son and daughter in law is busy on their shop so we now have left agriculture because of less man power...[see answer to C5: As we have left agriculture there is no production these days.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,104,NA,NA,NA,NA,NA,7,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,104,NA,NA,NA,NA,NA,8,See answer to C2,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+8,66,NA,NA,NA,NA,NA,9,We give pig dietary food and also waste food of our house with vitamins for weight gain [see answer to D3 and D5],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,104,NA,NA,NA,NA,NA,9,we have lack of man power to look after pigs we have reduced the number of pigs,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+9,67,NA,NA,NA,NA,NA,9,we have lack of man power to look after pigs we have reduced the number of pigs but the income has increased as the price of meat compared to past five year have increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,104,NA,NA,NA,NA,NA,10,My husband goes to labour work...and other son also works as a labour. We stop agriculture because of lack of manpower. Previously we did farming on sharecropping basis but this work is changed. Now we are involved in other income generating work.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,104,NA,NA,NA,NA,NA,10,One son has gone to abroad...We stop agriculture because of lack of manpower. Previously we did farming on sharecropping basis but this work is changed. Now we are involved in other income generating work.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,104,NA,NA,NA,NA,NA,10,Daughter in law and son has got a shop ...We stop agriculture because of lack of manpower. Previously we did farming on sharecropping basis but this work is changed. Now we are involved in other income generating work.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,10,My husband goes to labour work...and other son also works as a labour. We stop agriculture because of lack of manpower. Previously we did farming on sharecropping basis but this work is changed. Now we are involved in other income generating work. [For increased income see answer to E3],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,10,One son has gone to abroad...We stop agriculture because of lack of manpower. Previously we did farming on sharecropping basis but this work is changed. Now we are involved in other income generating work.  [For increased income see answer to E3],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,10,Daughter in law and son has got a shop ...We stop agriculture because of lack of manpower. Previously we did farming on sharecropping basis but this work is changed. Now we are involved in other income generating work. [For increased income see answer to E3],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,11,My one son has opened a grocery shop...that�s why we can say that the income from non farming and non agricultural work has been increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,11,Another son sends remittance...that�s why we can say that the income from non farming and non agricultural work has been increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,11,husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,109,NA,NA,NA,NA,NA,12,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,110,NA,NA,NA,NA,NA,12,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+59,114,NA,NA,NA,NA,NA,13,Also my elder son have recently build a house so we don�t have any saving or any other extra spending.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,14,"From my elder sons earning we have built a house. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,14,"From my elder sons earning we have built a house. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,14,"From my elder sons earning we have built a house. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,15,"I am experiencing the same situation. May be it will get better after we have some saving once all my kids are out from the college after studying and start working. All our son is getting educated so that is good for me and family. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,15,"I am experiencing the same situation. May be it will get better after we have some saving once all my kids are out from the college after studying and start working. All our son is getting educated so that is good for me and family. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,15,"I am experiencing the same situation. May be it will get better after we have some saving once all my kids are out from the college after studying and start working. All our son is getting educated so that is good for me and family. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,16,"Our situation is slightly changed as we have got a modern house. Good earning but not saving enough to choose and do what ever we like to have. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,16,"Our situation is slightly changed as we have got a modern house. Good earning but not saving enough to choose and do what ever we like to have. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,16,"Our situation is slightly changed as we have got a modern house. Good earning but not saving enough to choose and do what ever we like to have. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+10,75,NA,NA,NA,NA,NA,17,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,76,NA,NA,NA,NA,NA,18,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+12,76,NA,NA,NA,NA,NA,18,"We produce rice, wheat, vegetable for self. Now a days production has been increased due to irrigation facility, hybrid seeds and use of fertilizer.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,18,"We produce rice, wheat, vegetable for self. Now a days production has been increased due to irrigation facility, hybrid seeds and use of fertilizer.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,76,NA,NA,NA,NA,NA,18,"We produce rice, wheat, vegetable for self. Now a days production has been increased due to irrigation facility, hybrid seeds and use of fertilizer.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,76,NA,NA,NA,NA,NA,19,"We use fertilizer, hybrid seeds, and irrigation facility is good thus production level is increased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,76,NA,NA,NA,NA,NA,19,"We use fertilizer, hybrid seeds, and irrigation facility is good thus production level is increased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,19,"We use fertilizer, hybrid seeds, and irrigation facility is good thus production level is increased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+12,76,NA,NA,NA,NA,NA,19,"We use fertilizer, hybrid seeds, and irrigation facility is good thus production level is increased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+15,77,NA,NA,NA,NA,NA,19,selling price of grain is also increased thus income of our household has also increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,76,NA,NA,NA,NA,NA,20,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,76,NA,NA,NA,NA,NA,20,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+16,131,NA,NA,NA,NA,NA,21,At the same time viral allergy has been seen in pigs. So rearing pig and piglet is becoming difficult. We still follow what we used to do from generations. So we are unable to gain weight of pigs.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,104,NA,NA,NA,NA,NA,21,"We have also decreased the number of pigs as my husband goes for labour work and I also need to look after children so we have decreased the number of pigs.  As we have decreased the number of pigs, our income from pigs has also decreased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+24,104,NA,NA,NA,NA,NA,21,"We have also decreased the number of pigs as my husband goes for labour work and I also need to look after children so we have decreased the number of pigs.  As we have decreased the number of pigs, our income from pigs has also decreased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+17,130,NA,NA,NA,NA,NA,22,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+17,79,NA,NA,NA,NA,NA,22,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,23,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+17,130,NA,NA,NA,NA,NA,23,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,109,NA,NA,NA,NA,NA,24,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+18,75,NA,NA,NA,NA,NA,25,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,73,NA,NA,NA,NA,NA,26,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+20,73,NA,NA,NA,NA,NA,26,We have sufficient food thus we don�t have any problem at all.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,100,NA,NA,NA,NA,NA,27,son had gone to abroad but returned back because of health issue.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,100,NA,NA,NA,NA,NA,28,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+21,76,NA,NA,NA,NA,NA,29,I have introduced a new species of rice seed. Also now fertilizer is available locally.  We are harvesting new seed which has increased our production level. Increase in production results to increase in income as we sell stocked  produce in the market which we don�t consume. [For driver see answer to I1a: Important link to womens group for farming - trained us on introduction of new seeds: new seeds were used for paddy  harvesting and it has yielded good result],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,29,I have introduced a new species of rice seed...We are harvesting new seed which has increased our production level. Increase in production results to increase in income as we sell stocked  produce in the market which we don�t consume.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,76,NA,NA,NA,NA,NA,29,Also now fertilizer is available locally...Increase in production results to increase in income as we sell stocked  produce in the market which we don�t consume.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+3,76,NA,NA,NA,NA,NA,30,My sons are grown up and they are also helping us on farm. [See answer to C4],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+27,76,NA,NA,NA,NA,NA,30,We are using modern equipments for cultivation and  harvesting. [See answer to C4],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+21,76,NA,NA,NA,NA,NA,30,Use of new species of seeds of rice is giving more production.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+16,130,NA,NA,NA,NA,NA,31,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,32,My other son works as a labour that also add to overall household income.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,110,NA,NA,NA,NA,NA,33,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,34,Now one son works as a labour so some how income has increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,110,NA,NA,NA,NA,NA,34,At the same time expenses has also increased to some extent as I frequently need to visit hospital and also one son need to take regular medicines.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,35,"Yes it has been changed. We purchased TV, cycle. [For driver see answer to E4: Now one son works as a labour so some how income has increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,35,Our food behavior has also changed. [For driver see answer to E4: Now one son works as a labour so some how income has increased.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,110,NA,NA,NA,NA,NA,35,We spend lots of money for medical purpose. [For driver see answer to E4: Now one son works as a labour so some how income has increased.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,35,We even spend some money for marriage ceremony. [For driver see answer to E4: Now one son works as a labour so some how income has increased.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,100,NA,NA,NA,NA,NA,36,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,110,NA,NA,NA,NA,NA,36,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,110,NA,NA,NA,NA,NA,37,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,110,NA,NA,NA,NA,NA,38,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,100,NA,NA,NA,NA,NA,39,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+22,101,NA,NA,NA,NA,NA,40,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,104,NA,NA,NA,NA,NA,41,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+24,104,NA,NA,NA,NA,NA,41,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,105,NA,NA,NA,NA,NA,42,Because of less production due to decreased volume of land cultivation for agriculture work. [See answer to C1: Our production has decreased because of lack of manpower as husband works as a labour and I need to look after children.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+24,105,NA,NA,NA,NA,NA,42,Because of less production due to decreased volume of land cultivation for agriculture work. [See answer to C1: Our production has decreased because of lack of manpower as husband works as a labour and I need to look after children.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,104,NA,NA,NA,NA,NA,43,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,104,NA,NA,NA,NA,NA,44,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,104,NA,NA,NA,NA,NA,45,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+24,104,NA,NA,NA,NA,NA,45,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+17,130,NA,NA,NA,NA,NA,45,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,104,NA,NA,NA,NA,NA,46,Husband works as a labour in construction site. I have to look after children so we have stopped pig breeding and also decreased volume of farming. So even our agricultural production has gone down.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+24,104,NA,NA,NA,NA,NA,46,Husband works as a labour in construction site. I have to look after children so we have stopped pig breeding and also decreased volume of farming. So even our agricultural production has gone down.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+22,101,NA,NA,NA,NA,NA,46,Husband had gone abroad but returned because of low income and his current earning is not enough so that we could save money.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+24,104,NA,NA,NA,NA,NA,47,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,109,NA,NA,NA,NA,NA,48,We are spending more on childrens education and medication,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+24,100,NA,NA,NA,NA,NA,48,There is only husband who works as a labour and earn which we need to spend on everything so we don�t have saving. [See answer to E2: In my case it is no. I don�t work any more. I just look after the children. Only husband works as a labour and we are surviving on that.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+25,81,NA,NA,NA,NA,NA,48,"There are three cooperative established from womens group which provide easy loan, and we also have some loan.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+24,100,NA,NA,NA,NA,NA,49,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+24,100,NA,NA,NA,NA,NA,49,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+26,118,NA,NA,NA,NA,NA,50,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+60,94,NA,NA,NA,NA,NA,51,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,76,NA,NA,NA,NA,NA,52,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+27,76,NA,NA,NA,NA,NA,52,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,52,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,76,NA,NA,NA,NA,NA,52,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,53,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,76,NA,NA,NA,NA,NA,53,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+28,82,NA,NA,NA,NA,NA,54,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,104,NA,NA,NA,NA,NA,54,But these days we only have one pig which is pregnant and also is suffering from viral allergy. [See answer to D6: We have decreased number of pigs because now a days we are busy on tailoring work.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,104,NA,NA,NA,NA,NA,55,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,104,NA,NA,NA,NA,NA,56,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,104,NA,NA,NA,NA,NA,56,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,109,NA,NA,NA,NA,NA,57,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,109,NA,NA,NA,NA,NA,58,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,121,NA,NA,NA,NA,NA,58,Beside this we spend money to purchase seed and fertilizer.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,121,NA,NA,NA,NA,NA,58,Beside this we spend money to purchase seed and fertilizer.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,121,NA,NA,NA,NA,NA,58,Beside this we spend money to purchase seed and fertilizer.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,76,NA,NA,NA,NA,NA,59,"We usually grow wheat and paddy, taking about new farming activities we use hybrid seeds these days which increases the food production and also overall time spend on farming have decreased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,83,NA,NA,NA,NA,NA,59,"We usually grow wheat and paddy, taking about new farming activities we use hybrid seeds these days which increases the food production and also overall time spend on farming have decreased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,59,"We usually grow wheat and paddy, taking about new farming activities we use hybrid seeds these days which increases the food production and also overall time spend on farming have decreased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,83,NA,NA,NA,NA,NA,59,"We usually grow wheat and paddy, taking about new farming activities we use hybrid seeds these days which increases the food production and also overall time spend on farming have decreased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+30,138,NA,NA,NA,NA,NA,60,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,76,NA,NA,NA,NA,NA,61,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,61,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,76,NA,NA,NA,NA,NA,61,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+30,130,NA,NA,NA,NA,NA,62,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+16,130,NA,NA,NA,NA,NA,63,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+31,130,NA,NA,NA,NA,NA,64,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+8,102,NA,NA,NA,NA,NA,64,"Because these days we don�t have pigs now. In my view from pig farming, there is no such benefit what we think after selling pigs. Food, vitamin, medicine for pig is so expensive. The only profit that we get from pig is at the time of selling we get money in lump sum which we can invest some where else.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,65,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,66,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,128,NA,NA,NA,NA,NA,67,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+25,81,NA,NA,NA,NA,NA,67,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+30,84,NA,NA,NA,NA,NA,68,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,128,NA,NA,NA,NA,NA,69,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,128,NA,NA,NA,NA,NA,70,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+18,75,NA,NA,NA,NA,NA,71,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+20,75,NA,NA,NA,NA,NA,71,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+10,75,NA,NA,NA,NA,NA,71,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+21,85,NA,NA,NA,NA,NA,72,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+21,85,NA,NA,NA,NA,NA,73,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,76,NA,NA,NA,NA,NA,73,In Some of the land I even grow wheat and paddy for household consumption. So my expenses has decresed on staple grains and income has increased. [See answer to C5: we use hybrid seeds and chemical fertilizer thus in the limited land also we produce large amount of grain which is sufficient for our household consumption.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,76,NA,NA,NA,NA,NA,74,"We,  all family member give lots of time in the field, at the same time we use hybrid seeds and chemical fertilizer thus in the limited land also we produce large amount of grain which is sufficient for our household consumption. [See answer to C3: So my expenses has decresed on staple grains and income has increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,74,"We,  all family member give lots of time in the field, at the same time we use hybrid seeds and chemical fertilizer thus in the limited land also we produce large amount of grain which is sufficient for our household consumption. [See answer to C3: So my expenses has decresed on staple grains and income has increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,76,NA,NA,NA,NA,NA,74,"We,  all family member give lots of time in the field, at the same time we use hybrid seeds and chemical fertilizer thus in the limited land also we produce large amount of grain which is sufficient for our household consumption. [See answer to C3: So my expenses has decresed on staple grains and income has increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+21,85,NA,NA,NA,NA,NA,74,Now a days we dont have problem with the vegetables too. And we get regular income from selling vegetable produce.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+2,102,NA,NA,NA,NA,NA,75,Initially we made a modern type of shelter for pigs. But it is difficult to feed proper food to the pigs. Food for pigs in the market is costly. Thus we stopped purchasing food and started feeding pigs in tradiional way that is available in the home.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+2,102,NA,NA,NA,NA,NA,75,"While breeding we use traditional way. We use to take a pig in the neighbours home and breed it. But we have decreased the numbers of pigs because there is not so much income from pigs as we are not being able to feed them with proper diet from market,",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+16,130,NA,NA,NA,NA,NA,75,"But we have decreased the numbers of pigs because there is not so much income from pigs as we are not being able to feed them with proper diet from market, and also there are various diseases seen in pigs which even causes death of pig.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+17,130,NA,NA,NA,NA,NA,76,Earlier we kept 32 pigs in our house. But now we have only 2 pigs. We are not satisfied with the income from pigs...Thus we sold all the 30 pigs and have started mushroom and vegetable farming.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+2,102,NA,NA,NA,NA,NA,76,It is hard to gain the weight of pig and the cost of food is also high. Thus we sold all the 30 pigs and have started mushroom and vegetable farming.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+17,130,NA,NA,NA,NA,NA,77,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+21,85,NA,NA,NA,NA,NA,77,"Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,78,Yes the proportion of income increased in the last five years as mushroom farming and vegetable farming is better then farming rice and wheat. Rice and wheat is only cultivated for household consumption.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+31,130,NA,NA,NA,NA,NA,78,"Also in terms of pigs there is no proper pig farm in nearby area. Medical facilities for pigs are not available easily and it is also costly, so we have introduced mushroom farming with some vegetable and the income from these are good.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,109,NA,NA,NA,NA,NA,79,"Yes, it has changed over the years. Nowadays our expenditure for household is  increased. We spend our money for education of children, clothes for family.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,121,NA,NA,NA,NA,NA,79,"There is nothing on which we have stoped spending money like earlier. But now we need to spend on mushroom tunnels, seeds, vegetable tunnels, seeds, fertilizers etc. The surplus money after household consumption are put for saving in the bank.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,77,NA,NA,NA,NA,NA,79,The surplus money after household consumption are put for saving in the bank.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,80,"We have purchased TV, Fan and motor bike...Basically we have added to luxury items in the household. [For driver see answer to E1: Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,80,"Beside this we spend large amount of money  for the mushroom farm and education of children.  [For driver see answer to E1: Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,121,NA,NA,NA,NA,NA,80,Beside this we spend large amount of money  for the mushroom farm and education of children. Basically we have added to luxury items in the household.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,81,"I mean mostly we need to spend on daily consumption and we have got other assets like bike for transportation and TV for intertainment. [For driver see answer to E1: Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,82,"We purchased some assets like motorbike and  TV. [For driver see answer to E1: Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,82,"At the same time we have some saving in the bank too. But we are not able to save more because we need to spend for our mushroom and vegetable farming. [For driver see answer to E1: Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,121,NA,NA,NA,NA,NA,82,At the same time we have some saving in the bank too. But we are not able to save more because we need to spend for our mushroom and vegetable farming.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,83,Now I have a good income. I  take part in various social activities.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,83,In the time of  emergency I can manage some money,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,83,I also have some saving and good income from mushroom and vegetable farming.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,84,Now our income level has increased. Children are geeting good education.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,84,Now our income level has increased...we are living happily. We also have some saving for any crisis.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,85,Nowadays we are using hybrid seeds so some production is increasing.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,86,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,76,NA,NA,NA,NA,NA,86,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+16,130,NA,NA,NA,NA,NA,87,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+16,130,NA,NA,NA,NA,NA,88,Now we don�t have any pigs as they died we now don�t want to do pig farming anymore. [See answer to D1: Now we don�t have any because the pigs died of viral diseases and there was nothing that we could do.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,89,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,90,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+20,75,NA,NA,NA,NA,NA,91,The reason for good health of  my family member is that we are consuming healthy and balanced food.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+18,75,NA,NA,NA,NA,NA,91,We visit doctor in case of any illness and we are more conscious about our health and also there is proper health facility now.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+10,75,NA,NA,NA,NA,NA,91,We visit doctor in case of any illness and we are more conscious about our health,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+32,85,NA,NA,NA,NA,NA,92,We are doing seasonal vegetable farming�from vegetable we have increased our income. [See answer to I1a: Important link to Agriculture office - training on vegetable farming: started vegetable farming.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,92,A part of our land we use for vegetable farming and the remaining land is used for wheat and paddy production. This is our staple grain. We use fertilizer and hybrid seed thus production has also increased. Grain we produce is enough to feed our family member.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,76,NA,NA,NA,NA,NA,92,A part of our land we use for vegetable farming and the remaining land is used for wheat and paddy production. This is our staple grain. We use fertilizer and hybrid seed thus production has also increased. Grain we produce is enough to feed our family member.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+32,77,NA,NA,NA,NA,NA,93,As I am doing vegetable farming...the amount of money is increased. [See answer to I1a: Important link to Agriculture office - training on vegetable farming: started vegetable farming.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,93,My brother is busy in his business...the amount of money is increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,93,Another brother works as a employee in the office thus the amount of money is increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,76,NA,NA,NA,NA,NA,94,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,76,NA,NA,NA,NA,NA,94,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,94,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+8,66,NA,NA,NA,NA,NA,95,We are using the traditional method of farming. But nowadays we also provide them with various medicines and vitamins on a regular basis. Family members take care of the pigs. By using vitamins the pig has increased its volume too. We serve them the waste food of our family. We sell them at the village. [See answer to D5].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+8,66,NA,NA,NA,NA,NA,96,We give vitamin diet and medicine to the pig time and again. It has increased the weight of pig.  [See answer to D5].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+9,67,NA,NA,NA,NA,NA,96,We give vitamin diet and medicine to the pig time and again. It has increased the weight of pig. At the same time the market price of meat is also increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,97,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+32,85,NA,NA,NA,NA,NA,97,I have started vegetable farming. [See answer to I1a: Important link to Agriculture office - training on vegetable farming: started vegetable farming.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,97,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+32,85,NA,NA,NA,NA,NA,98,"Yes my income has increased. Earlier I used to sell the rice and wheat but now I am seling vegetables, and vegetables have  better income than rice. This business I do in the local market. [See answer to I1a: Important link to Agriculture office - training on vegetable farming: started vegetable farming.].",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+32,85,NA,NA,NA,NA,NA,99,We all three brothers are engaged in different income generating activities. Vegetable farming...[See answer to I1a: Important link to Agriculture office - training on vegetable farming: started vegetable farming.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,99,"We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,99,"We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,100,"Yes it has changed. We spend money for the livilihood,motorbike, mobile phone,TV, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,100,"Yes it has changed. We spend money for the livilihood,motorbike, mobile phone,TV, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,100,"Yes it has changed. We spend money for the livilihood,motorbike, mobile phone,TV, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,100,"Our father decide what to spend money on . We  give our income to father and he manage it. But while we need the goods for us we purchase ourself. The remaining money we save at bank for future. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,100,"Our father decide what to spend money on . We  give our income to father and he manage it. But while we need the goods for us we purchase ourself. The remaining money we save at bank for future. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,100,"Our father decide what to spend money on . We  give our income to father and he manage it. But while we need the goods for us we purchase ourself. The remaining money we save at bank for future. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+32,85,NA,NA,NA,NA,NA,100,In this 5 year time period we took a loan to establish bussiness. [See answer to I1a: Important link to Agriculture office - training on vegetable farming: started vegetable farming.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,101,"To meet the needs of todays life style we spend our money on mobile phone, motorbike, TV because we also have good income now. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,101,"To meet the needs of todays life style we spend our money on mobile phone, motorbike, TV because we also have good income now. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,101,"To meet the needs of todays life style we spend our money on mobile phone, motorbike, TV because we also have good income now. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+33,71,NA,NA,NA,NA,NA,102,The value of land has increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,102,"I have purchased various assets thus I feeel that the total value of my assects has increased. Such as motor bike, tv, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,102,"I have purchased various assets thus I feeel that the total value of my assects has increased. Such as motor bike, tv, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,102,"I have purchased various assets thus I feeel that the total value of my assects has increased. Such as motor bike, tv, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+32,85,NA,NA,NA,NA,NA,103,My wellbeing has changed for better because I am trained to do farming job to some extent. At the same time I am setteld. I have no problem in fulfilling of my basic needs. Due to experience which I have learned from life I am capable of continuing vegetable farming. [See answer to I1a: Important link to Agriculture office - training on vegetable farming: started vegetable farming.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+3,73,NA,NA,NA,NA,NA,104,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+32,85,NA,NA,NA,NA,NA,105,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,76,NA,NA,NA,NA,NA,106,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,106,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,76,NA,NA,NA,NA,NA,106,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+34,67,NA,NA,NA,NA,NA,107,I kept two piglets to grow as a mother pig and one piglet for selling in this period thus the number of pig has increased. As a result the amount of money by selling pigs and piglets has also increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+2,122,NA,NA,NA,NA,NA,107,At the same time rate of meat has also increased but still I am unable to gain pigs weight as it needs to be provided with dietary foods but I am unable to provide them with such foods.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+34,67,NA,NA,NA,NA,NA,108,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,76,NA,NA,NA,NA,NA,108,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+8,102,NA,NA,NA,NA,NA,109,Nowadays we are spending some money on medicines for rearing of pigs,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,110,NA,NA,NA,NA,NA,109,"Nowadays we are spending some money on medicines for rearing of pigs and sometimes medicines for family members, and the necessary goods for the household.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,109,NA,NA,NA,NA,NA,109,I spend money for childrens education because education is must these days.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,110,NA,NA,NA,NA,NA,110,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,115,NA,NA,NA,NA,NA,110,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+35,112,NA,NA,NA,NA,NA,110,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+35,112,NA,NA,NA,NA,NA,110,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,76,NA,NA,NA,NA,NA,111,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,111,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,76,NA,NA,NA,NA,NA,111,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+27,76,NA,NA,NA,NA,NA,111,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,112,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+14,76,NA,NA,NA,NA,NA,112,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+36,66,NA,NA,NA,NA,NA,113,"We feed pigs the food which is available in the market along with waste food products of our home. [See answer to D3, D5 and D6: The reason for this change is because of food that we supply to pig.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+36,66,NA,NA,NA,NA,NA,114,The reason for this change is because of food that we supply to pig. At the same time price of meat has also increased. [See answer to D3 and D5].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+9,67,NA,NA,NA,NA,NA,114,The reason for this change is because of food that we supply to pig. At the same time price of meat has also increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+2,102,NA,NA,NA,NA,NA,114,Along with income the expenses for rearing pig has also increased. Due to insufficent investment on food we are not able to increase the number of pigs. That is the reason it is hard to get good weight of pig. If we have less pigs then we can afford but we cannot afford on a large scale so we look after what we have and we do not want to increase the number of pigs.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,115,One of my son is earning abroad so he sends some remittance occasionally.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,115,Another son and daughter in law has started tailoring business besides that the income from pig farming is also there.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,116,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+3,74,NA,NA,NA,NA,NA,116,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,117,The proportion of money earned from different sources has increased compared to past. At the same time expenses have also increased but still its ok. These days we spend more on consumption in various products that we get from market. But over all we are doing good. [For driver see answer to E2: It has changed since last five years due to remittance money.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,109,NA,NA,NA,NA,NA,118,We spend on education of kids especially for grandchildrens school fees.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,128,NA,NA,NA,NA,NA,118,We also put money for tailoring machine and furniture to establish the tailoring shop.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,71,NA,NA,NA,NA,NA,118,We also put money for tailoring machine and furniture to establish the tailoring shop.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,118,This year we bought a mini tractor which will help us in ploughing field and will save our time. [For driver see answer to E2: It has changed since last five years due to remittance money.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+37,126,NA,NA,NA,NA,NA,119,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+37,126,NA,NA,NA,NA,NA,120,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,121,"Recently we have  purchased land, we invested on tailoring shop and mini tractor but regarding saving my son knows everything I am unknown about this. I mean we have added to property and that too is saving only. [For driver see answer to E2: It has changed since last five years due to remittance money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,71,NA,NA,NA,NA,NA,121,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+38,71,NA,NA,NA,NA,NA,121,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+30,94,NA,NA,NA,NA,NA,122,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+35,112,NA,NA,NA,NA,NA,123,"Personally for me I am not good nowadays, I am getting everything what I wanted but due to age factor, time and again health become so poor. I don�t think my wellbeing is good in that sense",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,123,But at household level we are doing good in terms of income generation and to manage livelihood means.  [For driver see answer to E2: It has changed since last five years due to remittance money.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,124,"Now our income as a whole family is good. Children are doing their own work, they are supporting us at each and every aspect. Son and daughter in law takes care of us and they love us. It is great. I am getting food and other things od my choice withough putting too much of effort. My kids do it for me. [For driver see answer to E2: It has changed since last five years due to remittance money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+13,76,NA,NA,NA,NA,NA,125,Earlier we used locally produced seed but nowadays we are farming with hybrid seed. So proportionally the amount of maize that we produce has increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,126,We are getting some money from selling tomato and the crops which we dont consume at home. So income from agriculture sector is increasing.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+42,106,NA,NA,NA,NA,NA,126,But not to a large extent because we don�t have any collection centre so we are forced to sells our products through the agents. This year we had loss as the selling price of tomato was so low.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+44,95,NA,NA,NA,NA,NA,126,We also sell hen in the local market which is a good income for us.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+43,105,NA,NA,NA,NA,NA,127,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+9,67,NA,NA,NA,NA,NA,128,As the price of pig meat has increased so while selling pigs we get a good price.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,129,My father goes for labour work.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,130,"Yes, the amount of money that our household earns from different activities has increased. As my father goes for labour work.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,76,NA,NA,NA,NA,NA,130,"We sell tomato in its season.  We cultivate maize and pulses by taking land on rent. So at the time of good production, we sell them.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+44,95,NA,NA,NA,NA,NA,130,"Beside this, we have kept some hens in our home which is also our source of income.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+45,120,NA,NA,NA,NA,NA,131,"We spend most of our income on education and medicines, rice and religious events. We have to also pay for the electric bill,  cable bill, water bill and so on. Earlier it was less expensive. Even education was less expensive when we were small, but now higher the level of education higher is the cost. At the same time, the cost of rice has also increased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+45,109,NA,NA,NA,NA,NA,131,"Even education was less expensive when we were small, but now higher the level of education higher is the cost.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,110,NA,NA,NA,NA,NA,131,Frequently we have to take mother to the hospital where also we need money for various tests.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,109,NA,NA,NA,NA,NA,132,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+42,106,NA,NA,NA,NA,NA,133,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+16,102,NA,NA,NA,NA,NA,134,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,135,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,136,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,73,NA,NA,NA,NA,NA,137,"With the means of education, we regard our family as having wellbeing in the family.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+31,130,NA,NA,NA,NA,NA,138,Also while selling pigs there is no profit all the money we got from pig is used on pig farming.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,139,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,140,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,141,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+47,105,NA,NA,NA,NA,NA,142,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+47,105,NA,NA,NA,NA,NA,143,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+47,105,NA,NA,NA,NA,NA,144,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+16,130,NA,NA,NA,NA,NA,145,Pigs used to die more often so we don�t keep pigs for a  business purpose rather we rear them to worship for god. There is no earning from pig. Quite a few of our pig died. We don�t know why so we left pig farming.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+46,96,NA,NA,NA,NA,NA,145,Pigs used to die more often so we don�t keep pigs for a  business purpose rather we rear them to worship for god..these days we have 4 pigs because our worship ceremony will held this year.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+2,122,NA,NA,NA,NA,NA,146,It is difficult to gain weight of pigs as we are not able to feed them with proper food�There is no profit from pig farming.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+46,96,NA,NA,NA,NA,NA,146,But this time we had to increase the number of pigs as a worship ceremony is coming.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,147,We have a building at Dhankuta main market. From tenants we get some rent. We  also have a  book shop.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,147,Similarly  my son and daughter work in Kathmandu.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,148,We are now earning from other sector rather then pig and agriculture farming. [For driver see answer to E1: We have a building at Dhankuta main market. From tenants we get some rent. We  also have a  book shop.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,148,We are now earning from other sector rather then pig and agriculture farming. [For driver see answer to E1: my son and daughter work in Kathmandu.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,149,Now we have book shop. We collect rent from tenants.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,149,My son and daughter also earn in Kathmandu.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+48,97,NA,NA,NA,NA,NA,150,Before also we used to spend on agriculture work but now we don�t do agriculture so we don�t spend on agriculture anymore.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,151,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,151,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,152,"We are more conscious on spending and saving. So we are controlling money and saving for better tomorrow. As a head of the household, I take all the decisions and control money. [For driver see answer to F3: Now we have good income from shop, tenants and also son and daughters income. So we have saved money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,152,"We are more conscious on spending and saving. So we are controlling money and saving for better tomorrow. As a head of the household, I take all the decisions and control money. [For driver see answer to F3: Now we have good income from shop, tenants and also son and daughters income. So we have saved money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,153,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,153,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,154,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,154,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,155,"As we have saved now and also live with bonding. And we do all the works on a shared basis so our wellbeing is better. All the family member are busy in their own work.[For driver see answer to F3: Now we have good income from shop, tenants and also son and daughters income. So we have saved money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+7,74,NA,NA,NA,NA,NA,155,"As we have saved now and also live with bonding. And we do all the works on a shared basis so our wellbeing is better. All the family member are busy in their own work. [For driver see answer to F3: Now we have good income from shop, tenants and also son and daughters income. So we have saved money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,121,NA,NA,NA,NA,NA,156,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+42,106,NA,NA,NA,NA,NA,156,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,117,NA,NA,NA,NA,NA,157,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+9,67,NA,NA,NA,NA,NA,158,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,159,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+11,85,NA,NA,NA,NA,NA,160,Earlier there were limited varieties when it came to harvesting and it was limited to staple crops mainly used within household consumption. But now we have started cash crops like tomato and cucumber.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,160,"Earlier husband used to work as labour, now he has gone to Oman and sends remittance which is our household earning.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,161,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+40,118,NA,NA,NA,NA,NA,162,I pay interest of  the loan which we have taken.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,162,I spend more on different occasions and religious ceremony. [For driver see answer to E4: Now remittance is another source of money.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,163,"Due to increase in income, now I can spend more on the household purpose.  Earlier we even had to control money for eating food and wearing good clothes, but now on this issue we are not facing any problem. [For driver see answer to E4: Now remittance is another source of money.].",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,163,"Due to increase in income, now I can spend more on the household purpose.  Earlier we even had to control money for eating food and wearing good clothes, but now on this issue we are not facing any problem. [For driver see answer to E4: Now remittance is another source of money.].",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,109,NA,NA,NA,NA,NA,163,"Along increasingly expenses on children is increasing in every sector like education, food, entertainment sector and so on.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,84,NA,NA,NA,NA,NA,164,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,132,NA,NA,NA,NA,NA,165,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,84,NA,NA,NA,NA,NA,166,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,167,At the time of  marriage I had suffered a lot in this house. I had to work hard and I didnt have any money. Now I work in the field from where I earn some money. Now I am clearing the loan. I am free to do what ever I like so I am happy now a days. [For driver see answer to E2: But now we have started cash crops like tomato and cucumber.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too.[For driver see answer to E4: Now remittance is another source of money.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too. [For driver see answer to E2: But now we have started cash crops like tomato and cucumber.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too.[For driver see answer to E4: Now remittance is another source of money.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too. [For driver see answer to E2: But now we have started cash crops like tomato and cucumber.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too.[For driver see answer to E4: Now remittance is another source of money.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too. [For driver see answer to E2: But now we have started cash crops like tomato and cucumber.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+34,67,NA,NA,NA,NA,NA,169,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,170,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,171,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,172,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,84,NA,NA,NA,NA,NA,173,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,84,NA,NA,NA,NA,NA,174,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,175,"Yes, we have some saving nowadays. [For driver see answer to E4: From the means of remittance.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,175,My brother have purchased a motorbike. [For driver see answer to E4: From the means of remittance.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,110,NA,NA,NA,NA,NA,175,"At the same time, we spend a lot of money for operation and while brother has gone abroad.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+49,73,NA,NA,NA,NA,NA,176,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,177,All of the family members are busy in their own work. These days we have some saving too. We are earning money through which we are providing a good education to the children. So everything is going well. [For driver see answer to E4: From the means of remittance.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,177,All of the family members are busy in their own work. These days we have some saving too. We are earning money through which we are providing a good education to the children. So everything is going well. [For driver see answer to E4: From the means of remittance.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+50,101,NA,NA,NA,NA,NA,178,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+50,101,NA,NA,NA,NA,NA,179,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+23,105,NA,NA,NA,NA,NA,180,"Now farming is being difficult because of high labour cost, low production and change in seasonal climatic abruptions.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+43,105,NA,NA,NA,NA,NA,180,"Now farming is being difficult because of high labour cost, low production and change in seasonal climatic abruptions.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+31,130,NA,NA,NA,NA,NA,181,As cost for rearing pig is high so we do not raise it to let pigs become mature. Thus income is determined by the number of piglets born at a time.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+50,101,NA,NA,NA,NA,NA,182,Husband has gone abroad but now he has returned back due to death of father in law.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,182,Apart from that my husband sometime goes for labour work as well.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+50,101,NA,NA,NA,NA,NA,183,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+50,113,NA,NA,NA,NA,NA,184,Father - in - laws death ritual ceremony cost a lot of money. In Rai culture we have to perform a lot of rituals to perform death rites.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,132,NA,NA,NA,NA,NA,184,At the time when husband left for abroad we had to spend a lots of money to send him for work in processing charge.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+50,101,NA,NA,NA,NA,NA,185,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+50,113,NA,NA,NA,NA,NA,186,We had borrowed loan for father in laws death rituals.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+40,133,NA,NA,NA,NA,NA,186,We had borrowed loan for father in laws death rituals. At the same time we already debts while my husband has gone abroad. When the father in law was active he even sold a piece of land. So in fact instead of adding property we have lost in the last five years.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+40,118,NA,NA,NA,NA,NA,187,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+50,101,NA,NA,NA,NA,NA,188,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+40,118,NA,NA,NA,NA,NA,188,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+50,113,NA,NA,NA,NA,NA,188,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+51,122,NA,NA,NA,NA,NA,189,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+32,85,NA,NA,NA,NA,NA,190,Avocado has been a new experience of farming for us. Once while we had visited Kathmandu there we saw the avocado plant.  Later agriculture cooperative provided us with its plant.  We are interested in it due to  its market value,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,135,NA,NA,NA,NA,NA,191,Now we are farming avocado so it has been 4 years but this year only it have started giving fruits.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+52,117,NA,NA,NA,NA,NA,192,"The harvest that we cultivate for self-consumption, we do not use any fertilizer so we have low production.  Due to low production, we have to purchase a lot of food items including grain.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+61,117,NA,NA,NA,NA,NA,192,"In the meantime, due to plantation of tree at the boundary of the field and the shade of the tree, the production is further low.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,73,NA,NA,NA,NA,NA,193,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+53,73,NA,NA,NA,NA,NA,193,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+53,73,NA,NA,NA,NA,NA,194,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+54,91,NA,NA,NA,NA,NA,194,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+19,88,NA,NA,NA,NA,NA,195,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+62,88,NA,NA,NA,NA,NA,195,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,104,NA,NA,NA,NA,NA,196,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,100,NA,NA,NA,NA,NA,197,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,104,NA,NA,NA,NA,NA,198,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,100,NA,NA,NA,NA,NA,198,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+29,122,NA,NA,NA,NA,NA,199,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+2,122,NA,NA,NA,NA,NA,199,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,200,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,201,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,202,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+35,100,NA,NA,NA,NA,NA,202,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,110,NA,NA,NA,NA,NA,203,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,110,NA,NA,NA,NA,NA,204,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1,115,NA,NA,NA,NA,NA,205,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+35,100,NA,NA,NA,NA,NA,205,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+35,112,NA,NA,NA,NA,NA,206,Now father in law is suffering from illness time and again due to old age.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+15,77,NA,NA,NA,NA,NA,207,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+43,105,NA,NA,NA,NA,NA,208,"Due to a change in the seasonal pattern  especially climatic abruptions, production rate is comparatively low. Earlier except rice, we used to produce all the goods needed for us. But nowadays we purchase various goods from the market too.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+43,136,NA,NA,NA,NA,NA,208,We also don�t have enough water supply for own self so there is always lack of water for our crops as well. This is an issue that has adversely affected our production.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+8,66,NA,NA,NA,NA,NA,209,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,210,My husband is present ward chairperson. Thus his salary and allowance is the main source of income these days.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,211,The only change is that my husband is political representative of the village.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,212,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,84,NA,NA,NA,NA,NA,213,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,214,I have saved some money in various womens group and even in a bank. But we don�t have purchased any assets. My husband is planning to do investment in other sector rather than agriculture. [For driver see answer to E1: My husband is present ward chairperson. Thus his salary and allowance is the main source of income these days.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,84,NA,NA,NA,NA,NA,215,Earlier my husband was taking interest in selling things but after he being elected as ward chair all household related decision is taken by me.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,216,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+55,73,NA,NA,NA,NA,NA,216,The most important thing is now I  am healthy.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,217,We all are living happily. We share with each other. We have a feeling of togetherness in the community. We have some saving we don�t have any problem. [For driver see answer to E1: My husband is present ward chairperson. Thus his salary and allowance is the main source of income these days.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+47,105,NA,NA,NA,NA,NA,218,"Now we are farming lemon, maize and tomato. But maize is destroyed by monkey and deer.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+42,85,NA,NA,NA,NA,NA,218,"From tomato, we are not getting satisfactory price so we started farming lemon instead of tomato.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+47,105,NA,NA,NA,NA,NA,219,As our crops often are destroyed by monkey and deer,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+42,106,NA,NA,NA,NA,NA,219,also this year we had great loss on tomato. We sold tomato low price. There was loss in this.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+42,105,NA,NA,NA,NA,NA,220,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+17,130,NA,NA,NA,NA,NA,221,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+56,131,NA,NA,NA,NA,NA,222,What we serve them is the waste food from our home which is the main reason that they don�t get weight so now we have left farming pigs.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,223,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,223,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,223,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,224,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,225,Income has increased due to remittance money and labour work. Compared to five years ago earning  of the household has increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,225,Income has increased due to remittance money and labour work. Compared to five years ago earning  of the household has increased.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,225,Now we are focusing on products that has a market and this thinking was not there five years ago.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,226,"We have to buy most of the thing in household. We have to spend on education, foods, TV channels, phone charge and so on. [For driver see E4: Income has increased due to remittance money and labour work.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,226,"We have to buy most of the thing in household. We have to spend on education, foods, TV channels, phone charge and so on. [For driver see E4: Income has increased due to remittance money and labour work.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,227,Altogether we have a good family earning. All family member give money to me and I spend on what we need to. [For driver see E4: Income has increased due to remittance money and labour work.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,227,Altogether we have a good family earning. All family member give money to me and I spend on what we need to. [For driver see E4: Income has increased due to remittance money and labour work.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,228,We have saved some money in the bank though We havent purchased any assets.[For driver see E4: Income has increased due to remittance money and labour work.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,228,We have saved some money in the bank though We havent purchased any assets.[For driver see E4: Income has increased due to remittance money and labour work.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,229,"Now, husband earns from labour work. We are getting remittance money also.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,229,"Now, husband earns from labour work. We are getting remittance money also.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+41,77,NA,NA,NA,NA,NA,229,Now from lemon farming we are getting some good amount of money.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+55,73,NA,NA,NA,NA,NA,229,Beside that health condition of all of us is good.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+53,73,NA,NA,NA,NA,NA,229,"We all respect each other. I see all the family member happy, personally, I am also happy. No complains.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+53,73,NA,NA,NA,NA,NA,230,"
+Everybody is doing their part of work. We take a decision on sharing basis.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+5,68,NA,NA,NA,NA,NA,230,"We have some saving too. So we can afford our children a quality education. This is something that is adding to our confidence. This is the real change in the last five years. [For driver see answer to H2: Now, husband earns from labour work. We are getting remittance money also.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,230,"We have some saving too. So we can afford our children a quality education. This is something that is adding to our confidence. This is the real change in the last five years. [For driver see answer to H2: Now, husband earns from labour work. We are getting remittance money also.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,231,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+35,112,NA,NA,NA,NA,NA,232,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+47,105,NA,NA,NA,NA,NA,233,Now maize is damaged by monkey.  lentil is destroyed by deer.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+42,106,NA,NA,NA,NA,NA,233,"And also due to the market problem, we are not getting any profit and this year we had to bear loss on our investment as we had to sell tomato on so low price that we even didn�t get our investment.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+42,106,NA,NA,NA,NA,NA,234,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+17,130,NA,NA,NA,NA,NA,235,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+6,69,NA,NA,NA,NA,NA,236,My son has gone abroad so he sends remittance.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+57,130,NA,NA,NA,NA,NA,236,Piglet also sold on low price as we have only local breed which is most common in the village so we don�t get paid more.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+100,101,NA,NA,NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+100,101,NA,NA,NA,NA,NA,2,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+102,130,NA,NA,NA,NA,NA,3,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,65,NA,NA,NA,NA,NA,5,"We have to buy everything for survival may be these days we can spend money on good clothing and meat products. But otherwise I do not think much has changed so not sure. [For driver see answer to E1: We, all family member go to labour work. Especially we go to work in construction site.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,6,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,6,"Beside that we used to farm vegetables, wheat and paddy for own consumption but now we have left agriculture because husband and son go for the labour work, one son is in abroad and one son and daughter in law is busy on their shop so we now have left agriculture because of less man power...[see answer to C5: As we have left agriculture there is no production these days.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,6,"Beside that we used to farm vegetables, wheat and paddy for own consumption but now we have left agriculture because husband and son go for the labour work, one son is in abroad and one son and daughter in law is busy on their shop so we now have left agriculture because of less man power...[see answer to C5: As we have left agriculture there is no production these days.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,7,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,8,See answer to C2,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+66,67,NA,NA,NA,NA,NA,9,We give pig dietary food and also waste food of our house with vitamins for weight gain [see answer to D3 and D5],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,130,NA,NA,NA,NA,NA,9,we have lack of man power to look after pigs we have reduced the number of pigs,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,10,My husband goes to labour work...and other son also works as a labour. We stop agriculture because of lack of manpower. Previously we did farming on sharecropping basis but this work is changed. Now we are involved in other income generating work.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,10,One son has gone to abroad...We stop agriculture because of lack of manpower. Previously we did farming on sharecropping basis but this work is changed. Now we are involved in other income generating work.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,10,Daughter in law and son has got a shop ...We stop agriculture because of lack of manpower. Previously we did farming on sharecropping basis but this work is changed. Now we are involved in other income generating work.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+74,70,NA,NA,NA,NA,NA,14,"From my elder sons earning we have built a house. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,70,NA,NA,NA,NA,NA,14,"From my elder sons earning we have built a house. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,70,NA,NA,NA,NA,NA,14,"From my elder sons earning we have built a house. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+74,72,NA,NA,NA,NA,NA,15,"I am experiencing the same situation. May be it will get better after we have some saving once all my kids are out from the college after studying and start working. All our son is getting educated so that is good for me and family. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,72,NA,NA,NA,NA,NA,15,"I am experiencing the same situation. May be it will get better after we have some saving once all my kids are out from the college after studying and start working. All our son is getting educated so that is good for me and family. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,72,NA,NA,NA,NA,NA,15,"I am experiencing the same situation. May be it will get better after we have some saving once all my kids are out from the college after studying and start working. All our son is getting educated so that is good for me and family. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+74,70,NA,NA,NA,NA,NA,16,"Our situation is slightly changed as we have got a modern house. Good earning but not saving enough to choose and do what ever we like to have. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,70,NA,NA,NA,NA,NA,16,"Our situation is slightly changed as we have got a modern house. Good earning but not saving enough to choose and do what ever we like to have. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,70,NA,NA,NA,NA,NA,16,"Our situation is slightly changed as we have got a modern house. Good earning but not saving enough to choose and do what ever we like to have. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,18,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,18,"We produce rice, wheat, vegetable for self. Now a days production has been increased due to irrigation facility, hybrid seeds and use of fertilizer.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,18,"We produce rice, wheat, vegetable for self. Now a days production has been increased due to irrigation facility, hybrid seeds and use of fertilizer.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,18,"We produce rice, wheat, vegetable for self. Now a days production has been increased due to irrigation facility, hybrid seeds and use of fertilizer.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,19,"We use fertilizer, hybrid seeds, and irrigation facility is good thus production level is increased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,19,"We use fertilizer, hybrid seeds, and irrigation facility is good thus production level is increased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,19,"We use fertilizer, hybrid seeds, and irrigation facility is good thus production level is increased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,19,"We use fertilizer, hybrid seeds, and irrigation facility is good thus production level is increased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,20,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,20,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,130,NA,NA,NA,NA,NA,21,"We have also decreased the number of pigs as my husband goes for labour work and I also need to look after children so we have decreased the number of pigs.  As we have decreased the number of pigs, our income from pigs has also decreased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,130,NA,NA,NA,NA,NA,21,"We have also decreased the number of pigs as my husband goes for labour work and I also need to look after children so we have decreased the number of pigs.  As we have decreased the number of pigs, our income from pigs has also decreased.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+75,73,NA,NA,NA,NA,NA,25,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+100,101,NA,NA,NA,NA,NA,27,son had gone to abroad but returned back because of health issue.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+100,101,NA,NA,NA,NA,NA,28,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,29,I have introduced a new species of rice seed. Also now fertilizer is available locally.  We are harvesting new seed which has increased our production level. Increase in production results to increase in income as we sell stocked  produce in the market which we don�t consume. [For driver see answer to I1a: Important link to womens group for farming - trained us on introduction of new seeds: new seeds were used for paddy  harvesting and it has yielded good result],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,29,I have introduced a new species of rice seed...We are harvesting new seed which has increased our production level. Increase in production results to increase in income as we sell stocked  produce in the market which we don�t consume.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,29,Also now fertilizer is available locally...Increase in production results to increase in income as we sell stocked  produce in the market which we don�t consume.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,30,My sons are grown up and they are also helping us on farm. [See answer to C4],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,30,We are using modern equipments for cultivation and  harvesting. [See answer to C4],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,30,Use of new species of seeds of rice is giving more production.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,65,NA,NA,NA,NA,NA,35,"Yes it has been changed. We purchased TV, cycle. [For driver see answer to E4: Now one son works as a labour so some how income has increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,65,NA,NA,NA,NA,NA,35,Our food behavior has also changed. [For driver see answer to E4: Now one son works as a labour so some how income has increased.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,80,NA,NA,NA,NA,NA,35,We even spend some money for marriage ceremony. [For driver see answer to E4: Now one son works as a labour so some how income has increased.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+110,114,NA,NA,NA,NA,NA,38,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+100,115,NA,NA,NA,NA,NA,39,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,41,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,41,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,106,NA,NA,NA,NA,NA,42,Because of less production due to decreased volume of land cultivation for agriculture work. [See answer to C1: Our production has decreased because of lack of manpower as husband works as a labour and I need to look after children.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,106,NA,NA,NA,NA,NA,42,Because of less production due to decreased volume of land cultivation for agriculture work. [See answer to C1: Our production has decreased because of lack of manpower as husband works as a labour and I need to look after children.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,43,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,130,NA,NA,NA,NA,NA,44,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,130,NA,NA,NA,NA,NA,45,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,130,NA,NA,NA,NA,NA,45,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,130,NA,NA,NA,NA,NA,46,Husband works as a labour in construction site. I have to look after children so we have stopped pig breeding and also decreased volume of farming. So even our agricultural production has gone down.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,130,NA,NA,NA,NA,NA,46,Husband works as a labour in construction site. I have to look after children so we have stopped pig breeding and also decreased volume of farming. So even our agricultural production has gone down.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+101,114,NA,NA,NA,NA,NA,46,Husband had gone abroad but returned because of low income and his current earning is not enough so that we could save money.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,47,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+100,114,NA,NA,NA,NA,NA,48,There is only husband who works as a labour and earn which we need to spend on everything so we don�t have saving. [See answer to E2: In my case it is no. I don�t work any more. I just look after the children. Only husband works as a labour and we are surviving on that.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+100,106,NA,NA,NA,NA,NA,49,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+100,116,NA,NA,NA,NA,NA,49,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,53,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,53,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,130,NA,NA,NA,NA,NA,54,But these days we only have one pig which is pregnant and also is suffering from viral allergy. [See answer to D6: We have decreased number of pigs because now a days we are busy on tailoring work.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,130,NA,NA,NA,NA,NA,55,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,130,NA,NA,NA,NA,NA,56,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,56,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,61,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,61,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,61,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+102,130,NA,NA,NA,NA,NA,64,"Because these days we don�t have pigs now. In my view from pig farming, there is no such benefit what we think after selling pigs. Food, vitamin, medicine for pig is so expensive. The only profit that we get from pig is at the time of selling we get money in lump sum which we can invest some where else.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+128,118,NA,NA,NA,NA,NA,67,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+128,118,NA,NA,NA,NA,NA,69,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+128,118,NA,NA,NA,NA,NA,70,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+85,77,NA,NA,NA,NA,NA,72,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+85,77,NA,NA,NA,NA,NA,73,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,73,In Some of the land I even grow wheat and paddy for household consumption. So my expenses has decresed on staple grains and income has increased. [See answer to C5: we use hybrid seeds and chemical fertilizer thus in the limited land also we produce large amount of grain which is sufficient for our household consumption.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,74,"We,  all family member give lots of time in the field, at the same time we use hybrid seeds and chemical fertilizer thus in the limited land also we produce large amount of grain which is sufficient for our household consumption. [See answer to C3: So my expenses has decresed on staple grains and income has increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,74,"We,  all family member give lots of time in the field, at the same time we use hybrid seeds and chemical fertilizer thus in the limited land also we produce large amount of grain which is sufficient for our household consumption. [See answer to C3: So my expenses has decresed on staple grains and income has increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,74,"We,  all family member give lots of time in the field, at the same time we use hybrid seeds and chemical fertilizer thus in the limited land also we produce large amount of grain which is sufficient for our household consumption. [See answer to C3: So my expenses has decresed on staple grains and income has increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+85,77,NA,NA,NA,NA,NA,74,Now a days we dont have problem with the vegetables too. And we get regular income from selling vegetable produce.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+102,122,NA,NA,NA,NA,NA,75,Initially we made a modern type of shelter for pigs. But it is difficult to feed proper food to the pigs. Food for pigs in the market is costly. Thus we stopped purchasing food and started feeding pigs in tradiional way that is available in the home.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+102,130,NA,NA,NA,NA,NA,75,"While breeding we use traditional way. We use to take a pig in the neighbours home and breed it. But we have decreased the numbers of pigs because there is not so much income from pigs as we are not being able to feed them with proper diet from market,",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+102,130,NA,NA,NA,NA,NA,76,It is hard to gain the weight of pig and the cost of food is also high. Thus we sold all the 30 pigs and have started mushroom and vegetable farming.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+85,77,NA,NA,NA,NA,NA,77,"Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,89,NA,NA,NA,NA,NA,79,The surplus money after household consumption are put for saving in the bank.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,80,NA,NA,NA,NA,NA,80,"We have purchased TV, Fan and motor bike...Basically we have added to luxury items in the household. [For driver see answer to E1: Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,72,NA,NA,NA,NA,NA,80,"Beside this we spend large amount of money  for the mushroom farm and education of children.  [For driver see answer to E1: Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,65,NA,NA,NA,NA,NA,81,"I mean mostly we need to spend on daily consumption and we have got other assets like bike for transportation and TV for intertainment. [For driver see answer to E1: Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,80,NA,NA,NA,NA,NA,82,"We purchased some assets like motorbike and  TV. [For driver see answer to E1: Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,89,NA,NA,NA,NA,NA,82,"At the same time we have some saving in the bank too. But we are not able to save more because we need to spend for our mushroom and vegetable farming. [For driver see answer to E1: Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,90,NA,NA,NA,NA,NA,83,Now I have a good income. I  take part in various social activities.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,89,NA,NA,NA,NA,NA,83,In the time of  emergency I can manage some money,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,89,NA,NA,NA,NA,NA,83,I also have some saving and good income from mushroom and vegetable farming.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,72,NA,NA,NA,NA,NA,84,Now our income level has increased. Children are geeting good education.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,89,NA,NA,NA,NA,NA,84,Now our income level has increased...we are living happily. We also have some saving for any crisis.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,65,NA,NA,NA,NA,NA,86,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,65,NA,NA,NA,NA,NA,86,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,65,NA,NA,NA,NA,NA,90,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+85,77,NA,NA,NA,NA,NA,92,We are doing seasonal vegetable farming�from vegetable we have increased our income. [See answer to I1a: Important link to Agriculture office - training on vegetable farming: started vegetable farming.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,92,A part of our land we use for vegetable farming and the remaining land is used for wheat and paddy production. This is our staple grain. We use fertilizer and hybrid seed thus production has also increased. Grain we produce is enough to feed our family member.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,92,A part of our land we use for vegetable farming and the remaining land is used for wheat and paddy production. This is our staple grain. We use fertilizer and hybrid seed thus production has also increased. Grain we produce is enough to feed our family member.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,94,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,94,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,94,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+66,67,NA,NA,NA,NA,NA,95,We are using the traditional method of farming. But nowadays we also provide them with various medicines and vitamins on a regular basis. Family members take care of the pigs. By using vitamins the pig has increased its volume too. We serve them the waste food of our family. We sell them at the village. [See answer to D5].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+66,67,NA,NA,NA,NA,NA,96,We give vitamin diet and medicine to the pig time and again. It has increased the weight of pig.  [See answer to D5].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+85,77,NA,NA,NA,NA,NA,97,I have started vegetable farming. [See answer to I1a: Important link to Agriculture office - training on vegetable farming: started vegetable farming.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+85,77,NA,NA,NA,NA,NA,98,"Yes my income has increased. Earlier I used to sell the rice and wheat but now I am seling vegetables, and vegetables have  better income than rice. This business I do in the local market. [See answer to I1a: Important link to Agriculture office - training on vegetable farming: started vegetable farming.].",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+85,77,NA,NA,NA,NA,NA,99,We all three brothers are engaged in different income generating activities. Vegetable farming...[See answer to I1a: Important link to Agriculture office - training on vegetable farming: started vegetable farming.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,65,NA,NA,NA,NA,NA,100,"Yes it has changed. We spend money for the livilihood,motorbike, mobile phone,TV, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+74,65,NA,NA,NA,NA,NA,100,"Yes it has changed. We spend money for the livilihood,motorbike, mobile phone,TV, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,65,NA,NA,NA,NA,NA,100,"Yes it has changed. We spend money for the livilihood,motorbike, mobile phone,TV, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+74,89,NA,NA,NA,NA,NA,100,"Our father decide what to spend money on . We  give our income to father and he manage it. But while we need the goods for us we purchase ourself. The remaining money we save at bank for future. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,89,NA,NA,NA,NA,NA,100,"Our father decide what to spend money on . We  give our income to father and he manage it. But while we need the goods for us we purchase ourself. The remaining money we save at bank for future. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,89,NA,NA,NA,NA,NA,100,"Our father decide what to spend money on . We  give our income to father and he manage it. But while we need the goods for us we purchase ourself. The remaining money we save at bank for future. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,65,NA,NA,NA,NA,NA,101,"To meet the needs of todays life style we spend our money on mobile phone, motorbike, TV because we also have good income now. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+74,65,NA,NA,NA,NA,NA,101,"To meet the needs of todays life style we spend our money on mobile phone, motorbike, TV because we also have good income now. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,65,NA,NA,NA,NA,NA,101,"To meet the needs of todays life style we spend our money on mobile phone, motorbike, TV because we also have good income now. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,80,NA,NA,NA,NA,NA,102,"I have purchased various assets thus I feeel that the total value of my assects has increased. Such as motor bike, tv, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+74,80,NA,NA,NA,NA,NA,102,"I have purchased various assets thus I feeel that the total value of my assects has increased. Such as motor bike, tv, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,80,NA,NA,NA,NA,NA,102,"I have purchased various assets thus I feeel that the total value of my assects has increased. Such as motor bike, tv, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+85,73,NA,NA,NA,NA,NA,103,My wellbeing has changed for better because I am trained to do farming job to some extent. At the same time I am setteld. I have no problem in fulfilling of my basic needs. Due to experience which I have learned from life I am capable of continuing vegetable farming. [See answer to I1a: Important link to Agriculture office - training on vegetable farming: started vegetable farming.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,106,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,106,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,106,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,108,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+112,110,NA,NA,NA,NA,NA,110,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+112,115,NA,NA,NA,NA,NA,110,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,111,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,111,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,111,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,111,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,112,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,78,NA,NA,NA,NA,NA,112,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+66,67,NA,NA,NA,NA,NA,113,"We feed pigs the food which is available in the market along with waste food products of our home. [See answer to D3, D5 and D6: The reason for this change is because of food that we supply to pig.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+66,67,NA,NA,NA,NA,NA,114,The reason for this change is because of food that we supply to pig. At the same time price of meat has also increased. [See answer to D3 and D5].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+102,130,NA,NA,NA,NA,NA,114,Along with income the expenses for rearing pig has also increased. Due to insufficent investment on food we are not able to increase the number of pigs. That is the reason it is hard to get good weight of pig. If we have less pigs then we can afford but we cannot afford on a large scale so we look after what we have and we do not want to increase the number of pigs.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,65,NA,NA,NA,NA,NA,117,The proportion of money earned from different sources has increased compared to past. At the same time expenses have also increased but still its ok. These days we spend more on consumption in various products that we get from market. But over all we are doing good. [For driver see answer to E2: It has changed since last five years due to remittance money.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,87,NA,NA,NA,NA,NA,118,This year we bought a mini tractor which will help us in ploughing field and will save our time. [For driver see answer to E2: It has changed since last five years due to remittance money.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,93,NA,NA,NA,NA,NA,121,"Recently we have  purchased land, we invested on tailoring shop and mini tractor but regarding saving my son knows everything I am unknown about this. I mean we have added to property and that too is saving only. [For driver see answer to E2: It has changed since last five years due to remittance money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+112,115,NA,NA,NA,NA,NA,123,"Personally for me I am not good nowadays, I am getting everything what I wanted but due to age factor, time and again health become so poor. I don�t think my wellbeing is good in that sense",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,73,NA,NA,NA,NA,NA,123,But at household level we are doing good in terms of income generation and to manage livelihood means.  [For driver see answer to E2: It has changed since last five years due to remittance money.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,73,NA,NA,NA,NA,NA,124,"Now our income as a whole family is good. Children are doing their own work, they are supporting us at each and every aspect. Son and daughter in law takes care of us and they love us. It is great. I am getting food and other things od my choice withough putting too much of effort. My kids do it for me. [For driver see answer to E2: It has changed since last five years due to remittance money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,117,NA,NA,NA,NA,NA,127,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+76,77,NA,NA,NA,NA,NA,130,"We sell tomato in its season.  We cultivate maize and pulses by taking land on rent. So at the time of good production, we sell them.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+109,118,NA,NA,NA,NA,NA,132,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,129,NA,NA,NA,NA,NA,142,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,106,NA,NA,NA,NA,NA,143,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,106,NA,NA,NA,NA,NA,144,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+122,131,NA,NA,NA,NA,NA,146,It is difficult to gain weight of pigs as we are not able to feed them with proper food�There is no profit from pig farming.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+74,89,NA,NA,NA,NA,NA,151,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,89,NA,NA,NA,NA,NA,151,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,89,NA,NA,NA,NA,NA,152,"We are more conscious on spending and saving. So we are controlling money and saving for better tomorrow. As a head of the household, I take all the decisions and control money. [For driver see answer to F3: Now we have good income from shop, tenants and also son and daughters income. So we have saved money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+74,89,NA,NA,NA,NA,NA,152,"We are more conscious on spending and saving. So we are controlling money and saving for better tomorrow. As a head of the household, I take all the decisions and control money. [For driver see answer to F3: Now we have good income from shop, tenants and also son and daughters income. So we have saved money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+74,89,NA,NA,NA,NA,NA,153,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,89,NA,NA,NA,NA,NA,153,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+74,73,NA,NA,NA,NA,NA,154,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,73,NA,NA,NA,NA,NA,154,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,89,NA,NA,NA,NA,NA,155,"As we have saved now and also live with bonding. And we do all the works on a shared basis so our wellbeing is better. All the family member are busy in their own work.[For driver see answer to F3: Now we have good income from shop, tenants and also son and daughters income. So we have saved money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+74,89,NA,NA,NA,NA,NA,155,"As we have saved now and also live with bonding. And we do all the works on a shared basis so our wellbeing is better. All the family member are busy in their own work. [For driver see answer to F3: Now we have good income from shop, tenants and also son and daughters income. So we have saved money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+117,107,NA,NA,NA,NA,NA,157,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,80,NA,NA,NA,NA,NA,162,I spend more on different occasions and religious ceremony. [For driver see answer to E4: Now remittance is another source of money.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,65,NA,NA,NA,NA,NA,163,"Due to increase in income, now I can spend more on the household purpose.  Earlier we even had to control money for eating food and wearing good clothes, but now on this issue we are not facing any problem. [For driver see answer to E4: Now remittance is another source of money.].",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,65,NA,NA,NA,NA,NA,163,"Due to increase in income, now I can spend more on the household purpose.  Earlier we even had to control money for eating food and wearing good clothes, but now on this issue we are not facing any problem. [For driver see answer to E4: Now remittance is another source of money.].",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+132,118,NA,NA,NA,NA,NA,165,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,98,NA,NA,NA,NA,NA,167,At the time of  marriage I had suffered a lot in this house. I had to work hard and I didnt have any money. Now I work in the field from where I earn some money. Now I am clearing the loan. I am free to do what ever I like so I am happy now a days. [For driver see answer to E2: But now we have started cash crops like tomato and cucumber.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,99,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too.[For driver see answer to E4: Now remittance is another source of money.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,99,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too. [For driver see answer to E2: But now we have started cash crops like tomato and cucumber.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,72,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too.[For driver see answer to E4: Now remittance is another source of money.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,72,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too. [For driver see answer to E2: But now we have started cash crops like tomato and cucumber.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,98,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too.[For driver see answer to E4: Now remittance is another source of money.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,98,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too. [For driver see answer to E2: But now we have started cash crops like tomato and cucumber.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,89,NA,NA,NA,NA,NA,175,"Yes, we have some saving nowadays. [For driver see answer to E4: From the means of remittance.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,80,NA,NA,NA,NA,NA,175,My brother have purchased a motorbike. [For driver see answer to E4: From the means of remittance.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,89,NA,NA,NA,NA,NA,177,All of the family members are busy in their own work. These days we have some saving too. We are earning money through which we are providing a good education to the children. So everything is going well. [For driver see answer to E4: From the means of remittance.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,72,NA,NA,NA,NA,NA,177,All of the family members are busy in their own work. These days we have some saving too. We are earning money through which we are providing a good education to the children. So everything is going well. [For driver see answer to E4: From the means of remittance.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+101,123,NA,NA,NA,NA,NA,183,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+101,126,NA,NA,NA,NA,NA,185,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+113,118,NA,NA,NA,NA,NA,186,We had borrowed loan for father in laws death rituals.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+133,134,NA,NA,NA,NA,NA,186,We had borrowed loan for father in laws death rituals. At the same time we already debts while my husband has gone abroad. When the father in law was active he even sold a piece of land. So in fact instead of adding property we have lost in the last five years.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+118,115,NA,NA,NA,NA,NA,187,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+101,123,NA,NA,NA,NA,NA,188,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+118,115,NA,NA,NA,NA,NA,188,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+135,106,NA,NA,NA,NA,NA,191,Now we are farming avocado so it has been 4 years but this year only it have started giving fruits.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+117,107,NA,NA,NA,NA,NA,192,"The harvest that we cultivate for self-consumption, we do not use any fertilizer so we have low production.  Due to low production, we have to purchase a lot of food items including grain.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+117,107,NA,NA,NA,NA,NA,192,"In the meantime, due to plantation of tree at the boundary of the field and the shade of the tree, the production is further low.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+91,73,NA,NA,NA,NA,NA,194,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,196,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+100,105,NA,NA,NA,NA,NA,197,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+104,105,NA,NA,NA,NA,NA,198,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+100,105,NA,NA,NA,NA,NA,198,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+122,130,NA,NA,NA,NA,NA,199,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+122,130,NA,NA,NA,NA,NA,199,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+100,116,NA,NA,NA,NA,NA,202,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+100,115,NA,NA,NA,NA,NA,205,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,117,NA,NA,NA,NA,NA,208,"Due to a change in the seasonal pattern  especially climatic abruptions, production rate is comparatively low. Earlier except rice, we used to produce all the goods needed for us. But nowadays we purchase various goods from the market too.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+136,105,NA,NA,NA,NA,NA,208,We also don�t have enough water supply for own self so there is always lack of water for our crops as well. This is an issue that has adversely affected our production.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,89,NA,NA,NA,NA,NA,214,I have saved some money in various womens group and even in a bank. But we don�t have purchased any assets. My husband is planning to do investment in other sector rather than agriculture. [For driver see answer to E1: My husband is present ward chairperson. Thus his salary and allowance is the main source of income these days.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,73,NA,NA,NA,NA,NA,216,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,89,NA,NA,NA,NA,NA,217,We all are living happily. We share with each other. We have a feeling of togetherness in the community. We have some saving we don�t have any problem. [For driver see answer to E1: My husband is present ward chairperson. Thus his salary and allowance is the main source of income these days.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,106,NA,NA,NA,NA,NA,219,As our crops often are destroyed by monkey and deer,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,117,NA,NA,NA,NA,NA,220,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+131,130,NA,NA,NA,NA,NA,222,What we serve them is the waste food from our home which is the main reason that they don�t get weight so now we have left farming pigs.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,65,NA,NA,NA,NA,NA,226,"We have to buy most of the thing in household. We have to spend on education, foods, TV channels, phone charge and so on. [For driver see E4: Income has increased due to remittance money and labour work.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,65,NA,NA,NA,NA,NA,226,"We have to buy most of the thing in household. We have to spend on education, foods, TV channels, phone charge and so on. [For driver see E4: Income has increased due to remittance money and labour work.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,65,NA,NA,NA,NA,NA,227,Altogether we have a good family earning. All family member give money to me and I spend on what we need to. [For driver see E4: Income has increased due to remittance money and labour work.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,65,NA,NA,NA,NA,NA,227,Altogether we have a good family earning. All family member give money to me and I spend on what we need to. [For driver see E4: Income has increased due to remittance money and labour work.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,89,NA,NA,NA,NA,NA,228,We have saved some money in the bank though We havent purchased any assets.[For driver see E4: Income has increased due to remittance money and labour work.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,89,NA,NA,NA,NA,NA,228,We have saved some money in the bank though We havent purchased any assets.[For driver see E4: Income has increased due to remittance money and labour work.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,73,NA,NA,NA,NA,NA,229,"Now, husband earns from labour work. We are getting remittance money also.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,73,NA,NA,NA,NA,NA,229,"Now, husband earns from labour work. We are getting remittance money also.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+77,73,NA,NA,NA,NA,NA,229,Now from lemon farming we are getting some good amount of money.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+68,72,NA,NA,NA,NA,NA,230,"We have some saving too. So we can afford our children a quality education. This is something that is adding to our confidence. This is the real change in the last five years. [For driver see answer to H2: Now, husband earns from labour work. We are getting remittance money also.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+69,72,NA,NA,NA,NA,NA,230,"We have some saving too. So we can afford our children a quality education. This is something that is adding to our confidence. This is the real change in the last five years. [For driver see answer to H2: Now, husband earns from labour work. We are getting remittance money also.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,106,NA,NA,NA,NA,NA,233,Now maize is damaged by monkey.  lentil is destroyed by deer.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,106,NA,NA,NA,NA,NA,7,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,107,NA,NA,NA,NA,NA,8,See answer to C2,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+70,71,NA,NA,NA,NA,NA,14,"From my elder sons earning we have built a house. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+70,71,NA,NA,NA,NA,NA,14,"From my elder sons earning we have built a house. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+70,71,NA,NA,NA,NA,NA,14,"From my elder sons earning we have built a house. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+72,73,NA,NA,NA,NA,NA,15,"I am experiencing the same situation. May be it will get better after we have some saving once all my kids are out from the college after studying and start working. All our son is getting educated so that is good for me and family. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+72,73,NA,NA,NA,NA,NA,15,"I am experiencing the same situation. May be it will get better after we have some saving once all my kids are out from the college after studying and start working. All our son is getting educated so that is good for me and family. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+72,73,NA,NA,NA,NA,NA,15,"I am experiencing the same situation. May be it will get better after we have some saving once all my kids are out from the college after studying and start working. All our son is getting educated so that is good for me and family. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+70,73,NA,NA,NA,NA,NA,16,"Our situation is slightly changed as we have got a modern house. Good earning but not saving enough to choose and do what ever we like to have. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+70,73,NA,NA,NA,NA,NA,16,"Our situation is slightly changed as we have got a modern house. Good earning but not saving enough to choose and do what ever we like to have. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+70,73,NA,NA,NA,NA,NA,16,"Our situation is slightly changed as we have got a modern house. Good earning but not saving enough to choose and do what ever we like to have. [For driver see answer to E4: My one son has opened a grocery shop. Another son sends remittance, husband goes to labour work and other son also works as a labour so we have left agriculture work that�s why we can say that the income from non farming and non agricultural work has been increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,80,NA,NA,NA,NA,NA,35,"Yes it has been changed. We purchased TV, cycle. [For driver see answer to E4: Now one son works as a labour so some how income has increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,63,NA,NA,NA,NA,NA,35,Our food behavior has also changed. [For driver see answer to E4: Now one son works as a labour so some how income has increased.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,117,NA,NA,NA,NA,NA,43,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,106,NA,NA,NA,NA,NA,56,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+118,115,NA,NA,NA,NA,NA,70,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+78,86,NA,NA,NA,NA,NA,73,In Some of the land I even grow wheat and paddy for household consumption. So my expenses has decresed on staple grains and income has increased. [See answer to C5: we use hybrid seeds and chemical fertilizer thus in the limited land also we produce large amount of grain which is sufficient for our household consumption.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+78,86,NA,NA,NA,NA,NA,74,"We,  all family member give lots of time in the field, at the same time we use hybrid seeds and chemical fertilizer thus in the limited land also we produce large amount of grain which is sufficient for our household consumption. [See answer to C3: So my expenses has decresed on staple grains and income has increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+78,86,NA,NA,NA,NA,NA,74,"We,  all family member give lots of time in the field, at the same time we use hybrid seeds and chemical fertilizer thus in the limited land also we produce large amount of grain which is sufficient for our household consumption. [See answer to C3: So my expenses has decresed on staple grains and income has increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+78,86,NA,NA,NA,NA,NA,74,"We,  all family member give lots of time in the field, at the same time we use hybrid seeds and chemical fertilizer thus in the limited land also we produce large amount of grain which is sufficient for our household consumption. [See answer to C3: So my expenses has decresed on staple grains and income has increased.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+80,71,NA,NA,NA,NA,NA,80,"We have purchased TV, Fan and motor bike...Basically we have added to luxury items in the household. [For driver see answer to E1: Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,80,NA,NA,NA,NA,NA,81,"I mean mostly we need to spend on daily consumption and we have got other assets like bike for transportation and TV for intertainment. [For driver see answer to E1: Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+80,71,NA,NA,NA,NA,NA,82,"We purchased some assets like motorbike and  TV. [For driver see answer to E1: Now we are focusing on agriculture, particullarly mushroom farming and vegetable farming from these we are getting cash directly.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+90,73,NA,NA,NA,NA,NA,83,Now I have a good income. I  take part in various social activities.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+89,73,NA,NA,NA,NA,NA,83,In the time of  emergency I can manage some money,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+89,73,NA,NA,NA,NA,NA,83,I also have some saving and good income from mushroom and vegetable farming.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+72,73,NA,NA,NA,NA,NA,84,Now our income level has increased. Children are geeting good education.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+89,73,NA,NA,NA,NA,NA,84,Now our income level has increased...we are living happily. We also have some saving for any crisis.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,63,NA,NA,NA,NA,NA,86,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,63,NA,NA,NA,NA,NA,86,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,80,NA,NA,NA,NA,NA,100,"Yes it has changed. We spend money for the livilihood,motorbike, mobile phone,TV, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,80,NA,NA,NA,NA,NA,100,"Yes it has changed. We spend money for the livilihood,motorbike, mobile phone,TV, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,80,NA,NA,NA,NA,NA,100,"Yes it has changed. We spend money for the livilihood,motorbike, mobile phone,TV, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,80,NA,NA,NA,NA,NA,101,"To meet the needs of todays life style we spend our money on mobile phone, motorbike, TV because we also have good income now. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,80,NA,NA,NA,NA,NA,101,"To meet the needs of todays life style we spend our money on mobile phone, motorbike, TV because we also have good income now. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,80,NA,NA,NA,NA,NA,101,"To meet the needs of todays life style we spend our money on mobile phone, motorbike, TV because we also have good income now. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+80,71,NA,NA,NA,NA,NA,102,"I have purchased various assets thus I feeel that the total value of my assects has increased. Such as motor bike, tv, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+80,71,NA,NA,NA,NA,NA,102,"I have purchased various assets thus I feeel that the total value of my assects has increased. Such as motor bike, tv, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+80,71,NA,NA,NA,NA,NA,102,"I have purchased various assets thus I feeel that the total value of my assects has increased. Such as motor bike, tv, refregerator etc. [For driver see answer to E4: We all three brothers are engaged in different income generating activities. Vegetable farming, income from business and salary from service is the reason for increased amount of money of my household earning.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,80,NA,NA,NA,NA,NA,117,The proportion of money earned from different sources has increased compared to past. At the same time expenses have also increased but still its ok. These days we spend more on consumption in various products that we get from market. But over all we are doing good. [For driver see answer to E2: It has changed since last five years due to remittance money.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+87,71,NA,NA,NA,NA,NA,118,This year we bought a mini tractor which will help us in ploughing field and will save our time. [For driver see answer to E2: It has changed since last five years due to remittance money.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+93,71,NA,NA,NA,NA,NA,121,"Recently we have  purchased land, we invested on tailoring shop and mini tractor but regarding saving my son knows everything I am unknown about this. I mean we have added to property and that too is saving only. [For driver see answer to E2: It has changed since last five years due to remittance money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+106,129,NA,NA,NA,NA,NA,143,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+106,129,NA,NA,NA,NA,NA,144,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+131,130,NA,NA,NA,NA,NA,146,It is difficult to gain weight of pigs as we are not able to feed them with proper food�There is no profit from pig farming.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+89,84,NA,NA,NA,NA,NA,152,"We are more conscious on spending and saving. So we are controlling money and saving for better tomorrow. As a head of the household, I take all the decisions and control money. [For driver see answer to F3: Now we have good income from shop, tenants and also son and daughters income. So we have saved money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+89,84,NA,NA,NA,NA,NA,152,"We are more conscious on spending and saving. So we are controlling money and saving for better tomorrow. As a head of the household, I take all the decisions and control money. [For driver see answer to F3: Now we have good income from shop, tenants and also son and daughters income. So we have saved money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+89,73,NA,NA,NA,NA,NA,155,"As we have saved now and also live with bonding. And we do all the works on a shared basis so our wellbeing is better. All the family member are busy in their own work.[For driver see answer to F3: Now we have good income from shop, tenants and also son and daughters income. So we have saved money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+89,73,NA,NA,NA,NA,NA,155,"As we have saved now and also live with bonding. And we do all the works on a shared basis so our wellbeing is better. All the family member are busy in their own work. [For driver see answer to F3: Now we have good income from shop, tenants and also son and daughters income. So we have saved money.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,63,NA,NA,NA,NA,NA,163,"Due to increase in income, now I can spend more on the household purpose.  Earlier we even had to control money for eating food and wearing good clothes, but now on this issue we are not facing any problem. [For driver see answer to E4: Now remittance is another source of money.].",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,64,NA,NA,NA,NA,NA,163,"Due to increase in income, now I can spend more on the household purpose.  Earlier we even had to control money for eating food and wearing good clothes, but now on this issue we are not facing any problem. [For driver see answer to E4: Now remittance is another source of money.].",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+98,73,NA,NA,NA,NA,NA,167,At the time of  marriage I had suffered a lot in this house. I had to work hard and I didnt have any money. Now I work in the field from where I earn some money. Now I am clearing the loan. I am free to do what ever I like so I am happy now a days. [For driver see answer to E2: But now we have started cash crops like tomato and cucumber.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+99,73,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too.[For driver see answer to E4: Now remittance is another source of money.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+99,73,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too. [For driver see answer to E2: But now we have started cash crops like tomato and cucumber.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+72,73,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too.[For driver see answer to E4: Now remittance is another source of money.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+72,73,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too. [For driver see answer to E2: But now we have started cash crops like tomato and cucumber.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+98,73,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too.[For driver see answer to E4: Now remittance is another source of money.].,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+98,73,NA,NA,NA,NA,NA,168,Earlier  even we had difficulties to have rice in our meal. But now we earn some money. Along with this we are providing a quality education for the children. Earlier we had lots of loan. Now we are clearing them and only a part of it is left.  After some year we will have some saving too. [For driver see answer to E2: But now we have started cash crops like tomato and cucumber.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+80,71,NA,NA,NA,NA,NA,175,My brother have purchased a motorbike. [For driver see answer to E4: From the means of remittance.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+89,73,NA,NA,NA,NA,NA,177,All of the family members are busy in their own work. These days we have some saving too. We are earning money through which we are providing a good education to the children. So everything is going well. [For driver see answer to E4: From the means of remittance.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+72,73,NA,NA,NA,NA,NA,177,All of the family members are busy in their own work. These days we have some saving too. We are earning money through which we are providing a good education to the children. So everything is going well. [For driver see answer to E4: From the means of remittance.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+123,115,NA,NA,NA,NA,NA,188,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,106,NA,NA,NA,NA,NA,196,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,106,NA,NA,NA,NA,NA,197,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,117,NA,NA,NA,NA,NA,198,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,117,NA,NA,NA,NA,NA,198,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+117,107,NA,NA,NA,NA,NA,208,"Due to a change in the seasonal pattern  especially climatic abruptions, production rate is comparatively low. Earlier except rice, we used to produce all the goods needed for us. But nowadays we purchase various goods from the market too.",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+105,117,NA,NA,NA,NA,NA,208,We also don�t have enough water supply for own self so there is always lack of water for our crops as well. This is an issue that has adversely affected our production.,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+89,73,NA,NA,NA,NA,NA,217,We all are living happily. We share with each other. We have a feeling of togetherness in the community. We have some saving we don�t have any problem. [For driver see answer to E1: My husband is present ward chairperson. Thus his salary and allowance is the main source of income these days.],NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,80,NA,NA,NA,NA,NA,226,"We have to buy most of the thing in household. We have to spend on education, foods, TV channels, phone charge and so on. [For driver see E4: Income has increased due to remittance money and labour work.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+65,80,NA,NA,NA,NA,NA,226,"We have to buy most of the thing in household. We have to spend on education, foods, TV channels, phone charge and so on. [For driver see E4: Income has increased due to remittance money and labour work.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+72,73,NA,NA,NA,NA,NA,230,"We have some saving too. So we can afford our children a quality education. This is something that is adding to our confidence. This is the real change in the last five years. [For driver see answer to H2: Now, husband earns from labour work. We are getting remittance money also.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+72,73,NA,NA,NA,NA,NA,230,"We have some saving too. So we can afford our children a quality education. This is something that is adding to our confidence. This is the real change in the last five years. [For driver see answer to H2: Now, husband earns from labour work. We are getting remittance money also.]",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+2,9,NA,0.5,0.5,NA,NA,1,NA,NA,NA,NA,NA,I had gone to Saudi Arabia 3 years ago and returned back 6 months ago due to leg pain.,NA,NA,NA,NA,NA

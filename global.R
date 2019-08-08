@@ -15,7 +15,7 @@ source("functions/find_cycles.r")
 
 
 library(shinythemes)
-# library(pushbar)
+library(stringi)
 library(shinyWidgets)
 library(webshot)
 library(readxl)
@@ -237,6 +237,7 @@ small <- "asdf"
 
 highlight_text <- function(large, smallvec, start = "<a href='.'>", stop = "</a>") {
   for (small in smallvec) {
+  small <- str_remove_all(small," *\\[.*?\\] *")
     if (length(nchar(small)) > 0) {
       if (str_detect(large, small) && nchar(small) > 2) {
         where <- str_locate(large, small)

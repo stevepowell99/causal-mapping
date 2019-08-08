@@ -42,3 +42,5 @@ diagram,downarrows,TRUE,NA
 arrow,notForwards,T,NA
 variable,shape,box,NA
 diagram,codingfocus,T,NA
+variable,coding.font.size,44,NA
+variable,opacity,0.8,NA

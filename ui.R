@@ -75,6 +75,23 @@ ui <- tagList(
                              img(src = "img/logo.gif", height = "20px", style = "display:inline-block;"),
                              a(icon("question-circle"),href="http://www.pogol.net/_causal_mapping/index.html", target="_blank",height = "20px", style = "display:inline-block;margin-left:20px"),
                              
+                             
+                             div((dropdownButton(
+                               tagList(
+                               actionButton("settingsTableGlobalUp","Update")
+                               
+                               ,
+                               
+                               rHandsontableOutput("settingsTableGlobal")
+                               )
+                               
+                               
+                               
+                               , circle = TRUE, status = "default",
+                               size = "xs", icon = icon("cog"), label = NULL, tooltip = "settings",
+                               right = FALSE, up = FALSE, width = NULL, margin = "5px",
+                               inputId = NULL)), style = "display:inline-block;width:8%"),
+                             
                              hr(style = "margin-top:5px"),
                              
                              # alerts if user requests correct or incorrect permalink
@@ -108,38 +125,42 @@ ui <- tagList(
                                                         ".csv"
                                                       )
                                             )
-                                          ) %>% 
-                                   bs_append(
-                                            title = "View and edit statements",
-                                            p("The first column is the text. You can use other columns for attributes like age or gender."),
-                                         p() ) %>% 
-                                   bs_append(
-                                            "Upload variables and arrows",
-                                            p("Nodes table must contain a column called label"),
-                                            fileInput("up.nodes", "Upload variables",
-                                                      multiple = FALSE, width = NULL,
-                                                      accept = c(
-                                                        "text/csv",
-                                                        "text/comma-separated-values,text/plain",
-                                                        ".csv"
-                                                      )
-                                            ),
-                                            p("Arrows table must contain columns from and to and optionally N"),
-                                            fileInput("up.edges", "Upload arrows",
-                                                      multiple = FALSE, width = NULL,
-                                                      accept = c(
-                                                        "text/csv",
-                                                        "text/comma-separated-values,text/plain",
-                                                        ".csv"
-                                                      )
-                                            ),
-                                            checkboxInput("use.labels", "Use labels instead of row numbers",value = T)
                                           )
+                                 # %>% 
+                                 #   bs_append(
+                                 #            title = "Upload variables",
+                                 #     tagList(
+                                 #     p("Nodes table must contain a column called label"),
+                                 #     fileInput("up.nodes", "Upload variables",
+                                 #       multiple = FALSE, width = NULL,
+                                 #       accept = c(
+                                 #         "text/csv",
+                                 #         "text/comma-separated-values,text/plain",
+                                 #         ".csv"
+                                 #       )
+                                 #     )
+                                 #     )
+                                 #     ) %>% 
+                                 #   bs_append(
+                                 #            "Upload arrows",
+                                 #      tagList(      
+                                 #            p("Arrows table must contain columns from and to and optionally N"),
+                                 #            fileInput("up.edges", "Upload arrows",
+                                 #                      multiple = FALSE, width = NULL,
+                                 #                      accept = c(
+                                 #                        "text/csv",
+                                 #                        "text/comma-separated-values,text/plain",
+                                 #                        ".csv"
+                                 #                      )
+                                 #            ),
+                                 #            checkboxInput("use.labels", "Use labels instead of row numbers",value = T)
+                                 #          )
+                                 #          )
                                ),
                                
                                # ui coding----                             
                                #  most important panel. in most cases user will be looking at / scrolling through pieces of text and will "code" them aka use the information to create arrows/edges
-                               tabPanel("",icon=icon("highlighter"),
+                               tabPanel(span("",title="Code",icon("highlighter")),
                                         value = "Code", 
                                         
                                         uiOutput("pagerBig"),
@@ -164,7 +185,9 @@ ui <- tagList(
                                         conditionalPanel("input.nodeTableAddCol",
                                                          uiOutput("nodeTableAddCol")),
                                         rHandsontableOutput("nodeTable"),
-                                        uiOutput("combine_button")
+                                        uiOutput("combine_button"),
+                                 actionButton("autoMerge", "Auto-suggest clusters")                         # not importatn
+                                 
                                ),
                                tabPanel("",                             # user can directly edit the edges aka arrows table. still functional but will probably be dropped
                                         value = "Arrows", icon = icon("arrow-right"),
@@ -185,32 +208,31 @@ ui <- tagList(
                                  uiOutput("condFormattingOutput")
                                ),
                                
-                               tabPanel("",value="Settings",    #  settings panel 
-                                        icon = icon("cog"),
-                                        
-                                        uiOutput("inputs"),                         # probably will not use these
-                                        bs_accordion(id = "otherSettings") %>% 
-                                          bs_append(
-                                            "Advanced",tagList(
-                                            actionButton("settingsTableGlobalUp","Update"),
-                                            rHandsontableOutput("settingsTableGlobal"),                         # global settings
-                                            hr()
-                                            )
-                                          ) %>% 
-                                        bs_append(
-                                          "Easy",
-                                          actionButton("autoMerge", "Auto-suggest clusters")                         # not importatn
-                                        ) %>% 
-                                   bs_append(                    #this is just a utility from visnetwork which I will drop at some point
-                                   "Advanced options",
-                                   p("Development only"),
-                                   icon("exclamation-triangle"),
-                                   p(id = "advancedAnchor")
-                                 )
-                                 
-                                 
-                                 
-                               ),
+                               # tabPanel("",value="Settings",    #  settings panel 
+                               #          icon = icon("cog"),
+                               #          
+                               #          uiOutput("inputs"),                         # probably will not use these
+                               #          bs_accordion(id = "otherSettings") %>% 
+                               #            bs_append(
+                               #              "Advanced",tagList(
+                               #              # actionButton("settingsTableGlobalUp","Update"),
+                               #              # rHandsontableOutput("settingsTableGlobal"),                         # global settings
+                               #              # hr()
+                               #              )
+                               #            ) %>% 
+                               #          bs_append(
+                               #            "Easy",
+                               #          ) %>% 
+                               #     bs_append(                    #this is just a utility from visnetwork which I will drop at some point
+                               #     "Advanced options",
+                               #     p("Development only"),
+                               #     icon("exclamation-triangle"),
+                               #     p(id = "advancedAnchor")
+                               #   )
+                               #   
+                               #   
+                               #   
+                               # ),
                                
                                tabPanel("", icon=icon("warehouse"),div(style = ""),                         # library of existing projects stored locally as csv files. clicking loads up the project 
                                         style = "",

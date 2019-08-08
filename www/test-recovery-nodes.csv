@@ -1,7 +1,5 @@
 label,details,group,col1,cluster,value,level,fun,type,is_context,clusterLabel
-one,NA,NA,NA,,NA,NA,NA,NA,NA,
-two,NA,NA,NA,,NA,NA,NA,NA,NA,
-three,NA,NA,NA,,NA,NA,NA,NA,NA,
-four,NA,NA,NA,,NA,NA,NA,NA,NA,
-five,NA,NA,NA,,NA,NA,NA,NA,NA,
-asdf,NA,NA,NA,,NA,NA,NA,NA,NA,NA
+one,NA,NA,NA,,NA,NA,NA,NA,NA,NA
+two,NA,NA,NA,,NA,NA,NA,NA,NA,NA
+three,NA,NA,NA,,NA,NA,NA,NA,NA,NA
+four,NA,NA,NA,,NA,NA,NA,NA,NA,NA

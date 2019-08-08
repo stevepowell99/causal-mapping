@@ -12,7 +12,6 @@ diagram,downarrows,TRUE,NA
 diagram,focus,TRUE,NA
 diagram,layout,layout_with_sugiyama,NA
 diagram,orientation,LR,NA
-diagram,overview_column,NA,NA
 diagram,splitColumnNames,NA,NA
 diagram,subtitle,NA,NA
 diagram,title,NA,NA
@@ -23,6 +22,7 @@ variable,label,!label,NA
 variable,merge,TRUE,NA
 variable,minimum.frequency,0,NA
 variable,tooltip,!label,NA
-variable,width,NA,NA
+variable,width,300,NA
 variable,shape,box,NA
 variable,opacity,0.8,NA
+variable,coding.font.size,33,NA

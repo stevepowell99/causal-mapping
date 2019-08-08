@@ -197,7 +197,8 @@ server <- function(input, output, session) {
               bind_rows(defaultEdges %>% filter(F)) %>%
               mutate(trust = as.numeric(trust)) %>%
               mutate(strength = as.numeric(strength)) %>%
-              mutate(statement = as.numeric(statement))
+              mutate(statement = as.numeric(statement)) %>% 
+              mutate(quote=stringi::stri_trans_general(quote,"latin-ascii"))
 
             values$graf <- tbl_graph(nodes, edges)
 
@@ -1523,6 +1524,7 @@ server <- function(input, output, session) {
 
   observeEvent(input$settingsTableGlobalUp, {
     doNotification("updating from settingsTableGlobal")
+    # browser()
     values$settingsGlobal <- hot_to_r(input$settingsTableGlobal)
   })
 
@@ -1853,9 +1855,10 @@ server <- function(input, output, session) {
           format_nodes_and_edges(input, type = "edge", values$settingsConditional)
       } else {
         # browser()
-        vno$font.color <- "#eeffee"
-        vno$color.background <- "#aaaaaa"
-        vno$font.size <- 55
+        vno$font.color <- "#eeeeee"
+        vno$color.background <- "#226622"
+        vno$font.size <- findset("variablecoding.font.size",vals)
+        
 
         ved$width <- 3
       }
@@ -1889,7 +1892,7 @@ server <- function(input, output, session) {
         # mutate(arrows.middle.enabled = ifelse(combo.type == "", F, T)) %>%
         mutate(arrows.middle.enabled = F) %>%
         # mutate(label = paste0(label, ifelse(arrows.middle.enabled, paste0(" ", combo.type), ""))) %>%
-        mutate(dashes = definition.type != "") %>%
+        mutate(dashes = str_remove_all(definition.type,",") != "") %>%
         mutate(arrows.to = definition.type != "Defined, undirected")
 
       if (!is.null(legend)) {
@@ -1917,10 +1920,9 @@ server <- function(input, output, session) {
 
 
       # fontsize ceiling so it doesn't crash. doesn't take into account if there are very long words
-      # browser()
-      vno <- vno %>%
-        mutate(font.size = round(pmin(as.numeric(font.size), as.numeric(findset("variablewidth")) / 8)))
-
+      # if (this_tab != "Code")      vno <- vno %>% mutate(font.size =  findset("variablecoding.font.size",v = vals)
+# )
+# browser()
 
       # # wrapping ----
       ved <- ved %>%
@@ -1954,7 +1956,8 @@ server <- function(input, output, session) {
   observe(if (!is.null(values$grafAgg2)) {
     vals <- isolate(values)
     vga <- req(values$grafAgg2)
-
+    this_tab <- isolate(input$sides)
+    
     if ((input$crowd)) {
       values$legend <- ""
     }
@@ -2089,7 +2092,7 @@ server <- function(input, output, session) {
     #     visPhysics(barnesHut = list(avoidOverlap = .7))
     # }
 
-    fvw <- findset("variablewidth")
+    fvw <- ifelse(this_tab=="Code",findset("variablecoding.width",vals),findset("variablewidth",vals))
     # browser()
     vn <- vn %>%
       visNodes(
@@ -2194,6 +2197,7 @@ server <- function(input, output, session) {
       tagList(
 
         # div(actionButton("render_button","Render"),style="display:inline-block;vertical-align:top"),
+      
         div(textInput(
           "titl", NULL,
           value = ifelse(is.null(values$current), "", values$current), placeholder = "Title", width = "100%"

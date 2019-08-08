@@ -602,7 +602,7 @@ i.glyphicon.glyphicon-play{
 
 .textbanner a {background-color: yellow !important;color:black !important;}
 
-#filters {position:fixed;z-index: 99}
+#filters {position:fixed;z-index: 99;right: 300px}
 
 .colourpicker-input {height:15px !important;}
 
