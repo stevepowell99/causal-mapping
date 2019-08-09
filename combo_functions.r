@@ -39,7 +39,7 @@ meanfun <- function(x) {
   mean(x,na.rm=T) 
 }
 
-catfun=function(x)paste0(x,collapse=",")
+# catfun=function(x)paste0(x,collapse=",")
 
 
 

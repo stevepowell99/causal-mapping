@@ -90,7 +90,7 @@ ui <- tagList(
                                , circle = TRUE, status = "default",
                                size = "xs", icon = icon("cog"), label = NULL, tooltip = "settings",
                                right = FALSE, up = FALSE, width = NULL, margin = "5px",
-                               inputId = NULL)), style = "display:inline-block;width:8%"),
+                               inputId = "dropSettings")), style = "display:inline-block;width:8%"),
                              
                              hr(style = "margin-top:5px"),
                              

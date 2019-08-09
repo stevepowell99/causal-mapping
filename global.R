@@ -8,13 +8,14 @@ options(stringsAsFactors = F)
 # source ------------------------------------------------------------------
 
 source("combo_functions.r")
-source("functions/find_cycles.r")
+# source("functions/find_cycles.r")
 
 # libs --------------------------------------------------------------------
 
 
 
 library(shinythemes)
+library(shinylogs)
 library(stringi)
 library(shinyWidgets)
 library(webshot)
@@ -37,6 +38,7 @@ library(googledrive)
 library(googlesheets4)
 library(shinycssloaders)
 library(rdrop2)
+library(igraph) # for find cycles
 
 require(visNetwork)
 require(plotly) # rgba
@@ -99,7 +101,11 @@ generalise_sprintf <- function(str, tex, ...) {
 }
 
 
-make_labels <- function(tex, df, sep = "<br>") {
+make_labels <- function(tex, wrap=33,df,  sep = "<br>",type="html") {
+  wrap <- replace_na(wrap,"")
+  wrap[wrap==""] <- 33
+  wrap <- as.numeric(wrap)
+  
   cols <- tex %>%
     str_extract_all("\\!\\w*") %>%
     `[[`(1) %>%
@@ -114,10 +120,35 @@ make_labels <- function(tex, df, sep = "<br>") {
 
     if (i %in% colnames(df)) tex2 <- sprintf(tex2, unlist(df[, i]))
   }
-  tex2
+  tex2 %>% 
+    str_replace_all( "///", ifelse(type=="html","<br>","\n")) %>%
+    str_wrap(wrap) %>%
+    str_replace_all( "NA", "") %>%
+    str_trim()
+  # TODO the /// wrapping does not work anywhere!
 }
 
 
+# findset function to transfer user settings to values$settings. I simplified it -----------
+
+findset <- function(tex, v ) {
+  x <- v$settingsGlobal %>%
+    bind_rows(defaultSettingsGlobal) %>%
+    group_by(type, setting) %>%
+    summarise_all(.funs = funs(first))
+  
+  x <- x %>%
+    mutate_all(replaceNA) %>%
+    mutate(labs = paste0(type, setting)) %>%
+    filter(labs == tex) %>%
+    pull(value) %>%
+    last()
+  
+  if (is.na(x)) {
+    doNotification(paste0(x, " is not in settings"))
+  }
+  x
+}
 
 
 
@@ -194,7 +225,11 @@ prepare_vno <- function(vno) {
     mutate(clusterLabel = ifelse(is.na(clusterLabel), "", clusterLabel))
 }
 
-ved_join <- function(ved, statements) {
+ved_join_statements <- function(ved, statements) {
+  
+  # colnames(statements) <- colnames(statements) %>% paste0("statement__",.)
+  # statements <- statements %>% 
+  #   rename(statement=statement__statement)
   ved <- ved %>%
     left_join(statements, by = "statement")
   ved
@@ -214,7 +249,7 @@ merge_nodes <- function(vno, ved) {
     mutate(clusterLength = n()) %>%
     mutate(clusterLabel = clusterLabel %>% replaceNA()) %>%
     mutate(label = ifelse(clusterLength < 2, label, ifelse(clusterLabel != "", clusterLabel, paste0("Cluster: ", label)))) %>%
-    mutate_if_sw(is.numeric, .funs = list(sum = sumfun, mean = meanfun)) %>%
+    # mutate_if_sw(is.numeric, .funs = list(sum = sumfun, mean = meanfun)) %>%
     ungroup()
 
   ved <- ved %>%
@@ -428,19 +463,70 @@ findfirst <- function(vec, vec2) {
   })
 }
 
-
+merge_edges <- function(ved,this_tab,vals){
+  
+  if (this_tab != "Code" & findset("arrowmerge", v = vals) %>% as.logical()) {
+    ved <- ved %>%
+      group_by(from, to)
+    
+    # legend <- paste0(legend, "</br>Multiple arrows between pairs of variables collapsed into one")
+  } else {
+# add different curve to each edge in coterminal sets of edges--------------
+    ved <- ved %>%
+      group_by(from, to) %>%
+      mutate(smooth.type = "continuous") %>%
+      mutate(smooth.roundness = seq(from = 0, to = .8, length.out = n())) %>%
+      mutate(smooth.enabled = TRUE) %>%
+      ungroup() %>%
+      group_by(row_number())
+  }
+  
+  doNotification("merge edge aggregation")
+  
+  ved <- ved %>%
+    mutate_at(vars(matches(paste_colnames(colnames_for_concat))),funs(catfun)) %>% 
+    mutate_at(vars(matches(paste_colnames(colnames_for_sum))),funs(sumfun)) %>% 
+    mutate_at(vars(matches(paste_colnames(colnames_for_mean))),funs(meanfun)) %>% 
+    mutate(frequency = n())
+  
+  ved <- ved %>%
+    summarise_all(.funs = funs(first))
+  
+  
+  
+  
+  ved <- ved %>%
+    ungroup() 
+  # %>%
+  #   mutate(title = paste0(frequency, gsub("[^[:alnum:][:space:]]", "", label), separate = "- "))
+  
+  
+  
+  # if ("N" %in% colnames(ved)) {
+  #   ved <- ved %>%
+  #     mutate(frequency = N)
+  # }
+  
+  ved
+}
 
 join_nodes_and_edges <- function(vno, ved) {
+  matchCols <- paste_colnames(unique(c(colnames_for_concat,colnames_for_sum,colnames_for_mean)))
   ved.from <- ved %>%
     mutate(id = from) %>%
     group_by(id) %>%
-    mutate_if_sw(is.numeric, .funs = list(sum = sumfun, mean = meanfun)) %>%
-    mutate_if_sw(is.character, .funs = catfun) %>%
+    select(matches(matchCols)) %>% 
+    # mutate_if_sw(is.numeric, .funs = list(sum = sumfun, mean = meanfun)) %>%
+    # mutate_if_sw(is.character, .funs = catfun) %>%
+    mutate_at(vars(matches(paste_colnames(colnames_for_concat))),funs(catfun)) %>% 
+    mutate_at(vars(matches(paste_colnames(colnames_for_sum))),funs(sumfun)) %>% 
+    mutate_at(vars(matches(paste_colnames(colnames_for_mean))),funs(meanfun)) %>% 
+    
     summarise_all(.funs = funs(first)) %>%
     ungroup() %>%
     rename_all(function(x) paste0("from.", x)) %>%
     rename(id = from.id)
-
+# browser()
   vno <- vno %>%
     mutate(id = row_number()) %>%
     left_join(ved.from, by = "id")
@@ -448,59 +534,66 @@ join_nodes_and_edges <- function(vno, ved) {
   ved.to <- ved %>%
     mutate(id = to) %>%
     group_by(id) %>%
-    mutate_if_sw(is.numeric, .funs = list(sum = sumfun, mean = meanfun)) %>%
-    mutate_if_sw(is.character, .funs = catfun) %>%
+    select(matches(matchCols)) %>% 
+    # mutate_if_sw(is.numeric, .funs = list(sum = sumfun, mean = meanfun)) %>%
+    # mutate_if_sw(is.character, .funs = catfun) %>%
+    mutate_at(vars(matches(paste_colnames(colnames_for_concat))),funs(catfun)) %>% 
+    mutate_at(vars(matches(paste_colnames(colnames_for_sum))),funs(sumfun)) %>% 
+    mutate_at(vars(matches(paste_colnames(colnames_for_mean))),funs(meanfun)) %>% 
     summarise_all(.funs = funs(first)) %>%
     ungroup() %>%
     rename_all(function(x) paste0("to.", x)) %>%
     rename(id = to.id)
-
+  
   vno <- vno %>%
     mutate(id = row_number()) %>%
     left_join(ved.to, by = "id")
-
+  
   # add from and to scores for nodes
+  
+for(col in (intersect(colnames(ved),(colnames_for_sum)) %>% setdiff("label"))){
+# browser()
+  vno[,col] <- rowSums(vno[,c(paste0("from.",col),paste0("to.",col))],na.rm=T)
+}  
+  
+  
+for(col in (intersect(colnames(ved),(colnames_for_concat)) %>% setdiff("label"))){
+  
+  vno <- vno %>% 
+    unite(!!col,paste0("from.",col),paste0("to.",col))
+}  
+  
+  
 
-  vnofrom <- vno %>%
-    select(starts_with("from.")) %>%
-    select_if(is.numeric) %>%
-    as.matrix()
+for(col in (intersect(colnames(ved),(colnames_for_mean)) %>% setdiff("label"))){
+  vno[,col] <- rowMeans(vno[,c(paste0("from.",col),paste0("to.",col))],na.rm=T)
+}
+  
+  
 
-  vnoto <- vno %>%
-    select(starts_with("to.")) %>%
-    select_if(is.numeric) %>%
-    as.matrix()
 
-  vnomean <- apply(simplify2array(list(vnofrom, vnoto)), c(1, 2), meanfun) %>% as.tibble()
-  vnosum <- apply(simplify2array(list(vnofrom, vnoto)), c(1, 2), sumfun) %>% as.tibble()
-
-  colnames(vnomean) <- str_remove_all(colnames(vnoto), "^to.") %>% paste0("mean_", .)
-  colnames(vnosum) <- str_remove_all(colnames(vnoto), "^to.") %>% paste0("sum_", .)
-
-  vno <- bind_cols(vno, vnomean, vnosum)
+  # vnofrom <- vno %>%
+  #   select(starts_with("from.")) %>%
+  #   select_if(is.numeric) %>%
+  #   as.matrix()
+  # 
+  # vnoto <- vno %>%
+  #   select(starts_with("to.")) %>%
+  #   select_if(is.numeric) %>%
+  #   as.matrix()
+  # 
+  # vnomean <- apply(simplify2array(list(vnofrom, vnoto)), c(1, 2), meanfun) %>% as.tibble()
+  # vnosum <- apply(simplify2array(list(vnofrom, vnoto)), c(1, 2), sumfun) %>% as.tibble()
+  # 
+  # colnames(vnomean) <- str_remove_all(colnames(vnoto), "^to.") %>% paste0("mean_", .)
+  # colnames(vnosum) <- str_remove_all(colnames(vnoto), "^to.") %>% paste0("sum_", .)
+  # 
+  # vno <- bind_cols(vno, vnomean, vnosum)
 
   # browser()
-  vno <- vno %>%
-    ungroup() %>%
-    mutate(
-      frequency = sum_frequency_sum,
-      trust = sum_trust_sum,
-      strength = sum_strength_sum_sum,
-      wstrength = sum_wstrength_sum_sum
-    ) %>%
-    mutate(
-      edgelabels = paste0(from.label, to.label),
-      statement = paste0(from.statement, to.statement),
-      quote = paste0(from.quote, to.quote)
-    )
-
-
-
-
-  if ("mean_key1_mean_mean" %in% colnames(vno)) vno <- vno %>% mutate(key1 = mean_key1_mean_mean)
-  if ("mean_key2_mean_mean" %in% colnames(vno)) vno <- vno %>% mutate(key2 = mean_key2_mean_mean)
-
-  vno
+  vno %>%
+    ungroup() 
+ 
 }
 
 
@@ -520,9 +613,9 @@ format_nodes_and_edges <- function(df, inp, type, vsc) {
     row_clean <- vsc[vsc$attribute == attribute_clean, ]
     floor <- row$value
 
+    # browser()
     var <- df %>% pull(row$var)
     if (0 != sum(as.numeric(var), na.rm = T)) var <- as.numeric(var) else var <- as.numeric(factor(var))
-    # browser()
     if (row$selector == "conditional on ...") {
       ceiling <- row$value2
       if (str_detect(attribute, "color")) {
@@ -536,6 +629,7 @@ format_nodes_and_edges <- function(df, inp, type, vsc) {
           mutate(xxx = (rgb(V1, V2, V3, maxColorValue = 255))) %>%
           pull(xxx)
       } else {
+# browser()
         floor <- as.numeric(floor)
         ceiling <- as.numeric(ceiling)
         df[, attribute_short] <- (var / max(var, na.rm = T)) * ((ceiling - floor)) + floor
@@ -660,6 +754,85 @@ refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh bu
   }
 }
 
+
+
+
+
+# https://stackoverflow.com/questions/31034730/graph-analysis-identify-loop-paths
+
+
+# breadth first search of paths and unique loops
+get_loops <- function(adj, paths, maxlen){
+  # tracking the actual path length:
+  maxlen <- maxlen - 1
+  nxt_paths <- list()
+  # iterating over all paths:
+  for(path in paths$paths){
+    # iterating neighbors of the last vertex in the path:
+    for(nxt in adj[[path[length(path)]]]){
+      # attaching the next vertex to the path:
+      nxt_path <- c(path, nxt)
+      if(path[1] == nxt & min(path) == nxt){
+        # the next vertex is the starting vertex, we found a loop
+        # we keep the loop only if the starting vertex has the 
+        # lowest vertex id, to avoid having the same loops 
+        # more than once
+        paths$loops <- c(paths$loops, list(nxt_path))
+        # if you don't need the starting vertex included 
+        # at the end:
+        # paths$loops <- c(paths$loops, list(path))
+      }else if(!(nxt %in% path)){
+        # keep the path only if we don't create 
+        # an internal loop in the path
+        nxt_paths <- c(nxt_paths, list(nxt_path))
+      }
+    }
+  }
+  # paths grown by one step:
+  paths$paths <- nxt_paths
+  if(maxlen == 0){
+    # the final return when maximum search length reached
+    return(paths)
+  }else{
+    # recursive return, to grow paths further
+    return(get_loops(adj, paths, maxlen))
+  }
+}
+
+adj <- list()
+loops <- list()
+# the maximum length to limit computation time on large graphs
+# maximum could be vcount(graph), but that might take for ages
+maxlen <- 4
+# 
+# g <- erdos.renyi.game(n = 100, p.or.m = 0.04)
+# # creating an adjacency list
+# for(v in V(g)){
+#   # for directed graphs use the 'mode' argument of neighbors() 
+#   # according to your needs ('in', 'out' or 'all')
+#   adj[[as.numeric(v)]] <- neighbors(g, v)
+# }
+
+
+find_cycles <- function(adj){
+  for(start in seq(length(adj))){
+    loops <- c(loops, get_loops(adj, list(paths = list(c(start)), 
+      loops = list()), maxlen)$loops)
+    
+  }
+  loops
+  
+}
+
+# get_loops_all(g)
+# recursive search of loops 
+# for each vertex as candidate starting point
+
+# create_notable()
+
+
+
+
 # constants ----
 
 
@@ -673,7 +846,7 @@ all_attributes <- c(paste0("node_", node_names), paste0("edge_", edge_names))
 writeLines("", "log.txt") # just to open up a fresh file
 
 
-csvlist <- xc("nodes edges settingsConditional statements settingsGlobal")
+csvlist <- xc("nodes edges statements sources settingsConditional settingsGlobal")
 
 
 # generate some nice colours
@@ -699,6 +872,11 @@ colnams <- lapply(xc("Grey Red Blue Green Orange Purple"), function(x) xc("light
 names(allcols) <- c(colnams, paste0(colnams, " hazy"))
 
 shapelist <- c("box", "circle", "square", "triangle", "dot", "star", "ellipse", "database", "text", "diamond")
+
+default.sources <- tibble(
+  "id" =
+    rep(1, 1)
+)
 
 default.statements <- data.frame(
   "text" =
@@ -849,3 +1027,15 @@ valuelist <- list(
 
 defaultSettingsConditional <- read_csv("defaultSettingsConditional.csv")
 defaultSettingsGlobal <- read_csv("defaultSettingsGlobal.csv")
+
+
+
+
+colnames_for_concat=xc("quote text label details statement")
+colnames_for_sum=xc("frequency")
+colnames_for_mean=xc("sex Positive older female ava avp")
+
+
+
+paste_colnames <- function(vec) vec %>% paste0(collapse="|")
+# paste_colnames <- function(str) str %>% str_split("\\|") %>% `[[`(1)

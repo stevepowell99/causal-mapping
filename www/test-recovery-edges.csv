@@ -1,4 +1,0 @@
-from,to,label,strength,trust,sensitivity,specificity,statement,package,packageNote,quote,full.quote,combo.type,definition.type,fun
-1,2,,0.5,0.5,NA,NA,1,NA,NA,,Some text,,,
-2,3,,0.5,0.5,NA,NA,1,NA,NA,,Some text,,,
-3,4,,0.5,0.5,NA,NA,1,NA,NA,,Some text,,,

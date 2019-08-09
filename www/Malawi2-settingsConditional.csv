@@ -1,10 +1,10 @@
 attribute,value,selector,var,value2
-node_color.background,#807DBA,conditional on ...,frequency,#FCFBFD
+node_color.background,#807DBA,always,frequency,#FCFBFD
 node_color.border,#807DBA,always,label,#FFFFFF
 node_font.color,#252525,always,label,#FFFFFF
-node_font.size,33,conditional on ...,frequency,55
+node_font.size,33,always,frequency,55
 node_borderWidth,3,always,label,6
-edge_color,#E41A1C,conditional on ...,notForwards,#FFFFFF
+edge_color,#E41A1C,always,notForwards,#FFFFFF
 edge_font.color,#4DAF4A,always,label,#FFFFFF
 edge_font.size,44,always,label,22
-edge_width,3,conditional on ...,frequency,26
+edge_width,3,always,frequency,26

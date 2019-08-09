@@ -225,11 +225,6 @@ blockquote p {font-size:14pt  !important;background-color:ghostwhite !important;
 #includes {font-size: 10pt;background-color:blanchedalmond;display:inline}
 #pictype {font-size: smaller;text-align:right;color:gray}
 #savebut {margin-left:3px}
-.def {padding: 8px;line-height: 40px;font-size:13pt;background-color:aliceblue; }
-.the {padding: 8px;line-height: 40px;font-size:13pt;background-color:coral;color:white; }
-.puz {padding: 8px;line-height: 40px;font-size:13pt;background-color:wheat; }
-.key {padding: 8px;line-height: 40px;font-size:13pt;background-color:ghostwhite;color:slategray; }
-.con {padding: 8px;line-height: 40px;font-size:13pt;background-color:ghostwhite;color: #FB8F30;}
 
 #buttons {display:inline}
 #links {
@@ -538,8 +533,15 @@ color:white;*/
   height: 28px !important;
  padding: 0px 6px 0px 6px !important;
   font-size: 1px; 
+  width: 22px;
+  display: inline-block;
  }
   /*vertical-align: top !important;*/
+
+.colourpicker-input {
+  height:15px !important;
+display: inline-block;
+}
 
 
 .panel-success>.panel-heading{
@@ -591,9 +593,6 @@ i.glyphicon.glyphicon-play{
 
 /*for the large dropdowns*/
 
-.selectize-input    {line-height:  16px !important;  min-height: 45px !important; }
-.selectize-dropdown {line-height:  16px !important;  min-height: 35px !important; }
-.item {font-size: 18px; }
 
 #deleteVarForm{
 	background-color: #FFDDDD !important;
@@ -603,8 +602,6 @@ i.glyphicon.glyphicon-play{
 .textbanner a {background-color: yellow !important;color:black !important;}
 
 #filters {position:fixed;z-index: 99;right: 300px}
-
-.colourpicker-input {height:15px !important;}
 
 
 
@@ -666,7 +663,7 @@ margin-left:200px;
   background-color: blue;
 }
 #resetSelection{
-  background-color: blue;
+  background-color: #6666cc;
 }
 .btn.disabled{
   background-color: gray !important;
@@ -727,3 +724,7 @@ margin-left:200px;
   width: 40% !important;
 }
 
+#dropdown-menu-dropSettings{
+  padding:10px;
+  opacity: .95;
+}

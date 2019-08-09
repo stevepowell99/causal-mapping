@@ -1,9 +1,19 @@
 server <- function(input, output, session) {
+
+  # initialising ------------------------------------------------------------
+
+  
+  track_usage(storage_mode = store_json(path = "logs/"))
+  
   autoInvalidate <- reactiveTimer(2000)
+
+  # reactive values ---------------------------------------------------------
+
 
   values <- reactiveValues() # nearly all reactive values are stored in values$...
   values$pag <- 1 # stores value of pager in Code panel
   values$statements <- default.statements
+  values$sources <- default.sources
   # values$clickArrow <- F # no idea
   values$crowd <- F
 
@@ -49,27 +59,7 @@ server <- function(input, output, session) {
   makeReactiveBinding("inputtitl")
 
 
-  # findset function to transfer user settings to values$settings. I simplified it -----------
-
-  findset <- function(tex, v = values) {
-    x <- v$settingsGlobal %>%
-      bind_rows(defaultSettingsGlobal) %>%
-      group_by(type, setting) %>%
-      summarise_all(.funs = funs(first))
-
-    x <- x %>%
-      mutate_all(replaceNA) %>%
-      mutate(labs = paste0(type, setting)) %>%
-      filter(labs == tex) %>%
-      pull(value) %>%
-      last()
-
-    if (is.na(x)) {
-      doNotification(paste0(x, " is not in settings"))
-    }
-    x
-  }
-
+  
 
 
 
@@ -283,9 +273,9 @@ server <- function(input, output, session) {
   })
 
 
-  # ++ Import/Statements panel -------------------------------------------------
+  # Import/Statements panel -------------------------------------------------
 
-  # ++create statements table to allow user edit of statements----
+  # create statements table to allow user edit of statements----
   output$statements <- renderRHandsontable({
     vs <- values$statements
 
@@ -418,7 +408,7 @@ server <- function(input, output, session) {
     # browser()
   })
 
-  # ++ Code panel -----------------------------------------------------------
+  # Code panel -----------------------------------------------------------
 
   # create values$tot -------------------------------------------------------
 
@@ -443,7 +433,7 @@ server <- function(input, output, session) {
     }
   }))
 
-  # **Pager----
+  # Pager----
 
   #   the pager allows user to view interview statements one by one
   output$pagerBig <- renderUI({
@@ -474,7 +464,7 @@ server <- function(input, output, session) {
       ),
       div(
         # if("source" %in% colnames(values$statements))
-        div(actionButton("resetSelection", label = NULL, icon = icon("refresh")), style = "position:absolute;right:25px") %>% bs_embed_tooltip("Reset the view for this statement"),
+        div(actionButton("resetSelection", label = NULL, icon = icon("refresh")), style = "position:absolute;right:35px") %>% bs_embed_tooltip("Reset the view for this statement"),
         div(actionButton("overview_col", label = "Read more"), style = "display:inline-block"), #   if one interview source has made more than one statement, show all of them
         div(checkboxInput("onlyThisStatement", label = "Only this", value = T), style = "display:inline-block"), #   if one interview source has made more than one statement, show all of them
         style = "display:inline-block;margin-left:20px"
@@ -535,7 +525,7 @@ server <- function(input, output, session) {
     ))
   }, ignoreInit = T)
 
-  # ** display statements one by one ----
+  # display statements one by one ----
 
   output$displayStatementPanel <- renderUI({
     # browser()
@@ -692,7 +682,7 @@ server <- function(input, output, session) {
             bs_embed_tooltip(title = if (T) ("If you select text in the Statement panel above using your mouse, it will appear here. You can also edit this text.")),
           style = "margin-top:20px"
         ),
-        checkboxInput("edgeDetails", "Details", value = F),
+        awesomeCheckbox("edgeDetails", "Details", value = F),
 
         conditionalPanel(
           "input.edgeDetails",
@@ -780,7 +770,7 @@ server <- function(input, output, session) {
 
 
 
-# new widget for making arrows (and also for recoding nodes) --------------------------------------------
+  # new widget for making arrows (and also for recoding nodes) --------------------------------------------
 
 
   output$selectBoxButtons <- renderUI({
@@ -1074,7 +1064,7 @@ server <- function(input, output, session) {
       filter(!(row_number() %in% whichtarg))
   })
 
-  # ++node/variables panel----
+  # ode/variables panel----
 
 
   # varSelectInput("variables", "Variable:", mtcars, multiple = TRUE) could be useful here
@@ -1270,7 +1260,7 @@ server <- function(input, output, session) {
     values$graf <- tbl_graph(x, values$graf %>% edges_as_tibble())
   })
 
-  # ++edge/arrows panel----
+  # edge/arrows panel----
 
   output$test <- renderUI({
     tagList(
@@ -1344,12 +1334,12 @@ server <- function(input, output, session) {
       hot_rows(fixedRowsTop = 1)
   })
 
-  # ++Display / settings panel ----
+  # Display / settings panel ----
 
 
   output$condFormattingOutput <- renderUI({
 
-    gr <- xc("label frequency sex mean_Positive_mean_mean notForwards mean_older_mean_mean mean_female_mean_mean female_mean older_mean ava_mean avp_mean")
+    gr <- xc("label frequency sex Positive notForwards older female ava avp")
 
     vals <- values$settingsConditional %>%
       mutate(type = if_else(str_detect(attribute, "node"), "node", "edge"))
@@ -1363,14 +1353,10 @@ server <- function(input, output, session) {
 
       div(
         div(
-          p(thisAttribute, style = "width:160px"),
+          p(thisAttribute %>% str_replace("_|\\."," "), style = "width:160px"),
           style = "display:inline-block;vertical-align:top"
         ),
 
-        div(
-          selectInput(paste0("conditional_selector_", attribute_clean), label = NULL, choices = c("always", "conditional on ..."), selected = vals2 %>% pull(selector), width = "120px"),
-          style = "display:inline-block;vertical-align:top"
-        ),
 
 
         if (thisAttribute %>% str_detect("color")) {
@@ -1382,14 +1368,19 @@ server <- function(input, output, session) {
               value = vals2 %>% pull(value),
               allowedCols = allcols1
             ),
-            style = "display:inline-block;vertical-align:top"
+            style = "display:inline-block;vertical-align:top;width:50px"
           )
         } else {
           div(
             textInput(paste0("conditional_value_", thisAttribute), NULL, value = vals2 %>% pull(value), width = "120px"),
-            style = "display:inline-block;vertical-align:top"
+            style = "display:inline-block;vertical-align:top;width:100px"
           )
         },
+
+        div(
+          selectInput(paste0("conditional_selector_", attribute_clean), label = NULL, choices = c("always", "conditional on ..."), selected = vals2 %>% pull(selector), width = "120px"),
+          style = "display:inline-block;vertical-align:top"
+        ),
         conditionalPanel(
           paste0("input.conditional_selector_", attribute_clean, '=="conditional on ..."'),
           div(
@@ -1398,6 +1389,12 @@ server <- function(input, output, session) {
               ,
               style = "display:inline-block;vertical-align:top"
             ),
+            
+            div(
+              selectInput(paste0("agg_type_", thisAttribute), label = NULL, choices = xc("sum mean"), width = "120px"),
+              style = "display:inline-block;vertical-align:top"
+            ),
+            
 
             div(
               p("up to"),
@@ -1412,7 +1409,7 @@ server <- function(input, output, session) {
                   value = vals2 %>% pull(value2),
                   allowedCols = allcols1
                 ),
-                style = "display:inline-block;vertical-align:top"
+                style = "display:inline-block;vertical-align:top;width:50px"
               )
             } else {
               div(
@@ -1420,8 +1417,8 @@ server <- function(input, output, session) {
                 style = "display:inline-block;vertical-align:top"
               )
             },
-            style = "display:inline-block;background-color:#EEFFEE;margin-left:50px"
-          )
+            style = "display:inline-block;"
+          ),style = "display:inline-block;background-color:#EEFFEE;margin-left:20px;padding:10px"
         ),
         hr(style = "margin:5px")
       )
@@ -1440,7 +1437,7 @@ server <- function(input, output, session) {
 
   
 
-# filters, don't work at the moment ---------------------------------------
+  # filters, don't work at the moment ---------------------------------------
 
   
   output$filters <- renderUI({
@@ -1486,16 +1483,16 @@ server <- function(input, output, session) {
             colourInput(paste0("input", rt), rt,
               palette = "limited",
               showColour = "background",
-              value = if (is.null(findset(rt))) findset(rt) else findset(rt),
+              value = if (is.null(findset(rt),values)) findset(rt) else findset(rt,values),
               allowedCols = allcols1
             )
           }
           else if (rg == "slider") {
-            sliderInput(paste0("input", rt), rt, min = 0, max = 100, value = findset(rt))
+            sliderInput(paste0("input", rt), rt, min = 0, max = 100, value = findset(rt,values))
           }
           else if (rg == "checkbox") {
             # browser()
-            checkboxInput(paste0("input", rt), rt, value = as.logical(findset(rt)))
+            checkboxInput(paste0("input", rt), rt, value = as.logical(findset(rt,values)))
           }
           else
           if (rg == "input") paste0(row$type, row$setting, collapse = ""),
@@ -1529,9 +1526,9 @@ server <- function(input, output, session) {
   })
 
 
-  # ++ library/gallery panel ------------------------------------------------
+  # library/gallery panel ------------------------------------------------
 
-  ## Gallery ----
+  # Gallery ----
 
   output$gallery <- renderUI({
     if (storage == "local") {
@@ -1577,7 +1574,7 @@ server <- function(input, output, session) {
   })
 
 
-  # ++ downloads panel  -----------------------------------------------------------
+  # downloads panel  -----------------------------------------------------------
 
   output$downloads <- renderUI({
     # browser()
@@ -1605,7 +1602,7 @@ server <- function(input, output, session) {
     }
   })
 
-  # ++ main panel  -----------------------------------------------------------
+  # main panel  -----------------------------------------------------------
   # description below graph
   output$description <- renderUI({
     x <- findset("diagramdescription")
@@ -1635,7 +1632,7 @@ server <- function(input, output, session) {
     )
   })
 
-  # ++AGGREGATE ---------------------------------------------------------------------------
+  # AGGREGATE ---------------------------------------------------------------------------
   # the long process of aggregating values$graf into values$grafAgg2, adding formatting etc
 
 
@@ -1658,7 +1655,7 @@ server <- function(input, output, session) {
 
     if (nrow(edges_tbl) > 0) {
 
-      # prepare statements, split columns ------------------------------------------------------
+      # prepare statements, split columns ----
 
       doNotification("starting aggregation")
       legend <- ""
@@ -1679,8 +1676,13 @@ server <- function(input, output, session) {
       vno <- graph_values %>% nodes_as_tibble()
       ved <- graph_values %>% edges_as_tibble()
 
+      
 
-      if (findset("variablemerge") %>% as.logical() & this_tab != "Code") { # need to convert to and froms in edge df
+# merge nodes -------------------------------------------------------------
+
+      
+
+      if (findset("variablemerge",values) %>% as.logical() & this_tab != "Code") { # need to convert to and froms in edge df
 
         x <- merge_nodes(vno, ved)
         vno <- x[[1]]
@@ -1696,7 +1698,7 @@ server <- function(input, output, session) {
 
       # ved rick inv_multi --------------------------------
 
-      if (("from" %in% colnames(ved)) && as.logical(findset("arrowabsence"))) { # todo findset
+      if (("from" %in% colnames(ved)) && as.logical(findset("arrowabsence",vals))) { # todo findset
 
         doNotification("rick aggregation")
 
@@ -1709,9 +1711,9 @@ server <- function(input, output, session) {
 
       # ved join statements--------------------------------
       # browser()
-      if (is.null(values$statements$source__id)) values$statements <- values$statements %>% mutate(source__id = row_number())
+      if (is.null(values$statements$source__id)) values$statements <- values$statements %>% mutate(source__id = 1)
 
-      ved <- ved_join(ved, values$statements)
+      ved <- ved_join_statements(ved, values$statements)
 
 
       # saveRDS(ved, "ved")
@@ -1729,7 +1731,7 @@ server <- function(input, output, session) {
       # quip stats by question/domain---------------
 
 
-      if ("source" %in% colnames(ved) && "question" %in% colnames(ved)) {
+      if ("source__id" %in% colnames(ved) && "question" %in% colnames(ved)) {
 
         # browser()
         ved <- ved %>%
@@ -1741,58 +1743,25 @@ server <- function(input, output, session) {
           ungroup() %>%
           mutate(citation_intensity = citation_count / respondent_count)
       }
-      # browser()
-      # ved edge merge TODO this messes up statements ----
 
-      if (this_tab != "Code" & findset("arrowmerge", v = vals) %>% as.logical()) {
-        ved <- ved %>%
-          group_by(from, to)
-
-        legend <- paste0(legend, "</br>Multiple arrows between pairs of variables collapsed into one")
-      } else {
-        # add different curve to each edge in coterminal sets of edges--------------
-        ved <- ved %>%
-          group_by(from, to) %>%
-          mutate(smooth.type = "continuous") %>%
-          mutate(smooth.roundness = seq(from = 0, to = .8, length.out = n())) %>%
-          mutate(smooth.enabled = TRUE) %>%
-          ungroup() %>%
-          group_by(row_number())
-      }
-
-      doNotification("merge edge aggregation")
+# merge edges -------------------------------------------------------------
 
 
-      ved <- ved %>%
-        mutate_if_sw(is.numeric, .funs = list(sum = sumfun, mean = meanfun)) %>%
-        mutate_if_sw(is.character, .funs = catfun) %>%
-        mutate(frequency = n())
-
-      ved <- ved %>%
-        summarise_all(.funs = funs(first))
-
-
-
-
-      ved <- ved %>%
-        ungroup() %>%
-        mutate(title = paste0(frequency, gsub("[^[:alnum:][:space:]]", "", label), separate = "- "))
-
-      if ("N" %in% colnames(ved)) {
-        ved <- ved %>%
-          mutate(frequency = N)
-      }
-
+      ved <- merge_edges(ved,this_tab,vals)
+      
       doNotification("min freq aggregation")
 
       # edge minimum freq ----
 
+        # browser()
       if (this_tab != "Code") {
         ved <- ved %>%
           filter(frequency > findset("arrowminimum.frequency", v = vals))
       
 
-      # join edges with nodes------------------------------------------------
+
+# join edges with nodes ---------------------------------------------------
+
 
       doNotification("join to edges aggregation")
 
@@ -1801,7 +1770,6 @@ server <- function(input, output, session) {
 
         vno <- join_nodes_and_edges(vno, ved)
 
-        # browser()
 
         # doNotification("merging nodes and arrows")
       }
@@ -1845,8 +1813,8 @@ server <- function(input, output, session) {
       vno <- tmp %>% nodes_as_tibble()
       ved <- tmp %>% edges_as_tibble()
 
-
-      if (this_tab != "Code") { # TODO if the conditional display tab has not been loaded yet, provide some plain defaults
+# browser()
+      if (this_tab != "Code") { 
         vno <- vno %>%
           format_nodes_and_edges(input, type = "node", values$settingsConditional)
 
@@ -1879,11 +1847,7 @@ server <- function(input, output, session) {
 
       doNotification("final aggregation")
 
-      ved <- ved %>%
-        mutate(strength = strength_mean) %>%
-        mutate(wstrength = wstrength_mean)
-
-      # labels----
+      # hard-coded formatting ----
       # browser()
       ved <- ved %>%
         mutate(label = replace_na(label, "")) %>%
@@ -1899,23 +1863,22 @@ server <- function(input, output, session) {
         if (legend != "") values$legend <- glue("</br><b style='font-color:red;'>Legend:</b>{legend}</br></br></br></br>")
       }
 
+      # labels ----
       vno <- vno %>%
         mutate(label = if_else(value > 0, paste0(label, " <U+2665>"), label)) %>%
-        mutate(label = if_else(value < 0, paste0(label, " <U+2639>"), label)) %>%
-        mutate(label = str_replace_all(label, "///", "<br>"))
-
+        mutate(label = if_else(value < 0, paste0(label, " <U+2639>"), label)) 
 
       vno <- vno %>%
-        mutate(label = make_labels(findset("variablelabel", v = vals), vno))
+        mutate(label = make_labels(findset("variablelabel", v = vals),findset("variablewrap", v = vals), vno,type="none"))
 
       vno <- vno %>%
-        mutate(title = make_labels(findset("variabletooltip", v = vals), vno))
+        mutate(title = make_labels(findset("variabletooltip", v = vals),findset("variablewrap", v = vals), vno,type="html"))
 
 
       ved <- ved %>%
         mutate(
-          title = make_labels(findset("arrowtooltip", v = vals), ved),
-          label = make_labels(findset("arrowlabel", v = vals), ved)
+          title = make_labels(findset("arrowtooltip", v = vals),findset("arrowrap", v = vals), ved,type="html"),
+          label = make_labels(findset("arrowlabel", v = vals),findset("arrowwrap", v = vals), ved,type="none")
         )
 
 
@@ -1923,13 +1886,6 @@ server <- function(input, output, session) {
       # if (this_tab != "Code")      vno <- vno %>% mutate(font.size =  findset("variablecoding.font.size",v = vals)
 # )
 # browser()
-
-      # # wrapping ----
-      ved <- ved %>%
-        mutate(label = str_replace_all(label, "///", "\n")) %>%
-        mutate(label = str_wrap(label, findset("arrowwrap"))) %>%
-        mutate(label = str_replace_all(label, "NA", "")) %>%
-        mutate(label = str_trim(label))
 
       tmp <- tbl_graph(vno, ved)
 
@@ -1981,11 +1937,13 @@ server <- function(input, output, session) {
             as_tibble() %>%
             mutate(id = row_number()),
         main =
-          findset("diagramtitle"),
+          findset("diagramtitle",vals),
         submain =
-          findset("diagramsubtitle"),
+          findset("diagramsubtitle",vals),
         background = findset("diagrambackground", v = vals)
       )
+    
+    # browser()
 
     vn <- vn1 %>%
       visInteraction(
@@ -2010,7 +1968,7 @@ server <- function(input, output, session) {
         collapse = F,
         highlightNearest = list(
           enabled = T,
-          degree = if (findset("diagramdownarrows") %>% as.logical()) list(from = 0, to = 19) else list(from = 19, to = 0),
+          degree = if (findset("diagramdownarrows",vals) %>% as.logical()) list(from = 0, to = 19) else list(from = 19, to = 0),
           # degree = ifelse(input$widgetDownArrows,list(from=0,to=19),list(from=19,to=0)),
           hover = T,
           labelOnly = F,
@@ -2034,9 +1992,9 @@ server <- function(input, output, session) {
     # visEvents(select = "function(nodes) {
     #         Shiny.onInputChange('net_selected', nodes.nodes);
     #         ;}")
-
-    if (!all(na.omit(vga$group) == "")) {
-    }
+# 
+#     if (!all(na.omit(vga$group) == "")) {
+#     }
 
 
     # layout ----------------
@@ -2093,46 +2051,25 @@ server <- function(input, output, session) {
     # }
 
     fvw <- ifelse(this_tab=="Code",findset("variablecoding.width",vals),findset("variablewidth",vals))
+    
+    
     # browser()
     vn <- vn %>%
       visNodes(
         shadow = list(enabled = T, size = 10),
-        # color = 'rgba(120,32,14,.8)',
-        # color.highlight.background="white"
         widthConstraint = if ("" == fvw) NULL else as.numeric(fvw), # ,300-(levels*10),#,(300*levels)-9,
         hidden = F, # findset("variablehidden",global=F) %>% as.logical(),
         scaling = list(label = list(enabled = F)),
         shape = findset("variableshape", v = vals),
-        # shapeProperties = list("borderDashes=T"),
         group = T, # findset("variablegroup",global=F),
-        # borderWidth = findset("variableborderWidth",global=F, v = vals),
-        # widthConstraint=4,
-        # widthConstraint = =4,
-        # size =
-        #   findset("variablesize",global=F),
 
         physics = findset("diagramphysics", v = vals)
-        # ,
-        # ,
-        # widthConstraint=10
-
-        # widthConstraint=findset("variablewidth") %>% as.numeric # %>% ifelse(.>0,.,NA)
       ) %>%
       visEdges(
         smooth = T,
         arrowStrikethrough = T,
         shadow =
           list(enabled = F, size = 5),
-        # width =
-        #   findset("arrowwidth"),
-        # font =
-        #   list(
-        #     color =
-        #       findset("arrowfont.color",global=F, v = vals),
-        #     background =
-        #       "#FFFFFF80",
-        #     size = findset("arrowfont.size",global=F, v = vals)
-        #   ),
         hoverWidth = 8, #' function (width) {return width*50;}',
         selectionWidth = 8, # sqrt(nrow(vn$x$nodes)),
         physics = F,
@@ -2142,7 +2079,7 @@ server <- function(input, output, session) {
         # ,
         # dashes = findset("arrowdashes") %>% as.logical()
       )
-
+# browser()
     values$net <- vn
 
     doNotification("Produced viz")
@@ -2155,17 +2092,17 @@ server <- function(input, output, session) {
       # doNotification("rendered viz")
       values$net
     })
-    if (T) {
-      visNetworkProxy("net") %>%
-        visUpdateNodes(nodes = tibble(id = 1:20, color = "red"))
-    }
+    # if (T) {
+    #   visNetworkProxy("net") %>%
+    #     visUpdateNodes(nodes = tibble(id = 1:20, color = "red"))
+    # }
   })
 
 
 
 
 
-  # ++ report -----------------------------------------------------
+  # report -----------------------------------------------------
 # not important. 
   output$reportTable <- renderFormattable({
     if ("frequency" %in% colnames(values$net$x$nodes)) {
@@ -2184,7 +2121,7 @@ server <- function(input, output, session) {
     }
   })
 
-  # ++ floating widgets -----------------------------------------------------
+  # floating widgets -----------------------------------------------------
   output$floatingWidgets <- renderUI({
     # div(
     # div(actionButton("fitaction", label=NULL,icon=icon("arrows-alt")), style = "display:inline-block;margin-right:20px"),

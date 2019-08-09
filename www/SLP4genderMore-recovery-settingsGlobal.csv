@@ -13,17 +13,17 @@ diagram,focus,TRUE,NA
 variable,autogroup,FALSE,NA
 variable,merge,T,NA
 arrow,merge,TRUE,NA
-variable,minimum.frequency,1,NA
+variable,minimum.frequency,0,NA
 arrow,minimum.frequency,0,NA
 variable,infer,FALSE,NA
 arrow,absence,F,NA
 variable,joinedges,T,NA
-variable,tooltip,!label proportion of women: !mean_female_mean_mean,NA
+variable,tooltip,!label proportion of women: !female,NA
 variable,label,!label,NA
 arrow,label,NA,NA
 arrow,tooltip,!quote,NA
 arrow,wrap,15,NA
-variable,wrap,15,NA
+variable,wrap,33,NA
 diagram,palette1,"blue,red",NA
 diagram,palette2,"blue,white,red",NA
 diagram,palette3,"green,orange",NA
@@ -35,10 +35,12 @@ diagram,width,3000,NA
 diagram,splitColumnNames,NA,NA
 arrow,conditionalwidthscaling,19,NA
 variable,conditionalwidthscaling,19,NA
-variable,width,450,NA
+variable,width,NA,NA
 variable,font.size.floor,80,NA
 variable,font.size.scale,25,NA
 diagram,downarrows,TRUE,NA
 arrow,notForwards,T,NA
 variable,shape,box,NA
 variable,opacity,.8,NA
+variable,coding.font.size,33,NA
+variable,coding.width,200,NA
