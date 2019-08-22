@@ -8,7 +8,7 @@ body {
   padding-left:6px;
 }
 .form-group {
-  margin-bottom:0;
+  margin-bottom:0 !important;
 }
 
 .same-image {
@@ -505,11 +505,13 @@ color:white;*/
 
 
 
-./*form-control {
- padding: 0px 6px 0px 6px ;
-  height: 22px ;
-  font-size: 10px;
-*/
+.conditional-row text {
+  height: 34px !important;
+}
+
+.conditional-row {
+  border-top: 1px dashed gray;
+}
 
 #setwig label { font-size: 12px; } 
 
@@ -601,7 +603,7 @@ i.glyphicon.glyphicon-play{
 
 .textbanner a {background-color: yellow !important;color:black !important;}
 
-#filters {position:fixed;z-index: 99;right: 300px}
+#filters {}
 
 
 
@@ -612,7 +614,7 @@ i.glyphicon.glyphicon-play{
 #savemsg{
     color: white;
     padding-left: 6px;
-    padding-top: 10px;
+    padding-top: 20px;
 }
 
 
@@ -728,3 +730,4 @@ margin-left:200px;
   padding:10px;
   opacity: .95;
 }
+

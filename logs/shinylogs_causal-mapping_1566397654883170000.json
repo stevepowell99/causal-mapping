@@ -1,0 +1,1 @@
+{"errors":[{"name":"gallery","timestamp":"2019-08-21T15:27:41+01:00","error":"cannot coerce type 'closure' to vector of type 'character'"}],"session":[{"app":"causal-mapping","user":"user","server_connected":"2019-08-21T15:27:34+0100","sessionid":"a2d66e86ff505c3ffe8b9dbe4df7d434","server_disconnected":"2019-08-21T15:28:01+0100"}]}

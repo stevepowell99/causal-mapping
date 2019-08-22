@@ -35,9 +35,9 @@ library(shinyPagerUI)
 library(networkD3)
 library(tidygraph)
 library(googledrive)
-library(googlesheets4)
+# library(googlesheets4)
 library(shinycssloaders)
-library(rdrop2)
+# library(rdrop2)
 library(igraph) # for find cycles
 
 require(visNetwork)
@@ -56,23 +56,23 @@ library(formattable)
 
 # storage <- "dropbox"
 # storage <- "gsheets"
-storage <- "local"
+# storage <- "local"
 
 
-if (storage == "local" | storage == "gsheets") {
-  file__exists <- file.exists
-  read__csv <- read_csv
-  write__csv <- write_csv
-} else if (storage == "dropbox") {
-  file__exists <- drop_exists
-  read__csv <- drop_read_csv
-  write__csv <- function(obj, path) {
-    # browser()
-    write_csv(obj, path = path)
-    drop_upload(path, "www") # note folder is hard-coded TODO
-    file.remove(path)
-  }
-}
+# if (storage == "local" | storage == "gsheets") {
+#   file__exists <- file.exists
+#   read__csv <- read_csv
+#   write__csv <- write_csv
+# } else if (storage == "dropbox") {
+#   file__exists <- drop_exists
+#   read__csv <- drop_read_csv
+#   write__csv <- function(obj, path) {
+#     # browser()
+#     write_csv(obj, path = path)
+#     drop_upload(path, "www") # note folder is hard-coded TODO
+#     file.remove(path)
+#   }
+# }
 
 # functions ----------------------------------------------------------------
 strip_symbols <- function(vec) vec %>%
@@ -94,7 +94,16 @@ id.finder <- function(label, node.df) {
   })
 }
 
+upload_to_gdrive <- function(gdriveRoot,vc,vals,it){
+  # doNotification("Uploading to google drive", 2)
 
+  loggedUserFolder=reactiveVal(drive_ls(gdriveRoot,type="folder",pattern="^free$"))
+  saveRDS(vals,file = paste0("www/",vc))
+  drive_upload(media = paste0("www/",vc), path=loggedUserFolder(),name = paste0(it))
+  # doNotification("Finished uploading to google drive", 2)
+
+
+}
 
 generalise_sprintf <- function(str, tex, ...) {
 
@@ -132,12 +141,12 @@ make_labels <- function(tex, wrap=33,df,  sep = "<br>",type="html") {
 # findset function to transfer user settings to values$settings. I simplified it -----------
 
 findset <- function(tex, v ) {
-  x <- v$settingsGlobal %>%
+  # if(tex=="variablewrap") browser()
+  
+  x <- v %>%
     bind_rows(defaultSettingsGlobal) %>%
     group_by(type, setting) %>%
-    summarise_all(.funs = funs(first))
-  
-  x <- x %>%
+    summarise_all(.funs = funs(first)) %>%
     mutate_all(replaceNA) %>%
     mutate(labs = paste0(type, setting)) %>%
     filter(labs == tex) %>%
@@ -1035,6 +1044,16 @@ colnames_for_concat=xc("quote text label details statement")
 colnames_for_sum=xc("frequency")
 colnames_for_mean=xc("sex Positive older female ava avp")
 
+userlist <- xc("free BSDR Steve")
+
+query_modal <- modalDialog(
+  title = "Select user",
+  selectInput('input_user','Who are you:',userlist),
+  easyClose = T,            #TODO revert for production
+  footer = tagList(
+    actionButton("logon", "Log on")
+  )
+)
 
 
 paste_colnames <- function(vec) vec %>% paste0(collapse="|")

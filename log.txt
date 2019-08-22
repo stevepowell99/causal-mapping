@@ -1,7 +1,47 @@
 
+render viz
+render viz
+Adding Node
+Adding Node
+starting aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+NA is not in settings
+NA is not in settings
+Aggregated
+starting aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+NA is not in settings
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+NA is not in settings
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
 Loading files
 checking recovery versions
-Loaded53 variables from permalink
+Loaded5 variables from permalink
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -11,52 +51,19 @@ NA is not in settings
 Aggregated
 started viz
 Produced viz
-render viz
-started viz
-Produced viz
 starting aggregation
 merge edge aggregation
 min freq aggregation
-join to edges aggregation
 format aggregation
-Missing values for colour fade replaced with means
-Missing values for colour fade replaced with means
 final aggregation
 NA is not in settings
 Aggregated
+render viz
 started viz
 Produced viz
-render viz
-updating from settingsTableGlobal
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-Missing values for colour fade replaced with means
-Missing values for colour fade replaced with means
-final aggregation
-NA is not in settings
-Aggregated
 started viz
 Produced viz
-render viz
-updating from settingsTableGlobal
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-Missing values for colour fade replaced with means
-Missing values for colour fade replaced with means
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-updating from settingsTableGlobal
-Saved
+Adding Node
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -71,52 +78,6 @@ starting aggregation
 merge edge aggregation
 min freq aggregation
 format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-Saved
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-Missing values for colour fade replaced with means
-Missing values for colour fade replaced with means
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-Missing values for colour fade replaced with means
-Missing values for colour fade replaced with means
 final aggregation
 NA is not in settings
 Aggregated
@@ -125,7 +86,29 @@ Produced viz
 render viz
 Loading files
 checking recovery versions
-Loaded51 variables from permalink
+Loaded5 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+Produced viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+render viz
+started viz
+Produced viz
+started viz
+Produced viz
+Adding Node
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -136,127 +119,10 @@ Aggregated
 started viz
 Produced viz
 render viz
-started viz
-Produced viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-Missing values for colour fade replaced with means
-Missing values for colour fade replaced with means
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-Loading files
-checking recovery versions
-Loaded51 variables from permalink
 starting aggregation
 merge edge aggregation
 min freq aggregation
 format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-Missing values for colour fade replaced with means
-Missing values for colour fade replaced with means
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-started viz
-Produced viz
-Loading files
-checking recovery versions
-Loaded51 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-started viz
-Produced viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-Missing values for colour fade replaced with means
-Missing values for colour fade replaced with means
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-Loading files
-checking recovery versions
-Loaded51 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-started viz
-Produced viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-Missing values for colour fade replaced with means
-Missing values for colour fade replaced with means
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-Loading files
-checking recovery versions
-Loaded51 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-started viz
-Produced viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-Missing values for colour fade replaced with means
-Missing values for colour fade replaced with means
 final aggregation
 NA is not in settings
 Aggregated

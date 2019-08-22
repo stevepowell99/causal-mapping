@@ -1,14 +1,30 @@
 server <- function(input, output, session) {
 
   # initialising ------------------------------------------------------------
+  
+  
+  if(!exists("loggedUser") %>% is.null)showModal(query_modal)
+  
+  # loggedUser <- reactiveVal()
+  loggedUser <- reactiveVal("free")
+  
+  observeEvent(input$logon, {
+    removeModal()
+    
+    loggedUser(input$input_user)
+    
+  })
+  
+  gdriveRoot <- drive_find(n_max = 20,type="folder",pattern="map-app") 
 
   
   track_usage(storage_mode = store_json(path = "logs/"))
   
-  autoInvalidate <- reactiveTimer(2000)
+  # autoInvalidate <- reactiveTimer(2000)
 
   # reactive values ---------------------------------------------------------
 
+  reactiveKeepRecovery <- reactiveVal(F)
 
   values <- reactiveValues() # nearly all reactive values are stored in values$...
   values$pag <- 1 # stores value of pager in Code panel
@@ -79,7 +95,9 @@ server <- function(input, output, session) {
   })
 
   # update from permalink or example url; -----------
-  observe(isolate({
+  observe(({
+    req(loggedUser())
+    
     first <- F
 
     # browser()
@@ -102,7 +120,14 @@ server <- function(input, output, session) {
 
 
       if (T) {
-        values$current <- ql
+        values$current <- ql %>%  gsub("^.*?\\/","",.)
+        thisUser <- ql %>%  str_extract("(^.*?)\\/") %>% str_remove("\\/$")
+        # browser()
+        
+        if(req(thisUser)!=req(loggedUser())) {
+          doNotification("You do not have access",9)
+          return()
+          }
         if (!is.null(ql)) {
           if (!loaded) {
             doNotification("Loading files", 2)
@@ -170,7 +195,7 @@ server <- function(input, output, session) {
                 doNotification("Finished reading from google drive", 2)
               } else if (storage == "local") {
                 if (file__exists(fnn)) {
-                  values[[fn]] <- read__csv((fnn))
+                  values[[fn]] <- read_csv((fnn))
                 }
               }
             }
@@ -196,9 +221,9 @@ server <- function(input, output, session) {
 
             doNotification(glue("Loaded{nrow(values$graf %>% nodes_as_tibble)} variables from permalink"))
 
-
-            updateTextInput(session, "titl", value = ql)
-            values$current <- filename
+# browser()
+            updateTextInput(session, "titl", value = values$current)#
+            # values$current <- filename
           }
         }
 
@@ -1353,7 +1378,7 @@ server <- function(input, output, session) {
 
       div(
         div(
-          p(thisAttribute %>% str_replace("_|\\."," "), style = "width:160px"),
+          p(thisAttribute %>% str_replace_all("_|\\."," "), style = "width:160px"),
           style = "display:inline-block;vertical-align:top"
         ),
 
@@ -1373,7 +1398,7 @@ server <- function(input, output, session) {
         } else {
           div(
             textInput(paste0("conditional_value_", thisAttribute), NULL, value = vals2 %>% pull(value), width = "120px"),
-            style = "display:inline-block;vertical-align:top;width:100px"
+            style = "display:inline-block;vertical-align:top;width:100px",class="conditional_text"
           )
         },
 
@@ -1419,9 +1444,10 @@ server <- function(input, output, session) {
             },
             style = "display:inline-block;"
           ),style = "display:inline-block;background-color:#EEFFEE;margin-left:20px;padding:10px"
-        ),
-        hr(style = "margin:5px")
-      )
+        )
+        # ,
+        # hr(style = "margin:5px")
+      ,class="conditional-row")
     })
   })
 
@@ -1469,6 +1495,7 @@ server <- function(input, output, session) {
 
   observeEvent(input$settingsTableGlobalUp, {
     # browser()
+    vals <- values$settingsGlobal
     vs <- values$settingsGlobal %>% mutate_all(as.character)
     output$inputs <- renderUI({
       lapply(1:nrow(vs), function(x) {
@@ -1483,16 +1510,16 @@ server <- function(input, output, session) {
             colourInput(paste0("input", rt), rt,
               palette = "limited",
               showColour = "background",
-              value = if (is.null(findset(rt),values)) findset(rt) else findset(rt,values),
+              value = if (is.null(findset(rt,vals))) findset(rt,vals) else findset(rt,values),
               allowedCols = allcols1
             )
           }
           else if (rg == "slider") {
-            sliderInput(paste0("input", rt), rt, min = 0, max = 100, value = findset(rt,values))
+            sliderInput(paste0("input", rt), rt, min = 0, max = 100, value = findset(rt,vals))
           }
           else if (rg == "checkbox") {
             # browser()
-            checkboxInput(paste0("input", rt), rt, value = as.logical(findset(rt,values)))
+            checkboxInput(paste0("input", rt), rt, value = as.logical(findset(rt,vals)))
           }
           else
           if (rg == "input") paste0(row$type, row$setting, collapse = ""),
@@ -1532,39 +1559,19 @@ server <- function(input, output, session) {
 
   output$gallery <- renderUI({
     if (storage == "local") {
-      details <- file.info(list.files("www", pattern = "-nodes.csv$", full.names = TRUE))
+      path <- paste0("www/",req(loggedUser()),"/")
+      details <- file.info(list.files(path, pattern = "-nodes.csv$", full.names = TRUE))
 
       details <- details[with(details, order(as.POSIXct(mtime))), ]
       files <- rownames(details) %>%
-        gsub("www/", "", .) %>%
+        gsub(path, "", .) %>%
         gsub("\\-nodes.csv", "", .)
 
       lapply(rev(files), function(x) {
-        sets <- read_csv(paste0("www/", x, "-settingsGlobal.csv"))
+        sets <- read_csv(paste0(path, x, "-settingsGlobal.csv"))
         desc <- sets$value[sets$setting == "description"][1]
         tagList(
-          tags$a(x, href = paste0(".?permalink=", gsub("\\.-nodes.csv$", "", x))),
-          "|",
-          desc,
-          hr()
-        )
-      })
-    } else if (storage == "dropbox") {
-      # browser()
-      details <- drop_dir("www") %>%
-        mutate(x = as.POSIXct(client_modified)) %>%
-        filter(str_detect(name, "-settingsGlobal\\.csv$")) %>%
-        arrange(x)
-
-      files <- details %>% pull("path_display")
-      doNotification("Loading file information", 2)
-      lapply(rev(files), function(x) {
-        sets <- read__csv(x)
-        desc <- sets$value[sets$setting == "description"][1]
-        x <- gsub("/www/", "", x)
-        x <- x %>% str_remove("-settingsGlobal\\.csv$")
-        tagList(
-          tags$a(x, href = paste0(".?permalink=", gsub("-settingsGlobal\\. csv$", "", x))),
+          tags$a(x, href = paste0(".?permalink=", loggedUser(),"/",gsub("\\.-nodes.csv$", "", x))),
           "|",
           desc,
           hr()
@@ -1605,7 +1612,7 @@ server <- function(input, output, session) {
   # main panel  -----------------------------------------------------------
   # description below graph
   output$description <- renderUI({
-    x <- findset("diagramdescription")
+    x <- findset("diagramdescription",values)
     if (x != "") {
       div(p(x), style = "padding:10px;background-color:whitesmoke;margin-top:10px;border-radius:5px")
     } else {
@@ -1646,7 +1653,8 @@ server <- function(input, output, session) {
 
 
     # browser()
-    vals <- isolate(values)
+    vals <- values$settingsGlobal
+    # vals <- isolate(values$settingsGlobal)
 
     # prevent this code running every time we change tab
     this_tab <- isolate(input$sides)
@@ -1664,7 +1672,6 @@ server <- function(input, output, session) {
 
       graph_values <- prepare_vg(values$graf)
 
-      # browser()
 
       # infer ----
 
@@ -1680,9 +1687,10 @@ server <- function(input, output, session) {
 
 # merge nodes -------------------------------------------------------------
 
+      # browser()
       
 
-      if (findset("variablemerge",values) %>% as.logical() & this_tab != "Code") { # need to convert to and froms in edge df
+      if ((findset("variablemerge",vals) %>% as.logical()) & this_tab != "Code") { # need to convert to and froms in edge df
 
         x <- merge_nodes(vno, ved)
         vno <- x[[1]]
@@ -1775,8 +1783,8 @@ server <- function(input, output, session) {
       }
 
       # minimum freq for vars
-      mf <- findset("variableminimum.frequency", v = vals) %>% as.numeric()
       # browser()
+      mf <- findset("variableminimum.frequency", v = vals) %>% as.numeric()
       if (this_tab != "Code" && mf > 0) {
         tmp <- tbl_graph(vno, ved) %>%
           N_() %>%
@@ -1867,7 +1875,7 @@ server <- function(input, output, session) {
       vno <- vno %>%
         mutate(label = if_else(value > 0, paste0(label, " <U+2665>"), label)) %>%
         mutate(label = if_else(value < 0, paste0(label, " <U+2639>"), label)) 
-
+# browser()
       vno <- vno %>%
         mutate(label = make_labels(findset("variablelabel", v = vals),findset("variablewrap", v = vals), vno,type="none"))
 
@@ -1910,9 +1918,9 @@ server <- function(input, output, session) {
   # finally we use values$grafAgg2 to generate the viz
 
   observe(if (!is.null(values$grafAgg2)) {
-    vals <- isolate(values)
     vga <- req(values$grafAgg2)
     this_tab <- isolate(input$sides)
+    vals <- values$settingsGlobal
     
     if ((input$crowd)) {
       values$legend <- ""
@@ -1944,6 +1952,16 @@ server <- function(input, output, session) {
       )
     
     # browser()
+    
+    if(exists("loggedUser")){
+    if(!is.null(loggedUser())){
+      # browser()
+      if(loggedUser()=="free")vn1 <- vn1%>% 
+      visEvents(beforeDrawing = 'function(ctx) {		
+			ctx.drawImage(document.getElementById("watermark"), 0, 800);
+	}')
+    }
+    }
 
     vn <- vn1 %>%
       visInteraction(
@@ -1987,7 +2005,9 @@ server <- function(input, output, session) {
       visEvents(select = "function(data) {
                 Shiny.onInputChange('net_selected', data.nodes);
                 Shiny.onInputChange('net_selectedEdges', data.edges);
-                ;}")
+                ;}") 
+    
+    
 
     # visEvents(select = "function(nodes) {
     #         Shiny.onInputChange('net_selected', nodes.nodes);
@@ -2134,7 +2154,7 @@ server <- function(input, output, session) {
       tagList(
 
         # div(actionButton("render_button","Render"),style="display:inline-block;vertical-align:top"),
-      
+      div(if(!is.null(loggedUser()))tagList(span("Logged in as: " %>% paste0( loggedUser())) , a("| Log out",href=".")), style = "color:white;height:20px;font-size:14px;margin-bottom:0"),
         div(textInput(
           "titl", NULL,
           value = ifelse(is.null(values$current), "", values$current), placeholder = "Title", width = "100%"
@@ -2155,11 +2175,15 @@ server <- function(input, output, session) {
   observeEvent(
     input$saveb,
     ignoreInit = TRUE, {
+      
+      
+      
       # browser()
       # doNotification("observing save button",7)
+          # browser()
 
       if ("" != input$titl) {
-        inputtitl <<- gsub("[^[[:alnum:]|-]]*", "", input$titl)
+        inputtitl <<- gsub("[^[[:alnum:]|-]]*", "", input$titl) %>% paste0(loggedUser(),"/",.)
         values$current <- inputtitl
 
 
@@ -2169,33 +2193,27 @@ server <- function(input, output, session) {
         values$edges <- values$graf %>% edges_as_tibble()
 
         for (c in csvlist) {
-          write__csv(values[[c]], path = paste0("www/", inputtitl, "-", c, ".csv"))
+          write_csv(values[[c]], path = paste0("www/", values$current, "-", c, ".csv"))
         }
+        # browser()
 
 
-        if (storage == "gsheets") {
-          # browser()
-          doNotification("Uploading to google drive", 2)
-          drive_upload(media = paste0("www/", inputtitl, "-settings.csv"), name = paste0(inputtitl, "-settings"), type = "spreadsheet")
-          drive_upload(media = paste0("www/", inputtitl, "-settingsGlobal.csv"), name = paste0(inputtitl, "-settingsGlobal"), type = "spreadsheet")
-          drive_upload(media = paste0("www/", inputtitl, "-statements.csv"), name = paste0(inputtitl, "-statements"), type = "spreadsheet")
-          drive_upload(media = paste0("www/", inputtitl, "-nodes.csv"), name = paste0(inputtitl, "-nodes"), type = "spreadsheet")
-          drive_upload(media = paste0("www/", inputtitl, "-edges.csv"), name = paste0(inputtitl, "-edges"), type = "spreadsheet")
-          doNotification("Finished uploading to google drive", 2)
-        }
-
+upload_to_gdrive(gdriveRoot,values$current,values,input$titl)
 
         # file.copy(paste0("www/", inputtitl,".tm"),paste0("www/", inputtitl,".otm"),overwrite = T)
         doNotification("Saved")
         values$issaved <- T
         # toggleClass("savemsg", "red")
         # delay(500, toggleClass("savemsg", "red"))
-      }
+      
     }
+    }
+    
   )
 
   # save recovery versions of tables --------------
-  observe({
+  observe(if(reactiveKeepRecovery()){
+    # browser()
     if ("" != req(input$titl)) {
       inputtitl <<- gsub("[^[[:alnum:]|-]]*", "", input$titl)
 
@@ -2203,7 +2221,7 @@ server <- function(input, output, session) {
       values$edges <- req(values$graf) %>% edges_as_tibble()
 
       for (c in csvlist) {
-        if (!is.null(values[[c]])) write__csv(values[[c]], path = paste0("www/", inputtitl, "-recovery-", c, ".csv"))
+        if (!is.null(values[[c]])) write_csv(values[[c]], path = paste0("www/",loggedUser(),"/", inputtitl, "-recovery-", c, ".csv"))
       }
     }
   })
@@ -2224,11 +2242,11 @@ server <- function(input, output, session) {
 
       # browser()
       # if(storage="local"){
-      if (!is.null(values$settings)) write__csv(values$settings, path = paste0("www/", inputtitl, "-settings.csv"))
-      if (!is.null(values$settingsGlobal)) write__csv(values$settingsGlobal, path = paste0("www/", inputtitl, "-settingsGlobal.csv"))
-      if (!is.null(values$statements)) write__csv(values$statements, path = paste0("www/", inputtitl, "-statements.csv"))
-      if (!is.null(nodes)) write__csv(nodes, path = paste0("www/", inputtitl, "-nodes.csv"))
-      if (!is.null(edges)) write__csv(edges, path = paste0("www/", inputtitl, "-edges.csv"))
+      if (!is.null(values$settings)) write_csv(values$settings, path = paste0("www/", inputtitl, "-settings.csv"))
+      if (!is.null(values$settingsGlobal)) write_csv(values$settingsGlobal, path = paste0("www/", inputtitl, "-settingsGlobal.csv"))
+      if (!is.null(values$statements)) write_csv(values$statements, path = paste0("www/", inputtitl, "-statements.csv"))
+      if (!is.null(nodes)) write_csv(nodes, path = paste0("www/", inputtitl, "-nodes.csv"))
+      if (!is.null(edges)) write_csv(edges, path = paste0("www/", inputtitl, "-edges.csv"))
 
       if (storage == "gsheets") {
         # browser()
@@ -2443,6 +2461,13 @@ server <- function(input, output, session) {
     toggleClass("mainPanel", "col5")
     toggleClass("net", "maindivnet-small")
   })
+  
+  
+  # session$onSessionEnded(function() {
+  #   upload_to_gdrive(gdriveRoot,values$current,values,input$titl)
+  #   
+  #   
+  #     })
 
   hide(id = "loading-content", anim = TRUE, animType = "fade")
   show("app-content")

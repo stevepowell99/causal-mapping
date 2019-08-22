@@ -64,6 +64,7 @@ ui <- tagList(
                      
                      div(
                        
+                             img(id="watermark",src = "img/watermark-medium.png", height = "10px", width="10px",style = "visibility:hidden;"),
                        div(
                          
                          
@@ -72,7 +73,7 @@ ui <- tagList(
                              
                              id = "app-content",
                              a(h4("Causal Mapping", style = "display:inline-block;color:white;margin-right:8px"), href = "."),
-                             img(src = "img/logo.gif", height = "20px", style = "display:inline-block;"),
+                             img(id="logo",src = "img/logo.gif", height = "20px", style = "display:inline-block;"),
                              a(icon("question-circle"),href="http://www.pogol.net/_causal_mapping/index.html", target="_blank",height = "20px", style = "display:inline-block;margin-left:20px"),
                              
                              
@@ -204,6 +205,9 @@ ui <- tagList(
                                
                                tabPanel("",value="Display",    # conditional formatting 
                                         icon = icon("palette"),
+                                 h4("Filters"),
+                                 uiOutput("filters"),
+                                 h4("Formatting"),
                                    uiOutput("upConditionalBut"),
                                  uiOutput("condFormattingOutput")
                                ),
@@ -249,7 +253,6 @@ ui <- tagList(
                            # main panel----
                            column(8,
                            id="mainPanel",  
-                             uiOutput("filters"),
                              uiOutput("widthControlOutput"),
                              bsTooltip("widthControlOutput", "title", placement = "bottom", trigger = "hover",
                                options = NULL),
