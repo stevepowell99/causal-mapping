@@ -238,10 +238,10 @@ ui <- tagList(
                                #   
                                # ),
                                
-                               tabPanel("", icon=icon("warehouse"),div(style = ""),                         # library of existing projects stored locally as csv files. clicking loads up the project 
-                                        style = "",
-                                        uiOutput("gallery")
-                               ),
+                               # tabPanel("", icon=icon("warehouse"),div(style = ""),                         # library of existing projects stored locally as csv files. clicking loads up the project 
+                               #          style = "",
+                               #          uiOutput("gallery")
+                               # ),
                                tabPanel("", icon=icon("download"),div(style = ""),
                                         style = "",
                                         uiOutput("downloads")

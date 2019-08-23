@@ -1,16 +1,16 @@
 
 render viz
-Adding Node
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-NA is not in settings
-NA is not in settings
-Aggregated
+render viz
+You do not have access
+render viz
+render viz
+Loading files
+render viz
+Loading files
+Loaded0 variables from permalink
+render viz
+Loading files
+Loaded2 variables from permalink
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -22,5 +22,22 @@ NA is not in settings
 Aggregated
 started viz
 NA is not in settings
+Produced viz
+render viz
+started viz
+NA is not in settings
+Produced viz
+You do not have access
+render viz
+Loading files
+Loaded41 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
 Produced viz
 render viz
