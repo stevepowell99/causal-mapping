@@ -1056,16 +1056,16 @@ colnames_for_concat=xc("quote text label details statement")
 colnames_for_sum=xc("frequency")
 colnames_for_mean=xc("sex Positive older female ava avp")
 
-userlist <- xc("free BSDR Steve")
+userlist <- xc("Steve free BSDR")
 
-query_modal <- modalDialog(
-  title = "Select user",
-  selectInput('input_user','Who are you:',userlist),
-  easyClose = T,            #TODO revert for production
-  footer = tagList(
-    actionButton("logon", "Log on")
-  )
-)
+# query_modal <- modalDialog(
+#   title = "Select user",
+#   selectInput('input_user','Who are you:',userlist),
+#   easyClose = T,            #TODO revert for production
+#   footer = tagList(
+#     actionButton("logon", "Log on")
+#   )
+# )
 
 
 paste_colnames <- function(vec) vec %>% paste0(collapse="|")

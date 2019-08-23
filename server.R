@@ -33,6 +33,8 @@ server <- function(input, output, session) {
   
   source("modules/user.r",local=T)
   source("modules/coding.r",local=T)
+  source("modules/display.r",local=T)
+  source("modules/settingsGlobal.r",local=T)
   
   
   
@@ -511,217 +513,25 @@ server <- function(input, output, session) {
     }")
   })
 
-  output$edge2 <- renderRHandsontable(if (!is.null(values$grafAgg2)) {
-    doNotification("Creating edges2 table")
-    rhandsontable(values$grafAgg2 %>% edges_as_tibble(), height = 700, rowHeaders = FALSE, usetypes = T) %>%
-      hot_context_menu(allowRowEdit = T) %>%
-      hot_cols(columnSorting = TRUE) %>%
-      hot_cols(fixedColumnsLeft = 1) %>%
-      hot_rows(fixedRowsTop = 1)
-  })
-
-  output$node2 <- renderRHandsontable(if (!is.null(values$grafAgg2)) {
-    doNotification("Creating nodes2 table")
-    rhandsontable(values$grafAgg2 %>% nodes_as_tibble(), height = 700, rowHeaders = FALSE, usetypes = T) %>%
-      hot_context_menu(allowRowEdit = T) %>%
-      hot_cols(columnSorting = TRUE) %>%
-      hot_cols(fixedColumnsLeft = 1) %>%
-      hot_rows(fixedRowsTop = 1)
-  })
-
-  # Display / settings panel ----
-
-
-  output$condFormattingOutput <- renderUI({
-
-    gr <- xc("label frequency sex Positive notForwards older female ava avp")
-
-    vals <- values$settingsConditional %>%
-      mutate(type = if_else(str_detect(attribute, "node"), "node", "edge"))
-
-    lapply(seq_along(all_attributes), function(n) {
-      thisAttribute <- all_attributes[n]
-      thisType <- ifelse(n > length(node_names), "edge", "node")
-      if (is.na(thisAttribute)) browser()
-      vals2 <- vals %>% filter(attribute == thisAttribute)
-      attribute_clean <- str_replace_all(thisAttribute, "\\.", "_") # because of js condition later
-
-      div(
-        div(
-          p(thisAttribute %>% str_replace_all("_|\\."," "), style = "width:160px"),
-          style = "display:inline-block;vertical-align:top"
-        ),
-
-
-
-        if (thisAttribute %>% str_detect("color")) {
-          div(
-            colourInput(paste0("conditional_value_", thisAttribute),
-              label = NULL,
-              palette = "limited",
-              showColour = "background",
-              value = vals2 %>% pull(value),
-              allowedCols = allcols1
-            ),
-            style = "display:inline-block;vertical-align:top;width:50px"
-          )
-        } else {
-          div(
-            textInput(paste0("conditional_value_", thisAttribute), NULL, value = vals2 %>% pull(value), width = "120px"),
-            style = "display:inline-block;vertical-align:top;width:100px",class="conditional_text"
-          )
-        },
-
-        div(
-          selectInput(paste0("conditional_selector_", attribute_clean), label = NULL, choices = c("always", "conditional on ..."), selected = vals2 %>% pull(selector), width = "120px"),
-          style = "display:inline-block;vertical-align:top"
-        ),
-        conditionalPanel(
-          paste0("input.conditional_selector_", attribute_clean, '=="conditional on ..."'),
-          div(
-            div(
-              selectInput(paste0("conditional_var_", thisAttribute), label = NULL, choices = gr, selected = vals2 %>% pull(var), width = "120px")
-              ,
-              style = "display:inline-block;vertical-align:top"
-            ),
-            
-            div(
-              selectInput(paste0("agg_type_", thisAttribute), label = NULL, choices = xc("sum mean"), width = "120px"),
-              style = "display:inline-block;vertical-align:top"
-            ),
-            
-
-            div(
-              p("up to"),
-              style = "display:inline-block;vertical-align:top"
-            ),
-            if (thisAttribute %>% str_detect("color")) {
-              div(
-                colourInput(paste0("conditional_value2_", thisAttribute),
-                  label = NULL,
-                  palette = "limited",
-                  showColour = "background",
-                  value = vals2 %>% pull(value2),
-                  allowedCols = allcols1
-                ),
-                style = "display:inline-block;vertical-align:top;width:50px"
-              )
-            } else {
-              div(
-                textInput(paste0("conditional_value2_", thisAttribute), NULL, value = vals2 %>% pull(value2), width = "120px"),
-                style = "display:inline-block;vertical-align:top"
-              )
-            },
-            style = "display:inline-block;"
-          ),style = "display:inline-block;background-color:#EEFFEE;margin-left:20px;padding:10px"
-        )
-        # ,
-        # hr(style = "margin:5px")
-      ,class="conditional-row")
-    })
-  })
-
-
-  output$upConditionalBut <- renderUI({
-    actionButton("upConditional", "Update")
-  })
-
-  observeEvent(input$upConditional, ignoreInit = T, {
-    # browser()
-    values$settingsConditional <- make_settingsConditional(input, values$settingsConditional)
-  })
-
-  
-
-  # filters, don't work at the moment ---------------------------------------
-
-  
-  output$filters <- renderUI({
-    clusters <- values$graf %>%
-      nodes_as_tibble() %>%
-      pull(cluster) %>%
-      unique()
-
-    tagList(
-      lapply(colnames(values$statements %>% select(-text)), function(y) {
-        x <- values$statements[[y]]
-        u <- unique(x) %>% na.omit()
-        if (length(u) > 1 & length(u) < 12) {
-          div(checkboxGroupButtons(paste0("filters", y), y, choices = sort(u), selected = u), style = "display:inline-block;vertical-align:top")
-        }
-      }),
-      if (!is.null(clusters) && length(clusters) > 1) {
-        tagList(
-          div(checkboxGroupButtons("filterscluster", "cluster", choices = sort(values$graf %>% nodes_as_tibble() %>% pull(cluster) %>% unique())), style = "display:inline-block;vertical-align:top")
-        )
-      }
-    )
-  })
-
+  # output$edge2 <- renderRHandsontable(if (!is.null(values$grafAgg2)) {
+  #   doNotification("Creating edges2 table")
+  #   rhandsontable(values$grafAgg2 %>% edges_as_tibble(), height = 700, rowHeaders = FALSE, usetypes = T) %>%
+  #     hot_context_menu(allowRowEdit = T) %>%
+  #     hot_cols(columnSorting = TRUE) %>%
+  #     hot_cols(fixedColumnsLeft = 1) %>%
+  #     hot_rows(fixedRowsTop = 1)
+  # })
+  # 
+  # output$node2 <- renderRHandsontable(if (!is.null(values$grafAgg2)) {
+  #   doNotification("Creating nodes2 table")
+  #   rhandsontable(values$grafAgg2 %>% nodes_as_tibble(), height = 700, rowHeaders = FALSE, usetypes = T) %>%
+  #     hot_context_menu(allowRowEdit = T) %>%
+  #     hot_cols(columnSorting = TRUE) %>%
+  #     hot_cols(fixedColumnsLeft = 1) %>%
+  #     hot_rows(fixedRowsTop = 1)
+  # })
 
   ######## where is the observe event for filters, including for cluster filter?
-
-  # produce  settings widgets --------------------------------
-
-  observeEvent(input$settingsTableGlobalUp, {
-    # browser()
-    vals <- values$settingsGlobal
-    vs <- values$settingsGlobal %>% mutate_all(as.character)
-    output$inputs <- renderUI({
-      lapply(1:nrow(vs), function(x) {
-        row <- vs[x, ]
-        rg <- replace_na(row$widget, "")
-        rt <- paste0(row$type, row$setting, collapse = "")
-        rt <- replace_na(rt, "")
-        # if(rg=="color")  {checkboxInput("asdf","asdf")}
-        div(
-          if (rg == "color") {
-            # browser()
-            colourInput(paste0("input", rt), rt,
-              palette = "limited",
-              showColour = "background",
-              value = if (is.null(findset(rt,vals))) findset(rt,vals) else findset(rt,values),
-              allowedCols = allcols1
-            )
-          }
-          else if (rg == "slider") {
-            sliderInput(paste0("input", rt), rt, min = 0, max = 100, value = findset(rt,vals))
-          }
-          else if (rg == "checkbox") {
-            # browser()
-            checkboxInput(paste0("input", rt), rt, value = as.logical(findset(rt,vals)))
-          }
-          else
-          if (rg == "input") paste0(row$type, row$setting, collapse = ""),
-          style = "display:inline-block;"
-        )
-      })
-    })
-  })
-
-
-  output$settingsTableGlobal <- renderRHandsontable({
-    vs <- values$settingsGlobal %>% mutate_all(as.character)
-
-    ds <- defaultSettingsGlobal %>% mutate_all(as.character)
-
-    vs <- bind_rows(vs, ds) %>%
-      distinct(type, setting, .keep_all = T)
-# browser()
-
-    rhandsontable(vs %>%
-      mutate(type = factor(type)), height = NULL, rowHeaders = FALSE, usetypes = T) %>%
-      hot_context_menu(allowRowEdit = T) %>%
-      hot_cols(colWidths = c(80, 120, 250, 80))
-  })
-
-
-  observeEvent(input$settingsTableGlobalUp, {
-    doNotification("updating from settingsTableGlobal")
-    # browser()
-    values$settingsGlobal <- hot_to_r(input$settingsTableGlobal)
-  })
-
 
   
 
@@ -791,6 +601,7 @@ server <- function(input, output, session) {
 
     # make this code run whenever the tab$change reactive triggers
     tab$change
+    input$projectSelect
     # SP commented out above line
 
     # prevent this code running every time we update values
