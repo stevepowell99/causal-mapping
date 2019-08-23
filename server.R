@@ -1,9 +1,19 @@
 server <- function(input, output, session) {
 
+
+# sql ---------------------------------------------------------------------
+
+  
   # initialising ------------------------------------------------------------
   
   
+  
+  
+  
+  
+  
   if(!exists("loggedUser") %>% is.null)showModal(query_modal)
+  fileFromURL <- reactiveVal("")
   
   # loggedUser <- reactiveVal()
   loggedUser <- reactiveVal("free")
@@ -119,12 +129,11 @@ server <- function(input, output, session) {
       # ql=tolower(ql)
 
 
-      if (T) {
-        values$current <- ql %>%  gsub("^.*?\\/","",.)
-        thisUser <- ql %>%  str_extract("(^.*?)\\/") %>% str_remove("\\/$")
+        fileFromURL <- reactiveVal(ql %>%  get_title_from_query())
+        userFromURL <- reactiveVal(ql %>%  get_user_from_query())
         # browser()
         
-        if(req(thisUser)!=req(loggedUser())) {
+        if(req(userFromURL())!=req(loggedUser())) {
           doNotification("You do not have access",9)
           return()
           }
@@ -152,53 +161,67 @@ server <- function(input, output, session) {
 
             
             # browser()   TODO this just checks nodes. should check all. I will fix this after your performance improvements!
-            if (filename != "" & file__exists(paste0(filename, "-recovery-nodes.csv"))) {
-              recfile <- read.csv(paste0(filename, "-recovery-nodes.csv"))
-              mainfile <- read.csv(paste0(filename, "-nodes.csv"))
-              rectime <- file.info(paste0(filename, "-recovery-nodes.csv"))$mtime %>% as.numeric()
-              maintime <- file.info(paste0(filename, "-nodes.csv"))$mtime %>% as.numeric()
-
-              if (rectime > maintime & !identical(recfile, mainfile)) { # TODO this shouldn't be necc, but sometimes app saves tables without any changes
-                createAlert(
-                  session,
-                  "recoveryNewer",
-                  title = "There is a recovery version of this project which is newer",
-                  content = paste0("<a href=?permalink=", ql, "-recovery>Click here to restore</a>"), append = FALSE
-                )
-              }
-            }
+            # if (filename != "" & file__exists(paste0(filename, "-recovery-nodes.csv"))) {
+            #   recfile <- read.csv(paste0(filename, "-recovery-nodes.csv"))
+            #   mainfile <- read.csv(paste0(filename, "-nodes.csv"))
+            #   rectime <- file.info(paste0(filename, "-recovery-nodes.csv"))$mtime %>% as.numeric()
+            #   maintime <- file.info(paste0(filename, "-nodes.csv"))$mtime %>% as.numeric()
+            # 
+            #   if (rectime > maintime & !identical(recfile, mainfile)) { # TODO this shouldn't be necc, but sometimes app saves tables without any changes
+            #     createAlert(
+            #       session,
+            #       "recoveryNewer",
+            #       title = "There is a recovery version of this project which is newer",
+            #       content = paste0("<a href=?permalink=", ql, "-recovery>Click here to restore</a>"), append = FALSE
+            #     )
+            #   }
+            # }
+            # 
+            # doNotification("checking recovery versions")
+            # 
+            # if (grepl("-recovery", filename)) {
+            #   if (T) {
+            #     createAlert(
+            #       session,
+            #       "recoveryVersion",
+            #       title = "You are working on a recovery version of this project",
+            #       content = "Check the project then save under a new name"
+            #     )
+            #   }
+            # }
             
-            doNotification("checking recovery versions")
             
-            if (grepl("-recovery", filename)) {
-              if (T) {
-                createAlert(
-                  session,
-                  "recoveryVersion",
-                  title = "You are working on a recovery version of this project",
-                  content = "Check the project then save under a new name"
-                )
-              }
-            }
+            # doNotification("Reading from google drive", 2)
+            # # browser()
+            # 
+            # loggedUserFolder=drive_ls(gdriveRoot,type="folder",pattern="^free$")
+            # saveRDS(vals,file = paste0("www/",vc))
+            # drive_upload(media = paste0("www/",vc), path=loggedUserFolder(),name = paste0(it))
+            # 
+            # 
+            # 
+            # fnn <- paste0(filename, "-", fn) %>% str_remove("^www/")
+            # browser()
+            # loggedUserFolder=reactiveVal(drive_ls(gdriveRoot,type="folder",pattern=paste0("^",userFromURL(),"$")))
+            # 
+            # gfile <- drive_find(pattern = fnn, type = "spreadsheet")[1, ]
+            # local_file <- drive_download(file = gfile, path = paste0("www/",thisURL()))
+            # read_sheet(fnnn)
+            # values[[fn]] <- read_excel(local_file$local_path) # workaround using readxl because auth not yet available on package
+            # 
+            # doNotification("Finished reading from google drive", 2)
+            
+            
             for (fn in csvlist) {
               fnn <- paste0(filename, "-", fn, ".csv")
 
-              if (storage == "gsheets") {
-                doNotification("Reading from google drive", 2)
-                # browser()
-                fnn <- paste0(filename, "-", fn) %>% str_remove("^www/")
-                fnnn <- drive_find(pattern = fnn, type = "spreadsheet")[1, ]
-                local_file <- drive_download(fnnn, path = tempfile(fileext = ".xlsx"))
-                read_sheet(fnnn)
-                values[[fn]] <- read_excel(local_file$local_path) # workaround using readxl because auth not yet available on package
-
-                doNotification("Finished reading from google drive", 2)
-              } else if (storage == "local") {
+              # if (storage == "gsheets") {
+              # } else if (storage == "local") {
                 if (file__exists(fnn)) {
                   values[[fn]] <- read_csv((fnn))
                 }
               }
-            }
+            # }
 
 
             # need to add any new columns TODO
@@ -220,15 +243,13 @@ server <- function(input, output, session) {
 
 
             doNotification(glue("Loaded{nrow(values$graf %>% nodes_as_tibble)} variables from permalink"))
-
 # browser()
-            updateTextInput(session, "titl", value = values$current)#
-            # values$current <- filename
+            updateTextInput(session, "titl", value = fileFromURL())#
           }
         }
 
         loaded <<- T
-      }
+      # }
 
       # update from text------------
 
@@ -857,7 +878,7 @@ server <- function(input, output, session) {
           tmp <- req(values$graf) # has to be agg2 because of statements, but shouldn't be because some missed out
           vpag <- values$pag
           iot <- input$onlyThisStatement
-          delay(4000, refresh_and_filter_net(tmp, vpag, iot))
+          delay(1000, refresh_and_filter_net(tmp, vpag, iot))
         }
       }
 
@@ -1586,8 +1607,8 @@ server <- function(input, output, session) {
   output$downloads <- renderUI({
     # browser()
     doNotification("Creating library list")
-    if (!is.null(values$current)) {
-      name <- gsub("www/", "", values$current)
+    if (!is.null(fileFromURL())) {
+      name <- gsub("www/", "", fileFromURL())
       tagList(
         h4("Download your files"),
         h5("CSV files"),
@@ -2149,7 +2170,11 @@ server <- function(input, output, session) {
     # h1("asdfasdfasdf")
   })
 
-  output$savebut <- renderUI(div(
+  # observe(if(exists("fileFromURL")){
+    
+  output$savebut <- renderUI(
+    
+    div(
     div(
       tagList(
 
@@ -2157,7 +2182,7 @@ server <- function(input, output, session) {
       div(if(!is.null(loggedUser()))tagList(span("Logged in as: " %>% paste0( loggedUser())) , a("| Log out",href=".")), style = "color:white;height:20px;font-size:14px;margin-bottom:0"),
         div(textInput(
           "titl", NULL,
-          value = ifelse(is.null(values$current), "", values$current), placeholder = "Title", width = "100%"
+          value = ifelse(is.null(fileFromURL()), "", fileFromURL()), placeholder = "Title", width = "100%"
         ), style = "display:inline-block;width:50%"),
         div(
           actionButton("saveb", "Save", icon = icon("save")),
@@ -2167,7 +2192,7 @@ server <- function(input, output, session) {
       style = "margin-bottom:-20px"
     )
   ))
-
+  # })
 
 
   # observe save button ----
@@ -2178,34 +2203,28 @@ server <- function(input, output, session) {
       
       
       
-      # browser()
-      # doNotification("observing save button",7)
-          # browser()
-
       if ("" != input$titl) {
         inputtitl <<- gsub("[^[[:alnum:]|-]]*", "", input$titl) %>% paste0(loggedUser(),"/",.)
-        values$current <- inputtitl
+        fileFromURL <- reactiveVal(inputtitl)
 
 
-        # saveRDS(values, paste0("www/", inputtitl, ".tm"))
-
+      
+        
         values$nodes <- values$graf %>% nodes_as_tibble()
         values$edges <- values$graf %>% edges_as_tibble()
 
         for (c in csvlist) {
-          write_csv(values[[c]], path = paste0("www/", values$current, "-", c, ".csv"))
+          write_csv(values[[c]], path = paste0("www/", inputtitl, "-", c, ".csv"))
         }
-        # browser()
+        
+        
 
-
-upload_to_gdrive(gdriveRoot,values$current,values,input$titl)
+        upload_to_gdrive(gdriveRoot,fileFromURL(),values,input$titl)
 
         # file.copy(paste0("www/", inputtitl,".tm"),paste0("www/", inputtitl,".otm"),overwrite = T)
         doNotification("Saved")
         values$issaved <- T
-        # toggleClass("savemsg", "red")
-        # delay(500, toggleClass("savemsg", "red"))
-      
+
     }
     }
     
@@ -2232,7 +2251,7 @@ upload_to_gdrive(gdriveRoot,values$current,values,input$titl)
 
     if ("" != input$titl) {
       inputtitl <<- gsub("[^[[:alnum:]|-]]*", "", input$titl)
-      values$current <- inputtitl
+      # fileFromURL() <- inputtitl
 
 
       # saveRDS(values, paste0("www/", inputtitl, ".tm"))
@@ -2287,6 +2306,7 @@ upload_to_gdrive(gdriveRoot,values$current,values,input$titl)
 
 
   observeEvent(input$saveb, ignoreInit = TRUE, {
+    # browser()
     output$savedMsg <- renderUI({
       if (!values$issaved) {
         div()
@@ -2295,12 +2315,16 @@ upload_to_gdrive(gdriveRoot,values$current,values,input$titl)
           id = "savemsg",
           "Saved to this permanent link: ",
           tags$a(
-            paste0(values$current),
-            href = paste0("?permalink=", values$current)
+            paste0(fileFromURL()),
+            href = paste0("?permalink=", fileFromURL())
           )
         )
       }
     })
+    
+    
+    # toggleClass("savemsg", "red")
+    # delay(500, toggleClass("savemsg", "red"))
   })
 
 
@@ -2463,11 +2487,7 @@ upload_to_gdrive(gdriveRoot,values$current,values,input$titl)
   })
   
   
-  # session$onSessionEnded(function() {
-  #   upload_to_gdrive(gdriveRoot,values$current,values,input$titl)
-  #   
-  #   
-  #     })
+  
 
   hide(id = "loading-content", anim = TRUE, animType = "fade")
   show("app-content")

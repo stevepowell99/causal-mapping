@@ -1,6 +1,5 @@
 
 render viz
-render viz
 Adding Node
 Adding Node
 starting aggregation
@@ -23,109 +22,5 @@ NA is not in settings
 Aggregated
 started viz
 NA is not in settings
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-NA is not in settings
-NA is not in settings
-NA is not in settings
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-Loading files
-checking recovery versions
-Loaded5 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-render viz
-started viz
-Produced viz
-started viz
-Produced viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-Loading files
-checking recovery versions
-Loaded5 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-render viz
-started viz
-Produced viz
-started viz
-Produced viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
 Produced viz
 render viz

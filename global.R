@@ -94,13 +94,22 @@ id.finder <- function(label, node.df) {
   })
 }
 
-upload_to_gdrive <- function(gdriveRoot,vc,vals,it){
-  # doNotification("Uploading to google drive", 2)
 
-  loggedUserFolder=reactiveVal(drive_ls(gdriveRoot,type="folder",pattern="^free$"))
+get_user_from_query <- function(url){
+  str_remove(url,"\\/.*$")
+}
+get_title_from_query <- function(url){
+  str_remove(url,"^.*?\\/")
+}
+
+
+upload_to_gdrive <- function(gdriveRoot,vc,vals,it){
+  doNotification("Uploading to google drive", 2)
+# browser()
+  loggedUserFolder=reactiveVal(drive_ls(gdriveRoot,type="folder",pattern=paste0("^",get_user_from_query(vc),"$")))
   saveRDS(vals,file = paste0("www/",vc))
   drive_upload(media = paste0("www/",vc), path=loggedUserFolder(),name = paste0(it))
-  # doNotification("Finished uploading to google drive", 2)
+  doNotification("Finished uploading to google drive", 2)
 
 
 }
