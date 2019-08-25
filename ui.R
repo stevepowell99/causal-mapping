@@ -278,7 +278,7 @@ ui <- tagList(
                                
                                tabPanel("Statements",
                                  
-                                 uiOutput("push")
+                                 uiOutput("statementsPanel")
                                ),
                                
                                 tabPanel("Description",

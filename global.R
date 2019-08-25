@@ -288,10 +288,11 @@ merge_nodes <- function(vno, ved) {
 }
 
 
-large <- "er asdfjk klasdf"
-small <- "asdf"
-
+large <- ""
+small <- ""
 highlight_text <- function(large, smallvec, start = "<a href='.'>", stop = "</a>") {
+  # browser()
+  if(length(large)>0 & length(smallvec)>0){
   for (small in smallvec) {
   small <- str_remove_all(small," *\\[.*?\\] *")
     if (length(nchar(small)) > 0) {
@@ -304,6 +305,7 @@ highlight_text <- function(large, smallvec, start = "<a href='.'>", stop = "</a>
     }
   }
   large
+  } else ""
 }
 
 
@@ -670,6 +672,27 @@ make_quip_stats <- function(graf) {
   graf
 }
 
+send_to_sql <- function(values,con,user,project,table){
+  # browser()
+  dbExecute(con,glue("DELETE FROM {table} WHERE user = '{user}' AND project='{project}'"))
+  temp <- values[[table]] %>% 
+    mutate(user=user,project=project) %>% 
+    select(user,project,everything())
+  dbAppendTable(con,table,temp)
+}
+
+delete_from_sql <- function(con,user,project){
+  for(c in csvlist) dbExecute(con,glue("DELETE FROM {c} WHERE user = '{user}' AND project='{project}'"))
+  doNotification(glue("Deleted project {project}"))
+}
+# updateEdges <- function(con,user,project,edges){
+#   dbExecute(con,glue("DELETE FROM edges WHERE user = '{user}' AND project='{project}'"))
+#   edges <- edges %>% 
+#     mutate(user=user,project=project) %>% 
+#     select(user,project,everything())
+#   dbAppendTable(con,"edges",edges)
+#   
+# }
 
 
 make_settingsConditional <- function(inp, vs) {
@@ -855,6 +878,33 @@ find_cycles <- function(adj){
 
 
 # constants ----
+
+# **provide default nodes and edges if necessary ----
+
+defaultNodes <- data.frame(
+  # id = 1:2,
+  # color.background=c("","") ,
+  # color.border=c("","") ,
+  # color.highlight.border = c("","") ,
+  # color.highlight.background = c("","") ,
+  # font.size=1:20,
+  # frequency="1" ,
+  # borderWidth=1:20,
+  # shape=rep(20,"box",20)
+  label = xc("one two"),
+  details = xc("one two"),
+  group = c("", ""),
+  col1 = c("", ""),
+  cluster = c("", ""),
+  value = 0,
+  level = 0,
+  fun = "sumfun",
+  type = ("<U+25E8>"),
+  is_context = c(F, F),
+  clusterLabel = c("", ""),
+  stringsAsFactors = F
+)
+
 
 
 node_names <- xc("color.background color.border font.color font.size borderWidth")

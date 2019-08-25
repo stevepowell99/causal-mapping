@@ -1,24 +1,85 @@
 
 render viz
 Loading project from remote database
-Loaded project from remote database
-Loaded43 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
+Loading project from remote database
+Loading project from remote database
+Loading project from remote database
 render viz
+Loading project from remote database
+Loading project from remote database
+render viz
+Loading project from remote database
+Creating new project
+Loaded0 variables from permalink
+render viz
+Loading project from remote database
+Loaded project from database
+Loaded5 variables from permalink
+starting aggregation
+rick aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
 started viz
 Produced viz
+render viz
+Saved
+Saved
+Loading project from remote database
+Creating new project
+Loaded0 variables from permalink
+render viz
+Loading project from remote database
+Loaded project from database
+Loaded5 variables from permalink
+starting aggregation
+rick aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+Produced viz
+render viz
+render viz
+Loading project from remote database
+Creating new project
+Loaded0 variables from permalink
+render viz
+Loading project from remote database
+Loaded project from database
+Loaded5 variables from permalink
+starting aggregation
+rick aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+Produced viz
+render viz
+render viz
+Loading project from remote database
+Creating new project
+Loaded0 variables from permalink
+render viz
+Loading project from remote database
+Loaded project from database
+Loaded138 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+Produced viz
+render viz

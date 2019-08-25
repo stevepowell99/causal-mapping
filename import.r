@@ -1,7 +1,14 @@
 
 library(tidyverse)
 library(RMariaDB)
-con <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
+library(RSQLite)
+conM <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
+conl <-  DBI::dbConnect(RSQLite::SQLite(),"CMA")
+
+db_list_tables(conl)
+
+DBI::dbDisconnect(conl)
+DBI::dbDisconnect(conM)
 
 
 plist=xc("SLP4genderMore SLX5 Nepal3 Malawi2 rick multiple-statements-per-source")
@@ -56,35 +63,84 @@ dbDisconnect(con)
 
 
 # s <- paste0("CREATE DATABASE CMA ")
-con <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
+conr <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
+conl <- dbConnect(RSQLite::SQLite(), "CMA")
+dbListTables(conl)
 
 DBI::dbExecute(con, as.character('set character set "utf8"'))
 s="ALTER DATABASE CMA CHARACTER SET utf8 COLLATE utf8_general_ci;"
 
 
 
-s="SHOW TABLES;"
-rs <- 
-  dbSendQuery(con, s)
-df <-  fetch(rs, n = -1)
+# Load the mtcars as an R data frame put the row names as a column, and print the header.
+data("mtcars")
+mtcars$car_names <- rownames(mtcars)
+rownames(mtcars) <- c()
+head(mtcars)
+# Create a connection to our new database, CarsDB.db
+# you can check that the .db file has been created on your working directory
+conn <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
+
+nodes <- dbGetQuery(conn,"SELECT * FROM nodes") %>% collect()
+copy_to(conl,nodes,temporary=F)
+edges <- dbGetQuery(conn,"SELECT * FROM edges") %>% collect()
+copy_to(conl,edges,temporary=F)
+statements <- dbGetQuery(conn,"SELECT * FROM statements") %>% collect()
+copy_to(conl,statements,temporary=F)
+sources <- dbGetQuery(conn,"SELECT * FROM sources") %>% collect()
+copy_to(conl,sources,temporary=F)
+settingsGlobal <- dbGetQuery(conn,"SELECT * FROM settingsGlobal") %>% collect()
+copy_to(conl,settingsGlobal,temporary=F)
+settingsConditional <- dbGetQuery(conn,"SELECT * FROM settingsConditional") %>% collect()
+copy_to(conl,settingsConditional,temporary=F)
 
 
 
-tbl(con, 'nodes') %>% 
-  select(cyl,mpg)
-
-
-iris[1,6]="Jel čuješ samo što hoćeš"
-iris4=iris[1:3,]
-copy_to(con, iris4)
 
 
 
-dbSendQuery(con,"INSERT INTO iris4 (V6)
-    VALUES ('čuješ✅')")
-
-tbl(con, 'iris4') %>% 
-  filter(is.na(Sepal.Width))
 
 
-rs <- dbSendStatement(con,"INSERT INTO nodes (user, project, label) VALUES ('Steve', 'SLX5', 'xxyyzzaa')")
+
+dbWriteTable(conn, "cars_data", mtcars)
+
+
+
+conl <- dbConnect(RSQLite::SQLite(), "CMA.db")
+
+dbWriteTable(conn, "cars_data", mtcars)
+# List all the tables available in the database
+dbListTables(conl)
+
+
+dbGetQuery(conl, "SELECT * FROM statements")
+
+
+
+dbWriteTable(conn,"cars_data", mtcars, append = TRUE)
+x <- dbGetQuery(conn, "SELECT * FROM cars_data")
+nrow(x)
+dbWriteTable(conn,"cars_data", x, append = TRUE)
+
+(y <- dbWriteTable(conM,"cars_data", x, append = TRUE)) %>% system.time()
+dbExecute(conn, "DELETE FROM cars_data WHERE cyl=4")
+dbExecute(conn, "UPDATE cars_data SET mpg = 22, disp = 5, wt = 6, car_names ='asdjfo dfasdfosasdofia sdfoaisdf oasidf oasdif aosdfi aosdfi asodfi asodfia sodfia dsfoaidf' WHERE mpg=15.8")
+
+for(i in 1:100) dbExecute(conn, "INSERT INTO cars_data (car_names) VALUES ('asdjfo dfasdfosasdofia sdfoaisdf oasidf oasdif aosdfi aosdfi asodfi asodfia sodfia dsfoaidf')")
+
+
+
+
+
+
+system.time(x <- rnorm(10000000)) 
+
+
+
+
+
+
+
+
+
+

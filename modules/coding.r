@@ -1,5 +1,58 @@
 # Code panel -----------------------------------------------------------
 
+# observing edge and node selections --------------------------------------
+
+# this is necessary because you can't programmatically deselect, you have to actually click. so store active node / edge in valuesCoding$nodesSelected instead, and nullify it manually when neccessary
+values$highlightedText <- "" # part of a system to copy any text highlighted with mouse in browser i.e. from interview quotes and insert into the edge information
+values$pag <- 1 # stores value of pager in Code panel
+
+observeEvent(input$net_selected, {
+  # browser()
+  valuesCoding$nodesSelected <- input$net_selected
+})
+observeEvent(input$net_selectedEdges, {
+  # browser()
+  valuesCoding$edgesSelected <- input$net_selectedEdges
+})
+
+
+observe({
+  if (is.null(input$net_selected)) valuesCoding$nodesSelected <- NULL
+}) # this is necessary when user clicks on canvas to deselect a node
+
+
+observeEvent(input$net_selectedEdges, {
+  valuesCoding$edgesSelected <- input$net_selectedEdges
+})
+
+
+
+
+observeEvent(input$highlightedText, {
+  if (!is.null(input$highlightedText)) values$highlightedText <- input$highlightedText
+  if (input$sides == "Code") updateTextAreaInput(session, "quote", value = values$highlightedText)
+})
+
+
+
+valuesCoding <- reactiveValues(fromStack = NULL, toStack = NULL, foundIDs = NULL, readyForEndArrow = F, nodeSelected = NULL, edgeSelected = NULL)
+# i added an extra reactive variable because you said not to have them all in one :-)    Not sure if they need splitting up more
+
+# This keeps a record of the previous page, and so ensures that we only update
+# the visNetwork if we transition to/from the 'Code' tab.
+#
+# You can change when updates happen by either updating the conditions here,
+# or adding dependencies further down, like I have for tab$change
+tab <- reactiveValues(old = "", change = 0)
+observeEvent(input$sides, {
+  if (tab$old == "Code") {
+    tab$change <- tab$change + 1
+  } else if (input$sides == "Code") {
+    tab$change <- tab$change + 1
+  }
+  tab$old <- input$sides
+})
+
 # create values$tot -------------------------------------------------------
 
 #   just the total number of statements, to provide the maximum value of the pager
@@ -680,5 +733,63 @@ output$combineVars <- renderUI({
     actionButton("combine", "Combine!"),
     hr()
   )
+})
+
+
+output$quotesOutput <- renderUI({
+  ins <- valuesCoding$nodesSelected
+  inse <- valuesCoding$edgesSelected
+  if (!is.null(ins)) {
+    quotes <- values$net$x$nodes %>%
+      filter(id %in% ins) %>%
+      pull(quote) %>%
+      str_remove_all(",NA") %>%
+      paste0(collapse = "; ")
+  }
+  
+  else if (!is.null(inse)) {
+    quotes <- values$net$x$edges %>%
+      filter(id %in% ins) %>%
+      pull(quote) %>%
+      str_remove_all(",NA") %>%
+      paste0(collapse = "; ")
+  }
+  else {
+    quotes <- "Click on a variable or arrow to see the quotes"
+  }
+  
+  tagList(
+    icon("quote-left"),
+    quotes %>%
+      HTML() %>% div(class = "quotes")
+  )
+})
+
+
+
+observeEvent(input$deletePackage, {
+  # browser()
+  if (!is.null(valuesCoding$edgesSelected)) {
+    values$graf <- values$graf %>%
+      activate(edges) %>%
+      mutate(id = row_number()) %>%
+      filter(!(id %in% valuesCoding$edgesSelected)) %>%
+      select(-id)
+  }
+})
+
+
+
+observeEvent(valuesCoding$edgesSelected, {
+  # browser()
+  
+  vce <- valuesCoding$edgesSelected
+  
+  targetStatement <- values$graf %>%
+    edges_as_tibble() %>%
+    filter(vce == row_number()) %>%
+    pull(statement)
+  
+  if (!is.null(vce) & !input$onlyThisStatement) updatePageruiInput(session, "pager", page_current = as.numeric(targetStatement))
 })
 
