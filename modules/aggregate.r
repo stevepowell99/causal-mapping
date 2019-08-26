@@ -15,19 +15,10 @@ values$graf <- tbl_graph(
 
 
 observe({
-  
+  # input$upConditionalBut
   # make this code run whenever the tab$change reactive triggers
   tab$change
-  # input$projectSelect
-  # SP commented out above line
-  
-  # prevent this code running every time we update values
-  
-  
-  # browser()
   vals <- values$settingsGlobal
-  # vals <- isolate(values$settingsGlobal)
-  
   # prevent this code running every time we change tab
   this_tab <- isolate(input$sides)
   
@@ -42,6 +33,7 @@ observe({
     
     # post-process original version
     
+    # browser()
     graph_values <- prepare_vg(values$graf)
     
     
@@ -59,7 +51,6 @@ observe({
     
     # merge nodes -------------------------------------------------------------
     
-    # browser()
     
     
     if ((findset("variablemerge",vals) %>% as.logical()) & this_tab != "Code") { # need to convert to and froms in edge df
@@ -82,7 +73,7 @@ observe({
       
       doNotification("rick aggregation")
       
-      if (all(is.na(ved$statement))) ved$statement <- 1
+      if (all(is.na(ved$statement_id))) ved$statement_id <- 1
       # browser()
       ved <- ved %>%
         inv_multi()
@@ -91,18 +82,24 @@ observe({
     
     # ved join statements--------------------------------
     # browser()
-    if (is.null(values$statements$source__id)) values$statements <- values$statements %>% mutate(source__id = 1)
+    # if (is.null(values$statements$source_id)) values$statements <- values$statements %>% mutate(source_id = 1)
+    # browser()
+    ved <- ved %>%
+      left_join(values$statements, by = "statement_id") 
     
-    ved <- ved_join_statements(ved, values$statements)
     
+    sources <- 
+      values$sources %>%
+      spread(key,value)
     
-    # saveRDS(ved, "ved")
+    ved <- ved %>% 
+      left_join(sources,by = "source_id")
     
     
     
     
     ved <- ved %>%
-      mutate(statement = as.character(statement)) %>%
+      # mutate(statement = as.character(statement)) %>%
       mutate(wstrength = strength * trust)
     # browser()
     
@@ -111,7 +108,7 @@ observe({
     # quip stats by question/domain---------------
     
     
-    if ("source__id" %in% colnames(ved) && "question" %in% colnames(ved)) {
+    if ("source_id" %in% colnames(ved) && "question" %in% colnames(ved)) {
       
       # browser()
       ved <- ved %>%

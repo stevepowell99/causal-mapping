@@ -5,8 +5,9 @@ account: stevepowell
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1041171
-bundleId: 2299984
+bundleId: 2354160
 url: https://stevepowell.shinyapps.io/causal-mapping/
-when: 1565242753.43694
+when: 1566763394.82491
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: logs

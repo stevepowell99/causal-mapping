@@ -354,7 +354,7 @@ output$edgeTable <- renderRHandsontable({
   ve <- values$graf %>%
     E_() %>%
     mutate(fromLabel = .N()$label[from], toLabel = .N()$label[to]) %>%
-    select(fromLabel, toLabel, -full.quote, everything(), full.quote) %>%
+    select(fromLabel, toLabel, everything()) %>%
     edges_as_tibble() %>%
     select(-from, -to, everything())
   

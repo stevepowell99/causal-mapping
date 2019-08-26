@@ -407,7 +407,9 @@ left:-800px;
 
 }
 
-
+input[type=text]{
+  height: 34px;
+}
 #arrowListAgg td {background-color: whitesmoke;}
 
 .texin input {
@@ -733,4 +735,9 @@ margin-left:200px;
 
 .red{
   color:red;
+}
+
+.myelement{
+  display:inline-block;
+  vertical-align: top;
 }

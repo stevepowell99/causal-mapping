@@ -2,7 +2,7 @@
 
 
 
-if(F) {
+if(T) {
   con <- isolate(dbConnect(RSQLite::SQLite(), "CMA"))
 } else {
   con <-  isolate(DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306))
@@ -10,11 +10,11 @@ if(F) {
 
 # browser()
 
+# 
+# loaded <- F # whether loaded from url permalink
+# makeReactiveBinding("loaded")
 
-loaded <- F # whether loaded from url permalink
-makeReactiveBinding("loaded")
-
-fileFromURL <- reactiveVal("")
+projectFromURL <- reactiveVal("")
 
 
 
@@ -25,13 +25,19 @@ observeEvent(input$projectSelect,{
   req((input$projectSelect))
   query <- isolate(parseQueryString(session$clientData$url_search))
   ql <- query[["permalink"]]
-  # fileFromURL <- reactiveVal(ql %>%  get_title_from_query())
-  # userFromURL <- reactiveVal(ql %>%  get_user_from_query())
-  if(!is.null(ql)) updateSelectInput(session,"projectSelect",selected="SLX5")
+  projectFromURL <- reactiveVal(ql %>%  get_project_from_query())
+  userFromURL <- reactiveVal(ql %>%  get_user_from_query())
+  if(!is.null(ql)) {
+    req(input$userSelect)
+    req(input$projectSelect)
+    # browser()
+    updateSelectInput(session,"userSelect",selected=userFromURL())
+    updateSelectInput(session,"projectSelect",selected=projectFromURL())
+    }
   
   if (T) {
-    doNotification("Loading project from remote database")
     for (fn in csvlist) {
+    doNotification(glue("Loading {fn} from remote database"))
       # fnn <- paste0(filename, "-", fn, ".csv")
       # browser()
       
@@ -57,6 +63,10 @@ observeEvent(input$projectSelect,{
           defaultNodes[0, ],
           defaultEdges[0, ]
         )
+        values$statements <- default.statements
+        values$sources <- default.sources
+        values$settingsGlobal <- defaultSettingsGlobal
+        values$settingsConditional <- defaultSettingsConditional
         values$net <- NULL
         values$grafAgg2 <- NULL
       }
@@ -128,22 +138,22 @@ observe({
         
         # div(actionButton("render_button","Render"),style="display:inline-block;vertical-align:top"),
         # div(if(!is.null(input$userSelect))tagList(span("Logged in as: " %>% paste0( input$userSelect)) , a("| Log out",href=".")), style = "color:white;height:20px;font-size:14px;margin-bottom:0"),
-        div(selectInput("userSelect",NULL,choices = userlist,width="100%"), style = "display:inline-block;width:15%"),
-        # div(actionButton("userSelectGo","Go!",), style = "display:inline-block;width:5%"),
-        div(selectInput("projectSelect",NULL,choices = "",width="100%"), style = "display:inline-block;width:35%"),
+        div(selectInput("userSelect",NULL,choices = userlist,width="100%"), class="myelement",style = ";width:15%"),
+        # div(actionButton("userSelectGo","Go!",), class="myelement",style = ";width:5%"),
+        div(selectInput("projectSelect",NULL,choices = "",width="100%"), class="myelement",style = ";width:30%"),
         div(
           actionButton("deleteProject", NULL, icon = icon("trash")),
-          style = "display:inline-block;margin-left:5px;margin-right:5px;width:8%"
+          class="myelement",style = ";margin-left:5px;width:8%"
         ),
-        div(textInput("projectSaveAs",NULL,placeholder = "Save as",width="100%"), style = "display:inline-block;width:35%"),
-        # div(actionButton("projectSelectGo","Go!",), style = "display:inline-block;width:5%"),
+        div(textInput("projectSaveAs",NULL,placeholder = "Save as",width="100%"), class="myelement",style = ";width:30%"),
+        # div(actionButton("projectSelectGo","Go!",), class="myelement",style = ";width:5%"),
         # div(textInput(
         #   "titl", NULL,
-        #   value = ifelse(is.null(fileFromURL()), "", fileFromURL()), placeholder = "Title", width = "100%"
-        # ), style = "display:inline-block;width:35%"),
+        #   value = ifelse(is.null(projectFromURL()), "", projectFromURL()), placeholder = "Title", width = "100%"
+        # ), class="myelement",style = ";width:35%"),
         div(
           actionButton("saveb", "Save", icon = icon("save")),
-          style = "display:inline-block;margin-left:5px;margin-right:5px;width:10%"
+          class="myelement",style = ";margin-left:5px;margin-right:5px;width:10%"
         )
       ),
       style = "margin-bottom:-20px"
@@ -158,18 +168,17 @@ observeEvent(
   input$saveb,
   ignoreInit = TRUE, {
     
-    
+      # browser()
     
     if (!(input$projectSaveAs=="" & input$projectSelect=="blank")) {
       inputtitl <- gsub("[^[[:alnum:]|-]]*", "", input$projectSelect) %>% paste0(input$userSelect,"/",.)
-      fileFromURL <- reactiveVal(inputtitl)
-      
-      
+      projectFromURL <- reactiveVal(inputtitl)
       
       
       values$nodes <- values$graf %>% nodes_as_tibble()
       values$edges <- values$graf %>% edges_as_tibble()
       
+    # browser()
       # for (c in csvlist) {
       #   write_csv(values[[c]], path = paste0("www/", inputtitl, "-", c, ".csv"))
       # }
@@ -178,11 +187,11 @@ observeEvent(
       send_to_sql(values,con,input$userSelect,project,"nodes")
       send_to_sql(values,con,input$userSelect,project,"edges")
       send_to_sql(values,con,input$userSelect,project,"statements")
-      send_to_sql(values,con,input$userSelect,project,"sources")
+      # send_to_sql(values,con,input$userSelect,project,"sources")
       send_to_sql(values,con,input$userSelect,project,"settingsGlobal")
       send_to_sql(values,con,input$userSelect,project,"settingsConditional")
       
-      # upload_to_gdrive(gdriveRoot,fileFromURL(),values,input$projectSelect)
+      # upload_to_gdrive(gdriveRoot,projectFromURL(),values,input$projectSelect)
       
       # file.copy(paste0("www/", inputtitl,".tm"),paste0("www/", inputtitl,".otm"),overwrite = T)
       doNotification("Saved")
@@ -203,16 +212,18 @@ observeEvent(
 
 observeEvent(input$saveb, ignoreInit = TRUE, {
   # browser()
+  link <- paste0(input$userSelect,"/",input$projectSelect)
   output$savedMsg <- renderUI({
-    if (!values$issaved) {
+    if (F) {
+    # if (!values$issaved) {
       div()
     } else {
       div(
         id = "savemsg",
         "Saved to this permanent link: ",
         tags$a(
-          paste0(fileFromURL()),
-          href = paste0("?permalink=", fileFromURL())
+          link,
+          href = link
         )
       )
     }

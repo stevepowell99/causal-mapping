@@ -45,7 +45,7 @@ valuesCoding <- reactiveValues(fromStack = NULL, toStack = NULL, foundIDs = NULL
 # or adding dependencies further down, like I have for tab$change
 tab <- reactiveValues(old = "", change = 0)
 observeEvent(input$sides, {
-  if (tab$old == "Code") {
+  if (tab$old == "Code" ) {
     tab$change <- tab$change + 1
   } else if (input$sides == "Code") {
     tab$change <- tab$change + 1
@@ -60,11 +60,11 @@ observe(({
   if (!is.null(values$statements)) {
     # tot=nrow(values$statements)
     #
-    if (!("statement" %in% colnames(values$statments))) {
-      values$statements <- values$statements %>% mutate(statement = row_number())
-    }
+    # if (!("statement" %in% colnames(values$statments))) {
+    #   values$statements <- values$statements %>% mutate(statement = row_number())
+    # }
     tot <- values$statements %>%
-      pull(statement) %>%
+      pull(statement_id) %>%
       na.omit() %>%
       as.numeric() %>%
       max()
@@ -123,16 +123,16 @@ observeEvent(input$overview_col, {
   # browser()
   
   # col=findset("diagramoverview_column")
-  if (!("source__id" %in% colnames(vs))) {
-    vs$source__id <- 1
+  if (!("source_id" %in% colnames(vs))) {
+    vs$source_id <- 1
   }
   
   vs <- vs %>%
-    mutate(newSource = ifelse(source__id != lag(source__id), source__id, "")) %>%
-    mutate(newSource = ifelse(is.na(newSource), source__id, newSource))
+    mutate(newSource = ifelse(source_id != lag(source_id), source_id, "")) %>%
+    mutate(newSource = ifelse(is.na(newSource), source_id, newSource))
   
-  pointer <- vs$source__id[req(values$pag)]
-  content <- vs$statement[(vs$source__id == pointer)]
+  pointer <- vs$source_id[req(values$pag)]
+  content <- vs$statement_id[(vs$source_id == pointer)]
   # content=vs$statement[]
   
   showModal(modalDialog(
@@ -154,7 +154,7 @@ observeEvent(input$overview_col, {
         # browser()
         tagList(
           if (vs$newSource[y] == "") div() else div(h3(paste0("Source: ", pointer))),
-          div(h4(paste0("Statement: ", vs$statement[x]))),
+          div(h4(paste0("Statement: ", vs$statement_id[x]))),
           # actionButton(paste0("gosource",x),"Go!"),
           if (str_detect(vs$text[x], "pdf$")) {
             tags$iframe(src = "pdf.pdf", style = "height:800px; width:100%;scrolling=yes")
@@ -175,14 +175,14 @@ output$displayStatementPanel <- renderUI({
   
   quote <- values$graf %>%
     edges_as_tibble() %>%
-    filter(statement == values$pag) %>%
+    filter(statement_id == values$pag) %>%
     pull(quote) %>%
     replace_na("")
   
   
   tagList(
     icon("quote-left"),
-    values$statements$text[values$statements$statement == values$pag] %>%
+    values$statements$text[values$statements$statement_id == values$pag] %>%
       highlight_text(quote) %>%
       HTML() %>% div(class = "textbanner", id = "textbanner"),
     # span(values$statements$text[values$statements$statement==values$pag], class = "textbanner", id = "textbanner"),
@@ -207,12 +207,12 @@ observeEvent(input$firstuncoded, {
   # browser()
   slist <- values$statements %>%
     filter(text != "") %>%
-    pull(statement) %>%
+    pull(statement_id) %>%
     na.omit() %>%
     as.numeric() %>%
     sort()
   
-  elist <- edges_as_tibble(values$graf)$statement %>%
+  elist <- edges_as_tibble(values$graf)$statement_id %>%
     na.omit() %>%
     as.numeric()
   
@@ -276,7 +276,7 @@ observeEvent(input$recodeButton, {
   
   
   ved <- ved %>%
-    mutate(thisStatement = (ved$statement == vpag | !iot)) %>%
+    mutate(thisStatement = (ved$statement_id == vpag | !iot)) %>%
     mutate(from = ifelse(thisStatement & from %in% vfs, ins, from)) %>%
     mutate(to = ifelse(thisStatement & to %in% vfs, ins, to))
   
@@ -568,9 +568,9 @@ observeEvent(input$addTo, {
     fun = "",
     combo.type = ifelse(input$crowd, "", ifelse(is.null(input$combo), "", input$combo)),
     definition.type = ifelse(input$crowd, "", input$definition.type),
-    statement = ifelse(input$crowd, 1, values$pag %>% as.integer()),
+    statement_id = ifelse(input$crowd, 1, values$pag %>% as.integer()),
     quote = ifelse(input$crowd, "", qq),
-    full.quote = ifelse(input$crowd, "", values$statements$text[values$statements$statement == values$pag])
+    # full.quote = ifelse(input$crowd, "", values$statements$text[values$statements$statement == values$pag])
   )
   
   values$graf <- values$graf %>%
@@ -788,7 +788,7 @@ observeEvent(valuesCoding$edgesSelected, {
   targetStatement <- values$graf %>%
     edges_as_tibble() %>%
     filter(vce == row_number()) %>%
-    pull(statement)
+    pull(statement_id)
   
   if (!is.null(vce) & !input$onlyThisStatement) updatePageruiInput(session, "pager", page_current = as.numeric(targetStatement))
 })

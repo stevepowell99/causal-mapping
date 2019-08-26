@@ -19,7 +19,7 @@ server <- function(input, output, session) {
 
   values <- reactiveValues() # nearly all reactive values are stored in values$...
   values$statements <- default.statements
-  values$sources <- default.sources
+  # values$sources <- default.sources
   # values$clickArrow <- F # no idea
   # values$crowd <- F
 

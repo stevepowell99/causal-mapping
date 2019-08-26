@@ -15,6 +15,7 @@ source("combo_functions.r")
 
 library(RMariaDB)
 
+library(whereami) #TODO testing only
 
 
 library(shinythemes)
@@ -246,15 +247,12 @@ prepare_vno <- function(vno) {
     mutate(clusterLabel = ifelse(is.na(clusterLabel), "", clusterLabel))
 }
 
-ved_join_statements <- function(ved, statements) {
-  
-  # colnames(statements) <- colnames(statements) %>% paste0("statement__",.)
-  # statements <- statements %>% 
-  #   rename(statement=statement__statement)
-  ved <- ved %>%
-    left_join(statements, by = "statement")
-  ved
-}
+# ved_join_statements <- function(ved, statements) {
+#   
+#   ved <- ved %>%
+#     left_join(statements, by = "statement")
+#   ved
+# }
 
 
 merge_nodes <- function(vno, ved) {
@@ -366,7 +364,7 @@ inv <- function(ed) { # inverts an edgelist. For Rick's suggestion for cacluatin
 inv_multi <- function(df) { # For Rick's suggestion for cacluating a node metric
   # browser()
   stats <- df %>%
-    split(.$statement) %>%
+    split(.$statement_id) %>%
     purrr::map_dfr(inv) %>%
     group_by(from, to) %>%
     mutate(absent = sum(1 - present), present = sum(present), num = n(), avp = round(present / num, 2), ava = round(absent / num, 2)) %>%
@@ -673,7 +671,8 @@ make_quip_stats <- function(graf) {
 }
 
 send_to_sql <- function(values,con,user,project,table){
-  # browser()
+  # if(table=="settingsGlobal")browser()
+doNotification(glue("Sending {table} to sql database"))
   dbExecute(con,glue("DELETE FROM {table} WHERE user = '{user}' AND project='{project}'"))
   temp <- values[[table]] %>% 
     mutate(user=user,project=project) %>% 
@@ -693,6 +692,14 @@ delete_from_sql <- function(con,user,project){
 #   dbAppendTable(con,"edges",edges)
 #   
 # }
+
+
+get_user_from_query <- function(url){
+  str_remove(url,"\\/.*$")
+}
+get_project_from_query <- function(url){
+  str_remove(url,"^.*?\\/")
+}
 
 
 make_settingsConditional <- function(inp, vs) {
@@ -730,12 +737,12 @@ refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh bu
   ved <- tmp %>% edges_as_tibble()
   vf <- ved %>%
     group_by(from) %>%
-    summarise(fstat = paste0(statement, collapse = ",")) %>%
+    summarise(fstat = paste0(statement_id, collapse = ",")) %>%
     mutate(id = from)
 
   vt <- ved %>%
     group_by(to) %>%
-    summarise(tstat = paste0(statement, collapse = ",")) %>%
+    summarise(tstat = paste0(statement_id, collapse = ",")) %>%
     mutate(id = to)
 
   vno <- vno %>%
@@ -744,16 +751,16 @@ refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh bu
     left_join(vt) %>%
     mutate(fstat = replace_na(fstat, "")) %>%
     mutate(tstat = replace_na(tstat, "")) %>%
-    unite("statement", c("fstat", "tstat"), sep = ",")
+    unite("statement_id", c("fstat", "tstat"), sep = ",")
 
 
 
   # browser()
-  if (!("statement" %in% colnames(vno))) vno$statement <- 1
+  if (!("statement_id" %in% colnames(vno))) vno$statement_id <- 1
 
   if (!is.null(vpag) & nrow(vno) > 0) {
     ids <- vno %>%
-      mutate(sel = ifelse(str_detect(statement, paste0("(,|^)", as.character(vpag), "(,|$)")), T, F)) %>%
+      mutate(sel = ifelse(str_detect(statement_id, paste0("(,|^)", as.character(vpag), "(,|$)")), T, F)) %>%
       pull(sel)
     # browser()
     yesids <- ids %>% which()
@@ -763,7 +770,7 @@ refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh bu
 
 
     eids <- ved %>%
-      mutate(hit = vpag == statement) %>%
+      mutate(hit = vpag == statement_id) %>%
       pull(hit)
 
 
@@ -917,7 +924,7 @@ all_attributes <- c(paste0("node_", node_names), paste0("edge_", edge_names))
 writeLines("", "log.txt") # just to open up a fresh file
 
 
-csvlist <- xc("nodes edges statements sources settingsConditional settingsGlobal")
+csvlist <- xc("nodes edges statements settingsConditional settingsGlobal sources")
 
 
 # generate some nice colours
@@ -943,31 +950,23 @@ colnams <- lapply(xc("Grey Red Blue Green Orange Purple"), function(x) xc("light
 names(allcols) <- c(colnams, paste0(colnams, " hazy"))
 
 shapelist <- c("box", "circle", "square", "triangle", "dot", "star", "ellipse", "database", "text", "diamond")
-
+# 
 default.sources <- tibble(
-  "id" =
-    rep(1, 1)
+  "source_id" =
+    rep("1", 1),
+  "key" =
+    rep("key", 1),
+  "value" =
+    rep("1", 1),
 )
 
 default.statements <- data.frame(
   "text" =
     rep("Some text", 1),
-  "key1" =
-    rep("", 1),
-  "key2" =
-    rep("", 1),
-  "key3" =
-    rep("", 1),
-  "key4" =
-    rep("", 1),
-  "key5" =
-    rep("", 1),
-  "key6" =
-    rep("", 1),
-  "key7" =
-    rep("", 1),
-  "statement" =
+  "statement_id" =
     rep(1, 1),
+  "source_id" =
+    rep("1", 1),
   stringsAsFactors = FALSE
 )
 
@@ -981,11 +980,11 @@ defaultEdges <- data.frame(
   trust = .5,
   sensitivity = .5,
   specificity = .5,
-  statement = 1,
+  statement_id = 1,
   package = "",
   packageNote = "",
   quote = "",
-  full.quote = "",
+  # full.quote = "",
   combo.type = "",
   definition.type = "",
   # frequency="1",
@@ -1102,7 +1101,7 @@ defaultSettingsGlobal <- read_csv("defaultSettingsGlobal.csv")
 
 
 
-colnames_for_concat=xc("quote text label details statement")
+colnames_for_concat=xc("quote text label details statement_id")
 colnames_for_sum=xc("frequency")
 colnames_for_mean=xc("sex Positive older female ava avp")
 
