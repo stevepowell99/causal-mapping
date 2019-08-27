@@ -110,41 +110,15 @@ dbWriteTable(conn, "cars_data", mtcars)
 
 
 
-conl <- dbConnect(RSQLite::SQLite(), "CMA.db")
+con <- dbConnect(RSQLite::SQLite(), "CMA")
+db_list_tables(con)
 
-dbWriteTable(conn, "cars_data", mtcars)
-# List all the tables available in the database
-dbListTables(conl)
 
 
 dbGetQuery(conl, "SELECT * FROM statements")
 
 
 
-dbWriteTable(conn,"cars_data", mtcars, append = TRUE)
-x <- dbGetQuery(conn, "SELECT * FROM cars_data")
-nrow(x)
-dbWriteTable(conn,"cars_data", x, append = TRUE)
-
-(y <- dbWriteTable(conM,"cars_data", x, append = TRUE)) %>% system.time()
-dbExecute(conn, "DELETE FROM cars_data WHERE cyl=4")
-dbExecute(conn, "UPDATE cars_data SET mpg = 22, disp = 5, wt = 6, car_names ='asdjfo dfasdfosasdofia sdfoaisdf oasidf oasdif aosdfi aosdfi asodfi asodfia sodfia dsfoaidf' WHERE mpg=15.8")
-
-for(i in 1:100) dbExecute(conn, "INSERT INTO cars_data (car_names) VALUES ('asdjfo dfasdfosasdofia sdfoaisdf oasidf oasdif aosdfi aosdfi asodfi asodfia sodfia dsfoaidf')")
-
-
-
-
-
-
-system.time(x <- rnorm(10000000)) 
-
-
-tmp=list()
-for (t in csvlist){
-tmp[[t]] <- read_csv(glue("www/gya4-recovery-{t}.csv"))
-dbAppendTable(conl,t,tmp[[t]])
-}
 
 
 

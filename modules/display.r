@@ -5,6 +5,7 @@
 output$condFormattingOutput <- renderUI({
   
   gr <- xc("label frequency sex Positive notForwards older female ava avp")
+  gr <- c(colnames_for_sum,colnames_for_mean)
   
   vals <- values$settingsConditional %>%
     mutate(type = if_else(str_detect(attribute, "node"), "node", "edge"))

@@ -168,7 +168,7 @@ observe(if (!is.null(values$grafAgg2)) {
       shape = findset("variableshape", v = vals),
       group = T, # findset("variablegroup",global=F),
       
-      physics = T#findset("diagramphysics", v = vals)
+      physics = findset("diagramphysics", v = vals)
     ) %>%
     visEdges(
       smooth = T,
@@ -183,8 +183,7 @@ observe(if (!is.null(values$grafAgg2)) {
         list(middle = list(type = "circle", scaleFactor = .5), from = list(type = "circle", scaleFactor = 0.2)),
       # ,
       # dashes = findset("arrowdashes") %>% as.logical()
-    ) %>% 
-    visPhysics(barnesHut = list(avoidOverlap = .7))
+    )
   # browser()
   values$net <- vn
   

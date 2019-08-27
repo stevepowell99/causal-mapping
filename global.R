@@ -1,7 +1,7 @@
 # options -----------------------------------------------------------------
 options(shiny.port = 1111)
 options(shiny.autoreload = T)
-options(shiny.autoreload.pattern = glob2rx("ui.R|global.R|server.R"))
+options(shiny.autoreload.pattern = glob2rx("ui.R|global.R|server.R")) #TODO dev only
 doNotificationLevel <- 0 # notification popups. level=1 is debugging and level=2 is user.
 options(stringsAsFactors = F)
 
@@ -659,6 +659,8 @@ format_nodes_and_edges <- function(df, inp, type, vsc) {
           doNotification("Missing values for colour fade replaced with means")
           var[is.na(var)] <- mean(var, na.rm = T)
         }
+        var <- var-min(var,na.rm=T)
+        
         df[, attribute_short] <- colorRamp(c(floor, ceiling))(var / max(var, na.rm = T)) %>%
           as.tibble() %>%
           mutate(xxx = (rgb(V1, V2, V3, maxColorValue = 255))) %>%
@@ -938,7 +940,7 @@ all_attributes <- c(paste0("node_", node_names), paste0("edge_", edge_names))
 writeLines("", "log.txt") # just to open up a fresh file
 
 
-csvlist <- xc("nodes edges statements settingsConditional settingsGlobal sources")
+csvlist <- xc("nodes edges statements settingsConditional settingsGlobal sources statements_extra")
 
 
 # generate some nice colours
@@ -967,6 +969,14 @@ shapelist <- c("box", "circle", "square", "triangle", "dot", "star", "ellipse", 
 # 
 default.sources <- tibble(
   "source_id" =
+    rep("1", 1),
+  "key" =
+    rep("key", 1),
+  "value" =
+    rep("1", 1),
+)
+default.statements_extra <- tibble(
+  "statement_code" =
     rep("1", 1),
   "key" =
     rep("key", 1),
@@ -1117,7 +1127,7 @@ defaultSettingsGlobal <- read_csv("defaultSettingsGlobal.csv")
 
 colnames_for_concat=xc("quote text label details statement_id")
 colnames_for_sum=xc("frequency")
-colnames_for_mean=xc("sex Positive older female ava avp")
+colnames_for_mean=xc("sex Positive older female ava avp attributionExplicit attributionValence")
 
 userlist <- xc("Steve free BSDR")
 

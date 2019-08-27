@@ -289,9 +289,10 @@ ui <- tagList(
                                 tabPanel("Legend",
                                 plotOutput("colourLegend")
                                   ),
-                                tabPanel("Report",
+                                tabPanel("Reports",
                                
-                             formattableOutput("reportTable", width = "100%", height = "0")
+                             formattableOutput("reportTable", width = "100%", height = "0"),
+                             formattableOutput("reportTable2", width = "100%", height = "0")
                              )
                              )
                            
