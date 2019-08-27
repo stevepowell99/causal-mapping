@@ -1,0 +1,109 @@
+"label","Code","cluster"
+"Loss/absence of family member","D1","6"
+"Increased family size","D2","6"
+"Ill-health/disability","D3","6"
+"Pregnancy","D4","6"
+"Climate change/weather","D5","4"
+"Infertile soil","D6","4"
+"Health, hygeine and sanitation training","D7","1"
+"Agricultural training and support","D8","1"
+"Financial advice","D9","1"
+"SAC support (unspecified)","D10","1"
+"Government work (unspecified)","D11","2"
+"Provision of mosquito net","D12","2"
+"Provision of clean water access","D13","1"
+"Provision of livestock","D15","1"
+"Provision of seeds","D16","1"
+"Provision of farming materials","D18","1"
+"Access to health services","D19","2"
+"Access to education","D20","2"
+"Safety-net program","D21","2"
+"Community groups and networks","D23","1"
+"Savings group","D25","1"
+"Trading activity (farming related)","D29","5"
+"Loss of land","D30","5"
+"Leasing farm land","D31","5"
+"Received/renting new land","D32","5"
+"Involvement in cooperative planting share-cropping","D33","5"
+"Support with Biogas technology","D34","1"
+"Disease (cattle)","D35","4"
+"Disease or infestation (crops)","D36","4"
+"Delay/inequality in fertiliser delivery","D37","2"
+"Increased price of market goods","D38","3"
+"Increased price of crops","D39","3"
+"Increased cost of living","D40","3"
+"Improved women's legal rights","D41","2"
+"Faith in God","D42","6"
+"Urbanization","D44","3"
+"Kebele divided into two","D45","2"
+"Reduced market demand","D49","3"
+"Kebele stopped support","D50","2"
+"Training from SAC beneficiary","D51","1"
+"Rising population","D52","4"
+"Non-farming livelihood","D53","5"
+"Improved health, hygiene and sanitation practices","OP1",NA
+"Improved health","OP2",NA
+"Improved non-farming job opportunities","OP3",NA
+"Reduced disease","OP4",NA
+"Improved access to clean water","OP5",NA
+"Improved livelihood (unspecified)","OP6",NA
+"Increased variety in crop production","OP7",NA
+"Increased yield/productivity","OP8",NA
+"Increased income","OP9",NA
+"Increased ability to purchase food from market","OP10",NA
+"Increased assets/purchasing power","OP11",NA
+"Ability to build a house","OP12",NA
+"Increased engagement in business activities","OP13",NA
+"Increased ability to save money/in-kind","OP14",NA
+"Increased ability to borrow money","OP15",NA
+"Compensation (from land loss)","OP17",NA
+"Improved diet (quality and variety)","OP18",NA
+"Sufficient food produced for household consumption","OP19",NA
+"Ability to produce a surplus to store or sell","OP20",NA
+"Reduced hunger / increased amount of food","OP21",NA
+"Improved community involvement in community development","OP22",NA
+"Improved community relationships and collaboration","OP23",NA
+"Experience/knowledge shared with community","OP24",NA
+"Non-beneficiary member benefits","OP25",NA
+"Remittances","OP26",NA
+"Electricity introduced to community","OP27",NA
+"Increased ability for children to study / attend school","OP29",NA
+"Improved wellbeing","OP30",NA
+"Improved family relationships","OP31",NA
+"Improved farming techniques/activities","OP32",NA
+"Improved trading activity","OP33",NA
+"Increased farming activity","OP34",NA
+"Increased control and decision-making power","OP35",NA
+"Improved financial stability and security","OP36",NA
+"Able to avoid fertiliser loan","OP37",NA
+"Rewarded (with assets) for project engagement","OP38",NA
+"Increased market demand","OP39",NA
+"Compensation","OP40",NA
+"Lowered market price for vegetables","OP41",NA
+"Increased hope","OP42",NA
+"Decreased yield /productivity","ON1",NA
+"No yield/crop failure","ON2",NA
+"Livestock death/disease","ON3",NA
+"Decreased farming activity/business","ON4",NA
+"Decreased income","ON5",NA
+"Reduction in assets/land","ON6",NA
+"Reduced purchasing/saving power","ON8",NA
+"Financial strain, shortfall or stress","ON9",NA
+"Insufficient food produced for household consumption","ON10",NA
+"Reliance on (expensive) market for household consumption","ON11",NA
+"Family migration","ON12",NA
+"Early marriage","ON13",NA
+"School dropouts or affected education","ON14",NA
+"Reduced wellbeing","ON15",NA
+"Excluded from project","ON17",NA
+"Lack of access to services","ON18",NA
+"Reduced community support/collaboration","ON19",NA
+"Decreased amount of food / reduced food security","ON20",NA
+"Late sowing","ON21",NA
+"Poor quality fertiliser from market","ON22",NA
+"Share-cropping","ON23",NA
+"Decreased quality/variety of food","ON24",NA
+"Reduced health","ON25",NA
+"Lack of land for cattle to graze","ON26",NA
+"Unable to pay back loan","ON27",NA
+"Engaged in arguments with the government","ON28",NA

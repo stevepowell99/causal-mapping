@@ -3,6 +3,7 @@ library(tidyverse)
 library(RMariaDB)
 library(RSQLite)
 conm <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
+con <-  DBI::dbConnect(RSQLite::SQLite(),"CMA")
 conl <-  DBI::dbConnect(RSQLite::SQLite(),"CMA")
 
 db_list_tables(conl)
@@ -146,5 +147,14 @@ dbAppendTable(conl,t,tmp[[t]])
 }
 
 
+
+# import foreign proj -----------------------------------------------------
+
+temps=list()
+for(c in csvlist){
+  temps[[c]]=read_csv(glue("import/{c}.csv"))
+  send_to_sql(temps,con,"BSDR","sace",c)
+  
+}
 
 

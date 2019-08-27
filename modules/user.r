@@ -47,10 +47,17 @@ observeEvent(input$projectSelect,{
       values[[fn]] <- tbl(con,fn) %>% 
         filter(project==ip, user==iu) %>% 
         select(-project,-user) %>% 
-        collect()
+        collect() 
     }
     if(nrow(values[["nodes"]])>0)   {
       doNotification("Loaded project from database")
+      values$edges$quote <- values$edges$quote %>% cleanfun
+      values$edges$label <- values$edges$label %>% cleanfun
+      values$edges$domain <- values$edges$domain %>% cleanfun
+      values$statements$text <- values$statements$text %>% cleanfun
+      values$sources$value <- values$sources$value %>% cleanfun
+      values$nodes$label <- values$nodes$label %>% cleanfun
+      values$nodes$details <- values$nodes$details %>% cleanfun
     }
     else {
       # browser()
@@ -136,21 +143,13 @@ observe({
     div(
       tagList(
         
-        # div(actionButton("render_button","Render"),style="display:inline-block;vertical-align:top"),
-        # div(if(!is.null(input$userSelect))tagList(span("Logged in as: " %>% paste0( input$userSelect)) , a("| Log out",href=".")), style = "color:white;height:20px;font-size:14px;margin-bottom:0"),
         div(selectInput("userSelect",NULL,choices = userlist,width="100%"), class="myelement",style = ";width:15%"),
-        # div(actionButton("userSelectGo","Go!",), class="myelement",style = ";width:5%"),
         div(selectInput("projectSelect",NULL,choices = "",width="100%"), class="myelement",style = ";width:30%"),
         div(
           actionButton("deleteProject", NULL, icon = icon("trash")),
           class="myelement",style = ";margin-left:5px;width:8%"
         ),
         div(textInput("projectSaveAs",NULL,placeholder = "Save as",width="100%"), class="myelement",style = ";width:30%"),
-        # div(actionButton("projectSelectGo","Go!",), class="myelement",style = ";width:5%"),
-        # div(textInput(
-        #   "titl", NULL,
-        #   value = ifelse(is.null(projectFromURL()), "", projectFromURL()), placeholder = "Title", width = "100%"
-        # ), class="myelement",style = ";width:35%"),
         div(
           actionButton("saveb", "Save", icon = icon("save")),
           class="myelement",style = ";margin-left:5px;margin-right:5px;width:10%"
@@ -164,6 +163,11 @@ observeEvent(input$deleteProject,{
   delete_from_sql(con,input$userSelect,input$projectSelect)
   
 })
+
+
+# observe save button -----------------------------------------------------
+
+
 observeEvent(
   input$saveb,
   ignoreInit = TRUE, {
@@ -178,27 +182,18 @@ observeEvent(
       values$nodes <- values$graf %>% nodes_as_tibble()
       values$edges <- values$graf %>% edges_as_tibble()
       
-    # browser()
-      # for (c in csvlist) {
-      #   write_csv(values[[c]], path = paste0("www/", inputtitl, "-", c, ".csv"))
-      # }
-      # 
-      project <- ifelse(input$projectSaveAs=="blank",input$projectSelect,input$projectSaveAs)
-      send_to_sql(values,con,input$userSelect,project,"nodes")
-      send_to_sql(values,con,input$userSelect,project,"edges")
-      send_to_sql(values,con,input$userSelect,project,"statements")
-      # send_to_sql(values,con,input$userSelect,project,"sources")
-      send_to_sql(values,con,input$userSelect,project,"settingsGlobal")
-      send_to_sql(values,con,input$userSelect,project,"settingsConditional")
+      project <- ifelse(input$projectSaveAs=="",input$projectSelect,input$projectSaveAs)
       
-      # upload_to_gdrive(gdriveRoot,projectFromURL(),values,input$projectSelect)
+      for(c in csvlist){
+      send_to_sql(values,con,input$userSelect,project,c)
+        
+      }
+
       
-      # file.copy(paste0("www/", inputtitl,".tm"),paste0("www/", inputtitl,".otm"),overwrite = T)
       doNotification("Saved")
-      values$issaved <- T
-      # browser()
+
+            values$issaved <- T
       updateSelectInput(session,"userSelect",selected = input$userSelect) # to cascade changes
-      # updateSelectInput(session,"projectSelect",selected = project)
       updateTextInput(session,"projectSaveAs",value = "")
       
     } else doNotification("You have to give it a name")
@@ -223,7 +218,7 @@ observeEvent(input$saveb, ignoreInit = TRUE, {
         "Saved to this permanent link: ",
         tags$a(
           link,
-          href = link
+          href = paste0("./?permalink=",link)
         )
       )
     }

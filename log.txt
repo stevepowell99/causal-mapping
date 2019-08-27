@@ -1,5 +1,6 @@
 
 render viz
+render viz
 Loading nodes from remote database
 Loading edges from remote database
 Loading statements from remote database
@@ -15,26 +16,8 @@ Loading statements from remote database
 Loading settingsConditional from remote database
 Loading settingsGlobal from remote database
 Loading sources from remote database
-Loaded project from database
-Loaded43 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-started viz
-Produced viz
-started viz
-Produced viz
-started viz
-Produced viz
-started viz
-Produced viz
+Creating new project
+Loaded0 variables from permalink
 Loading nodes from remote database
 Loading edges from remote database
 Loading statements from remote database
@@ -42,28 +25,7 @@ Loading settingsConditional from remote database
 Loading settingsGlobal from remote database
 Loading sources from remote database
 Loaded project from database
-Loaded5 variables from permalink
-starting aggregation
-rick aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced viz
-render viz
-started viz
-Produced viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading sources from remote database
-Loaded project from database
-Loaded5 variables from permalink
+Loaded108 variables from permalink
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -74,47 +36,11 @@ Aggregated
 started viz
 Produced viz
 render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading sources from remote database
-Loaded project from database
-Loaded2 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-NA is not in settings
-NA is not in settings
-Aggregated
 started viz
-NA is not in settings
+Produced viz
+started viz
 Produced viz
 render viz
-Adding Node
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-NA is not in settings
-NA is not in settings
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsGlobal to sql database
-Sending settingsConditional to sql database
-Saved
 Loading nodes from remote database
 Loading edges from remote database
 Loading statements from remote database
@@ -130,22 +56,8 @@ Loading statements from remote database
 Loading settingsConditional from remote database
 Loading settingsGlobal from remote database
 Loading sources from remote database
-Loaded project from database
-Loaded3 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-NA is not in settings
-NA is not in settings
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-Deleted project kill
+Creating new project
+Loaded0 variables from permalink
 Loading nodes from remote database
 Loading edges from remote database
 Loading statements from remote database
@@ -153,7 +65,7 @@ Loading settingsConditional from remote database
 Loading settingsGlobal from remote database
 Loading sources from remote database
 Loaded project from database
-Loaded51 variables from permalink
+Loaded108 variables from permalink
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -164,13 +76,33 @@ Aggregated
 started viz
 Produced viz
 render viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
+started viz
+Produced viz
 starting aggregation
 merge edge aggregation
 min freq aggregation
 join to edges aggregation
 format aggregation
-Missing values for colour fade replaced with means
-Missing values for colour fade replaced with means
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+Produced viz
+render viz
+updating from settingsTableGlobal
+starting aggregation
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
 final aggregation
 NA is not in settings
 Aggregated

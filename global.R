@@ -79,6 +79,20 @@ library(formattable)
 # }
 
 # functions ----------------------------------------------------------------
+
+
+
+cleanfun=function(tex){
+  tex %>% 
+    str_remove("\\]") %>% 
+    str_remove("\\[") %>% 
+    str_remove("\\'") %>% 
+    str_remove('\\"') %>% 
+    gsub("[^[:alnum:]/-\\?[:space:]]","",.) %>% 
+    strip_symbols()
+  
+}
+
 strip_symbols <- function(vec) vec %>%
     str_remove_all("\\n|\\r") %>%
     str_replace_all("\\s+", " ") %>%

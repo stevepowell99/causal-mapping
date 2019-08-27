@@ -16,7 +16,7 @@ observe(if (!is.null(values$grafAgg2)) {
   if (is.null(values$pag)) {
     values$pag <- 1
   }
-  
+  # browser()
   vn1 <-
     visNetwork(
       nodes =
@@ -28,6 +28,7 @@ observe(if (!is.null(values$grafAgg2)) {
         vga %>% activate(edges) %>%
         as_tibble() %>%
         mutate(id = row_number()),
+      
       main =
         findset("diagramtitle",vals),
       submain =
@@ -167,7 +168,7 @@ observe(if (!is.null(values$grafAgg2)) {
       shape = findset("variableshape", v = vals),
       group = T, # findset("variablegroup",global=F),
       
-      physics = findset("diagramphysics", v = vals)
+      physics = T#findset("diagramphysics", v = vals)
     ) %>%
     visEdges(
       smooth = T,
@@ -182,7 +183,8 @@ observe(if (!is.null(values$grafAgg2)) {
         list(middle = list(type = "circle", scaleFactor = .5), from = list(type = "circle", scaleFactor = 0.2)),
       # ,
       # dashes = findset("arrowdashes") %>% as.logical()
-    )
+    ) %>% 
+    visPhysics(barnesHut = list(avoidOverlap = .7))
   # browser()
   values$net <- vn
   
@@ -190,6 +192,7 @@ observe(if (!is.null(values$grafAgg2)) {
 })
 
 observe({
+  # browser()
   output$net <- renderVisNetwork({
     doNotification("render viz")
     # browser()
