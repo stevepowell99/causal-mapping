@@ -55,7 +55,7 @@ observeEvent(input$projectSelect,{
       values$edges$label <- values$edges$label %>% cleanfun
       values$edges$domain <- values$edges$domain %>% cleanfun
       values$statements$text <- values$statements$text %>% cleanfun
-      values$sources$value <- values$sources$value %>% cleanfun
+      values$statements_extra$value <- values$statements_extra$value %>% cleanfun
       values$nodes$label <- values$nodes$label %>% cleanfun
       values$nodes$details <- values$nodes$details %>% cleanfun
     }
@@ -71,7 +71,7 @@ observeEvent(input$projectSelect,{
           defaultEdges[0, ]
         )
         values$statements <- default.statements
-        values$sources <- default.sources
+        values$statements_extra <- default.statements_extra
         values$settingsGlobal <- defaultSettingsGlobal
         values$settingsConditional <- defaultSettingsConditional
         values$net <- NULL

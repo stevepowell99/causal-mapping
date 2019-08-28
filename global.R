@@ -940,7 +940,7 @@ all_attributes <- c(paste0("node_", node_names), paste0("edge_", edge_names))
 writeLines("", "log.txt") # just to open up a fresh file
 
 
-csvlist <- xc("nodes edges statements settingsConditional settingsGlobal sources statements_extra")
+csvlist <- xc("nodes edges statements settingsConditional settingsGlobal statements_extra")
 
 
 # generate some nice colours
@@ -967,21 +967,21 @@ names(allcols) <- c(colnams, paste0(colnams, " hazy"))
 
 shapelist <- c("box", "circle", "square", "triangle", "dot", "star", "ellipse", "database", "text", "diamond")
 # 
-default.sources <- tibble(
-  "source_id" =
-    rep("1", 1),
-  "key" =
-    rep("key", 1),
-  "value" =
-    rep("1", 1),
-)
+# default.sources <- tibble(
+#   "source_id" =
+#     rep("1", 1),
+#   "key" =
+#     rep("key", 1),
+#   "value" =
+#     rep("1", 1),
+# )
 default.statements_extra <- tibble(
-  "statement_code" =
+  "statement_id" =
     rep("1", 1),
   "key" =
-    rep("key", 1),
+    rep("key", "1"),
   "value" =
-    rep("1", 1),
+    rep("1", "1"),
 )
 
 default.statements <- data.frame(

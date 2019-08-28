@@ -86,14 +86,14 @@ observe({
     # browser()
     ved <- ved %>%
       left_join(values$statements, by = "statement_id") 
+    # browser()
     
-    
-    sources <- 
-      values$sources %>%
+    statements_extra <-
+      values$statements_extra %>%
       spread(key,value)
-    
-    ved <- ved %>% 
-      left_join(sources,by = "source_id")
+
+    ved <- ved %>%
+      left_join(statements_extra,by = "statement_id")
     
     
     
