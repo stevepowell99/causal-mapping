@@ -205,43 +205,20 @@ ui <- tagList(
                                
                                tabPanel("",value="Display",    # conditional formatting 
                                         icon = icon("palette"),
-                                 h4("Filters"),
-                                 uiOutput("filters"),
-                                 h4("Formatting"),
-                                   uiOutput("upConditionalBut"),
+                               
+                                 bs_accordion("filterx") %>% 
+                                   bs_append("Filters",
+                                 uiOutput("filters")) %>% 
+                                       bs_append("Clusters",
+                                 uiOutput("filterscluster")
+                                       )
+                                     %>% bs_append("Formatting",
+                                   tagList(uiOutput("upConditionalBut"),
                                  uiOutput("condFormattingOutput")
-                               ),
+                               ))
+                                 ),
                                
-                               # tabPanel("",value="Settings",    #  settings panel 
-                               #          icon = icon("cog"),
-                               #          
-                               #          uiOutput("inputs"),                         # probably will not use these
-                               #          bs_accordion(id = "otherSettings") %>% 
-                               #            bs_append(
-                               #              "Advanced",tagList(
-                               #              # actionButton("settingsTableGlobalUp","Update"),
-                               #              # rHandsontableOutput("settingsTableGlobal"),                         # global settings
-                               #              # hr()
-                               #              )
-                               #            ) %>% 
-                               #          bs_append(
-                               #            "Easy",
-                               #          ) %>% 
-                               #     bs_append(                    #this is just a utility from visnetwork which I will drop at some point
-                               #     "Advanced options",
-                               #     p("Development only"),
-                               #     icon("exclamation-triangle"),
-                               #     p(id = "advancedAnchor")
-                               #   )
-                               #   
-                               #   
-                               #   
-                               # ),
                                
-                               # tabPanel("", icon=icon("warehouse"),div(style = ""),                         # library of existing projects stored locally as csv files. clicking loads up the project 
-                               #          style = "",
-                               #          uiOutput("gallery")
-                               # ),
                                tabPanel("", icon=icon("download"),div(style = ""),
                                         style = "",
                                         uiOutput("downloads")
@@ -289,10 +266,21 @@ ui <- tagList(
                                 tabPanel("Legend",
                                 plotOutput("colourLegend")
                                   ),
+                                tabPanel("Live Reports",
+                               
+                                  formattableOutput("reportTable", width = "100%", height = "0")
+                             ),
                                 tabPanel("Reports",
                                
-                             formattableOutput("reportTable", width = "100%", height = "0"),
                              formattableOutput("reportTable2", width = "100%", height = "0")
+                                  ,
+                             formattableOutput("reportTable3", width = "100%", height = "0")
+                                  ,
+                             formattableOutput("reportTable4", width = "100%", height = "0")
+                                  ,
+                             formattableOutput("reportTable5", width = "100%", height = "0")
+                                  ,
+                             plotOutput("reportPlot1", width = "100%")
                              )
                              )
                            

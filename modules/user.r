@@ -35,7 +35,6 @@ observeEvent(input$projectSelect,{
     updateSelectInput(session,"projectSelect",selected=projectFromURL())
     }
   
-  if (T) {
     for (fn in csvlist) {
     doNotification(glue("Loading {fn} from remote database"))
       # fnn <- paste0(filename, "-", fn, ".csv")
@@ -71,21 +70,17 @@ observeEvent(input$projectSelect,{
           defaultEdges[0, ]
         )
         values$statements <- default.statements
-        values$statements_extra <- default.statements_extra
+        values$statements_extra <- default.statements_extra 
         values$settingsGlobal <- defaultSettingsGlobal
         values$settingsConditional <- defaultSettingsConditional
         values$net <- NULL
         values$grafAgg2 <- NULL
       }
+      
     }
-    
-  } 
+  values$statements_extra <- values$statements_extra %>%
+    spread(key,value) 
   
-  
-  
-  
-  
-  # browser()
   values$graf <- tbl_graph(values$nodes, values$edges)
   
   

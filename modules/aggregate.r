@@ -30,6 +30,11 @@ observe({
     
     doNotification("starting aggregation")
     legend <- ""
+   
+    
+    values$graf <- values$graf %>% 
+      mutate(original_is_driver=node_is_source(),original_is_outcome=node_is_sink())
+    
     
     # post-process original version
     
@@ -43,7 +48,9 @@ observe({
       graph_values <- infer(graph_values)
       legend <- paste0(legend, "</br>Causal inference carried out")
     }
+
     
+        
     vno <- graph_values %>% nodes_as_tibble()
     ved <- graph_values %>% edges_as_tibble()
     
@@ -83,17 +90,14 @@ observe({
     # ved join statements--------------------------------
     # browser()
     # if (is.null(values$statements$source_id)) values$statements <- values$statements %>% mutate(source_id = 1)
-    # browser()
     ved <- ved %>%
       left_join(values$statements, by = "statement_id") 
+
+    
     # browser()
     
-    statements_extra <-
-      values$statements_extra %>%
-      spread(key,value)
-
     ved <- ved %>%
-      left_join(statements_extra,by = "statement_id")
+      left_join(values$statements_extra,by = "statement_id")
     
     
     
@@ -128,13 +132,9 @@ observe({
     
     doNotification("min freq aggregation")
     
-    # edge minimum freq ----
     
     # browser()
     if (this_tab != "Code") {
-      ved <- ved %>%
-        filter(frequency > findset("arrowminimum.frequency", v = vals))
-      
       
       
       # join edges with nodes ---------------------------------------------------
@@ -150,17 +150,25 @@ observe({
         
         # doNotification("merging nodes and arrows")
       }
+
       
-      # minimum freq for vars
+            
+      # minimum freq for vars and edges
       # browser()
+      
       mf <- findset("variableminimum.frequency", v = vals) %>% as.numeric()
       if (this_tab != "Code" && mf > 0) {
-        tmp <- tbl_graph(vno, ved) %>%
+        values$grafMerged <- tbl_graph(vno, ved) 
+        
+        tmp <- values$grafMerged %>%
           N_() %>%
           filter(frequency > mf)
         
         vno <- tmp %>% nodes_as_tibble()
-        ved <- tmp %>% edges_as_tibble()
+        ved <- tmp %>% edges_as_tibble()  %>%
+          filter(frequency > findset("arrowminimum.frequency", v = vals))
+        
+        
       }
     }
     
@@ -265,6 +273,13 @@ observe({
     # browser()
     
     tmp <- tbl_graph(vno, ved)
+    
+    
+
+# tidygraph calculations --------------------------------------------------
+
+    tmp <- tmp %>% 
+      mutate(is_driver=node_is_source(),is_outcome=node_is_sink())
     
     # autogroup
     

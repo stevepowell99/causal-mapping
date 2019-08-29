@@ -44,14 +44,14 @@ output$condFormattingOutput <- renderUI({
       },
       
       div(
-        selectInput(paste0("conditional_selector_", attribute_clean), label = NULL, choices = c("always", "conditional on ..."), selected = vals2 %>% pull(selector), width = "120px"),
+        selectInput(paste0("conditional_selector_", attribute_clean), label = NULL, choices = c("always", "conditional on ..."), selected = vals2 %>% pull(selector), width = "200px"),
         style = "display:inline-block;vertical-align:top"
       ),
       conditionalPanel(
         paste0("input.conditional_selector_", attribute_clean, '=="conditional on ..."'),
         div(
           div(
-            selectInput(paste0("conditional_var_", thisAttribute), label = NULL, choices = gr, selected = vals2 %>% pull(var), width = "120px")
+            selectInput(paste0("conditional_var_", thisAttribute), label = NULL, choices = gr, selected = vals2 %>% pull(var), width = "200px")
             ,
             style = "display:inline-block;vertical-align:top"
           ),
@@ -107,25 +107,30 @@ observeEvent(input$upConditional, ignoreInit = T, {
 # filters, don't work at the moment ---------------------------------------
 
 
-output$filters <- renderUI({
+output$filterscluster <- renderUI({
   clusters <- values$graf %>%
     nodes_as_tibble() %>%
     pull(cluster) %>%
     unique()
-  
+  # browser()
   tagList(
-    lapply(colnames(values$statements %>% select(-text)), function(y) {
-      x <- values$statements[[y]]
-      u <- unique(x) %>% na.omit()
-      if (length(u) > 1 & length(u) < 12) {
-        div(checkboxGroupButtons(paste0("filters", y), y, choices = sort(u), selected = u), style = "display:inline-block;vertical-align:top")
-      }
-    }),
     if (!is.null(clusters) && length(clusters) > 1) {
       tagList(
         div(checkboxGroupButtons("filterscluster", "cluster", choices = sort(values$graf %>% nodes_as_tibble() %>% pull(cluster) %>% unique())), style = "display:inline-block;vertical-align:top")
       )
     }
+  )
+})
+
+output$filters <- renderUI({
+  tagList(
+    lapply(c(colnames(values$statements_extra)), function(y) {
+      x <- values$statements_extra[[y]]
+      u <- unique(x) %>% na.omit()
+      if (length(u) > 1 & length(u) < 12 & max(nchar(u)) < 20) {
+        div(checkboxGroupButtons(paste0("filters", y), y, choices = sort(u), selected = u), style = "display:inline-block;vertical-align:top")
+      }
+    })
   )
 })
 

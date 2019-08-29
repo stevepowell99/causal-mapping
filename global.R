@@ -517,7 +517,7 @@ merge_edges <- function(ved,this_tab,vals){
   }
   
   doNotification("merge edge aggregation")
-  
+  # browser()
   ved <- ved %>%
     mutate_at(vars(matches(paste_colnames(colnames_for_concat))),funs(catfun)) %>% 
     mutate_at(vars(matches(paste_colnames(colnames_for_sum))),funs(sumfun)) %>% 
@@ -587,7 +587,6 @@ join_nodes_and_edges <- function(vno, ved) {
   # add from and to scores for nodes
   
 for(col in (intersect(colnames(ved),(colnames_for_sum)) %>% setdiff("label"))){
-# browser()
   vno[,col] <- rowSums(vno[,c(paste0("from.",col),paste0("to.",col))],na.rm=T)
 }  
   
@@ -597,7 +596,7 @@ for(col in (intersect(colnames(ved),(colnames_for_concat)) %>% setdiff("label"))
   vno <- vno %>% 
     unite(!!col,paste0("from.",col),paste0("to.",col))
 }  
-  
+
   
 
 for(col in (intersect(colnames(ved),(colnames_for_mean)) %>% setdiff("label"))){
@@ -638,6 +637,7 @@ set_text_contrast_color <- function(color) {
 
 
 format_nodes_and_edges <- function(df, inp, type, vsc) {
+  # browser()
   if (type == "node") namelist <- node_names else namelist <- edge_names
   for (attribute_short in namelist) {
     attribute <- paste0(type, "_", attribute_short)
@@ -1125,10 +1125,9 @@ defaultSettingsGlobal <- read_csv("defaultSettingsGlobal.csv")
 
 
 
-colnames_for_concat=xc("quote text label details statement_id")
+colnames_for_concat=xc("quote text label details statement_id domain")
 colnames_for_sum=xc("frequency")
-colnames_for_mean=xc("sex Positive older female ava avp attributionExplicit attributionValence")
-
+colnames_for_mean=c("sex", "Positive", "older", "female", "ava", "avp", "attributionExplicit", "attributionValence","What is the education of the main respondent?")
 userlist <- xc("Steve free BSDR")
 
 # query_modal <- modalDialog(

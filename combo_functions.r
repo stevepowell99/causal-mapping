@@ -28,7 +28,7 @@ sumfun <- function(x) {
   # x
   # x[1]
   # 
-  sum(x,na.rm=T) 
+  sum(as.numeric(x),na.rm=T) 
 }
 
 meanfun <- function(x) {
@@ -36,7 +36,7 @@ meanfun <- function(x) {
   # x <- mean(as.numeric(x), na.rm = T) %>% round(2)
   # x
   # x[1]
-  mean(x,na.rm=T) 
+  mean(as.numeric(x),na.rm=T) 
 }
 
 # catfun=function(x)paste0(x,collapse=",")
