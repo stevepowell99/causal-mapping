@@ -482,6 +482,117 @@ infer <- function(gr) { # sets levels of downstream variables
 }
 
 
+render_network <- function(vga,vals){
+  
+  visNetwork(
+    nodes =
+      vga %>%
+      nodes_as_tibble() %>% 
+      mutate(id = row_number()),
+    edges =
+      vga %>% edges_as_tibble() %>%
+      mutate(id = row_number()),
+    
+    main =
+      findset("diagramtitle",vals),
+    submain =
+      findset("diagramsubtitle",vals),
+    background = findset("diagrambackground", v = vals)
+  )  %>%
+    visInteraction(
+      dragNodes = T,
+      dragView = T,
+      zoomView = T,
+      navigationButtons = F,
+      multiselect = T
+    ) %>%
+    visInteraction(
+      tooltipStyle = "position: fixed;visibility:hidden;padding: 5px;
+                font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;
+                -moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;
+                 border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+                 max-width:500px;word-break: break-all",
+      hoverConnectedEdges = F,
+      keyboard = F, # would be nice for navigation but interferes with text editing
+      selectConnectedEdges = F
+    ) %>%
+    visOptions(
+      manipulation = F,
+      collapse = F,
+      highlightNearest = list(
+        enabled = T,
+        degree = if (findset("diagramdownarrows",vals) %>% as.logical()) list(from = 0, to = 19) else list(from = 19, to = 0),
+        # degree = ifelse(input$widgetDownArrows,list(from=0,to=19),list(from=19,to=0)),
+        hover = T,
+        labelOnly = F,
+        algorithm = "hierarchical"
+      ),
+      selectedBy = if (!("cluster" %in% colnames(vga %>% nodes_as_tibble()))) "" else ifelse((vga %>% nodes_as_tibble() %>% pull(cluster) %>% replace_na("") %>% `==`("") %>% all()), "", "cluster"),
+      nodesIdSelection = F
+    ) %>%
+    visEvents(select = "function(data) {
+                Shiny.onInputChange('net_selected', data.nodes);
+                Shiny.onInputChange('net_selectedEdges', data.edges);
+                ;}"
+    ) %>%
+    visIgraphLayout(layout = "layout_with_sugiyama", randomSeed = 123, type = "full") %>% 
+    visNodes(
+      shadow = list(enabled = T, size = 10),
+      # widthConstraint = if ("" == fvw) NULL else as.numeric(fvw), # ,300-(levels*10),#,(300*levels)-9,
+      hidden = F, # findset("variablehidden",global=F) %>% as.logical(),
+      scaling = list(label = list(enabled = F)),
+      shape = findset("variableshape", v = vals),
+      group = T, # findset("variablegroup",global=F),
+      
+      physics = findset("diagramphysics", v = vals)
+    ) %>%
+    visEdges(
+      smooth = T,
+      arrowStrikethrough = T,
+      shadow =
+        list(enabled = F, size = 5),
+      hoverWidth = 8, #' function (width) {return width*50;}',
+      selectionWidth = 8, # sqrt(nrow(vn$x$nodes)),
+      physics = F,
+      # color=list(highlight="#000000"),
+      arrows =
+        list(middle = list(type = "circle", scaleFactor = .5), from = list(type = "circle", scaleFactor = 0.2)),
+      # ,
+      # dashes = findset("arrowdashes") %>% as.logical()
+    )
+}
+
+
+dag_layout <- function(nods){
+  
+  
+  tmp <- nods$x
+  nods$x <- nods$y
+  nods$y <- tmp
+  # nods$color <- 'rgba(120,132,114,.7)'
+  vnxn <- nods
+  levels <- (length(unique(vnxn$x)))
+  maxLen <- vnxn %>%
+    group_by(x) %>%
+    summarise(len = n()) %>%
+    max()
+  
+  vnxn <- vnxn %>%
+    group_by(x) %>%
+    mutate(ran = min_rank(y), len = n(), y = rescale(ran, to = c(-1, 1)) * sqrt(len / maxLen) + rnorm(1, 0, .1 / len)) %>%
+    ungroup() # had to put in a tiny bit of rnorm to stop some artefacts in visnetwork when nodes have same y
+  # mutate(len=n(),ran=min_rank(y)-.5,y=ran*levels/(len*3))
+  vnxn <- vnxn %>%
+    mutate(x = 1 - scale(x) * 1, y = scale(y)) # 1 is the proportion. not sure why i added this line
+  
+  vnxn$x <- 1-vnxn$x
+  vnxn
+  
+}
+
+
+
+
 # helpers for tidygraph
 N_ <- function(gr) gr %>% activate(nodes)
 E_ <- function(gr) gr %>% activate(edges)

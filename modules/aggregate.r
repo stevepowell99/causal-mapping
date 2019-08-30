@@ -22,9 +22,7 @@ observe({
   # prevent this code running every time we change tab
   this_tab <- isolate(input$sides)
   
-  edges_tbl <- edges_as_tibble(req(values$graf))
-  
-  if (nrow(edges_tbl) > 0) {
+  if (nrow(nodes_as_tibble(req(values$graf))) > 0) {
     
     # prepare statements, split columns ----
     
@@ -32,27 +30,75 @@ observe({
     legend <- ""
    
     
-    values$graf <- values$graf %>% 
+    tmp <- values$graf 
+    
+    tmp <- tmp %>% 
       mutate(original_is_driver=node_is_source(),original_is_outcome=node_is_sink())
+
+    tmp <- prepare_vg(tmp)
     
     
-    # post-process original version
+    # prepare ved
+    
+    vno <- tmp %>% nodes_as_tibble()
+    ved <- tmp %>% edges_as_tibble()
+    
+    ved <- prepare_ved(ved)
+    # vno <- prepare_vno(vno)
+    
+    
+    
+    ved <- ved %>%
+      left_join(values$statements, by = "statement_id") 
+    
     
     # browser()
-    graph_values <- prepare_vg(values$graf)
     
+    ved <- ved %>%
+      left_join(values$statements_extra,by = "statement_id")
+    
+    
+    
+    
+    ved <- ved %>%
+      # mutate(statement = as.character(statement)) %>%
+      mutate(wstrength = strength * trust)
+    # browser()
+    
+    vno$font.color <- "#eeeeee"
+    vno$color.background <- "#226622"
+    vno$font.size <- findset("variablecoding.font.size",vals)
+    
+    
+    ved$width <- 3
     
     # infer ----
+  
+    
+    values$codingGraf <- tbl_graph(vno,ved)
+    
+    }
+  })
+  
+observe({
+  
+  vals <- values$settingsGlobal
+  # prevent this code running every time we change tab
+  this_tab <- isolate(input$sides)
+  
+  
+    if (nrow(nodes_as_tibble(req(values$codingGraf))) > 0 & this_tab!="Code") {
+    # browser()
+  
+      tmp <- values$codingGraf
+      
+      vno <- tmp %>% nodes_as_tibble()
+      ved <- tmp %>% edges_as_tibble()  
     
     if (findset("variableinfer", v = vals) %>% as.logical()) {
-      graph_values <- infer(graph_values)
+      tmp <- infer(tmp)
       legend <- paste0(legend, "</br>Causal inference carried out")
     }
-
-    
-        
-    vno <- graph_values %>% nodes_as_tibble()
-    ved <- graph_values %>% edges_as_tibble()
     
     
     
@@ -67,12 +113,6 @@ observe({
       ved <- x[[2]]
     }
     
-    
-    
-    # prepare ved
-    
-    ved <- prepare_ved(ved)
-    # vno <- prepare_vno(vno)
     
     # ved rick inv_multi --------------------------------
     
@@ -90,22 +130,6 @@ observe({
     # ved join statements--------------------------------
     # browser()
     # if (is.null(values$statements$source_id)) values$statements <- values$statements %>% mutate(source_id = 1)
-    ved <- ved %>%
-      left_join(values$statements, by = "statement_id") 
-
-    
-    # browser()
-    
-    ved <- ved %>%
-      left_join(values$statements_extra,by = "statement_id")
-    
-    
-    
-    
-    ved <- ved %>%
-      # mutate(statement = as.character(statement)) %>%
-      mutate(wstrength = strength * trust)
-    # browser()
     
     
     
@@ -180,7 +204,7 @@ observe({
     tmp <- tbl_graph(vno, ved)
     # browser()
     
-    # layout ----------------
+    # layout just for notForwards ----------------
     
     
     layout <- create_layout(tmp, layout = "sugiyama") %>%
@@ -199,22 +223,17 @@ observe({
     ved <- tmp %>% edges_as_tibble()
     
     # browser()
-    if (this_tab != "Code") { 
+    # if (this_tab != "Code") { 
       vno <- vno %>%
         format_nodes_and_edges(input, type = "node", values$settingsConditional)
       
       
       ved <- ved %>%
         format_nodes_and_edges(input, type = "edge", values$settingsConditional)
-    } else {
+    # } else {
       # browser()
-      vno$font.color <- "#eeeeee"
-      vno$color.background <- "#226622"
-      vno$font.size <- findset("variablecoding.font.size",vals)
       
-      
-      ved$width <- 3
-    }
+    # }
     ### make sure text is visibile when highlighted
     vno <- vno %>%
       mutate(color.highlight.background = set_text_contrast_color(font.color)) %>%
@@ -244,9 +263,6 @@ observe({
       mutate(dashes = str_remove_all(definition.type,",") != "") %>%
       mutate(arrows.to = definition.type != "Defined, undirected")
     
-    if (!is.null(legend)) {
-      if (legend != "") values$legend <- glue("</br><b style='font-color:red;'>Legend:</b>{legend}</br></br></br></br>")
-    }
     
     # labels ----
     vno <- vno %>%
