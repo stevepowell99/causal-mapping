@@ -189,20 +189,21 @@ observe(if (!is.null(values$grafAgg2)) {
   
   doNotification("Produced viz")
 })
-
+  
 observe({
-  # browser()
-  output$net <- renderVisNetwork({
-    doNotification("render viz")
-    # browser()
-    # doNotification("rendered viz")
+  output$netCoding <- renderVisNetwork({
+    doNotification("render coding viz")
     values$net
   })
-  # if (T) {
-  #   visNetworkProxy("net") %>%
-  #     visUpdateNodes(nodes = tibble(id = 1:20, color = "red"))
-  # }
+  })
+
+observe({
+  output$net <- renderVisNetwork({
+    doNotification("render viz")
+    values$net
+  })
 })
+  
 
 
 

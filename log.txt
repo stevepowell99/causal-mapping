@@ -1,5 +1,6 @@
 
 render viz
+render coding viz
 Loading nodes from remote database
 Loading edges from remote database
 Loading statements from remote database
@@ -9,16 +10,7 @@ Loading statements_extra from remote database
 Creating new project
 Loaded0 variables from permalink
 render viz
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-render viz
+render coding viz
 Loading nodes from remote database
 Loading edges from remote database
 Loading statements from remote database
@@ -35,6 +27,70 @@ Loading settingsGlobal from remote database
 Loading statements_extra from remote database
 Loaded project from database
 Loaded108 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+starting aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+render coding viz
+render viz
+render coding viz
+Loading nodes from remote database
+Loading edges from remote database
+Loading statements from remote database
+Loading settingsConditional from remote database
+Loading settingsGlobal from remote database
+Loading statements_extra from remote database
+Creating new project
+Loaded0 variables from permalink
+render coding viz
+Loading nodes from remote database
+Loading edges from remote database
+Loading statements from remote database
+Loading settingsConditional from remote database
+Loading settingsGlobal from remote database
+Loading statements_extra from remote database
+Creating new project
+Loaded0 variables from permalink
+Loading nodes from remote database
+Loading edges from remote database
+Loading statements from remote database
+Loading settingsConditional from remote database
+Loading settingsGlobal from remote database
+Loading statements_extra from remote database
+Loaded project from database
+Loaded108 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+starting aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render coding viz
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -46,33 +102,8 @@ Aggregated
 started viz
 NA is not in settings
 Produced viz
-render viz
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Loaded project from database
-Loaded108 variables from permalink
+render coding viz
+Creating edges table
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -83,7 +114,7 @@ Aggregated
 started viz
 NA is not in settings
 Produced viz
-render viz
+render coding viz
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -95,8 +126,52 @@ Aggregated
 started viz
 NA is not in settings
 Produced viz
+render coding viz
+render coding viz
 render viz
-updating from settingsTableGlobal
+Loading nodes from remote database
+Loading edges from remote database
+Loading statements from remote database
+Loading settingsConditional from remote database
+Loading settingsGlobal from remote database
+Loading statements_extra from remote database
+Creating new project
+Loaded0 variables from permalink
+render coding viz
+Loading nodes from remote database
+Loading edges from remote database
+Loading statements from remote database
+Loading settingsConditional from remote database
+Loading settingsGlobal from remote database
+Loading statements_extra from remote database
+Creating new project
+Loaded0 variables from permalink
+Loading nodes from remote database
+Loading edges from remote database
+Loading statements from remote database
+Loading settingsConditional from remote database
+Loading settingsGlobal from remote database
+Loading statements_extra from remote database
+Loaded project from database
+Loaded108 variables from permalink
+starting aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+starting aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render coding viz
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -108,40 +183,10 @@ Aggregated
 started viz
 NA is not in settings
 Produced viz
+render coding viz
 render viz
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Loaded project from database
-Loaded108 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
+Creating edges table
+Creating nodes table
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -153,226 +198,7 @@ started viz
 NA is not in settings
 Produced viz
 render viz
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Loaded project from database
-Loaded108 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Loaded project from database
-Loaded108 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Loaded project from database
-Loaded108 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Loaded project from database
-Loaded108 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Loaded project from database
-Loaded108 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
+render coding viz
 starting aggregation
 merge edge aggregation
 min freq aggregation
@@ -384,7 +210,21 @@ Aggregated
 started viz
 NA is not in settings
 Produced viz
+render coding viz
 render viz
+starting aggregation
+merge edge aggregation
+min freq aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+render coding viz
+render coding viz
 render viz
 Loading nodes from remote database
 Loading edges from remote database
@@ -394,7 +234,7 @@ Loading settingsGlobal from remote database
 Loading statements_extra from remote database
 Creating new project
 Loaded0 variables from permalink
-render viz
+render coding viz
 Loading nodes from remote database
 Loading edges from remote database
 Loading statements from remote database
@@ -428,19 +268,8 @@ Aggregated
 started viz
 NA is not in settings
 Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
+render coding viz
+render coding viz
 render viz
 Loading nodes from remote database
 Loading edges from remote database
@@ -450,7 +279,7 @@ Loading settingsGlobal from remote database
 Loading statements_extra from remote database
 Creating new project
 Loaded0 variables from permalink
-render viz
+render coding viz
 Loading nodes from remote database
 Loading edges from remote database
 Loading statements from remote database
@@ -479,65 +308,3 @@ merge edge aggregation
 min freq aggregation
 format aggregation
 final aggregation
-NA is not in settings
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Loaded project from database
-Loaded108 variables from permalink
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-starting aggregation
-merge edge aggregation
-min freq aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz
-starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-NA is not in settings
-Produced viz
-render viz

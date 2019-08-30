@@ -241,7 +241,13 @@ ui <- tagList(
                                               
                                               
                                               
-                             withSpinner((visNetworkOutput("net", height = "85vh", width="1250px")),type = 5)                         # the main network viz. 
+                             conditionalPanel("input.sides=='Code'",withSpinner(
+                               (visNetworkOutput("netCoding", height = "85vh", width="1250px"))
+                               ,type = 5))                         # the main network viz. 
+                               ,
+                             conditionalPanel("input.sides=='Display'",withSpinner(
+                               (visNetworkOutput("net", height = "85vh", width="1250px"))
+                               ,type = 5))                         # the main network viz. 
                                               
                                  
                              )
