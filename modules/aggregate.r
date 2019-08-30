@@ -158,7 +158,8 @@ observe({
     
     
     # browser()
-    if (this_tab != "Code") {
+    if (input$sides != "Code") {
+    # if (this_tab != "Code") {
       
       
       # join edges with nodes ---------------------------------------------------

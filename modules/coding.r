@@ -173,7 +173,7 @@ observeEvent(input$overview_col, {
 output$displayStatementPanel <- renderUI({
   # browser()
   
-  quote <- values$graf %>%
+  quote <- values$codingGraf %>%
     edges_as_tibble() %>%
     filter(statement_id == values$pag) %>%
     pull(quote) %>%
@@ -212,7 +212,7 @@ observeEvent(input$firstuncoded, {
     as.numeric() %>%
     sort()
   
-  elist <- edges_as_tibble(values$graf)$statement_id %>%
+  elist <- edges_as_tibble(values$codingGraf)$statement_id %>%
     na.omit() %>%
     as.numeric()
   
@@ -271,7 +271,7 @@ observeEvent(input$recodeButton, {
   vpag <- values$pag
   iot <- input$onlyThisStatement
   
-  ved <- values$graf %>%
+  ved <- values$codingGraf %>%
     edges_as_tibble()
   
   
@@ -280,11 +280,11 @@ observeEvent(input$recodeButton, {
     mutate(from = ifelse(thisStatement & from %in% vfs, ins, from)) %>%
     mutate(to = ifelse(thisStatement & to %in% vfs, ins, to))
   
-  values$graf <-
-    tbl_graph(values$graf %>% nodes_as_tibble(), ved) # kinda stupid not to use tidygraph functions
+  values$codingGraf <-
+    tbl_graph(values$codingGraf %>% nodes_as_tibble(), ved) # kinda stupid not to use tidygraph functions
   
   
-  delay(1000, refresh_and_filter_net(values$graf, vpag, iot))
+  delay(1000, refresh_and_filter_net(values$codingGraf, vpag, iot))
   doNotification("Recoded variable(s)", 9)
   valuesCoding$nodesSelected <- NULL
   valuesCoding$edgesSelected <- NULL
@@ -295,10 +295,10 @@ observeEvent(input$recodeButton, {
 # Add edges widget----
 
 output$add_edges_widget <- renderUI({
-  # varlist=values$graf %>% nodes_as_tibble() %>% pull(label) %>% unique() %>% as.character()
+  # varlist=values$codingGraf %>% nodes_as_tibble() %>% pull(label) %>% unique() %>% as.character()
   # varlist <- na.omit(varlist)
   
-  df <- values$graf %>%
+  df <- values$codingGraf %>%
     edges_as_tibble() %>%
     mutate(id = row_number())
   
@@ -360,7 +360,7 @@ output$add_edges_widget <- renderUI({
 
 
 observeEvent(input$savePackage, {
-  vg <- values$graf %>%
+  vg <- values$codingGraf %>%
     activate(edges)
   
   ise <- valuesCoding$edgesSelected
@@ -389,7 +389,7 @@ observeEvent(input$savePackage, {
       mutate(label = if_else(row_number() %in% ise, input$arrLabel, label))
   }
   
-  values$graf <- vg
+  values$codingGraf <- vg
   
   vpag <- values$pag
   iot <- input$onlyThisStatement
@@ -417,7 +417,7 @@ output$combo <- renderUI(if (T) {
 
 
 output$selectBoxButtons <- renderUI({
-  varlist <- values$graf %>%
+  varlist <- values$codingGraf %>%
     nodes_as_tibble() %>%
     pull(label) %>%
     unique() %>%
@@ -457,14 +457,14 @@ observeEvent(c(input$addFrom), ignoreInit = TRUE, {
     
     
     if (!is.null(isb)) {
-      vg <- values$graf
+      vg <- values$codingGraf
       inpfrom <- vg %>%
         mutate(id = row_number()) %>%
         filter(label == isb) %>%
         pull(id)
       
       if (length(inpfrom) == 0) {
-        values$graf <- vg %>%
+        values$codingGraf <- vg %>%
           bind_nodes(tibble(label = isb, cluster = ""))
         doNotification("Adding Node", 2)
         inpfrom <- vg %>%
@@ -472,7 +472,7 @@ observeEvent(c(input$addFrom), ignoreInit = TRUE, {
           nrow() %>%
           `+`(1)
         
-        tmp <- req(values$graf) # has to be agg2 because of statements, but shouldn't be because some missed out
+        tmp <- req(values$codingGraf) # has to be agg2 because of statements, but shouldn't be because some missed out
         vpag <- values$pag
         iot <- input$onlyThisStatement
         delay(1000, refresh_and_filter_net(tmp, vpag, iot))
@@ -488,7 +488,7 @@ observeEvent(c(input$addFrom), ignoreInit = TRUE, {
   }
   
   
-  visNetworkProxy("net") %>%
+  visNetworkProxy("netCoding") %>%
     visSetSelection(unselectAll = TRUE)
   
   updateSelectizeInput(session = session, inputId = "selectBoxValue", selected = "")
@@ -518,7 +518,7 @@ observeEvent(input$addTo, {
   # browser()
   # valuesCoding$readyForEndArrow <- F
   
-  # hiddenStore <- values$net$x$nodes$hidden
+  # hiddenStore <- values$netCoding$x$nodes$hidden
   
   if (!is.null(input$quote)) {
     qq <- input$quote %>% as.character()
@@ -538,7 +538,7 @@ observeEvent(input$addTo, {
   if (isb == "") isb <- NULL
   
   if (!is.null(isb)) {
-    vg <- values$graf
+    vg <- values$codingGraf
     
     inpto <- vg %>%
       mutate(id = row_number()) %>%
@@ -546,7 +546,7 @@ observeEvent(input$addTo, {
       pull(id)
     
     if (length(inpto) == 0) {
-      values$graf <- vg %>%
+      values$codingGraf <- vg %>%
         bind_nodes(tibble(label = isb, cluster = ""))
       doNotification("Adding Node", 2)
       inpto <- vg %>%
@@ -573,12 +573,12 @@ observeEvent(input$addTo, {
     # full.quote = ifelse(input$crowd, "", values$statements$text[values$statements$statement == values$pag])
   )
   
-  values$graf <- values$graf %>%
+  values$codingGraf <- values$codingGraf %>%
     bind_edges(newEdges)
   
   if (!is.null(input$combo)) {
     if (input$combo != "") {
-      values$graf <- values$graf %>%
+      values$codingGraf <- values$codingGraf %>%
         N_() %>%
         mutate(fun = ifelse(inpto == label, input$combo, fun))
     }
@@ -587,7 +587,7 @@ observeEvent(input$addTo, {
   valuesCoding$fromStack <- NULL
   updateTextInput(session = session, "selectBoxValue", value = "")
   
-  tmp <- req(values$graf) # has to be agg2 because of statements, but shouldn't be because some missed out
+  tmp <- req(values$codingGraf) # has to be agg2 because of statements, but shouldn't be because some missed out
   vpag <- values$pag
   iot <- input$onlyThisStatement
   delay(4000, refresh_and_filter_net(tmp, vpag, iot)) # TODO the 4 seconds is just a lucky guess
@@ -602,7 +602,7 @@ observeEvent(c(input$selectBoxValue), {
     
     if (input$selectBoxValue != "" && nchar(input$selectBoxValue) > 2) {
       
-      vag <- values$graf %>%
+      vag <- values$codingGraf %>%
         nodes_as_tibble() %>%
         pull(label)
       
@@ -611,17 +611,17 @@ observeEvent(c(input$selectBoxValue), {
       # wipe <- setdiff(valuesCoding$foundIDs, ids)
       
       if (length(ids) != 0 && length(ids) < length(vag)) {
-        visNetworkProxy("net") %>%
+        visNetworkProxy("netCoding") %>%
           visUpdateNodes(tibble(id = ids, hidden = F)) %>%
           visSelectNodes(id = ids)
       }
       
       # if (length(wipe) > 0) {
-      #   # visNetworkProxy("net") %>%
+      #   # visNetworkProxy("netCoding") %>%
       #   #   visUpdateNodes(tibble(id=wipe,hidden=T))
       # }
       
-      visNetworkProxy("net") %>%
+      visNetworkProxy("netCoding") %>%
         visFit(animation = list(duration = 500))
       
       valuesCoding$foundIDs <- c(valuesCoding$foundIDs, ids)
@@ -634,7 +634,7 @@ observeEvent(c(input$resetSelection, req(input$pager), input$onlyThisStatement),
   
   
   
-  tmp <- req(values$graf) # has to be agg2 because of statements, but shouldn't be because some missed out
+  tmp <- req(values$codingGraf) # has to be agg2 because of statements, but shouldn't be because some missed out
   vpag <- values$pag
   iot <- input$onlyThisStatement
   # browser()
@@ -651,7 +651,7 @@ observeEvent(c(input$resetSelection, req(input$pager), input$onlyThisStatement),
 output$varForm <- renderUI({
   if (length(req(valuesCoding$nodesSelected)) > 0) {
     # browser()
-    df <- values$graf %>%
+    df <- values$codingGraf %>%
       nodes_as_tibble() %>%
       mutate(id = row_number())
     
@@ -672,7 +672,7 @@ output$varForm <- renderUI({
   }
 })
 observeEvent(input$editVarForm, {
-  vg <- values$graf %>%
+  vg <- values$codingGraf %>%
     activate(nodes)
   
   
@@ -691,18 +691,18 @@ observeEvent(input$editVarForm, {
       mutate(cluster = if_else(row_number() %in% valuesCoding$nodesSelected, input$editcluster, cluster))
   }
   
-  values$graf <- vg
+  values$codingGraf <- vg
 })
 
 observeEvent(input$deleteVarForm, {
   # browser()
-  whichtarg <- values$graf %>%
+  whichtarg <- values$codingGraf %>%
     nodes_as_tibble() %>%
     mutate(id = row_number()) %>%
     filter(id %in% valuesCoding$nodesSelected) %>%
     pull(id)
   
-  values$graf <- values$graf %>%
+  values$codingGraf <- values$codingGraf %>%
     activate(nodes) %>%
     filter(!(row_number() %in% whichtarg))
 })
@@ -740,7 +740,7 @@ output$quotesOutput <- renderUI({
   ins <- valuesCoding$nodesSelected
   inse <- valuesCoding$edgesSelected
   if (!is.null(ins)) {
-    quotes <- values$net$x$nodes %>%
+    quotes <- values$netCoding$x$nodes %>%
       filter(id %in% ins) %>%
       pull(quote) %>%
       str_remove_all(",NA") %>%
@@ -748,7 +748,7 @@ output$quotesOutput <- renderUI({
   }
   
   else if (!is.null(inse)) {
-    quotes <- values$net$x$edges %>%
+    quotes <- values$netCoding$x$edges %>%
       filter(id %in% ins) %>%
       pull(quote) %>%
       str_remove_all(",NA") %>%
@@ -770,7 +770,7 @@ output$quotesOutput <- renderUI({
 observeEvent(input$deletePackage, {
   # browser()
   if (!is.null(valuesCoding$edgesSelected)) {
-    values$graf <- values$graf %>%
+    values$codingGraf <- values$codingGraf %>%
       activate(edges) %>%
       mutate(id = row_number()) %>%
       filter(!(id %in% valuesCoding$edgesSelected)) %>%
@@ -785,7 +785,7 @@ observeEvent(valuesCoding$edgesSelected, {
   
   vce <- valuesCoding$edgesSelected
   
-  targetStatement <- values$graf %>%
+  targetStatement <- values$codingGraf %>%
     edges_as_tibble() %>%
     filter(vce == row_number()) %>%
     pull(statement_id)

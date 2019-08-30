@@ -908,24 +908,24 @@ refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh bu
 
 
     if (iot) {
-      visNetworkProxy("net") %>% # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visNetworkProxy("netCoding") %>% # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
         visSetSelection(unselectAll = TRUE)
     } else {
       ids <- rep(T, nrow(vno))
       eids <- rep(T, nrow(ved))
 
-      visNetworkProxy("net") %>% # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visNetworkProxy("netCoding") %>% # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
         visSelectNodes(id = yesids)
     }
     if (nrow(vno) > 0) {
-      visNetworkProxy("net") %>% # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visNetworkProxy("netCoding") %>% # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
         visUpdateNodes(nodes = tibble(id = 1:nrow(vno), hidden = !ids))
     }
     if (nrow(ved) > 0) {
-      visNetworkProxy("net") %>% # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visNetworkProxy("netCoding") %>% # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
         visUpdateEdges(edges = tibble(id = 1:nrow(ved), hidden = !eids))
     }
-    visNetworkProxy("net") %>%
+    visNetworkProxy("netCoding") %>%
       visFit(animation = list(duration = 500)) %>%
       visSetSelection(unselectAll = TRUE) %>%
       visSelectNodes(id = F)
