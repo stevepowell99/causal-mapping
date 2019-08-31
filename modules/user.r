@@ -16,13 +16,7 @@ if(T) {
 
 projectFromURL <- reactiveVal("")
 
-
-
-# logging on -----------
-observeEvent(input$projectSelect,{
-  
-  req(input$userSelect)
-  req((input$projectSelect))
+observe({
   query <- isolate(parseQueryString(session$clientData$url_search))
   ql <- query[["permalink"]]
   projectFromURL <- reactiveVal(ql %>%  get_project_from_query())
@@ -33,7 +27,16 @@ observeEvent(input$projectSelect,{
     # browser()
     updateSelectInput(session,"userSelect",selected=userFromURL())
     updateSelectInput(session,"projectSelect",selected=projectFromURL())
-    }
+  }
+  
+})
+
+# logging on -----------
+observeEvent(input$projectSelect,{
+  
+  req(input$userSelect)
+  req((input$projectSelect))
+  
   
     for (fn in csvlist) {
     doNotification(glue("Loading {fn} from remote database"))
