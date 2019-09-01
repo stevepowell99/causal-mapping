@@ -21,6 +21,8 @@ library(whereami) #TODO testing only
 library(shinythemes)
 library(shinylogs)
 library(stringi)
+library(future)
+plan(multiprocess)
 library(shinyWidgets)
 library(webshot)
 library(readxl)

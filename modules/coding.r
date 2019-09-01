@@ -173,7 +173,7 @@ observeEvent(input$overview_col, {
 output$displayStatementPanel <- renderUI({
   # browser()
   
-  quote <- values$codingGraf %>%
+  quote <- req(values$codingGraf) %>%
     edges_as_tibble() %>%
     filter(statement_id == values$pag) %>%
     pull(quote) %>%
@@ -298,7 +298,7 @@ output$add_edges_widget <- renderUI({
   # varlist=values$codingGraf %>% nodes_as_tibble() %>% pull(label) %>% unique() %>% as.character()
   # varlist <- na.omit(varlist)
   
-  df <- values$codingGraf %>%
+  df <- req(values$codingGraf) %>%
     edges_as_tibble() %>%
     mutate(id = row_number())
   
@@ -417,7 +417,7 @@ output$combo <- renderUI(if (T) {
 
 
 output$selectBoxButtons <- renderUI({
-  varlist <- values$codingGraf %>%
+  varlist <- req(values$codingGraf) %>%
     nodes_as_tibble() %>%
     pull(label) %>%
     unique() %>%

@@ -80,18 +80,30 @@ ui <- tagList(
                              div((dropdownButton(
                                tagList(
                                actionButton("settingsTableGlobalUp","Update")
-                               
-                               ,
+                                 ,
                                
                                rHandsontableOutput("settingsTableGlobal")
                                )
-                               
-                               
-                               
-                               , circle = TRUE, status = "default",
-                               size = "xs", icon = icon("cog"), label = NULL, tooltip = "settings",
-                               right = FALSE, up = FALSE, width = NULL, margin = "5px",
-                               inputId = "dropSettings")), style = "display:inline-block;width:8%"),
+                               , icon = icon("cog"), tooltip = "settings", circle=F,size = "xs")), style = "display:inline-block;width:8%"),
+                             
+                             div((dropdownButton(
+                               tagList(fileInput("up.statements", NULL,
+                                 multiple = FALSE, width = NULL,
+                                 accept = c(
+                                   "text/csv",
+                                   "text/comma-separated-values,text/plain",
+                                   ".csv"
+                                 )
+                               )
+                               )
+                               , icon = icon("upload"), tooltip = "settings", circle=F,size = "xs")), style = "display:inline-block;width:8%"),
+                             
+                             div((dropdownButton(
+                               tagList(
+                                 uiOutput("downloads")
+                               )
+                               , icon = icon("download"), tooltip = "settings", circle=F,size = "xs")), style = "display:inline-block;width:8%"),
+                             
                              
                              hr(style = "margin-top:5px"),
                              
@@ -112,52 +124,6 @@ ui <- tagList(
                                
                                # ui statements----
                                
-                               tabPanel("",icon=icon("upload"),                        # user can upload set of statements to process, and optionally also pre-existing node and edge lists
-                                        style = glue(";border-radius:10px"),
-                                        
-                                        bs_accordion(id = "uploads") %>% 
-                                   bs_append(
-                                            title = "Upload statements",
-                                            fileInput("up.statements", NULL,
-                                                      multiple = FALSE, width = NULL,
-                                                      accept = c(
-                                                        "text/csv",
-                                                        "text/comma-separated-values,text/plain",
-                                                        ".csv"
-                                                      )
-                                            )
-                                          )
-                                 # %>% 
-                                 #   bs_append(
-                                 #            title = "Upload variables",
-                                 #     tagList(
-                                 #     p("Nodes table must contain a column called label"),
-                                 #     fileInput("up.nodes", "Upload variables",
-                                 #       multiple = FALSE, width = NULL,
-                                 #       accept = c(
-                                 #         "text/csv",
-                                 #         "text/comma-separated-values,text/plain",
-                                 #         ".csv"
-                                 #       )
-                                 #     )
-                                 #     )
-                                 #     ) %>% 
-                                 #   bs_append(
-                                 #            "Upload arrows",
-                                 #      tagList(      
-                                 #            p("Arrows table must contain columns from and to and optionally N"),
-                                 #            fileInput("up.edges", "Upload arrows",
-                                 #                      multiple = FALSE, width = NULL,
-                                 #                      accept = c(
-                                 #                        "text/csv",
-                                 #                        "text/comma-separated-values,text/plain",
-                                 #                        ".csv"
-                                 #                      )
-                                 #            ),
-                                 #            checkboxInput("use.labels", "Use labels instead of row numbers",value = T)
-                                 #          )
-                                 #          )
-                               ),
                                
                                # ui coding----                             
                                #  most important panel. in most cases user will be looking at / scrolling through pieces of text and will "code" them aka use the information to create arrows/edges
@@ -176,6 +142,24 @@ ui <- tagList(
                                      uiOutput("combo"),
                                      style="background-color:#DDFFDD;border:1px gray solid;padding:3px"
                                    )
+                               ),
+                               
+                               
+                               # ui display----
+                               
+                               tabPanel("",value="Display",    # conditional formatting 
+                                 icon = icon("palette"),
+                                 
+                                 bs_accordion("filterx") %>% 
+                                   bs_append("Filters",
+                                     uiOutput("filters")) %>% 
+                                   bs_append("Clusters",
+                                     uiOutput("filterscluster")
+                                   )
+                                 %>% bs_append("Formatting",
+                                   tagList(uiOutput("upConditionalBut"),
+                                     uiOutput("condFormattingOutput")
+                                   ))
                                ),
                                tabPanel(value="Variables","",                      # user can directly edit the nodes table. still functional but will probably be dropped
                                         style = glue("background-color:{rgb(0.99,1,0.97)};;border-radius:10px"), icon = icon("boxes"),
@@ -198,30 +182,6 @@ ui <- tagList(
                                           style = "display:inline-block;padding-left:20px;font-size:4px;width:150px",
                                           checkboxInput("addColBut", "Edit columns")
                                         )
-                               ),
-                               
-                               
-                               # ui display----
-                               
-                               tabPanel("",value="Display",    # conditional formatting 
-                                        icon = icon("palette"),
-                               
-                                 bs_accordion("filterx") %>% 
-                                   bs_append("Filters",
-                                 uiOutput("filters")) %>% 
-                                       bs_append("Clusters",
-                                 uiOutput("filterscluster")
-                                       )
-                                     %>% bs_append("Formatting",
-                                   tagList(uiOutput("upConditionalBut"),
-                                 uiOutput("condFormattingOutput")
-                               ))
-                                 ),
-                               
-                               
-                               tabPanel("", icon=icon("download"),div(style = ""),
-                                        style = "",
-                                        uiOutput("downloads")
                                )
                              )
                              

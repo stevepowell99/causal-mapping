@@ -182,11 +182,16 @@ observeEvent(
       
       project <- ifelse(input$projectSaveAs=="",input$projectSelect,input$projectSaveAs)
       
+      
+      v=values
+      c=con
+      ius=input$userSelect
+      future({
       for(c in csvlist){
-      send_to_sql(values,con,input$userSelect,project,c)
+      send_to_sql(v,c,ius,project,c)
         
       }
-
+})
       
       doNotification("Saved")
 
