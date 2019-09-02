@@ -1,47 +1,66 @@
 
+xx creating panel
+No edges
 render coding viz
 render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
 Creating new project
-Loaded0 variables from permalink
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Loaded project from database
-Loaded43 variables from permalink
+Loaded1 variables from permalink
 starting aggregation
 started coding viz
-Produced viz
-render coding viz
-Saved
-Saved
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
-Creating new project
-Loaded0 variables from permalink
+Adding Node
+starting aggregation
 started coding viz
 NA is not in settings
 Produced viz
 render coding viz
+Sending nodes to sql database
+Sending edges to sql database
+Sending statements to sql database
+Sending settingsConditional to sql database
+Sending settingsGlobal to sql database
+Sending statements_extra to sql database
+Saved
+Loading nodes from remote database for project: rick
+Loading edges from remote database for project: rick
+Loading statements from remote database for project: rick
+Loading settingsConditional from remote database for project: rick
+Loading settingsGlobal from remote database for project: rick
+Loading statements_extra from remote database for project: rick
+Loaded0 variables from permalink
+started coding viz
+NA is not in settings
+Produced viz
+Sending nodes to sql database
+Sending edges to sql database
+Sending statements to sql database
+Sending settingsConditional to sql database
+Sending settingsGlobal to sql database
+Sending statements_extra to sql database
+Saved
+xx creating panel
+update from query ...none
+No edges
 render coding viz
 render viz
-Loading nodes from remote database
-Loading edges from remote database
-Loading statements from remote database
-Loading settingsConditional from remote database
-Loading settingsGlobal from remote database
-Loading statements_extra from remote database
 Creating new project
-Loaded0 variables from permalink
+Loaded1 variables from permalink
+starting aggregation
+started coding viz
+Loading nodes from remote database for project: simple
+Loading edges from remote database for project: simple
+Loading statements from remote database for project: simple
+Loading settingsConditional from remote database for project: simple
+Loading settingsGlobal from remote database for project: simple
+Loading statements_extra from remote database for project: simple
+Loaded2 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+render coding viz
+Sending nodes to sql database
+Sending edges to sql database
+Sending statements to sql database
+Sending settingsConditional to sql database
+Sending settingsGlobal to sql database
+Sending statements_extra to sql database

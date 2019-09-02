@@ -341,9 +341,10 @@ add_opacity_vec <- function(colvec, opacity) sapply(colvec, add_opacity, opacity
 mutate_if_sw <- function(...) suppressMessages(mutate_if(...))
 
 doNotification <- function(text, level = 1, ...) {
-  if (level > doNotificationLevel) showNotification(text, ...)
+  if (level > doNotificationLevel) showNotification(glue(text), ...)
   write(paste0(text), paste0("", "log.txt"), append = T)
 }
+
 
 allNum <- function(vec) {
   vec <- replaceNA(vec)
@@ -1090,7 +1091,7 @@ shapelist <- c("box", "circle", "square", "triangle", "dot", "star", "ellipse", 
 # )
 default.statements_extra <- tibble(
   "statement_id" =
-    rep("1", 1),
+    rep(1, 1),
   "key" =
     rep("key", "1"),
   "value" =
@@ -1241,7 +1242,7 @@ defaultSettingsGlobal <- read_csv("defaultSettingsGlobal.csv")
 colnames_for_concat=xc("quote text label details statement_id domain")
 colnames_for_sum=xc("frequency")
 colnames_for_mean=c("sex", "Positive", "older", "female", "ava", "avp", "attributionExplicit", "attributionValence","What is the education of the main respondent?")
-userlist <- xc("Steve free BSDR")
+userlist <- xc("free Steve BSDR")
 
 # query_modal <- modalDialog(
 #   title = "Select user",

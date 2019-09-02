@@ -47,14 +47,17 @@ observe( {
     values$pag <- 1
   }
   # browser()
+  if(vga %>% edges_as_tibble() %>% nrow %>% `>`(0)){
   vn <- render_network(vga,vals)
   # browser()
+  
   vn$x$nodes <- dag_layout(vn$x$nodes)
   
   
   values$netCoding <- vn
   
   doNotification("Produced viz")}
+  } else doNotification("No edges")
 })
   
 observe({

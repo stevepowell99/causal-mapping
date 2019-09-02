@@ -70,7 +70,7 @@ observe({
     vno$font.size <- findset("variablecoding.font.size",vals)
     
     
-    ved$width <- 3
+    if(nrow(ved)>0)ved$width <- 3
     
     # infer ----
   
