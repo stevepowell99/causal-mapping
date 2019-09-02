@@ -74,7 +74,7 @@ ui <- tagList(
                              id = "app-content",
                              a(h4("Causal Mapping", style = "display:inline-block;color:white;margin-right:8px"), href = "."),
                              img(id="logo",src = "img/logo.gif", height = "20px", style = "display:inline-block;"),
-                             a(icon("question-circle"),href="http://www.pogol.net/_causal_mapping/index.html", target="_blank",height = "20px", style = "display:inline-block;margin-left:20px"),
+                             a(icon("question-circle"),href="http://www.pogol.net/_causal_mapping/index.html", target="_blank",height = "20px", style = "display:inline-block;margin-left:8px;margin-right:8px"),
                              
                              
                              div((dropdownButton(

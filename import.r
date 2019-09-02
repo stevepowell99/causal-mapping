@@ -2,8 +2,8 @@
 library(tidyverse)
 library(RMariaDB)
 library(RSQLite)
-conm <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
-con <-  DBI::dbConnect(RSQLite::SQLite(),"CMA")
+conremote <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
+conlocal <-  DBI::dbConnect(RSQLite::SQLite(),"CMA")
 conl <-  DBI::dbConnect(RSQLite::SQLite(),"CMA")
 
 db_list_tables(conl)
@@ -64,8 +64,8 @@ dbDisconnect(con)
 
 
 # s <- paste0("CREATE DATABASE CMA ")
-conr <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
-conl <- dbConnect(RSQLite::SQLite(), "CMA")
+conremote <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
+conlocal <- dbConnect(RSQLite::SQLite(), "CMA")
 dbListTables(conl)
 
 DBI::dbExecute(con, as.character('set character set "utf8"'))
@@ -85,18 +85,18 @@ conn <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf
 
 conn=conM
 
-nodes <- dbGetQuery(conn,"SELECT * FROM nodes") %>% collect()
-copy_to(conl,nodes,temporary=F,overwrite=T)
-edges <- dbGetQuery(conn,"SELECT * FROM edges") %>% collect()
-copy_to(conl,edges,temporary=F,overwrite=T)
-statements <- dbGetQuery(conn,"SELECT * FROM statements") %>% collect()
-copy_to(conl,statements,temporary=F,overwrite=T)
-sources <- dbGetQuery(conn,"SELECT * FROM sources") %>% collect()
-copy_to(conl,sources,temporary=F,overwrite=T)
-settingsGlobal <- dbGetQuery(conn,"SELECT * FROM settingsGlobal") %>% collect()
-copy_to(conl,settingsGlobal,temporary=F,overwrite=T)
-settingsConditional <- dbGetQuery(conn,"SELECT * FROM settingsConditional") %>% collect()
-copy_to(conl,settingsConditional,temporary=F,overwrite=T)
+nodes <- dbGetQuery(conlocal,"SELECT * FROM nodes") %>% collect()
+copy_to(conremote,nodes,temporary=F,overwrite=T)
+edges <- dbGetQuery(conlocal,"SELECT * FROM edges") %>% collect()
+copy_to(conremote,edges,temporary=F,overwrite=T)
+statements <- dbGetQuery(conlocal,"SELECT * FROM statements") %>% collect()
+copy_to(conremote,statements,temporary=F,overwrite=T)
+statements_extra <- dbGetQuery(conlocal,"SELECT * FROM statements_extra") %>% collect()
+copy_to(conremote,statements_extra,temporary=F,overwrite=T)
+settingsGlobal <- dbGetQuery(conlocal,"SELECT * FROM settingsGlobal") %>% collect()
+copy_to(conremote,settingsGlobal,temporary=F,overwrite=T)
+settingsConditional <- dbGetQuery(conlocal,"SELECT * FROM settingsConditional") %>% collect()
+copy_to(conremote,settingsConditional,temporary=F,overwrite=T)
 
 
 
