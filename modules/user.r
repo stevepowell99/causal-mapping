@@ -139,6 +139,8 @@ observeEvent({c(input$projectSelect)},{
   doNotification(glue("Loaded{nrow(values$graf %>% nodes_as_tibble)} variables from permalink"))
     
   # browser()
+  } else {
+    doNotification("There is no such project {input$projectSelect}, leaving old project")
   } 
   
 })
