@@ -1,5 +1,9 @@
 # RENDER visnetwork----
-# finally we use values$grafAgg2 to generate the viz
+# 
+
+# grafAgg2 to values$net --------------------------------------------------
+
+
 
 observe( {
   # browser()
@@ -31,6 +35,9 @@ observe( {
   doNotification("Produced viz")}
 })
   
+
+# codingGraf to values$netCoding --------------------------------------------------
+
 
 observe( {
   if (!is.null(values$codingGraf) & input$sides=="Code"){

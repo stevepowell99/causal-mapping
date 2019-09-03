@@ -10,19 +10,16 @@ if(T) {
 
 
 
-# projectFromURL <- reactiveVal("")
 sess <- reactiveValues()
 
 observe({
   doNotification("xx creating panel")
   
   sess$projectChoicesAll=tbl(con,"nodes") %>% select(project,user) %>% collect()
-  sess$projectChoices=sess$projectChoicesAll %>%  pull(project) %>% unique 
   
   query <- isolate(parseQueryString(session$clientData$url_search))
   ql <- query[["permalink"]]
   if(!is.null(ql)) {
-    # req(input$userSelect)
     user <- (ql %>%  get_user_from_query)
     project <- (ql %>%  get_project_from_query)
     doNotification("update from query ..." %>% paste0(ql %>% get_project_from_query))
@@ -31,26 +28,20 @@ observe({
     project <- "blank"
     
   }
-  # browser()
-  # lu <- input$userSelect
-  
-  # lu <- input$userSelect
-  # lu <- req(input$userSelect)
-  # if(user=="") projectChoices="blank" else projectChoices=tbl(con,"nodes") %>% filter(user==user) %>% pull(project) %>% unique() %>% c("blank",.)
-  # browser()
-  output$savebut <- renderUI({
+
+    output$savebut <- renderUI({
   
       div(
         tagList(
           
           div(selectInput("userSelect",NULL,selected=user,choices = c(userlist),width="100%"), class="myelement",style = ";width:15%"),
-          div(actionButton("userSelectGo",NULL,icon=icon("star")), class="myelement",style = ""),
-          div(selectizeInput("projectSelect",NULL,multiple=F,selected=project,choices = c("blank",sess$projectChoices),width="100%",
+          # div(actionButton("userSelectGo",NULL,icon=icon("star")), class="myelement",style = ""),
+          div(selectizeInput("projectSelect",NULL,multiple=F,selected=project,choices = project,width="100%",
             options =
               list(create = T),
           ), class="myelement",style = ";width:30%"),
           # div(actionButton("projectSelectGo",NULL,icon=icon("star")), class="myelement",style = ""),
-          div(actionButton("saveb",NULL,icon=icon("save")), class="myelement",style = ""),
+          div(actionButton("saveProject",NULL,icon=icon("save")), class="myelement",style = ""),
           div(
             actionButton("deleteProject", NULL, icon = icon("trash")),
             class="myelement",style = ";margin-left:5px;width:8%"
@@ -61,28 +52,35 @@ observe({
 })
 })
 
-observe({
+observeEvent(input$userSelect,{
   # query <- isolate(parseQueryString(session$clientData$url_search))
+  req(input$projectSelect)
+  proj <- isolate(input$projectSelect)
+  
+  isolate({
+    
+  # browser()
+    sess$projectChoices <- sess$projectChoicesAll %>%  
+      filter(user==req(input$userSelect)) %>% pull(project) %>% unique %>% c("blank",.)
+    })
+  
   # ql <- query[["permalink"]]
   # if(!is.null(ql)) {
   #   req(input$userSelect)
   #   updateSelectInput(session,"userSelect",selected=(ql %>%  get_project_from_query))
-  #   updateSelectizeInput(session,"projectSelect",selected=(ql %>%  get_user_from_query))
+    updateSelectizeInput(session,"projectSelect",choices=sess$projectChoices,selected=proj)
+  if((proj %in% sess$projectChoices))     updateSelectizeInput(session,"projectSelect",selected=proj)
   # doNotification("update from query ..." %>% paste0(ql %>% get_project_from_query))
   # } 
   # 
 })
 
 
-# logging on -----------
-observeEvent(input$userSelect,{
-  # isolate({sess$projectChoices=sess$projectChoicesAll %>%  filter(user==input$userSelect) %>% pull(project) %>% unique })
-  
-})
 
 
 observeEvent({c(input$projectSelect)},{
   # req(input$projectS)
+  # browser()
   if(input$projectSelect %in% c("blank",sess$projectChoices)){
   
   isolate({
@@ -91,6 +89,9 @@ observeEvent({c(input$projectSelect)},{
   })
     
     if(input$projectSelect=="blank"){
+      
+      disable("deleteProject")
+      disable("saveProject")
       
       doNotification("Creating new project")
       
@@ -106,7 +107,9 @@ observeEvent({c(input$projectSelect)},{
         values$nodes,values$edges
       )
   } else {
-  
+    enable("deleteProject")
+      enable("saveProject")
+    
     for (fn in csvlist) {
     doNotification(glue("Loading {fn} from remote database for project: {ip}"))
       # fnn <- paste0(filename, "-", fn, ".csv")
@@ -140,7 +143,7 @@ observeEvent({c(input$projectSelect)},{
     
   # browser()
   } else {
-    doNotification("There is no such project {input$projectSelect}, leaving old project")
+    doNotification("There is no such project, leaving old project")
   } 
   
 })
@@ -152,10 +155,10 @@ observeEvent({c(input$projectSelect)},{
 #   if((input$projectSaveAs)=="")   {
 #     
 #     if(input$projectSelect=="blank") {
-#       disable("saveb")
+#       disable("saveProject")
 #     } else {
-#       enable("saveb")
-#       html("saveb", "Save")
+#       enable("saveProject")
+#       html("saveProject", "Save")
 #     }
 #   }
 #   
@@ -163,16 +166,21 @@ observeEvent({c(input$projectSelect)},{
 
 # user and save panel ----
 
-observeEvent(c(input$userSelectGo),{
-  # isolate({lu <- req(input$userSelect)})
-  # updateSelectizeInput(session,"projectSelect",choices=tbl(con,"nodes") %>% filter(user==lu) %>% pull(project) %>% unique() %>% c("blank",.))
-})
+# observeEvent(c(input$userSelectGo),{
+#   # isolate({lu <- req(input$userSelect)})
+#   # updateSelectizeInput(session,"projectSelect",choices=tbl(con,"nodes") %>% filter(user==lu) %>% pull(project) %>% unique() %>% c("blank",.))
+# })
 
 
 
 
 observeEvent(input$deleteProject,{
   delete_from_sql(con,input$userSelect,input$projectSelect)
+  sess$projectChoicesAll=tbl(con,"nodes") %>% select(project,user) %>% collect()
+  updateSelectInput(session,"userSelect",selected=input$userSelect) # to cascade changes
+  updateSelectizeInput(session,"projectSelect",selected="blank")
+  
+  
   
 })
 
@@ -181,7 +189,7 @@ observeEvent(input$deleteProject,{
 
 
 observeEvent(
-  c(input$saveb),
+  c(input$saveProject),
   ignoreInit = TRUE, {
     
     # if(input$projectSelect %in% isolate(sess$projectChoices))
@@ -202,19 +210,19 @@ observeEvent(
       project <- input$projectSelect
       v=values
       ius=input$userSelect
-      # future({
+      future({
       # browser()
       for(c in csvlist){
       send_to_sql(v,con,ius,project,c)
         
       }
-# })
+      })
       
       doNotification("Saved")
 
             values$issaved <- T
-      updateSelectInput(session,"userSelect",selected = input$userSelect) # to cascade changes
-      updateTextInput(session,"projectSaveAs",value = "")
+      # updateSelectInput(session,"userSelect",selected = input$userSelect) # to cascade changes
+      # updateTextInput(session,"projectSaveAs",value = "")
       
     } else doNotification("You have to give it a name")
   }
@@ -225,7 +233,7 @@ observeEvent(
 
 
 
-observeEvent(input$saveb, ignoreInit = TRUE, {
+observeEvent(input$saveProject, ignoreInit = TRUE, {
   # browser()
   link <- paste0(input$userSelect,"/",input$projectSelect)
   output$savedMsg <- renderUI({

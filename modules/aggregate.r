@@ -14,6 +14,9 @@ values$graf <- tbl_graph(
 # the long process of aggregating values$graf into values$grafAgg2, adding formatting etc
 
 
+# create coding graf ------------------------------------------------------
+
+
 observe({
   # input$upConditionalBut
   # make this code run whenever the tab$change reactive triggers
@@ -61,7 +64,8 @@ observe({
     
     
     ved <- ved %>%
-      # mutate(statement = as.character(statement)) %>%
+      mutate(arrows.middle.enabled = as.logical(F)) %>%
+      mutate(arrows.to = as.logical(T)) %>%
       mutate(wstrength = strength * trust)
     # browser()
     
@@ -259,7 +263,7 @@ observe({
       mutate(label = ifelse(strength < 0, paste0("<U+0001F500> ", label), label)) %>%
       # mutate(combo.type <- replace_na(combo.type,"")) %>%
       # mutate(arrows.middle.enabled = ifelse(combo.type == "", F, T)) %>%
-      mutate(arrows.middle.enabled = F) %>%
+      # mutate(arrows.middle.enabled = 0) %>%
       # mutate(label = paste0(label, ifelse(arrows.middle.enabled, paste0(" ", combo.type), ""))) %>%
       mutate(dashes = str_remove_all(definition.type,",") != "") %>%
       mutate(arrows.to = definition.type != "Defined, undirected")
