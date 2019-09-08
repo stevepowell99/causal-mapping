@@ -121,16 +121,36 @@ output$filterscluster <- renderUI({
     }
   )
 })
-
-output$filters <- renderUI({
-  tagList(
-    lapply(c(colnames(values$statements_extra)), function(y) {
+observe(if(req(input$sides)=="Display") {
+  output$filters <- renderUI({
+    tagList(
+      lapply(c(colnames(values$statements_extra)), function(y) {
+        x <- values$statements_extra[[y]]
+        u <- unique(x) %>% na.omit()
+        if (length(u) > 1 & length(u) < 12 & max(nchar(u)) < 20) {
+          div(checkboxGroupButtons(paste0("filters", y), y, choices = sort(u), selected = u), style = "display:inline-block;vertical-align:top")
+        }
+      })
+    )
+  })
+  })
+  
+observe(if(req(input$sides)=="Display") {
+  edges <- values$codingGraf %>% edges_as_tibble()
+  
+lapply(c(colnames(values$statements_extra)), function(y) {
       x <- values$statements_extra[[y]]
       u <- unique(x) %>% na.omit()
       if (length(u) > 1 & length(u) < 12 & max(nchar(u)) < 20) {
-        div(checkboxGroupButtons(paste0("filters", y), y, choices = sort(u), selected = u), style = "display:inline-block;vertical-align:top")
+        filter <- input[[paste0("filters", y)]]
+        # browser()
+        if(!is.null(filter) & !all(edges[[y]] %in% filter)) {
+          # browser()
+          edges <- edges[edges[[y]] %in% filter,]
+          }
       }
     })
-  )
+        # browser()
+values$filteredEdges <- edges
 })
 

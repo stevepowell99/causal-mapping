@@ -745,3 +745,10 @@ margin-left:200px;
 li:nth-of-type(3) {
   margin-left: 100px;
 }
+
+#deleteProject{
+  border-color: red;
+}
+#saveProject{
+  border-color: green;
+}

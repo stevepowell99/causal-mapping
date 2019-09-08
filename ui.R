@@ -232,10 +232,13 @@ ui <- tagList(
                                 tabPanel("Legend",
                                 plotOutput("colourLegend")
                                   ),
+                               # conditionalPanel("T",
                                 tabPanel("Live Reports",
                                
-                                  formattableOutput("reportTable", width = "100%", height = "0")
-                             ),
+                                  formattableOutput("liveReportTable1", width = "100%", height = "0"),
+                                  formattableOutput("liveReportTable2", width = "100%", height = "0")
+                             # )
+                                 ),
                                 tabPanel("Reports",
                                
                              formattableOutput("reportTable2", width = "100%", height = "0")
@@ -245,6 +248,10 @@ ui <- tagList(
                              formattableOutput("reportTable4", width = "100%", height = "0")
                                   ,
                              formattableOutput("reportTable5", width = "100%", height = "0")
+                                  ,
+                             uiOutput("extraSelect")
+                                  ,
+                             formattableOutput("reportTable6", width = "100%", height = "0")
                                   ,
                              plotOutput("reportPlot1", width = "100%")
                              )

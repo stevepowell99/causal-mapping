@@ -1,13 +1,3 @@
-# sql ---------------------------------------------------------------------
-
-
-
-if(T) {
-  con <- isolate(dbConnect(RSQLite::SQLite(), "CMA"))
-} else {
-  con <-  isolate(DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306))
-}
-
 
 
 sess <- reactiveValues()
@@ -44,7 +34,7 @@ observe({
           div(actionButton("saveProject",NULL,icon=icon("save")), class="myelement",style = ""),
           div(
             actionButton("deleteProject", NULL, icon = icon("trash")),
-            class="myelement",style = ";margin-left:5px;width:8%"
+            class="myelement",style = ";margin-left:50px;width:8%"
           )
         ),
         style = "margin-bottom:-20px"

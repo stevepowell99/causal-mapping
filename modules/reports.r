@@ -2,7 +2,7 @@
 
 # reports -----------------------------------------------------
 # not important. 
-output$reportTable <-  renderFormattable({
+output$liveReportTable1 <-  renderFormattable({
   if ("frequency" %in% colnames(values$net$x$nodes)) {
   # browser()
     values$net$x$nodes %>%
@@ -19,6 +19,28 @@ output$reportTable <-  renderFormattable({
       formattable(list())
   }
 })
+
+output$liveReportTable2 <-  renderFormattable({
+  if ("frequency" %in% colnames(values$net$x$nodes)) {
+    # browser()
+    values$net$x$nodes %>% 
+      filter(!is.na(cluster)) %>%
+      mutate(Positive = ifelse(attributionValence>0,attributionValence,0),Negative = ifelse(attributionValence<=0,attributionValence,0)) %>% 
+      select(cluster,Positive,Negative) %>% 
+    arrange(desc(Positive)) %>%
+      formattable(list(
+      align=c("r","l","r"),
+        `Positive` = color_bar("#AAEEAA"),
+        `Negative` = color_bar("#EEAAAA")
+      ))
+    
+  } else {
+    tibble(warning = "You have to merge arrows with variables in order to get a report.") %>%
+      
+      formattable(list())
+  }
+})
+
 # output$reportTable2 <- renderFormattable({
 #     req(values$net$x$edges) %>% group_by(domain) %>% summarize(valence=round(mean(attributionValence),2)) %>% 
 #       arrange(desc(valence)) %>%
@@ -93,6 +115,33 @@ output$reportTable5 <- renderFormattable({
     ))
 })
 
+observe({
+  extras <- lapply(c(colnames(values$statements_extra)), function(y) {
+    x <- values$statements_extra[[y]]
+    u <- unique(x) %>% na.omit()
+    if (length(u) > 1 & length(u) < 12 & max(nchar(u)) < 20) {
+      y
+    }
+  }) %>% unlist
+  
+  output$extraSelect <- renderUI({
+    selectInput("extraSelect","Select extra information",choices=extras)
+  })
+ output$reportTable6 <-  renderFormattable({
+     # browser()
+   values$codingGraf %>% edges_as_tibble() %>% 
+     mutate(answer=UQ(sym(input$extraSelect))) %>% 
+     group_by(answer) %>% 
+       mutate(positive=attributionValence>0,negative=attributionValence<=0) %>% 
+       summarise(N=n(),positive=round(mean(positive,na.rm=T),2),negative=round(mean(negative,na.rm=T),2)) %>% 
+       formattable(
+         align=c("r","r","r","l"),
+         list(
+           `positive` = color_bar("#AAEEAA"),
+           `negative` = color_bar("#EEAAAA")
+         ))
+   })
+   })
 
 output$reportPlot1 <- renderPlot({
   values$grafMerged %>% nodes_as_tibble() %>% 
@@ -101,4 +150,10 @@ output$reportPlot1 <- renderPlot({
     geom_point()+
     geom_smooth()
 })
+
+
+
+
+
+
 

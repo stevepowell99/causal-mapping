@@ -105,6 +105,10 @@ observe({
     }
     
     
+
+# create statement groups -------------------------------------------------
+
+ved <- create_statement_groups(ved)      
     
     # merge nodes -------------------------------------------------------------
     

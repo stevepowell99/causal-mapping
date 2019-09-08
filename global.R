@@ -15,7 +15,7 @@ source("combo_functions.r")
 
 library(RMariaDB)
 
-library(whereami) #TODO testing only
+# library(whereami) #TODO testing only
 
 
 library(shinythemes)
@@ -38,9 +38,9 @@ library(r2d3)
 library(tidyverse)
 library(rhandsontable)
 library(shinyPagerUI)
-library(networkD3)
+# library(networkD3)
 library(tidygraph)
-library(googledrive)
+# library(googledrive)
 # library(googlesheets4)
 library(shinycssloaders)
 # library(rdrop2)
@@ -49,7 +49,7 @@ library(igraph) # for find cycles
 require(visNetwork)
 require(plotly) # rgba
 library(colourpicker)
-library(ggraph)
+# library(ggraph)
 library(DiagrammeR)
 library(rpivotTable)
 library(shape)
@@ -189,6 +189,43 @@ findset <- function(tex, v ) {
 }
 
 
+# }
+
+
+put_in_node_list <- function(vec,all){
+  c((1:all %in% unlist(vec[,1])),(1:all %in% unlist(vec[,2]))) %>% as.numeric  # this only looks at nodes involved, should really be an association matrix not a vector. 
+}                           # alsdoesn't take strength into account TODO
+
+
+create_statement_groups <- function(ved){
+  
+  res <- ved  %>% 
+    select(from,to) %>%
+    split(ved$statement_id) %>% 
+    map(put_in_node_list,max(c(ved$from,ved$to))) %>% 
+    bind_rows %>% 
+    t
+  
+  
+  
+  # hmethods <- c("ward.D", "ward.D2", "single", "complete", "average", "mcquitty", "median", "centroid")
+  # methods <- c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski")
+  # 
+  # plots=methods[c(1,2,5,6)] %>% map (~ hclust(dist(res,method=.x),method="mcquitty") %>% plot)
+  # plots=methods[c(1,2,5,6)] %>% map (~ hclust(dist(res,method=.x),method="complete") %>% plot)
+  # plots=hmethods[] %>% map (~ hclust(dist(res,method="binary"),method=.x) %>% plot)
+  # plots=methods[5] %>% map (~ hclust(dist(res,method=.x),method="mcquitty") %>% plot)
+  
+  # clus <- hclust(dist(t(res))) %>% plot
+  clus <- hclust(dist((res),method="binary"),method="ward.D") 
+  # plot(clus)
+  
+  
+  redo <- tibble(statement_group=clus %>% cutree(k=3)) %>% rownames_to_column(var="statement_id") %>% mutate(statement_id=as.integer(statement_id))
+  
+  left_join(ved,redo,by="statement_id")
+  
+}
 
 
 export_edgelist_adjacency <- function(gr) {
@@ -1240,7 +1277,7 @@ defaultSettingsGlobal <- read_csv("defaultSettingsGlobal.csv")
 
 
 colnames_for_concat=xc("quote text label details statement_id domain")
-colnames_for_sum=xc("frequency")
+colnames_for_sum=xc("frequency notForwards")
 colnames_for_mean=c("sex", "Positive", "older", "female", "ava", "avp", "attributionExplicit", "attributionValence","What is the education of the main respondent?")
 userlist <- xc("free Steve BSDR")
 

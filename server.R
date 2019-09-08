@@ -3,6 +3,16 @@ server <- function(input, output, session) {
 
   # TODO pool package to manage
   
+  # sql ---------------------------------------------------------------------
+  
+  
+  
+  if(T) {
+    con <- isolate(dbConnect(RSQLite::SQLite(), "CMA"))
+  } else {
+    con <-  isolate(DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306))
+  }
+  
   
   
   # initialising ------------------------------------------------------------
