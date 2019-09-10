@@ -63,6 +63,16 @@ observe({
     
     
     
+    
+    # create statement groups -------------------------------------------------
+    # browser()
+    if(nrow(ved)>0)ved <- create_statement_groups(ved)      
+    
+    
+    
+    
+    
+    
     ved <- ved %>%
       mutate(arrows.middle.enabled = as.logical(F)) %>%
       mutate(arrows.to = as.logical(T)) %>%
@@ -84,7 +94,10 @@ observe({
     }
   })
   
+
+
 observe({
+  req(valuesCoding$filterVec)
   
   vals <- values$settingsGlobal
   # prevent this code running every time we change tab
@@ -92,23 +105,20 @@ observe({
   
   
     if (nrow(nodes_as_tibble(req(values$codingGraf))) > 0 & this_tab!="Code") {
-    # browser()
   
-      tmp <- values$codingGraf
+      tmp <- values$codingGraf 
       
       vno <- tmp %>% nodes_as_tibble()
-      ved <- tmp %>% edges_as_tibble()  
+      
+      # browser()
+      ved <- tmp %>% edges_as_tibble() %>% 
+        filter(valuesCoding$filterVec)
     
     if (findset("variableinfer", v = vals) %>% as.logical()) {
       tmp <- infer(tmp)
       legend <- paste0(legend, "</br>Causal inference carried out")
     }
     
-    
-
-# create statement groups -------------------------------------------------
-
-ved <- create_statement_groups(ved)      
     
     # merge nodes -------------------------------------------------------------
     

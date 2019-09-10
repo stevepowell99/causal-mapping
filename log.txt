@@ -1,5 +1,13 @@
 
 xx creating panel
+No edges
+render coding viz
+render viz
+Creating new project
+Loaded1 variables from permalink
+starting aggregation
+started coding viz
+xx creating panel
 update from query ...sace
 No edges
 render coding viz
@@ -26,6 +34,17 @@ final aggregation
 NA is not in settings
 Aggregated
 No edges
+started viz
+NA is not in settings
+Produced viz
+render viz
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
 started viz
 NA is not in settings
 Produced viz

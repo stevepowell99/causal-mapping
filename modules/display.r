@@ -124,8 +124,8 @@ output$filterscluster <- renderUI({
 observe(if(req(input$sides)=="Display") {
   output$filters <- renderUI({
     tagList(
-      lapply(c(colnames(values$statements_extra)), function(y) {
-        x <- values$statements_extra[[y]]
+      lapply(c(colnames(values$codingGraf %>% edges_as_tibble())), function(y) {
+        x <- (values$codingGraf %>% edges_as_tibble())[[y]]
         u <- unique(x) %>% na.omit()
         if (length(u) > 1 & length(u) < 12 & max(nchar(u)) < 20) {
           div(checkboxGroupButtons(paste0("filters", y), y, choices = sort(u), selected = u), style = "display:inline-block;vertical-align:top")
@@ -137,20 +137,25 @@ observe(if(req(input$sides)=="Display") {
   
 observe(if(req(input$sides)=="Display") {
   edges <- values$codingGraf %>% edges_as_tibble()
-  
-lapply(c(colnames(values$statements_extra)), function(y) {
-      x <- values$statements_extra[[y]]
+  filterStore <- edges
+  filterStore[T] <- T
+for(y in c(colnames(edges))) {
+      x <- edges[[y]]
       u <- unique(x) %>% na.omit()
       if (length(u) > 1 & length(u) < 12 & max(nchar(u)) < 20) {
         filter <- input[[paste0("filters", y)]]
         # browser()
         if(!is.null(filter) & !all(edges[[y]] %in% filter)) {
-          # browser()
-          edges <- edges[edges[[y]] %in% filter,]
+          # edges <- edges[edges[[y]] %in% filter,]
+          filterStore[,y]=(edges[[y]] %in% filter)
+          # browser()   #this is the wrong way to do it TODO, can't just delete the rows, might need them back, need to offer an array
           }
       }
-    })
-        # browser()
-values$filteredEdges <- edges
+    }
+# if(!is.null(filterStore)){
+  if((which((filterStore %>% colMeans)!=1) %>% length)>0) {
+filterVec <- rowMeans(filterStore,na.rm=T)==1
+  } else filterVec=T
+valuesCoding$filterVec <- filterVec
 })
 
