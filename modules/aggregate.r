@@ -66,7 +66,10 @@ observe({
     
     
     # create statement groups -------------------------------------------------
-    if(nrow(ved)>0)ved <- create_statement_groups(ved)      
+    if(nrow(ved)>10)ved <- create_statement_groups(ved) else {
+      if(nrow(ved)>0)ved$statement_group <- 1
+      doNotification("Not enough edges to cluster")
+      }     
     
     
     
