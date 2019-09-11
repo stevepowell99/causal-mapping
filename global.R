@@ -789,6 +789,7 @@ set_text_contrast_color <- function(color) {
 
 format_nodes_and_edges <- function(df, inp, type, vsc) {
   # browser()
+  if(nrow(df)>0){
   if (type == "node") namelist <- node_names else namelist <- edge_names
   for (attribute_short in namelist) {
     attribute <- paste0(type, "_", attribute_short)
@@ -810,12 +811,21 @@ format_nodes_and_edges <- function(df, inp, type, vsc) {
           doNotification("Missing values for colour fade replaced with means")
           var[is.na(var)] <- mean(var, na.rm = T)
         }
-        var <- var-min(var,na.rm=T)
         
-        df[, attribute_short] <- colorRamp(c(floor, ceiling))(var / max(var, na.rm = T)) %>%
+        var <- var-min(var,na.rm=T)
+        # if(max(var, na.rm = T)==0) browser()
+        # browser()
+        
+        maxvar <- max(var, na.rm = T)
+        if(maxvar!=0){
+          
+        cat(glue("{attribute} ceiling {ceiling} floor {floor} max {max(var, na.rm = T)}"))
+        if(nrow(df)>0)df[, attribute_short] <- colorRamp(c(floor, ceiling))(var / maxvar) %>%
           as.tibble() %>%
           mutate(xxx = (rgb(V1, V2, V3, maxColorValue = 255))) %>%
           pull(xxx)
+        } else doNotification("All data for this formatting is the same")
+        
       } else {
 # browser()
         floor <- as.numeric(floor)
@@ -824,8 +834,12 @@ format_nodes_and_edges <- function(df, inp, type, vsc) {
       }
     }
     else {
+        cat(glue("{attribute_short} floor {floor} "))
+      # if(attribute_short=="color")
+        # browser()
       df[, attribute_short] <- floor
     }
+  }
   }
   df
 }

@@ -152,14 +152,14 @@ ui <- tagList(
                                  
                                  bs_accordion("filterx") %>% 
                                    bs_append("Filters",
-                                     uiOutput("filters")) %>% 
+                                     uiOutput("filters")) %>% bs_append("Formatting",
+                                       tagList(uiOutput("upConditionalBut"),
+                                         uiOutput("condFormattingOutput")
+                                       )) %>% 
                                    bs_append("Clusters",
                                      uiOutput("filterscluster")
                                    )
-                                 %>% bs_append("Formatting",
-                                   tagList(uiOutput("upConditionalBut"),
-                                     uiOutput("condFormattingOutput")
-                                   ))
+                                 
                                ),
                                tabPanel(value="Variables","",                      # user can directly edit the nodes table. still functional but will probably be dropped
                                         style = glue("background-color:{rgb(0.99,1,0.97)};;border-radius:10px"), icon = icon("boxes"),
@@ -207,8 +207,10 @@ ui <- tagList(
                                ,
                              conditionalPanel("input.sides=='Display'",withSpinner(
                                (visNetworkOutput("net", height = "85vh", width="1250px"))
-                               ,type = 5))                         # the main network viz. 
-                                              
+                               ,type = 5)
+                               )                         # the main network viz. 
+                               ,
+                               uiOutput("infoBar")              
                                  
                              )
                              ,

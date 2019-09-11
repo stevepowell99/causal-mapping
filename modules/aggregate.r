@@ -33,6 +33,7 @@ observe({
     legend <- ""
    
     
+    # browser()
     tmp <- values$graf 
     
     tmp <- tmp %>% 
@@ -65,7 +66,6 @@ observe({
     
     
     # create statement groups -------------------------------------------------
-    # browser()
     if(nrow(ved)>0)ved <- create_statement_groups(ved)      
     
     
@@ -87,7 +87,6 @@ observe({
     if(nrow(ved)>0)ved$width <- 3
     
     # infer ----
-  
     
     values$codingGraf <- tbl_graph(vno,ved)
     
@@ -98,6 +97,8 @@ observe({
 
 observe({
   req(valuesCoding$filterVec)
+  # browser()
+  doNotification("Starting second agg")
   
   vals <- values$settingsGlobal
   # prevent this code running every time we change tab

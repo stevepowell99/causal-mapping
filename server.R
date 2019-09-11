@@ -44,6 +44,7 @@ server <- function(input, output, session) {
   source("modules/coding.r",local=T)
   source("modules/display.r",local=T)
   source("modules/settingsGlobal.r",local=T)
+  source("modules/infoBar.r",local=T)
   source("modules/downloads.r",local=T)
   source("modules/reports.r",local=T)
   source("modules/tableWidgets.r",local=T)

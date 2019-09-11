@@ -122,9 +122,15 @@ output$filterscluster <- renderUI({
   )
 })
 observe(if(req(input$sides)=="Display") {
+  cols <- req(values$codingGraf) %>% 
+    edges_as_tibble() %>% 
+    select(statement_group,everything()) %>% 
+    colnames
   output$filters <- renderUI({
     tagList(
-      lapply(c(colnames(values$codingGraf %>% edges_as_tibble())), function(y) {
+      actionButton("filtersUp","Update"),
+      hr(),
+      lapply(cols, function(y) {
         x <- (values$codingGraf %>% edges_as_tibble())[[y]]
         u <- unique(x) %>% na.omit()
         if (length(u) > 1 & length(u) < 12 & max(nchar(u)) < 20) {
@@ -135,8 +141,10 @@ observe(if(req(input$sides)=="Display") {
   })
   })
   
-observe(if(req(input$sides)=="Display") {
-  edges <- values$codingGraf %>% edges_as_tibble()
+observeEvent(input$filtersUp,if(req(input$sides)=="Display"  & req(values$codingGraf) %>% edges_as_tibble() %>% nrow %>% `>`(0)) {
+  doNotification("Filtering")
+  # browser()
+  edges <- req(values$codingGraf) %>% edges_as_tibble()
   filterStore <- edges
   filterStore[T] <- T
 for(y in c(colnames(edges))) {
@@ -153,9 +161,20 @@ for(y in c(colnames(edges))) {
       }
     }
 # if(!is.null(filterStore)){
-  if((which((filterStore %>% colMeans)!=1) %>% length)>0) {
+  # if((which((filterStore %>% colMeans)!=1) %>% length)>0) {
+    
+    # noTrues=colMeans(filterStore)==0
+    # filterStore=filterStore[,-noTrues]  # don't want any filters which are all off
+    
 filterVec <- rowMeans(filterStore,na.rm=T)==1
-  } else filterVec=T
-valuesCoding$filterVec <- filterVec
+
+  # } else filterVec=T
+  # browser()
+if(!any(filterVec)){
+  filterVec=T
+  doNotification("This filter excludes all")
+}
+  
+  valuesCoding$filterVec <- filterVec
 })
 

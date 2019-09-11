@@ -40,7 +40,7 @@ observe( {
 
 
 observe( {
-  if (!is.null(values$codingGraf) & input$sides=="Code"){
+  if (!is.null(values$codingGraf)){
   vga <- req(values$codingGraf)
   this_tab <- isolate(input$sides)
   vals <- values$settingsGlobal

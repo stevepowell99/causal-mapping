@@ -1,5 +1,262 @@
 
 xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+All data for this formatting is the same
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+All data for this formatting is the same
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+All data for this formatting is the same
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Starting second agg
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Starting second agg
+render coding viz
+started coding viz
+NA is not in settings
+Produced viz
+started viz
+NA is not in settings
+Produced viz
+starting aggregation
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started coding viz
+NA is not in settings
+Produced viz
+started viz
+NA is not in settings
+Produced viz
+xx creating panel
 No edges
 render coding viz
 render viz
@@ -23,21 +280,40 @@ starting aggregation
 started coding viz
 NA is not in settings
 Produced viz
+xx creating panel
+update from query ...sace
+No edges
 render coding viz
-No edges
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
 starting aggregation
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
+started coding viz
 NA is not in settings
-Aggregated
+Produced viz
+xx creating panel
+update from query ...sace
 No edges
-started viz
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
 NA is not in settings
 Produced viz
-render viz
+Filtering
+Starting second agg
 merge edge aggregation
 min freq aggregation
 join to edges aggregation
@@ -49,6 +325,52 @@ started viz
 NA is not in settings
 Produced viz
 render viz
+Starting second agg
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Starting second agg
+render coding viz
+started coding viz
+NA is not in settings
+Produced viz
+started viz
+NA is not in settings
+Produced viz
+starting aggregation
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started coding viz
+NA is not in settings
+Produced viz
+started viz
+NA is not in settings
+Produced viz
+xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Filtering
+Starting second agg
 merge edge aggregation
 min freq aggregation
 join to edges aggregation
@@ -60,6 +382,24 @@ started viz
 NA is not in settings
 Produced viz
 render viz
+xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Filtering
+Starting second agg
 merge edge aggregation
 min freq aggregation
 join to edges aggregation
@@ -71,6 +411,24 @@ started viz
 NA is not in settings
 Produced viz
 render viz
+xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Filtering
+Starting second agg
 merge edge aggregation
 min freq aggregation
 join to edges aggregation
@@ -82,6 +440,40 @@ started viz
 NA is not in settings
 Produced viz
 render viz
+xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Filtering
+Starting second agg
 merge edge aggregation
 min freq aggregation
 join to edges aggregation
@@ -93,6 +485,54 @@ started viz
 NA is not in settings
 Produced viz
 render viz
+xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+All data for this formatting is the same
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
 merge edge aggregation
 min freq aggregation
 join to edges aggregation
@@ -104,3 +544,536 @@ started viz
 NA is not in settings
 Produced viz
 render viz
+xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+All data for this formatting is the same
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Starting second agg
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Starting second agg
+render coding viz
+started coding viz
+NA is not in settings
+Produced viz
+started viz
+NA is not in settings
+Produced viz
+starting aggregation
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started coding viz
+NA is not in settings
+Produced viz
+started viz
+NA is not in settings
+Produced viz
+updating from settingsTableGlobal
+starting aggregation
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started coding viz
+NA is not in settings
+Produced viz
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Starting second agg
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Starting second agg
+started viz
+NA is not in settings
+Produced viz
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+Filtering
+xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+All data for this formatting is the same
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+updating from settingsTableGlobal
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+All data for this formatting is the same
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+updating from settingsTableGlobal
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+All data for this formatting is the same
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+updating from settingsTableGlobal
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+updating from settingsTableGlobal
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+xx creating panel
+update from query ...sace
+No edges
+render coding viz
+render viz
+Loading nodes from remote database for project: sace
+Loading edges from remote database for project: sace
+Loading statements from remote database for project: sace
+Loading settingsConditional from remote database for project: sace
+Loading settingsGlobal from remote database for project: sace
+Loading statements_extra from remote database for project: sace
+Loaded108 variables from permalink
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+All data for this formatting is the same
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+All data for this formatting is the same
+All data for this formatting is the same
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+All data for this formatting is the same
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+All data for this formatting is the same
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+Filtering
+Starting second agg
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+NA is not in settings
+Produced viz
+render viz
+xx creating panel
+No edges
+render coding viz
+render viz
+Creating new project
+Loaded1 variables from permalink
+starting aggregation
+started coding viz
+xx creating panel
+No edges
+render coding viz
+render viz
+Creating new project
+Loaded1 variables from permalink
+starting aggregation
+started coding viz
+xx creating panel
+No edges
+render coding viz
+render viz
+Creating new project
+Loaded1 variables from permalink
+starting aggregation
+started coding viz
+Adding Node
+starting aggregation
