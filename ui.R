@@ -220,6 +220,10 @@ ui <- tagList(
                                  
                                  uiOutput("quotesOutput")
                                ),
+                               tabPanel("Stats",
+                                 
+                                 formattableOutput("stats")
+                               ),
                                
                                tabPanel("Statements",
                                  

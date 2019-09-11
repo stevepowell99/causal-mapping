@@ -42,6 +42,7 @@ server <- function(input, output, session) {
   
   source("modules/user.r",local=T)
   source("modules/coding.r",local=T)
+  source("modules/stats.r",local=T)
   source("modules/display.r",local=T)
   source("modules/settingsGlobal.r",local=T)
   source("modules/infoBar.r",local=T)
