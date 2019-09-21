@@ -446,7 +446,8 @@ infer <- function(gr) { # sets levels of downstream variables
 }
 
 
-render_network <- function(vga,vals){
+render_network <- function(vga,vals,type){
+  coding <- type=="Coding"
   
   visNetwork(
     nodes =
@@ -483,17 +484,13 @@ render_network <- function(vga,vals){
     visOptions(
       manipulation = F,
       collapse = F,
-      highlightNearest = list(
+      highlightNearest = if(coding) F else list(
         enabled = T,
         # degree=99,
         degree = list(from=9,to=9),#if (findset("diagramdownarrows",vals) %>% as.logical()) list(from = 0, to = 19) else list(from = 19, to = 0),
-        # degree = if (findset("diagramdownarrows",vals) %>% as.logical()) list(from = 0, to = 19) else list(from = 19, to = 0),
-        # degree = ifelse(input$widgetDownArrows,list(from=0,to=19),list(from=19,to=0)),
         hover = T,
-        labelOnly = T
-        # ,
-        # hideColor=rgba(100,200,200,0.9),
-        # algorithm = "hierarchical"
+        labelOnly = T,
+        algorithm = "hierarchical"
         # algorithm = "all"
       ),
       selectedBy = if (!("cluster" %in% colnames(vga %>% nodes_as_tibble()))) "" else ifelse((vga %>% nodes_as_tibble() %>% pull(cluster) %>% replace_na("") %>% `==`("") %>% all()), "", "cluster"),
@@ -530,6 +527,16 @@ render_network <- function(vga,vals){
       # dashes = findset("arrowdashes") %>% as.logical()
     )
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -570,7 +577,7 @@ convert_graf_to_codingGraf <- function(vgraf,vstat,vstate){
     left_join(vstate,by = "statement_id")
   
   
-  
+  # browser()
   
   
   # create statement groups -------------------------------------------------
@@ -602,6 +609,236 @@ convert_graf_to_codingGraf <- function(vgraf,vstat,vstate){
   tbl_graph(vno,ved)
   
 }
+
+
+convert_codingGraf_to_graf2 <- function(tmp,filterVec,vals,this_tab,input,vsetcond){
+  
+  # tmp <-  
+  
+  vno <- tmp %>% nodes_as_tibble()
+  
+  # browser()
+  ved <- tmp %>% edges_as_tibble() %>% 
+    filter(filterVec)
+  
+  if (findset("variableinfer", v = vals) %>% as.logical()) {
+    tmp <- infer(tmp)
+    legend <- paste0(legend, "</br>Causal inference carried out")
+  }
+  
+  
+  # merge nodes -------------------------------------------------------------
+  
+  
+  
+  if ((findset("variablemerge",vals) %>% as.logical()) & this_tab != "Code") { # need to convert to and froms in edge df
+    
+    x <- merge_nodes(vno, ved)
+    vno <- x[[1]]
+    ved <- x[[2]]
+  }
+  
+  
+  # ved rick inv_multi --------------------------------
+  
+  if (("from" %in% colnames(ved)) && as.logical(findset("arrowabsence",vals))) { # todo findset
+    
+    doNotification("rick aggregation")
+    
+    if (all(is.na(ved$statement_id))) ved$statement_id <- 1
+    # browser()
+    ved <- ved %>%
+      inv_multi()
+  }
+  
+  
+  # ved join statements--------------------------------
+  # browser()
+  # if (is.null(values$statements$source_id)) values$statements <- values$statements %>% mutate(source_id = 1)
+  
+  
+  
+  # quip stats by question/domain---------------
+  
+  
+  if ("source_id" %in% colnames(ved) && "question" %in% colnames(ved)) {
+    
+    # browser()
+    ved <- ved %>%
+      group_by(from, to, question) %>%
+      mutate(citation_count = length(unique(source))) %>%
+      ungroup() %>%
+      group_by(from, to) %>%
+      mutate(respondent_count = length(unique(source))) %>%
+      ungroup() %>%
+      mutate(citation_intensity = citation_count / respondent_count)
+  }
+  
+  # merge edges -------------------------------------------------------------
+  
+  
+  ved <- merge_edges(ved,this_tab,vals)
+  
+  doNotification("min freq aggregation")
+  
+  
+    # browser()
+  # browser()
+  if (input$sides != "Code") {
+    # if (this_tab != "Code") {
+    
+    
+    # join edges with nodes ---------------------------------------------------
+    
+    
+    doNotification("join to edges aggregation")
+    
+    
+    if (findset("variablejoinedges", v = vals) %>% as.logical()) { # todo, should list any functions. variablejoinedges is pointless
+      
+      vno <- join_nodes_and_edges(vno, ved)
+      
+      
+      # doNotification("merging nodes and arrows")
+    }
+    
+    
+    
+    # minimum freq for vars and edges
+    # browser()
+    mf <- findset("variableminimum.frequency", v = vals) %>% as.numeric()
+    if (this_tab != "Code" && mf > 0) {
+      # values$grafMerged <- tbl_graph(vno, ved) 
+      
+      tmp <- tbl_graph(vno, ved)  %>%
+        N_() %>%
+        filter(frequency > mf)
+      
+      vno <- tmp %>% nodes_as_tibble()
+      ved <- tmp %>% edges_as_tibble()  %>%
+        filter(frequency > findset("arrowminimum.frequency", v = vals))
+      
+      
+    }
+  }
+  
+  
+  doNotification("format aggregation")
+  
+  
+  
+  tmp <- tbl_graph(vno, ved)
+  # browser()
+  
+  # layout just for notForwards ----------------
+  
+  
+  layout <- create_layout(tmp, layout = "sugiyama") %>%
+    select(x, y, id)
+  
+  tmp <- tmp %>%
+    activate(nodes) %>%
+    left_join(layout, by = "id")
+  
+  tmp <- tmp %>%
+    activate(edges) %>%
+    mutate(fromLevel = .N()$y[from], toLevel = .N()$y[to], notForwards = fromLevel >= toLevel)
+  
+  
+  vno <- tmp %>% nodes_as_tibble()
+  ved <- tmp %>% edges_as_tibble()
+  
+  # browser()
+  # if (this_tab != "Code") { 
+  vno <- vno %>%
+    format_nodes_and_edges(input, type = "node", vsetcond)
+  
+  
+  ved <- ved %>%
+    format_nodes_and_edges(input, type = "edge", vsetcond)
+  # } else {
+  # browser()
+  
+  # }
+  ### make sure text is visibile when highlighted
+  vno <- vno %>%
+    mutate(color.highlight.background = set_text_contrast_color(font.color)) %>%
+    mutate(color.background = add_opacity_vec(color.background, as.numeric(findset("variableopacity", v = vals))))
+  
+  
+  # margin--------
+  # browser()
+  vno <- vno %>%
+    mutate(margin = 10) # decent approximation
+  
+  
+  
+  # rationalise----
+  
+  doNotification("final aggregation")
+  
+  # hard-coded formatting ----
+  # browser()
+  ved <- ved %>%
+    mutate(label = replace_na(label, "")) %>%
+    mutate(label = ifelse(strength < 0, paste0("<U+0001F500> ", label), label)) %>%
+    # mutate(combo.type <- replace_na(combo.type,"")) %>%
+    # mutate(arrows.middle.enabled = ifelse(combo.type == "", F, T)) %>%
+    # mutate(arrows.middle.enabled = 0) %>%
+    # mutate(label = paste0(label, ifelse(arrows.middle.enabled, paste0(" ", combo.type), ""))) %>%
+    mutate(dashes = str_remove_all(definition.type,",") != "") %>%
+    mutate(arrows.to = definition.type != "Defined, undirected")
+  
+  
+  # labels ----
+  vno <- vno %>%
+    mutate(label = if_else(value > 0, paste0(label, " <U+2665>"), label)) %>%
+    mutate(label = if_else(value < 0, paste0(label, " <U+2639>"), label)) 
+  # browser()
+  vno <- vno %>%
+    mutate(label = make_labels(findset("variablelabel", v = vals),findset("variablewrap", v = vals), vno,type="none"))
+  
+  vno <- vno %>%
+    mutate(title = make_labels(findset("variabletooltip", v = vals),findset("variablewrap", v = vals), vno,type="html"))
+  
+  
+  ved <- ved %>%
+    mutate(
+      title = make_labels(findset("arrowtooltip", v = vals),findset("arrowrap", v = vals), ved,type="html"),
+      label = make_labels(findset("arrowlabel", v = vals),findset("arrowwrap", v = vals), ved,type="none")
+    )
+  
+  
+  # fontsize ceiling so it doesn't crash. doesn't take into account if there are very long words
+  # if (this_tab != "Code")      vno <- vno %>% mutate(font.size =  findset("variablecoding.font.size",v = vals)
+  # )
+  # browser()
+  
+  tmp <- tbl_graph(vno, ved)
+  
+  
+  
+  # tidygraph calculations --------------------------------------------------
+  
+  tmp <- tmp %>% 
+    mutate(is_driver=node_is_source(),is_outcome=node_is_sink())
+  
+  # autogroup
+  
+  if (findset("variableautogroup", v = vals)) {
+    tmp <- tmp %>%
+      N_() %>%
+      mutate(group = group_walktrap())
+  }
+  
+  
+  tmp
+  
+  # browser()
+  
+ 
+}
+
 
 
 dag_layout <- function(nods){
@@ -788,7 +1025,7 @@ set_text_contrast_color <- function(color) {
 }
 
 
-format_nodes_and_edges <- function(df, inp, type, vsc) {
+format_nodes_and_edges <- function(df, inp, type, vsc,vsetcond) {
   # browser()
   if(nrow(df)>0){
     if (type == "node") namelist <- node_names else namelist <- edge_names

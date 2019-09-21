@@ -3,7 +3,7 @@
 # reports -----------------------------------------------------
 # not important. 
 output$liveReportTable1 <-  renderFormattable({
-  if ("frequency" %in% colnames(values$net$x$nodes)) {
+  if (F & "frequency" %in% colnames(values$net$x$nodes)) {
   # browser()
     values$net$x$nodes %>%
       transmute(label, frequency = replace_na(frequency, 0), from = replace_na(from.frequency), to = replace_na(to.frequency)) %>%
