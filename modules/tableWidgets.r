@@ -24,17 +24,18 @@ output$statements <- renderRHandsontable({
   vs <- values$statements
   
   if (!is.null(valuesCoding$nodesSelected)) {
-    if ("" != (valuesCoding$nodesSelected)) {
+    if ("" != (valuesCoding$nodesSelected) & input$sides=="Display") {
       ids <- values$grafAgg2 %>%
         nodes_as_tibble() %>%
-        filter(id == valuesCoding$nodesSelected) %>%
-        pull(statement) %>%
+        filter(id == input$net_selected) %>%
+        # filter(id == valuesCoding$nodesSelected) %>%
+        pull(statement_id) %>%
         str_remove_all("NA") %>%
         str_split(",") %>%
         `[[`(1)
       
       vs <- vs %>%
-        filter(statement %in% ids)
+        filter(statement_id %in% ids)
     }
   }
   rhandsontable(

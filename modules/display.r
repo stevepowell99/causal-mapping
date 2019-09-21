@@ -124,7 +124,7 @@ output$filterscluster <- renderUI({
 observe(if(req(input$sides)=="Display") {
   cols <- req(values$codingGraf) %>% 
     edges_as_tibble() %>% 
-    select(statement_group,everything()) %>% 
+    select(auto_group,everything()) %>% 
     colnames
   output$filters <- renderUI({
     tagList(

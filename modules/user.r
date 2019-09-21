@@ -124,7 +124,7 @@ observeEvent({c(input$projectSelect)},{
     }
       
   values$statements_extra <- values$statements_extra %>%
-    spread(key,value) 
+    spread(key,value,convert=T) 
   
   values$graf <- tbl_graph(values$nodes, values$edges)
   

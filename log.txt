@@ -6,26 +6,45 @@ render viz
 Creating new project
 Loaded1 variables from permalink
 starting aggregation
-Not enough edges to cluster
+starting aggregation
 started coding viz
+Loading nodes from remote database for project: oslo2
+Loading edges from remote database for project: oslo2
+Loading statements from remote database for project: oslo2
+Loading settingsConditional from remote database for project: oslo2
+Loading settingsGlobal from remote database for project: oslo2
+Loading statements_extra from remote database for project: oslo2
+Loaded6 variables from permalink
+starting aggregation
+starting aggregation
+started coding viz
+NA is not in settings
+Produced viz
+render coding viz
 xx creating panel
-update from query ...sace
 No edges
 render coding viz
 render viz
-Loading nodes from remote database for project: sace
-Loading edges from remote database for project: sace
-Loading statements from remote database for project: sace
-Loading settingsConditional from remote database for project: sace
-Loading settingsGlobal from remote database for project: sace
-Loading statements_extra from remote database for project: sace
-Loaded108 variables from permalink
+Creating new project
+Loaded1 variables from permalink
+starting aggregation
+starting aggregation
+started coding viz
+Loading nodes from remote database for project: oslo2
+Loading edges from remote database for project: oslo2
+Loading statements from remote database for project: oslo2
+Loading settingsConditional from remote database for project: oslo2
+Loading settingsGlobal from remote database for project: oslo2
+Loading statements_extra from remote database for project: oslo2
+Loaded6 variables from permalink
+starting aggregation
 starting aggregation
 started coding viz
 NA is not in settings
 Produced viz
 render coding viz
 starting aggregation
+starting aggregation
 started coding viz
 NA is not in settings
 Produced viz
@@ -35,7 +54,6 @@ merge edge aggregation
 min freq aggregation
 join to edges aggregation
 format aggregation
-All data for this formatting is the same
 final aggregation
 NA is not in settings
 Aggregated
@@ -43,16 +61,10 @@ started viz
 NA is not in settings
 Produced viz
 render viz
-Filtering
 Starting second agg
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
+starting aggregation
+starting aggregation
+started coding viz
 NA is not in settings
 Produced viz
-render viz
+Starting second agg

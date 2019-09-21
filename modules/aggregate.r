@@ -21,80 +21,16 @@ observe({
   # input$upConditionalBut
   # make this code run whenever the tab$change reactive triggers
   tab$change
-  vals <- values$settingsGlobal
+  # vals <- values$settingsGlobal
   # prevent this code running every time we change tab
-  this_tab <- isolate(input$sides)
+  # this_tab <- isolate(input$sides)
   
   if (nrow(nodes_as_tibble(req(values$graf))) > 0) {
-    
-    # prepare statements, split columns ----
-    
     doNotification("starting aggregation")
-    legend <- ""
-   
     
-    # browser()
-    tmp <- values$graf 
-    
-    tmp <- tmp %>% 
-      mutate(original_is_driver=node_is_source(),original_is_outcome=node_is_sink())
-
-    tmp <- prepare_vg(tmp)
-    
-    
-    # prepare ved
-    
-    vno <- tmp %>% nodes_as_tibble()
-    ved <- tmp %>% edges_as_tibble()
-    
-    ved <- prepare_ved(ved)
-    # vno <- prepare_vno(vno)
-    
-    
-    
-    ved <- ved %>%
-      left_join(values$statements, by = "statement_id") 
-    
-    
-    # browser()
-    
-    ved <- ved %>%
-      left_join(values$statements_extra,by = "statement_id")
-    
-    
-    
-    
-    
-    # create statement groups -------------------------------------------------
-    if(nrow(ved)>10)ved <- create_statement_groups(ved) else {
-      if(nrow(ved)>0)ved$statement_group <- 1
-      doNotification("Not enough edges to cluster")
-      }     
-    
-    
-    
-    
-    
-    
-    ved <- ved %>%
-      mutate(arrows.middle.enabled = as.logical(F)) %>%
-      mutate(arrows.to = as.logical(T)) %>%
-      mutate(wstrength = strength * trust)
-    # browser()
-    
-    vno$font.color <- "#eeeeee"
-    vno$color.background <- "#226622"
-    vno$font.size <- findset("variablecoding.font.size",vals)
-    
-    
-    if(nrow(ved)>0)ved$width <- 3
-    
-    # infer ----
-    
-    values$codingGraf <- tbl_graph(vno,ved)
-    
-    }
-  })
+    values$codingGraf <- convert_graf_to_codingGraf(values$graf,values$statements,values$statements_extra)
+  }
+})
   
 
 
@@ -102,10 +38,18 @@ observe({
   req(valuesCoding$filterVec)
   # browser()
   doNotification("Starting second agg")
+
   
   vals <- values$settingsGlobal
   # prevent this code running every time we change tab
   this_tab <- isolate(input$sides)
+  
+  
+  
+  
+
+# filtering ---------------------------------------------------------------
+
   
   
     if (nrow(nodes_as_tibble(req(values$codingGraf))) > 0 & this_tab!="Code") {

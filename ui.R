@@ -221,7 +221,9 @@ ui <- tagList(
                                  uiOutput("quotesOutput")
                                ),
                                tabPanel("Stats",
-                                 
+                                 p ("Adjusted R squared"),
+                                 formattableOutput ("statsSigs"),
+                                 uiOutput("statSelector"),
                                  formattableOutput("stats")
                                ),
                                
