@@ -25,7 +25,7 @@ output$statements <- renderRHandsontable({
   
   if (!is.null(valuesCoding$nodesSelected)) {
     if ("" != (valuesCoding$nodesSelected) & input$sides=="Display") {
-      ids <- values$grafAgg2 %>%
+      ids <- values$grafDisplay %>%
         nodes_as_tibble() %>%
         filter(id == input$net_selected) %>%
         # filter(id == valuesCoding$nodesSelected) %>%
@@ -248,7 +248,7 @@ output$nodeTable <- renderRHandsontable({
   
   
   if (!is.null(valuesCoding$nodesSelected)) {
-    whichtarg <- values$grafAgg2 %>%
+    whichtarg <- values$grafDisplay %>%
       nodes_as_tibble() %>%
       filter(row_number() == valuesCoding$nodesSelected) %>%
       pull(origID)

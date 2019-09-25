@@ -36,7 +36,7 @@ observeEvent(input$png, {
   doNotification("Saving file", 2)
   fn <- paste0("tmp", ".html")
   # browser()
-  visSave(values$net, fn, selfcontained = T)
+  visSave(values$netDisplay, fn, selfcontained = T)
   doNotification("Saved file", 2)
   file.copy(fn, paste0("www/", fn), overwrite = T) # because there is a bug with htmlwidgets saving to other directories
   # file.remove(fn)

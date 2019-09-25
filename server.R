@@ -59,12 +59,12 @@ server <- function(input, output, session) {
     if (nrow(nodes_as_tibble(req(values$graf))) > 0) {
       doNotification("starting aggregation")
       
-      values$codingGraf <- convert_graf_to_codingGraf(values$graf,values$statements,values$statements_extra)
+      values$codingGraf <- convert_graf_to_codingGraf(values$graf,values$statements,values$statements_extra,values$settingsGlobal)
     }
   })
   
   
-  # codingGraf to values$netCoding --------------------------------------------------
+  # codingGraf to values$netCode --------------------------------------------------
   
   
   observe( {
@@ -89,7 +89,7 @@ server <- function(input, output, session) {
         vn$x$nodes <- dag_layout(vn$x$nodes)
         
         
-        values$netCoding <- vn
+        values$netCode <- vn
         
         doNotification("Produced viz")}
     } else doNotification("No edges")
@@ -97,9 +97,9 @@ server <- function(input, output, session) {
     
     
   observe( {
-    output$netCoding <- renderVisNetwork({
+    output$netCode <- renderVisNetwork({
       doNotification("render coding viz")
-      values$netCoding
+      values$netCode
     })
   })
   
@@ -116,24 +116,24 @@ server <- function(input, output, session) {
     
     if (nrow(nodes_as_tibble(req(values$codingGraf))) > 0 & this_tab!="Code") {
       # browser()
-      values$grafAgg2 <- convert_codingGraf_to_graf2(values$codingGraf,values$filterVec,values$settingsGlobal,this_tab,input,values$settingsConditional)
+      values$grafDisplay <- convert_codingGraf_to_graf2(values$codingGraf,values$filterVec,values$settingsGlobal,this_tab,input,values$settingsConditional)
       doNotification("Aggregated")
     }
   })
 
   
   
-  # grafAgg2 to values$net --------------------------------------------------
+  # grafDisplay to values$netDisplay --------------------------------------------------
   
   
   
   observe( {
     # browser()
     
-    req(values$grafAgg2)
+    req(values$grafDisplay)
     req(input$sides)
-    if (!is.null(values$grafAgg2) & input$sides=="Display"){
-      vga <- req(values$grafAgg2)
+    if (!is.null(values$grafDisplay) & input$sides=="Display"){
+      vga <- req(values$grafDisplay)
       this_tab <- isolate(input$sides)
       vals <- values$settingsGlobal
       
@@ -152,7 +152,7 @@ server <- function(input, output, session) {
       vn$x$nodes <- dag_layout(vn$x$nodes)
       
       
-      values$net <- vn
+      values$netDisplay <- vn
       
       doNotification("Produced main viz")
     }
@@ -161,7 +161,7 @@ server <- function(input, output, session) {
     
     output$net <- renderVisNetwork({
       doNotification("render viz")
-      values$net
+      values$netDisplay
     })
     
   })

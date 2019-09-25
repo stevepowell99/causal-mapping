@@ -488,7 +488,7 @@ observeEvent(c(input$addFrom), ignoreInit = TRUE, {
   }
   
   
-  visNetworkProxy("netCoding") %>%
+  visNetworkProxy("netCode") %>%
     visSetSelection(unselectAll = TRUE)
   
   updateSelectizeInput(session = session, inputId = "selectBoxValue", selected = "")
@@ -518,7 +518,7 @@ observeEvent(input$addTo, {
   # browser()
   # valuesCoding$readyForEndArrow <- F
   
-  # hiddenStore <- values$netCoding$x$nodes$hidden
+  # hiddenStore <- values$netCode$x$nodes$hidden
   
   if (!is.null(input$quote)) {
     qq <- input$quote %>% as.character()
@@ -611,17 +611,17 @@ observeEvent(c(input$selectBoxValue), {
       # wipe <- setdiff(valuesCoding$foundIDs, ids)
       
       if (length(ids) != 0 && length(ids) < length(vag)) {
-        visNetworkProxy("netCoding") %>%
+        visNetworkProxy("netCode") %>%
           visUpdateNodes(tibble(id = ids, hidden = F)) %>%
           visSelectNodes(id = ids)
       }
       
       # if (length(wipe) > 0) {
-      #   # visNetworkProxy("netCoding") %>%
+      #   # visNetworkProxy("netCode") %>%
       #   #   visUpdateNodes(tibble(id=wipe,hidden=T))
       # }
       
-      visNetworkProxy("netCoding") %>%
+      visNetworkProxy("netCode") %>%
         visFit(animation = list(duration = 500))
       
       valuesCoding$foundIDs <- c(valuesCoding$foundIDs, ids)
@@ -707,7 +707,6 @@ observeEvent(input$deleteVarForm, {
     filter(!(row_number() %in% whichtarg))
 })
 
-# ode/variables panel----
 
 
 # varSelectInput("variables", "Variable:", mtcars, multiple = TRUE) could be useful here
@@ -740,7 +739,7 @@ output$quotesOutput <- renderUI({
   ins <- valuesCoding$nodesSelected
   inse <- valuesCoding$edgesSelected
   if (!is.null(ins)) {
-    quotes <- values$netCoding$x$nodes %>%
+    quotes <- values$netCode$x$nodes %>%
       filter(id %in% ins) %>%
       pull(quote) %>%
       str_remove_all(",NA") %>%
@@ -748,7 +747,7 @@ output$quotesOutput <- renderUI({
   }
   
   else if (!is.null(inse)) {
-    quotes <- values$netCoding$x$edges %>%
+    quotes <- values$netCode$x$edges %>%
       filter(id %in% ins) %>%
       pull(quote) %>%
       str_remove_all(",NA") %>%

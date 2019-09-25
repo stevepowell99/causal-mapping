@@ -540,7 +540,7 @@ render_network <- function(vga,vals,type){
 
 
 
-convert_graf_to_codingGraf <- function(vgraf,vstat,vstate){
+convert_graf_to_codingGraf <- function(vgraf,vstat,vstate,vals){
   
   # prepare statements, split columns ----
   
@@ -1200,25 +1200,25 @@ refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh bu
     
     
     if (iot) {
-      visNetworkProxy("netCoding") %>% # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visNetworkProxy("netCode") %>% # don't forget the ids come from values$grafAgg but the network is values$grafDisplay
         visSetSelection(unselectAll = TRUE)
     } else {
       ids <- rep(T, nrow(vno))
       eids <- rep(T, nrow(ved))
       
-      visNetworkProxy("netCoding") %>% # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visNetworkProxy("netCode") %>% # don't forget the ids come from values$grafAgg but the network is values$grafDisplay
         visSelectNodes(id = yesids)
     }
     if (nrow(vno) > 0) {
       # browser()
-      visNetworkProxy("netCoding") %>% # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visNetworkProxy("netCode") %>% # don't forget the ids come from values$grafAgg but the network is values$grafDisplay
         visUpdateNodes(nodes = tibble(id = 1:nrow(vno), hidden = !ids,font.size=15+5*(sqrt(nrow(vno)))))  #TODO THIS IS A TOTAL HACK
     }
     if (nrow(ved) > 0) {
-      visNetworkProxy("netCoding") %>% # don't forget the ids come from values$grafAgg but the network is values$grafAgg2
+      visNetworkProxy("netCode") %>% # don't forget the ids come from values$grafAgg but the network is values$grafDisplay
         visUpdateEdges(edges = tibble(id = 1:nrow(ved), hidden = !eids))
     }
-    visNetworkProxy("netCoding") %>%
+    visNetworkProxy("netCode") %>%
       visFit(animation = list(duration = 500)) %>%
       visSetSelection(unselectAll = TRUE) %>%
       visSelectNodes(id = F)
