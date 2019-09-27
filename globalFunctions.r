@@ -611,7 +611,7 @@ convert_graf_to_codingGraf <- function(vgraf,vstat,vstate,vals){
 }
 
 
-convert_codingGraf_to_graf2 <- function(tmp,filterVec,vals,this_tab,input,vsetcond){
+convert_codingGraf_to_displayGraf <- function(tmp,filterVec,vals,this_tab,input,vsetcond){
   
   # tmp <-  
   
@@ -1154,7 +1154,7 @@ make_settingsConditional <- function(inp, vs) {
 refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh button. refocusses graph on the current statement, removes any half-made arrows etc
   vno <- tmp %>% nodes_as_tibble()
   ved <- tmp %>% edges_as_tibble()
-  browser()
+  # browser()
   vf <- ved %>%
     group_by(from) %>%
     summarise(fstat = paste0(statement_id, collapse = ",")) %>%
@@ -1201,22 +1201,22 @@ refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh bu
     
     
     if (iot) {
-      visNetworkProxy("netCode") %>% # don't forget the ids come from values$grafAgg but the network is values$grafDisplay
+      visNetworkProxy("netCode") %>% 
         visSetSelection(unselectAll = TRUE)
     } else {
       ids <- rep(T, nrow(vno))
       eids <- rep(T, nrow(ved))
       
-      visNetworkProxy("netCode") %>% # don't forget the ids come from values$grafAgg but the network is values$grafDisplay
+      visNetworkProxy("netCode") %>% 
         visSelectNodes(id = yesids)
     }
     if (nrow(vno) > 0) {
       # browser()
-      visNetworkProxy("netCode") %>% # don't forget the ids come from values$grafAgg but the network is values$grafDisplay
+      visNetworkProxy("netCode") %>% 
         visUpdateNodes(nodes = tibble(id = 1:nrow(vno), hidden = !ids,font.size=15+5*(sqrt(nrow(vno)))))  #TODO THIS IS A TOTAL HACK
     }
     if (nrow(ved) > 0) {
-      visNetworkProxy("netCode") %>% # don't forget the ids come from values$grafAgg but the network is values$grafDisplay
+      visNetworkProxy("netCode") %>% 
         visUpdateEdges(edges = tibble(id = 1:nrow(ved), hidden = !eids))
     }
     visNetworkProxy("netCode") %>%

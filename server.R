@@ -142,7 +142,7 @@ server <- function(input, output, session) {
     
     if (nrow(nodes_as_tibble(req(values$codingGraf))) > 0 & this_tab!="Code") {
       # browser()
-      values$grafDisplay <- convert_codingGraf_to_graf2(values$codingGraf,values$filterVec,values$settingsGlobal,this_tab,input,values$settingsConditional)
+      values$grafDisplay <- convert_codingGraf_to_displayGraf(values$codingGraf,values$filterVec,values$settingsGlobal,this_tab,input,values$settingsConditional)
       doNotification("Aggregated")
     }
   })
