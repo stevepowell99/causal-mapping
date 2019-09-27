@@ -202,7 +202,7 @@ ui <- tagList(
                                               
                                               
                              conditionalPanel("input.sides=='Code'",withSpinner(
-                               (visNetworkOutput("netCode", height = "85vh", width="1250px"))
+                               (visNetworkOutput("codeNet", height = "85vh", width="1250px"))
                                ,type = 5))                         # the main network viz. 
                                ,
                              conditionalPanel("input.sides=='Display'",withSpinner(

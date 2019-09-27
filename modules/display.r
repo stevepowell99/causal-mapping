@@ -122,7 +122,7 @@ output$filterscluster <- renderUI({
   )
 })
 observe(if(req(input$sides)=="Display") {
-  cols <- req(values$codingGraf) %>% 
+  cols <- req(values$codeGraf) %>% 
     edges_as_tibble() %>% 
     select(auto_group,everything()) %>% 
     colnames
@@ -131,7 +131,7 @@ observe(if(req(input$sides)=="Display") {
       actionButton("filtersUp","Update"),
       hr(),
       lapply(cols, function(y) {
-        x <- (values$codingGraf %>% edges_as_tibble())[[y]]
+        x <- (values$codeGraf %>% edges_as_tibble())[[y]]
         u <- unique(x) %>% na.omit()
         if (length(u) > 1 & length(u) < 12 & max(nchar(u)) < 20) {
           div(checkboxGroupButtons(paste0("filters", y), y, choices = sort(u), selected = u), style = "display:inline-block;vertical-align:top")
@@ -141,10 +141,10 @@ observe(if(req(input$sides)=="Display") {
   })
   })
   
-observeEvent(input$filtersUp,if(req(input$sides)=="Display"  & req(values$codingGraf) %>% edges_as_tibble() %>% nrow %>% `>`(0)) {
+observeEvent(input$filtersUp,if(req(input$sides)=="Display"  & req(values$codeGraf) %>% edges_as_tibble() %>% nrow %>% `>`(0)) {
   doNotification("Filtering")
   # browser()
-  edges <- req(values$codingGraf) %>% edges_as_tibble()
+  edges <- req(values$codeGraf) %>% edges_as_tibble()
   filterStore <- edges
   filterStore[T] <- T
 for(y in c(colnames(edges))) {

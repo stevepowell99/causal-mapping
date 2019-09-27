@@ -3,9 +3,9 @@
 # reports -----------------------------------------------------
 # not important. 
 output$liveReportTable1 <-  renderFormattable({
-  if (F & "frequency" %in% colnames(valuesnetDisplay$x$nodes)) {
+  if (F & "frequency" %in% colnames(values$displayNet$x$nodes)) {
   # browser()
-    valuesnetDisplay$x$nodes %>%
+    values$displayNet$x$nodes %>%
       transmute(label, frequency = replace_na(frequency, 0), from = replace_na(from.frequency), to = replace_na(to.frequency)) %>%
       arrange(desc(frequency)) %>%
       formattable(list(
@@ -21,9 +21,9 @@ output$liveReportTable1 <-  renderFormattable({
 })
 
 output$liveReportTable2 <-  renderFormattable({
-  if ("frequency" %in% colnames(valuesnetDisplay$x$nodes)) {
+  if ("frequency" %in% colnames(values$displayNet$x$nodes)) {
     # browser()
-    valuesnetDisplay$x$nodes %>% 
+    values$displayNet$x$nodes %>% 
       filter(!is.na(cluster)) %>%
       mutate(Positive = ifelse(attributionValence>0,attributionValence,0),Negative = ifelse(attributionValence<=0,attributionValence,0)) %>% 
       select(cluster,Positive,Negative) %>% 
@@ -42,7 +42,7 @@ output$liveReportTable2 <-  renderFormattable({
 })
 
 # output$reportTable2 <- renderFormattable({
-#     req(valuesnetDisplay$x$edges) %>% group_by(domain) %>% summarize(valence=round(mean(attributionValence),2)) %>% 
+#     req(values$displayNet$x$edges) %>% group_by(domain) %>% summarize(valence=round(mean(attributionValence),2)) %>% 
 #       arrange(desc(valence)) %>%
 #       formattable(list(
 #         `valence` = color_bar("#EEAAAA")
@@ -129,7 +129,7 @@ observe({
   })
  output$reportTable6 <-  renderFormattable({
      # browser()
-   values$codingGraf %>% edges_as_tibble() %>% 
+   values$codeGraf %>% edges_as_tibble() %>% 
      mutate(answer=UQ(sym(input$extraSelect))) %>% 
      group_by(answer) %>% 
        mutate(positive=attributionValence>0,negative=attributionValence<=0) %>% 

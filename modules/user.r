@@ -93,7 +93,7 @@ observeEvent({c(input$projectSelect)},{
       values$settingsGlobal <- defaultSettingsGlobal
       values$settingsConditional <- defaultSettingsConditional
       # values$graf <- NULL
-      values$grafDisplay <- NULL
+      values$displayGraf <- NULL
       values$graf <- tbl_graph(
         values$nodes,values$edges
       )

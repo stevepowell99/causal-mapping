@@ -4,7 +4,7 @@ output$statSelector=renderUI({
 
 
 output$stats <- renderFormattable(if(input$sides=="Display"){
-  values$netCode$x$edges %>% 
+  values$codeNet$x$edges %>% 
     group_by(UQ(sym(input$statSelect))) %>% 
     select_if(is.numeric) %>% 
     select(-c(from,to,statement_id,package,N,packageNote,id)) %>% 
@@ -23,7 +23,7 @@ output$stats <- renderFormattable(if(input$sides=="Display"){
 
 output$statsSigs=renderFormattable({
   
-ve <- values$netCode$x$edges
+ve <- values$codeNet$x$edges
 ve[,c(19,20,35,41,40,36,63,64,65,67)] %>% select(-attributionValence) %>%
   map(~ lm(attributionValence~.x,data=ve) %>% summary %>%  `[`("adj.r.squared") %>% unlist %>% round(2)) %>% as.tibble  %>% formattable
 })

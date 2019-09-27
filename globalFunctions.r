@@ -540,7 +540,7 @@ render_network <- function(vga,vals,type){
 
 
 
-convert_graf_to_codingGraf <- function(vgraf,vstat,vstate,vals){
+convert_graf_to_codeGraf <- function(vgraf,vstat,vstate,vals){
   
   # prepare statements, split columns ----
   
@@ -611,7 +611,7 @@ convert_graf_to_codingGraf <- function(vgraf,vstat,vstate,vals){
 }
 
 
-convert_codingGraf_to_displayGraf <- function(tmp,filterVec,vals,this_tab,input,vsetcond){
+convert_codeGraf_to_displayGraf <- function(tmp,filterVec,vals,this_tab,input,vsetcond){
   
   # tmp <-  
   
@@ -1201,25 +1201,25 @@ refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh bu
     
     
     if (iot) {
-      visNetworkProxy("netCode") %>% 
+      visNetworkProxy("codeNet") %>% 
         visSetSelection(unselectAll = TRUE)
     } else {
       ids <- rep(T, nrow(vno))
       eids <- rep(T, nrow(ved))
       
-      visNetworkProxy("netCode") %>% 
+      visNetworkProxy("codeNet") %>% 
         visSelectNodes(id = yesids)
     }
     if (nrow(vno) > 0) {
       # browser()
-      visNetworkProxy("netCode") %>% 
+      visNetworkProxy("codeNet") %>% 
         visUpdateNodes(nodes = tibble(id = 1:nrow(vno), hidden = !ids,font.size=15+5*(sqrt(nrow(vno)))))  #TODO THIS IS A TOTAL HACK
     }
     if (nrow(ved) > 0) {
-      visNetworkProxy("netCode") %>% 
+      visNetworkProxy("codeNet") %>% 
         visUpdateEdges(edges = tibble(id = 1:nrow(ved), hidden = !eids))
     }
-    visNetworkProxy("netCode") %>%
+    visNetworkProxy("codeNet") %>%
       visFit(animation = list(duration = 500)) %>%
       visSetSelection(unselectAll = TRUE) %>%
       visSelectNodes(id = F)

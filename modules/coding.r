@@ -266,7 +266,7 @@ observeEvent(c(input$addFrom), ignoreInit = TRUE, {
   }
   
   
-  visNetworkProxy("netCode") %>%
+  visNetworkProxy("codeNet") %>%
     visSetSelection(unselectAll = TRUE)
   
   updateSelectizeInput(session = session, inputId = "selectBoxValue", selected = "")
@@ -386,13 +386,13 @@ observeEvent(c(input$selectBoxValue), {
       # wipe <- setdiff(valuesCoding$foundIDs, ids)
       
       if (length(ids) != 0 && length(ids) < length(vag)) {
-        visNetworkProxy("netCode") %>%
+        visNetworkProxy("codeNet") %>%
           visUpdateNodes(tibble(id = ids, hidden = F)) %>%
           visSelectNodes(id = ids)
       }
       
       
-      visNetworkProxy("netCode") %>%
+      visNetworkProxy("codeNet") %>%
         visFit(animation = list(duration = 500))
       
       valuesCoding$foundIDs <- c(valuesCoding$foundIDs, ids)

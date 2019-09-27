@@ -188,7 +188,7 @@ output$quotesOutput <- renderUI({
   ins <- valuesCoding$nodesSelected
   inse <- valuesCoding$edgesSelected
   if (!is.null(ins)) {
-    quotes <- values$netCode$x$nodes %>%
+    quotes <- values$codeNet$x$nodes %>%
       filter(id %in% ins) %>%
       pull(quote) %>%
       str_remove_all(",NA") %>%
@@ -196,7 +196,7 @@ output$quotesOutput <- renderUI({
   }
   
   else if (!is.null(inse)) {
-    quotes <- values$netCode$x$edges %>%
+    quotes <- values$codeNet$x$edges %>%
       filter(id %in% ins) %>%
       pull(quote) %>%
       str_remove_all(",NA") %>%

@@ -23,16 +23,14 @@ started coding viz
 Produced viz
 Starting second agg
 render coding viz
-starting aggregation
-starting aggregation
-started coding viz
-Produced viz
 Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-started coding viz
-Produced viz
-Starting second agg
-render coding viz
+merge edge aggregation
+min freq aggregation
+join to edges aggregation
+format aggregation
+final aggregation
+NA is not in settings
+Aggregated
+started viz
+Produced main viz
+render viz
