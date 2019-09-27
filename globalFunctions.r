@@ -1154,6 +1154,7 @@ make_settingsConditional <- function(inp, vs) {
 refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh button. refocusses graph on the current statement, removes any half-made arrows etc
   vno <- tmp %>% nodes_as_tibble()
   ved <- tmp %>% edges_as_tibble()
+  browser()
   vf <- ved %>%
     group_by(from) %>%
     summarise(fstat = paste0(statement_id, collapse = ",")) %>%

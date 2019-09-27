@@ -16,6 +16,7 @@ server <- function(input, output, session) {
   
   
   
+  
   # reactive values ---------------------------------------------------------
 
   values <- reactiveValues() # nearly all reactive values are stored in values$...
@@ -25,11 +26,26 @@ server <- function(input, output, session) {
   values$settingsConditional <- defaultSettingsConditional
   values$settingsGlobal <- defaultSettingsGlobal
   values$filterVec <- T
-
+  values$highlightedText <- "" # part of a system to copy any text highlighted with mouse in browser i.e. from interview quotes and insert into the edge information
+  values$pag <- 1 # stores value of pager in Code panel
+  
+  
+  valuesCoding <- reactiveValues(fromStack = NULL, tot=9,toStack = NULL, foundIDs = NULL, readyForEndArrow = F, nodeSelected = NULL, edgeSelected = NULL)
+  # i added an extra reactive variable because you said not to have them all in one :-)    Not sure if they need splitting up more
+  
+  # This keeps a record of the previous page, and so ensures that we only update
+  # the visNetwork if we transition to/from the 'Code' tab.
+  #
+  # You can change when updates happen by either updating the conditions here,
+  # or adding dependencies further down, like I have for tab$change
+  tab <- reactiveValues(old = "", change = 0)
+  
   
   
   source("modules/user.r",local=T)
   source("modules/coding.r",local=T)
+  source("modules/codingPanel.r",local=T)
+  source("modules/codingEdits.r",local=T)
   source("modules/stats.r",local=T)
   source("modules/display.r",local=T)
   source("modules/settingsGlobal.r",local=T)
@@ -47,6 +63,16 @@ server <- function(input, output, session) {
   )
   
   
+  observeEvent(input$sides, {
+    if (tab$old == "Code" ) {
+      tab$change <- tab$change + 1
+    } else if (input$sides == "Code") {
+      tab$change <- tab$change + 1
+    }
+    tab$old <- input$sides
+  })
+  
+  values$obsList <- list() #   to show all the statemtns from one source
   
   
   # create coding graf ------------------------------------------------------

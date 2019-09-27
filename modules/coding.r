@@ -3,8 +3,6 @@
 # observing edge and node selections --------------------------------------
 
 # this is necessary because you can't programmatically deselect, you have to actually click. so store active node / edge in valuesCoding$nodesSelected instead, and nullify it manually when neccessary
-values$highlightedText <- "" # part of a system to copy any text highlighted with mouse in browser i.e. from interview quotes and insert into the edge information
-values$pag <- 1 # stores value of pager in Code panel
 
 observeEvent(input$net_selected, {
   # browser()
@@ -28,220 +26,6 @@ observeEvent(input$net_selectedEdges, {
 
 
 
-observeEvent(input$highlightedText, {
-  if (!is.null(input$highlightedText)) values$highlightedText <- input$highlightedText
-  if (input$sides == "Code") updateTextAreaInput(session, "quote", value = values$highlightedText)
-})
-
-
-
-valuesCoding <- reactiveValues(fromStack = NULL, toStack = NULL, foundIDs = NULL, readyForEndArrow = F, nodeSelected = NULL, edgeSelected = NULL)
-# i added an extra reactive variable because you said not to have them all in one :-)    Not sure if they need splitting up more
-
-# This keeps a record of the previous page, and so ensures that we only update
-# the visNetwork if we transition to/from the 'Code' tab.
-#
-# You can change when updates happen by either updating the conditions here,
-# or adding dependencies further down, like I have for tab$change
-tab <- reactiveValues(old = "", change = 0)
-observeEvent(input$sides, {
-  if (tab$old == "Code" ) {
-    tab$change <- tab$change + 1
-  } else if (input$sides == "Code") {
-    tab$change <- tab$change + 1
-  }
-  tab$old <- input$sides
-})
-
-# create values$tot -------------------------------------------------------
-
-#   just the total number of statements, to provide the maximum value of the pager
-observe(({
-  if (!is.null(values$statements)) {
-    # tot=nrow(values$statements)
-    #
-    # if (!("statement" %in% colnames(values$statments))) {
-    #   values$statements <- values$statements %>% mutate(statement = row_number())
-    # }
-    tot <- values$statements %>%
-      pull(statement_id) %>%
-      na.omit() %>%
-      as.numeric() %>%
-      max()
-    values$tot <- tot
-    # browser()
-  } # if(!is.na(tot)) if(tot>1) browser()
-  else {
-    values$tot <- 9
-  }
-}))
-
-# Pager----
-
-#   the pager allows user to view interview statements one by one
-output$pagerBig <- renderUI({
-  tagList(
-    div(
-      pageruiInput("pager", pages_total = values$tot),
-      style = "display:inline-block;"
-    ),
-    div(
-      actionButton("firstuncoded", "First uncoded"),
-      style = "display:inline-block;"
-    ),
-    div(
-      # hilarious widget which scrolls through statements one by one
-      if (F) {
-        sliderInput(
-          "timeslider",
-          NULL,
-          min = 0,
-          max = values$tot,
-          value = 0,
-          animate = animationOptions(loop = T),
-          ticks = F,
-          width = "50px"
-        )
-      },
-      style = "display:inline-block;"
-    ),
-    div(
-      # if("source" %in% colnames(values$statements))
-      div(actionButton("resetSelection", label = NULL, icon = icon("refresh")), style = "position:absolute;right:35px") %>% bs_embed_tooltip("Reset the view for this statement"),
-      div(actionButton("overview_col", label = "Read more"), style = "display:inline-block"), #   if one interview source has made more than one statement, show all of them
-      div(checkboxInput("onlyThisStatement", label = "Only this", value = T), style = "display:inline-block"), #   if one interview source has made more than one statement, show all of them
-      style = "display:inline-block;margin-left:20px"
-    )
-  )
-})
-
-values$obsList <- list() #   to show all the statemtns from one source
-
-
-observeEvent(input$overview_col, {
-  vs <- values$statements
-  # browser()
-  
-  # col=findset("diagramoverview_column")
-  if (!("source_id" %in% colnames(vs))) {
-    vs$source_id <- 1
-  }
-  
-  vs <- vs %>%
-    mutate(newSource = ifelse(source_id != lag(source_id), source_id, "")) %>%
-    mutate(newSource = ifelse(is.na(newSource), source_id, newSource))
-  
-  pointer <- vs$source_id[req(values$pag)]
-  content <- vs$statement_id[(vs$source_id == pointer)]
-  # content=vs$statement[]
-  
-  showModal(modalDialog(
-    title = "All statements", footer = NULL, easyClose = T, size = "l",
-    tagList(
-      # checkboxInput("showAllSources","Show all sources"),
-      lapply(seq_along(content), function(y) if (!is.na(vs$text[[y]])) {
-        x <- content[[y]]
-        
-        btName <- paste0("gosource", x)
-        
-        if (T) {
-          # make sure to use <<- to update global variable obsList
-          values$obsList[[btName]] <- observeEvent(input[[btName]], {
-            updatePageruiInput(session, "pager", page_current = as.numeric(x))
-            removeModal(session = getDefaultReactiveDomain())
-          })
-        }
-        # browser()
-        tagList(
-          if (vs$newSource[y] == "") div() else div(h3(paste0("Source: ", pointer))),
-          div(h4(paste0("Statement: ", vs$statement_id[x]))),
-          # actionButton(paste0("gosource",x),"Go!"),
-          if (str_detect(vs$text[x], "pdf$")) {
-            tags$iframe(src = "pdf.pdf", style = "height:800px; width:100%;scrolling=yes")
-          } else {
-            div(id = paste0("allStatements-", y), actionLink(btName, label = vs$text[x]))
-          },
-          br()
-        )
-      })
-    )
-  ))
-}, ignoreInit = T)
-
-# display statements one by one ----
-
-output$displayStatementPanel <- renderUI({
-  # browser()
-  
-  quote <- req(values$graf) %>%
-    edges_as_tibble() %>%
-    filter(statement_id == values$pag) %>%
-    pull(quote) %>%
-    replace_na("")
-  
-  
-  tagList(
-    icon("quote-left"),
-    values$statements$text[values$statements$statement_id == values$pag] %>%
-      highlight_text(quote) %>%
-      HTML() %>% div(class = "textbanner", id = "textbanner"),
-    # span(values$statements$text[values$statements$statement==values$pag], class = "textbanner", id = "textbanner"),
-    # span(add_highlight((ve$quote[ve$statement==values$pag])[1],(values$statements$text[values$statements$statement==values$pag])), class = "textbanner", id = "textbanner"),
-    hr()
-  )
-})
-
-# observeEvent({c(input$pager,input$timeslider)},{
-observeEvent({
-  c(input$pager)
-}, {
-  if (!is.null(input$pager)) {
-    values$pag <- input$pager[[1]]
-    
-    # if (input$timeslider > 0 & nrow(values$statements) > 2) updatePageruiInput(session, "pager", page_current = input$timeslider)
-    if (!is.null(input$pager) && !is.null(input$quote)) updateTextAreaInput(session = session, inputId = "quote", value = "", placeholder = "quote")
-  }
-})
-
-observeEvent(input$firstuncoded, {
-  # browser()
-  slist <- values$statements %>%
-    filter(text != "") %>%
-    pull(statement_id) %>%
-    na.omit() %>%
-    as.numeric() %>%
-    sort()
-  
-  elist <- edges_as_tibble(values$graf)$statement_id %>%
-    na.omit() %>%
-    as.numeric()
-  
-  min <- slist[sapply(slist, function(y) !(y %in% elist))] %>% min()
-  
-  if (is.infinite(min)) {
-    doNotification("You have coded everything!", level = 2)
-  } else {
-    updatePageruiInput(session, "pager", page_current = min)
-  }
-})
-
-
-
-
-observeEvent(input$updateE2, {
-  selectizeInput(session, "new1_edge", selected = input$new2_edge)
-})
-
-observeEvent(input$updateE3, {
-  updatePageruiInput(session, inputId = "pager", page_current = as.numeric(values$pag) + 1)
-})
-
-
-
-# fromStack display
-
-output$fromStackInfo <- renderUI({
-})
 
 
 output$combineLink <- renderUI({
@@ -254,12 +38,6 @@ output$combineLink <- renderUI({
         if (!is.null(ins)) paste0(", To? ", ins[[1]])
       ), style = "display:inline-block")
     }
-    #     ,
-    #
-    #        if(0<length(vfs) & !is.null(ins)){
-    #          if(vfs!=ins){
-    #       div(actionLink("combineLink",label = "Recode ?"),style="display:inline-block")
-    # }  }
   )
 })
 
@@ -507,19 +285,16 @@ observeEvent(c(input$selectBoxValue, valuesCoding$nodesSelected, valuesCoding$fr
   if (is.null(isb)) isb <- ""
   if (is.null(vcf)) vcf <- ""
   if (length(vcf) == 0) vcf <- ""
-  if (("" != (ins) | "" != isb) & "" == (vcf)) enable("addFrom") else disable("addFrom")
-  if (("" != (ins) | "" != isb) & "" != (vcf)) enable("addTo") else disable("addTo")
-  if (("" != (ins) | "" != isb) & "" != (vcf)) enable("recodeButton") else disable("recodeButton")
+  # if (("" != (ins) | "" != isb) & "" == (vcf)) enable("addFrom") else disable("addFrom")
+  if (("" != (ins) | "" != isb) & "" != (vcf)[[1]]) enable("addTo") else disable("addTo")
+  if (("" != (ins) | "" != isb) & "" != (vcf)[[1]]) enable("recodeButton") else disable("recodeButton")
 })
 
 
 
 observeEvent(input$addTo, {
-  # browser()
-  # valuesCoding$readyForEndArrow <- F
-  
-  # hiddenStore <- values$netCode$x$nodes$hidden
-  
+
+    
   if (!is.null(input$quote)) {
     qq <- input$quote %>% as.character()
   } else {
@@ -616,10 +391,6 @@ observeEvent(c(input$selectBoxValue), {
           visSelectNodes(id = ids)
       }
       
-      # if (length(wipe) > 0) {
-      #   # visNetworkProxy("netCode") %>%
-      #   #   visUpdateNodes(tibble(id=wipe,hidden=T))
-      # }
       
       visNetworkProxy("netCode") %>%
         visFit(animation = list(duration = 500))
@@ -632,8 +403,6 @@ observeEvent(c(input$selectBoxValue), {
 
 observeEvent(c(input$resetSelection, req(input$pager), input$onlyThisStatement), {
   
-  
-  
   tmp <- req(values$graf) # has to be agg2 because of statements, but shouldn't be because some missed out
   vpag <- values$pag
   iot <- input$onlyThisStatement
@@ -645,124 +414,31 @@ observeEvent(c(input$resetSelection, req(input$pager), input$onlyThisStatement),
 })
 
 
-# widgets to edit and delete selected nodes and edges. not complete ----
-#
-
-output$varForm <- renderUI({
-  if (length(req(valuesCoding$nodesSelected)) > 0) {
-    # browser()
-    df <- values$graf %>%
-      nodes_as_tibble() %>%
-      mutate(id = row_number())
-    
-    rows <- df[valuesCoding$nodesSelected, ]
-    div(tagList(
-      if (length(valuesCoding$nodesSelected) > 0) {
-        tagList(
-          div(p("Edit: "), style = "display:inline-block;width:5%"),
-          if (length(valuesCoding$nodesSelected) == 1) div(textInput("editVarFormText", NULL, placeholder = "label", value = df[valuesCoding$nodesSelected, "label"], width = "95%"), style = "display:inline-block;"),
-          div(textInput("editdetails", NULL, placeholder = "details", value = ifelse(length(rows$details) > 1, "", rows$details), width = "95%"), style = "display:inline-block;"),
-          div(textInput("editcluster", NULL, placeholder = "cluster", value = rows$cluster %>% paste0(collapse = ","), width = "95%"), style = "display:inline-block"),
-          div(actionButton("editVarForm", "Save"), style = "display:inline-block;background-color:white;padding:10px;border-radius:5px"),
-          div(actionLink("deleteVarForm", paste0("Delete: ", valuesCoding$nodesSelected %>% paste0(collapse = ";"), "?")), style = "padding:2px;display:inline-block;color:red")
-        )
-      },
-      hr(style = "margin:2px")
-    ), style = "background-color:#EEFFEE;padding:10px;border:1px green solid")
-  }
-})
-observeEvent(input$editVarForm, {
-  vg <- values$graf %>%
-    activate(nodes)
-  
-  
-  
-  if (input$editdetails != "") {
-    vg <- vg %>%
-      mutate(details = if_else(row_number() %in% valuesCoding$nodesSelected, input$editdetails, details)) # hmm what if details form is empty
-  }
-  
-  if (length(valuesCoding$nodesSelected) == 1 && input$editVarFormText != "") {
-    vg <- vg %>%
-      mutate(label = if_else(row_number() %in% valuesCoding$nodesSelected, input$editVarFormText, label))
-  }
-  if (input$editcluster != "") {
-    vg <- vg %>%
-      mutate(cluster = if_else(row_number() %in% valuesCoding$nodesSelected, input$editcluster, cluster))
-  }
-  
-  values$graf <- vg
-})
-
-observeEvent(input$deleteVarForm, {
-  # browser()
-  whichtarg <- values$graf %>%
-    nodes_as_tibble() %>%
-    mutate(id = row_number()) %>%
-    filter(id %in% valuesCoding$nodesSelected) %>%
-    pull(id)
-  
-  values$graf <- values$graf %>%
-    activate(nodes) %>%
-    filter(!(row_number() %in% whichtarg))
-})
-
-
 
 # varSelectInput("variables", "Variable:", mtcars, multiple = TRUE) could be useful here
-
-output$combineVars <- renderUI({
-  varlist <- values$nodes$label %>%
-    unique() %>%
-    as.character()
-  varlist <- na.omit(varlist)
-  
-  tagList(
-    # h5("Combine variables")
-    # ,
-    
-    ### this will fail if duplicate labels TODO
-    selectizeInput("combineSelect",
-      label = NULL, selected = NULL, multiple = T,
-      options =
-        list(create = T, placeholder = "start typing the name of the variables you want to combine", onInitialize = I('function() { this.setValue(""); }')),
-      choices = varlist
-    ),
-    textInput("newName", "Type a name for this new combined variable"),
-    actionButton("combine", "Combine!"),
-    hr()
-  )
-})
-
-
-output$quotesOutput <- renderUI({
-  ins <- valuesCoding$nodesSelected
-  inse <- valuesCoding$edgesSelected
-  if (!is.null(ins)) {
-    quotes <- values$netCode$x$nodes %>%
-      filter(id %in% ins) %>%
-      pull(quote) %>%
-      str_remove_all(",NA") %>%
-      paste0(collapse = "; ")
-  }
-  
-  else if (!is.null(inse)) {
-    quotes <- values$netCode$x$edges %>%
-      filter(id %in% ins) %>%
-      pull(quote) %>%
-      str_remove_all(",NA") %>%
-      paste0(collapse = "; ")
-  }
-  else {
-    quotes <- "Click on a variable or arrow to see the quotes"
-  }
-  
-  tagList(
-    icon("quote-left"),
-    quotes %>%
-      HTML() %>% div(class = "quotes")
-  )
-})
+# 
+# output$combineVars <- renderUI({
+#   varlist <- values$nodes$label %>%
+#     unique() %>%
+#     as.character()
+#   varlist <- na.omit(varlist)
+#   
+#   tagList(
+#     # h5("Combine variables")
+#     # ,
+#     
+#     ### this will fail if duplicate labels TODO
+#     selectizeInput("combineSelect",
+#       label = NULL, selected = NULL, multiple = T,
+#       options =
+#         list(create = T, placeholder = "start typing the name of the variables you want to combine", onInitialize = I('function() { this.setValue(""); }')),
+#       choices = varlist
+#     ),
+#     textInput("newName", "Type a name for this new combined variable"),
+#     actionButton("combine", "Combine!"),
+#     hr()
+#   )
+# })
 
 
 
