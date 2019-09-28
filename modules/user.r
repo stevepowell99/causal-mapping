@@ -92,9 +92,9 @@ observeEvent({c(input$projectSelect)},{
       values$statements_extra <- default.statements_extra 
       values$settingsGlobal <- defaultSettingsGlobal
       values$settingsConditional <- defaultSettingsConditional
-      # values$graf <- NULL
+      # values$rawGraf <- NULL
       values$displayGraf <- NULL
-      values$graf <- tbl_graph(
+      values$rawGraf <- tbl_graph(
         values$nodes,values$edges
       )
   } else {
@@ -126,11 +126,11 @@ observeEvent({c(input$projectSelect)},{
   values$statements_extra <- values$statements_extra %>%
     spread(key,value,convert=T) 
   
-  values$graf <- tbl_graph(values$nodes, values$edges)
+  values$rawGraf <- tbl_graph(values$nodes, values$edges)
   
   
   
-  doNotification(glue("Loaded{nrow(values$graf %>% nodes_as_tibble)} variables from permalink"))
+  doNotification(glue("Loaded{nrow(values$rawGraf %>% nodes_as_tibble)} variables from permalink"))
     
   # browser()
   } else {
@@ -195,8 +195,8 @@ observeEvent(
       # projectFromURL <- reactiveVal(inputtitl)
       
       
-      values$nodes <- values$graf %>% nodes_as_tibble()
-      values$edges <- values$graf %>% edges_as_tibble()
+      values$nodes <- values$rawGraf %>% nodes_as_tibble()
+      values$edges <- values$rawGraf %>% edges_as_tibble()
       
       project <- input$projectSelect
       v=values

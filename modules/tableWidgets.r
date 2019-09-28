@@ -59,7 +59,7 @@ observeEvent(input$up.nodes, {
     mutate(label = strip_symbols(label)) %>%
     tidy_colnames()
   
-  values$graf <- tbl_graph(df, defaultEdges)
+  values$rawGraf <- tbl_graph(df, defaultEdges)
   doNotification("Updated variables, now update your edges")
 })
 
@@ -74,7 +74,7 @@ observeEvent(input$up.edges, {
     nodes <- tibble(label = (unique(unlist(c(df$from, df$to))))) %>%
       bind_rows(defaultNodes %>% filter(F))
   } else {
-    nodes <- values$graf %>% nodes_as_tibble()
+    nodes <- values$rawGraf %>% nodes_as_tibble()
   }
   
   
@@ -96,7 +96,7 @@ observeEvent(input$up.edges, {
   
   # if (select(df, from, to) %>% unlist() %>% max() > max) doNotification("You have edges which don't make sense",level=2)
   # browser()
-  values$graf <- tbl_graph(nodes, df)
+  values$rawGraf <- tbl_graph(nodes, df)
   doNotification("Updated arrows")
 })
 
@@ -219,25 +219,25 @@ observeEvent(input$autoMerge, { #               this is ancient. not used at mom
 })
 
 output$combine_button <- renderUI({
-  if (!all(replace_na((nodes_as_tibble(values$graf))$cluster, "") == "")) {
+  if (!all(replace_na((nodes_as_tibble(values$rawGraf))$cluster, "") == "")) {
     div(actionButton("node_permanent_combine", "Combine clusters permanently!?"), style = "margin-top:5px;")
   }
 })
 
 observeEvent(input$node_permanent_combine, {
-  values$graf <- values$tmp.graf
+  values$rawGraf <- values$tmp.graf
 })
 
 output$nodeTable <- renderRHandsontable({
   # browser()
-  arrows <- values$graf %>%
+  arrows <- values$rawGraf %>%
     edges_as_tibble() %>%
     select(xid = from, to) %>%
     unlist() %>%
     unclass() %>%
     as.tibble()
   
-  vg <- values$graf %>%
+  vg <- values$rawGraf %>%
     nodes_as_tibble() %>%
     # mutate_all(replaceNA) %>%
     mutate(xid = row_number()) %>%
@@ -301,7 +301,7 @@ output$nodeTableAddCol <- renderUI({
 observeEvent(input$newNodeGo, {
   # browser()
   if (!is.na(input$newNodeName)) {
-    values$graf <- values$graf %>%
+    values$rawGraf <- values$rawGraf %>%
       activate(nodes) %>%
       mutate(!!input$newNodeName := ifelse(input$newNodeType == "numeric", as.numeric(NA), ifelse(input$newNodeType == "logical", as.logical(NA), "")))
     updateCheckboxInput(session, inputId = "nodeTableAddCol", value = F)
@@ -318,7 +318,7 @@ observeEvent(input$nodeTableUp, {
     select(-frequency) %>%
     arrange(xid)
   
-  values$graf <- tbl_graph(x, values$graf %>% edges_as_tibble())
+  values$rawGraf <- tbl_graph(x, values$rawGraf %>% edges_as_tibble())
 })
 
 # edge/arrows panel----
@@ -337,7 +337,7 @@ observeEvent(input$edgeTableUp, {
   x <- hot_to_r(input$edgeTable) %>%
     select(-fromLabel, -toLabel)
   
-  node.ids <- values$graf %>%
+  node.ids <- values$rawGraf %>%
     nodes_as_tibble() %>%
     mutate(id = row_number()) %>%
     pull(id)
@@ -345,14 +345,14 @@ observeEvent(input$edgeTableUp, {
   x <- x %>%
     filter(from %in% node.ids & to %in% node.ids)
   
-  values$graf <- tbl_graph(values$graf %>% nodes_as_tibble(), x)
+  values$rawGraf <- tbl_graph(values$rawGraf %>% nodes_as_tibble(), x)
 })
 
 output$edgeTable <- renderRHandsontable({
   # browser()
   doNotification("Creating edges table")
   # values$edges=values$edges
-  ve <- values$graf %>%
+  ve <- values$rawGraf %>%
     E_() %>%
     mutate(fromLabel = .N()$label[from], toLabel = .N()$label[to]) %>%
     select(fromLabel, toLabel, everything()) %>%

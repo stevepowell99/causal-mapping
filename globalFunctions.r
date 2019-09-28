@@ -207,7 +207,10 @@ prepare_vg <- function(graf) {
     mutate(id = row_number(), origID = id) %>%
     mutate(value = as.numeric(value)) %>%
     mutate(value = if_else(value == "", 0, value)) %>%
-    mutate(value = replace_na(value, 0))
+    mutate(value = replace_na(value, 0)) %>% 
+    mutate(original_is_driver=node_is_source(),original_is_outcome=node_is_sink())
+    
+    
 }
 
 prepare_ved <- function(ved) {
@@ -215,7 +218,11 @@ prepare_ved <- function(ved) {
     mutate_at(vars(strength, trust), funs(as.numeric)) %>%
     mutate(combo.type = ifelse(is.na(combo.type), "", combo.type)) %>%
     mutate(label = ifelse(is.na(label), "", label)) %>%
-    mutate(definition.type = ifelse(is.na(definition.type), "", definition.type))
+    mutate(definition.type = ifelse(is.na(definition.type), "", definition.type)) %>% 
+    mutate(arrows.middle.enabled = as.logical(F)) %>%
+    mutate(arrows.to = as.logical(T)) %>%
+    mutate(wstrength = strength * trust)
+    
 }
 
 prepare_vno <- function(vno) {
@@ -540,7 +547,7 @@ render_network <- function(vga,vals,type){
 
 
 
-convert_graf_to_codeGraf <- function(vgraf,vstat,vstate,vals){
+convert_rawGraf_to_codeGraf <- function(vgraf,vstat,vstate,vals){
   
   # prepare statements, split columns ----
   
@@ -549,52 +556,30 @@ convert_graf_to_codeGraf <- function(vgraf,vstat,vstate,vals){
   
   
   # browser()
-  tmp <- vgraf 
+  tmp <- prepare_vg(vgraf)
   
-  tmp <- tmp %>% 
-    mutate(original_is_driver=node_is_source(),original_is_outcome=node_is_sink())
-  
-  tmp <- prepare_vg(tmp)
-  
-  
-  # prepare ved
-  
+
+    
   vno <- tmp %>% nodes_as_tibble()
   ved <- tmp %>% edges_as_tibble()
   
   ved <- prepare_ved(ved)
-  # vno <- prepare_vno(vno)
   
   
   
   ved <- ved %>%
-    left_join(vstat, by = "statement_id") 
-  
-  
-  # browser()
-  
-  ved <- ved %>%
+    left_join(vstat, by = "statement_id") %>% 
     left_join(vstate,by = "statement_id")
   
   
-  # browser()
-  
   
   # create statement groups -------------------------------------------------
+  
   if(nrow(ved)>10)ved <- create_auto_groups(ved) else {
     if(nrow(ved)>0)ved$auto_group <- 1
     # doNotification("Not enough edges to cluster")
   }     
   
-  
-  
-  
-  
-  
-  ved <- ved %>%
-    mutate(arrows.middle.enabled = as.logical(F)) %>%
-    mutate(arrows.to = as.logical(T)) %>%
-    mutate(wstrength = strength * trust)
   # browser()
   
   vno$font.color <- "#eeeeee"
@@ -708,7 +693,7 @@ convert_codeGraf_to_displayGraf <- function(tmp,filterVec,vals,this_tab,input,vs
     # browser()
     mf <- findset("variableminimum.frequency", v = vals) %>% as.numeric()
     if (this_tab != "Code" && mf > 0) {
-      # values$grafMerged <- tbl_graph(vno, ved) 
+      # values$mergedGraf <- tbl_graph(vno, ved) 
       
       tmp <- tbl_graph(vno, ved)  %>%
         N_() %>%
@@ -1151,7 +1136,9 @@ make_settingsConditional <- function(inp, vs) {
   }
 }
 
-refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh button. refocusses graph on the current statement, removes any half-made arrows etc
+refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL) {   
+  # also for the refresh button. refocusses graph on the current statement, removes any half-made arrows etc
+  # this part just works out which edges and nodes belong to this statement 
   vno <- tmp %>% nodes_as_tibble()
   ved <- tmp %>% edges_as_tibble()
   # browser()
@@ -1183,7 +1170,12 @@ refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh bu
       mutate(sel = ifelse(str_detect(statement_id, paste0("(,|^)", as.character(vpag), "(,|$)")), T, F)) %>%
       pull(sel)
     # browser()
-    yesids <- ids %>% which()
+    
+    ids[as.numeric(fromStack)] <- T
+    
+    yesids <- ids %>% 
+      which() 
+    
     noids <- ids %>%
       `!`() %>%
       which()
@@ -1199,17 +1191,19 @@ refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh bu
       `!`() %>%
       which()
     
-    
-    if (iot) {
-      visNetworkProxy("codeNet") %>% 
-        visSetSelection(unselectAll = TRUE)
-    } else {
-      ids <- rep(T, nrow(vno))
-      eids <- rep(T, nrow(ved))
-      
-      visNetworkProxy("codeNet") %>% 
-        visSelectNodes(id = yesids)
-    }
+    # 
+    # if (iot) {
+    #   visNetworkProxy("codeNet") %>% 
+    #     visSetSelection(unselectAll = TRUE)
+    # } else {
+    #   ids <- rep(T, nrow(vno))
+    #   eids <- rep(T, nrow(ved))
+    #   
+    #   visNetworkProxy("codeNet") %>% 
+    #     visSelectNodes(id = yesids)
+    # }
+    # 
+    # 
     if (nrow(vno) > 0) {
       # browser()
       visNetworkProxy("codeNet") %>% 
@@ -1220,9 +1214,10 @@ refresh_and_filter_net <- function(tmp, vpag, iot) {   # also for the refresh bu
         visUpdateEdges(edges = tibble(id = 1:nrow(ved), hidden = !eids))
     }
     visNetworkProxy("codeNet") %>%
-      visFit(animation = list(duration = 500)) %>%
-      visSetSelection(unselectAll = TRUE) %>%
-      visSelectNodes(id = F)
+      visFit(animation = list(duration = 500)) 
+    # %>%
+    #   visSetSelection(unselectAll = TRUE) %>%
+    #   visSelectNodes(id = F)
   }
 }
 

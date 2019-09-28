@@ -1,5 +1,9 @@
 
 xx creating panel
+No edges
+Starting second agg
+render coding viz
+xx creating panel
 update from query ...multiple-statements-per-source
 No edges
 Starting second agg
@@ -17,20 +21,53 @@ started coding viz
 Produced viz
 Starting second agg
 render coding viz
+xx creating panel
+update from query ...multiple-statements-per-source
+No edges
+Starting second agg
+render coding viz
+Loading nodes from remote database for project: multiple-statements-per-source
+Loading edges from remote database for project: multiple-statements-per-source
+Loading statements from remote database for project: multiple-statements-per-source
+Loading settingsConditional from remote database for project: multiple-statements-per-source
+Loading settingsGlobal from remote database for project: multiple-statements-per-source
+Loading statements_extra from remote database for project: multiple-statements-per-source
+Loaded5 variables from permalink
 starting aggregation
 starting aggregation
 started coding viz
 Produced viz
 Starting second agg
 render coding viz
+xx creating panel
+update from query ...multiple-statements-per-source
+No edges
 Starting second agg
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-Produced main viz
-render viz
+render coding viz
+Loading nodes from remote database for project: multiple-statements-per-source
+Loading edges from remote database for project: multiple-statements-per-source
+Loading statements from remote database for project: multiple-statements-per-source
+Loading settingsConditional from remote database for project: multiple-statements-per-source
+Loading settingsGlobal from remote database for project: multiple-statements-per-source
+Loading statements_extra from remote database for project: multiple-statements-per-source
+Loaded5 variables from permalink
+starting aggregation
+starting aggregation
+started coding viz
+Produced viz
+Starting second agg
+render coding viz
+Adding Node
+starting aggregation
+starting aggregation
+started coding viz
+Produced viz
+Starting second agg
+render coding viz
+Adding Node
+starting aggregation
+starting aggregation
+started coding viz
+Produced viz
+Starting second agg
+render coding viz

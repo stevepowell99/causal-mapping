@@ -12,7 +12,7 @@ server <- function(input, output, session) {
     con <-  isolate(DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306))
   }
   
-  track_usage(storage_mode = store_json(path = "logs/"))
+  if(F)track_usage(storage_mode = store_json(path = "logs/"))
   
   
   
@@ -31,13 +31,7 @@ server <- function(input, output, session) {
   
   
   valuesCoding <- reactiveValues(fromStack = NULL, tot=9,toStack = NULL, foundIDs = NULL, readyForEndArrow = F, nodeSelected = NULL, edgeSelected = NULL)
-  # i added an extra reactive variable because you said not to have them all in one :-)    Not sure if they need splitting up more
-  
-  # This keeps a record of the previous page, and so ensures that we only update
-  # the visNetwork if we transition to/from the 'Code' tab.
-  #
-  # You can change when updates happen by either updating the conditions here,
-  # or adding dependencies further down, like I have for tab$change
+
   tab <- reactiveValues(old = "", change = 0)
   
   
@@ -46,6 +40,7 @@ server <- function(input, output, session) {
   source("modules/coding.r",local=T)
   source("modules/codingPanel.r",local=T)
   source("modules/codingEdits.r",local=T)
+  source("modules/codingRecoding.r",local=T)
   source("modules/stats.r",local=T)
   source("modules/display.r",local=T)
   source("modules/settingsGlobal.r",local=T)
@@ -57,7 +52,7 @@ server <- function(input, output, session) {
   
   
   #   the default graph object with no nodes or edges
-  values$graf <- tbl_graph(
+  values$rawGraf <- tbl_graph(
     defaultNodes[0, ],
     defaultEdges[0, ]
   )
@@ -72,20 +67,18 @@ server <- function(input, output, session) {
     tab$old <- input$sides
   })
   
-  values$obsList <- list() #   to show all the statemtns from one source
+  valuesCoding$obsList <- list() #   to show all the statemtns from one source
   
   
   # create coding graf ------------------------------------------------------
   
   
   observe({
-    # make this code run whenever the tab$change reactive triggers
-    # tab$change
     
-    if (nrow(nodes_as_tibble(req(values$graf))) > 0) {
+    if (nrow(nodes_as_tibble(req(values$rawGraf))) > 0) {
       doNotification("starting aggregation")
       
-      values$codeGraf <- convert_graf_to_codeGraf(values$graf,values$statements,values$statements_extra,values$settingsGlobal)
+      values$codeGraf <- convert_rawGraf_to_codeGraf(values$rawGraf,values$statements,values$statements_extra,values$settingsGlobal)
     }
   })
   
@@ -97,20 +90,12 @@ server <- function(input, output, session) {
     if (!is.null(values$codeGraf)){
       vga <- req(values$codeGraf)
       this_tab <- isolate(input$sides)
-      vals <- values$settingsGlobal
-      
-      
       
       doNotification("started coding viz")
-      # browser()
-      
-      # if (is.null(values$pag)) {
-      #   values$pag <- 1
-      # }
-      # browser()
+
       if(vga %>% edges_as_tibble() %>% nrow %>% `>`(0)){
   
-        vn <- render_network(vga,vals,type="Coding")
+        vn <- render_network(vga,values$settingsGlobal,type="Coding")
         
         vn$x$nodes <- dag_layout(vn$x$nodes)
         
@@ -130,6 +115,7 @@ server <- function(input, output, session) {
   })
   
   
+  # codeGraf to displayGraf  --------------------------------------------------
   
   
   observe({

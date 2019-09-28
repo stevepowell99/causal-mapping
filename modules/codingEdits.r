@@ -5,7 +5,7 @@
 output$varForm <- renderUI({
   if (length(req(valuesCoding$nodesSelected)) > 0) {
     # browser()
-    df <- values$graf %>%
+    df <- values$rawGraf %>%
       nodes_as_tibble() %>%
       mutate(id = row_number())
     
@@ -26,7 +26,7 @@ output$varForm <- renderUI({
   }
 })
 observeEvent(input$editVarForm, {
-  vg <- values$graf %>%
+  vg <- values$rawGraf %>%
     activate(nodes)
   
   
@@ -45,19 +45,69 @@ observeEvent(input$editVarForm, {
       mutate(cluster = if_else(row_number() %in% valuesCoding$nodesSelected, input$editcluster, cluster))
   }
   
-  values$graf <- vg
+  values$rawGraf <- vg
 })
 
 observeEvent(input$deleteVarForm, {
   # browser()
-  whichtarg <- values$graf %>%
+  whichtarg <- values$rawGraf %>%
     nodes_as_tibble() %>%
     mutate(id = row_number()) %>%
     filter(id %in% valuesCoding$nodesSelected) %>%
     pull(id)
   
-  values$graf <- values$graf %>%
+  values$rawGraf <- values$rawGraf %>%
     activate(nodes) %>%
     filter(!(row_number() %in% whichtarg))
 })
 
+observeEvent(input$savePackage, {
+  vg <- values$rawGraf %>%
+    activate(edges)
+  
+  ise <- valuesCoding$edgesSelected
+  
+  
+  if (input$package != "") {
+    vg <- vg %>%
+      mutate(package = if_else(row_number() %in% ise, input$package, package))
+  }
+  
+  
+  if (input$packageNote != "") {
+    vg <- vg %>%
+      mutate(packageNote = if_else(row_number() %in% ise, input$packageNote, packageNote))
+  }
+  
+  
+  if (input$quote != "") {
+    vg <- vg %>%
+      mutate(quote = if_else(row_number() %in% ise, input$quote, quote))
+  }
+  
+  
+  if (input$arrLabel != "") {
+    vg <- vg %>%
+      mutate(label = if_else(row_number() %in% ise, input$arrLabel, label))
+  }
+  
+  values$rawGraf <- vg
+  
+  vpag <- values$pag
+  iot <- input$onlyThisStatement
+  delay(1000, refresh_and_filter_net(vg, vpag, iot))
+})
+
+
+
+
+observeEvent(input$deletePackage, {
+  # browser()
+  if (!is.null(valuesCoding$edgesSelected)) {
+    values$rawGraf <- values$rawGraf %>%
+      activate(edges) %>%
+      mutate(id = row_number()) %>%
+      filter(!(id %in% valuesCoding$edgesSelected)) %>%
+      select(-id)
+  }
+})

@@ -108,7 +108,7 @@ observeEvent(input$upConditional, ignoreInit = T, {
 
 
 output$filterscluster <- renderUI({
-  clusters <- values$graf %>%
+  clusters <- values$rawGraf %>%
     nodes_as_tibble() %>%
     pull(cluster) %>%
     unique()
@@ -116,7 +116,7 @@ output$filterscluster <- renderUI({
   tagList(
     if (!is.null(clusters) && length(clusters) > 1) {
       tagList(
-        div(checkboxGroupButtons("filterscluster", "cluster", choices = sort(values$graf %>% nodes_as_tibble() %>% pull(cluster) %>% unique())), style = "display:inline-block;vertical-align:top")
+        div(checkboxGroupButtons("filterscluster", "cluster", choices = sort(values$rawGraf %>% nodes_as_tibble() %>% pull(cluster) %>% unique())), style = "display:inline-block;vertical-align:top")
       )
     }
   )

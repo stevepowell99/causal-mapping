@@ -144,7 +144,7 @@ observe({
    })
 
 output$reportPlot1 <- renderPlot({
-  values$grafMerged %>% nodes_as_tibble() %>% 
+  values$mergedGraf %>% nodes_as_tibble() %>% 
     select(Education=`What is the education of the main respondent?`,attributionValence) %>% 
     ggplot(aes(attributionValence,Education))+
     geom_point()+

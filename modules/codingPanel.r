@@ -102,7 +102,7 @@ observeEvent(input$overview_col, {
         
         if (T) {
           # make sure to use <<- to update global variable obsList
-          values$obsList[[btName]] <- observeEvent(input[[btName]], {
+          valuesCoding$obsList[[btName]] <- observeEvent(input[[btName]], {
             updatePageruiInput(session, "pager", page_current = as.numeric(x))
             removeModal(session = getDefaultReactiveDomain())
           })
@@ -129,7 +129,7 @@ observeEvent(input$overview_col, {
 output$displayStatementPanel <- renderUI({
   # browser()
   
-  quote <- req(values$graf) %>%
+  quote <- req(values$rawGraf) %>%
     edges_as_tibble() %>%
     filter(statement_id == values$pag) %>%
     pull(quote) %>%
@@ -168,7 +168,7 @@ observeEvent(input$firstuncoded, {
     as.numeric() %>%
     sort()
   
-  elist <- edges_as_tibble(values$graf)$statement_id %>%
+  elist <- edges_as_tibble(values$rawGraf)$statement_id %>%
     na.omit() %>%
     as.numeric()
   
