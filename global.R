@@ -91,6 +91,8 @@ library(formattable)
 
 # **provide default nodes and edges if necessary ----
 
+mygreen <- "#226622"
+
 defaultNodes <- data.frame(
   # id = 1:2,
   # color.background=c("","") ,

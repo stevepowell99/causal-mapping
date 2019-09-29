@@ -583,7 +583,7 @@ convert_rawGraf_to_codeGraf <- function(vgraf,vstat,vstate,vals){
   # browser()
   
   vno$font.color <- "#eeeeee"
-  vno$color.background <- "#226622"
+  vno$color.background <- mygreen
   vno$font.size <- findset("variablecoding.font.size",vals)
   
   
@@ -1191,30 +1191,26 @@ refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL) {
       `!`() %>%
       which()
     
-    # 
-    # if (iot) {
-    #   visNetworkProxy("codeNet") %>% 
-    #     visSetSelection(unselectAll = TRUE)
-    # } else {
-    #   ids <- rep(T, nrow(vno))
-    #   eids <- rep(T, nrow(ved))
-    #   
-    #   visNetworkProxy("codeNet") %>% 
-    #     visSelectNodes(id = yesids)
-    # }
-    # 
-    # 
+    
     if (nrow(vno) > 0) {
       # browser()
-      visNetworkProxy("codeNet") %>% 
-        visUpdateNodes(nodes = tibble(id = 1:nrow(vno), hidden = !ids,font.size=15+5*(sqrt(nrow(vno)))))  #TODO THIS IS A TOTAL HACK
-    }
+      nods <- tibble(id = 1:nrow(vno), hidden = !ids,color=if_else(id %in% as.numeric(fromStack),"blue",mygreen),font.size=15+5*(sqrt(nrow(vno))))  #TODO THIS IS A TOTAL HACK
+      
+      # visNetworkProxy("codeNet") %>% 
     if (nrow(ved) > 0) {
       visNetworkProxy("codeNet") %>% 
-        visUpdateEdges(edges = tibble(id = 1:nrow(ved), hidden = !eids))
-    }
-    visNetworkProxy("codeNet") %>%
+        visUpdateNodes(nodes = nods) %>% 
+        visUpdateEdges(edges = tibble(id = 1:nrow(ved), hidden = !eids)) %>% 
       visFit(animation = list(duration = 500)) 
+    } else {
+      {
+        visNetworkProxy("codeNet") %>% 
+          visUpdateNodes(nodes = nods) %>% 
+          visFit(animation = list(duration = 500)) 
+      }
+    }
+
+          }
     # %>%
     #   visSetSelection(unselectAll = TRUE) %>%
     #   visSelectNodes(id = F)

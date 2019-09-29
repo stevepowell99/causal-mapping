@@ -161,8 +161,12 @@ output$combo <- renderUI(if (T) {
 
 observeEvent(c(input$addFrom), ignoreInit = TRUE, {
   ns <- valuesCoding$nodesSelected
+  vpag <- values$pag
+  iot <- input$onlyThisStatement
+
+        
   if (is.null(ns)) ns <- ""
-  if ("" != (ns) | !is.null(input$selectBoxValue)) {
+  # if ("" != (ns) | !is.null(input$selectBoxValue)) {
     # browser()
     
     isb <- input$selectBoxValue
@@ -185,28 +189,16 @@ observeEvent(c(input$addFrom), ignoreInit = TRUE, {
           nodes_as_tibble() %>%
           nrow() %>%
           `+`(1)
-        
-        tmp <- req(values$rawGraf) 
-        vpag <- values$pag
-        iot <- input$onlyThisStatement
-
-        
-        # browser()
-        valuesCoding$fromStack <- c(ns, valuesCoding$fromStack, inpfrom) %>% unique()
+      }
+    }
+        valuesCoding$fromStack <- c(ns, inpfrom, valuesCoding$fromStack) %>% unique()
         
         valuesCoding$fromStack <- valuesCoding$fromStack[valuesCoding$fromStack != ""]
         
-        delay(1000, refresh_and_filter_net(tmp, vpag, iot,valuesCoding$fromStack))
-      }
-    }
-
+        # browser()
+        
+        delay(1000, refresh_and_filter_net(values$rawGraf, vpag, iot,valuesCoding$fromStack))
     
-  }
-  
-  
-  # visNetworkProxy("codeNet") %>%
-  #   visSetSelection(unselectAll = TRUE)
-  
   updateSelectizeInput(session = session, inputId = "selectBoxValue", selected = "")
   
   session$sendCustomMessage("refocus", list(NULL))   # puts cursor back in box
@@ -296,38 +288,33 @@ observeEvent(input$addTo, {
 # if selectbox is not an existing node, add as new but only to vis; it will get added to graf if addFrom is pressed --------
 # doesn't work??
 
-observeEvent(c(input$selectBoxValue), {
-  if (req(input$sides) == "Code") {
-    
-    if (input$selectBoxValue != "" && nchar(input$selectBoxValue) > 2) {
-      
-      vag <- values$rawGraf %>%
-        nodes_as_tibble() %>%
-        pull(label)
-      
-      ids <- which(vag == input$selectBoxValue)
-      
-      # wipe <- setdiff(valuesCoding$foundIDs, ids)
-      
-      if (length(ids) != 0 && length(ids) < length(vag)) {
-        visNetworkProxy("codeNet") %>%
-          visUpdateNodes(tibble(id = ids, hidden = F)) %>%
-          visSelectNodes(id = ids)
-      }
-      
-      
-      # visNetworkProxy("codeNet") %>%
-      #   visFit(animation = list(duration = 500))
-      
-      # valuesCoding$foundIDs <- c(valuesCoding$foundIDs, ids)
-    }
-  }
-})
-#
+# observeEvent(c(input$selectBoxValue), {
+#   if (req(input$sides) == "Code") {
+#     
+#     if (input$selectBoxValue != "" && nchar(input$selectBoxValue) > 2) {
+#       
+#       vag <- values$rawGraf %>%
+#         nodes_as_tibble() %>%
+#         pull(label)
+#       
+#       ids <- which(vag == input$selectBoxValue)
+#       
+#       
+#       if (length(ids) != 0 && length(ids) < length(vag)) {
+#         visNetworkProxy("codeNet") %>%
+#           visUpdateNodes(tibble(id = ids, hidden = F)) %>%
+#           visSelectNodes(id = ids)
+#       }
+#       
+#       
+#     }
+#   }
+# })
 
 
 
-# reset selection on pressing button etc ----------------------------------
+
+# reset selection and refresh on pressing button etc ----------------------------------
 observeEvent(c(input$resetSelection, req(input$pager), input$onlyThisStatement), {
 
   tmp <- req(values$rawGraf) # has to be agg2 because of statements, but shouldn't be because some missed out
