@@ -30,7 +30,8 @@ server <- function(input, output, session) {
   values$pag <- 1 # stores value of pager in Code panel
   
   
-  valuesCoding <- reactiveValues(fromStack = NULL, tot=9,toStack = NULL, foundIDs = NULL, readyForEndArrow = F, nodeSelected = NULL, edgeSelected = NULL)
+  valuesCoding <- reactiveValues(fromStack = NULL, tot=9,toStack = NULL, foundIDs = NULL, readyForEndArrow = F, 
+    nodesSelected = NULL, edgeSelected = NULL)
 
   tab <- reactiveValues(old = "", change = 0)
   

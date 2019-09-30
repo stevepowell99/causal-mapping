@@ -529,7 +529,8 @@ render_network <- function(vga,vals,type){
       physics = F,
       # color=list(highlight="#000000"),
       arrows =
-        list(middle = list(type = "circle", scaleFactor = .5), from = list(type = "circle", scaleFactor = 0.2)),
+        list(middle = list(type = "circle", scaleFactor = .5)),
+        # list(middle = list(type = "circle", scaleFactor = .5), from = list(type = "circle", scaleFactor = 0.2)),
       # ,
       # dashes = findset("arrowdashes") %>% as.logical()
     )
@@ -584,6 +585,7 @@ convert_rawGraf_to_codeGraf <- function(vgraf,vstat,vstate,vals){
   
   vno$font.color <- "#eeeeee"
   vno$color.background <- mygreen
+  vno$color.highlight <- "#336633"
   vno$font.size <- findset("variablecoding.font.size",vals)
   
   
@@ -1136,84 +1138,52 @@ make_settingsConditional <- function(inp, vs) {
   }
 }
 
-refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL) {   
+refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {   
   # also for the refresh button. refocusses graph on the current statement, removes any half-made arrows etc
   # this part just works out which edges and nodes belong to this statement 
   vno <- tmp %>% nodes_as_tibble()
   ved <- tmp %>% edges_as_tibble()
   # browser()
-  vf <- ved %>%
-    group_by(from) %>%
-    summarise(fstat = paste0(statement_id, collapse = ",")) %>%
-    mutate(id = from)
   
-  vt <- ved %>%
-    group_by(to) %>%
-    summarise(tstat = paste0(statement_id, collapse = ",")) %>%
-    mutate(id = to)
-  
-  vno <- vno %>%
-    mutate(id = row_number()) %>%
-    left_join(vf) %>%
-    left_join(vt) %>%
-    mutate(fstat = replace_na(fstat, "")) %>%
-    mutate(tstat = replace_na(tstat, "")) %>%
-    unite("statement_id", c("fstat", "tstat"), sep = ",")
+  ved <- ved %>% 
+    mutate(hidden=!((statement_id == vpag) | !iot))
   
   
+  theseIDs <- ved %>% 
+    filter(!hidden) %>% 
+    select(from,to) %>% 
+    unlist %>% 
+    c(as.numeric(fromStack),reveal) %>% 
+    unique
+
+  vno <- vno %>% 
+    mutate(id=row_number(),hidden=!(id %in% theseIDs),color.background=if_else(id %in% as.numeric(fromStack),"blue",mygreen),
+      font.size=15+5*(sqrt(nrow(vno))))
   
-  # browser()
-  if (!("statement_id" %in% colnames(vno))) vno$statement_id <- 1
+  # if (!("statement_id" %in% colnames(vno))) vno$statement_id <- 1
   
   if (!is.null(vpag) & nrow(vno) > 0) {
-    ids <- vno %>%
-      mutate(sel = ifelse(str_detect(statement_id, paste0("(,|^)", as.character(vpag), "(,|$)")), T, F)) %>%
-      pull(sel)
-    # browser()
-    
-    ids[as.numeric(fromStack)] <- T
-    
-    yesids <- ids %>% 
-      which() 
-    
-    noids <- ids %>%
-      `!`() %>%
-      which()
-    
-    
-    eids <- ved %>%
-      mutate(hit = vpag == statement_id) %>%
-      pull(hit)
-    
-    
-    yeseids <- eids %>% which()
-    noeids <- eids %>%
-      `!`() %>%
-      which()
-    
     
     if (nrow(vno) > 0) {
       # browser()
-      nods <- tibble(id = 1:nrow(vno), hidden = !ids,color=if_else(id %in% as.numeric(fromStack),"blue",mygreen),font.size=15+5*(sqrt(nrow(vno))))  #TODO THIS IS A TOTAL HACK
+      # nods <- tibble(id = 1:nrow(vno), hidden = !ids,color=if_else(id %in% as.numeric(fromStack),"blue",mygreen),font.size=15+5*(sqrt(nrow(vno))))  #TODO THIS IS A TOTAL HACK
       
       # visNetworkProxy("codeNet") %>% 
     if (nrow(ved) > 0) {
+      # browser()
       visNetworkProxy("codeNet") %>% 
-        visUpdateNodes(nodes = nods) %>% 
-        visUpdateEdges(edges = tibble(id = 1:nrow(ved), hidden = !eids)) %>% 
+        visUpdateNodes(nodes = vno) %>% 
+        visUpdateEdges(edges = tibble(id=1:nrow(ved),hidden=ved$hidden,color=mygreen)) %>%
       visFit(animation = list(duration = 500)) 
     } else {
-      {
+      
         visNetworkProxy("codeNet") %>% 
-          visUpdateNodes(nodes = nods) %>% 
+          visUpdateNodes(nodes = vno) %>% 
           visFit(animation = list(duration = 500)) 
-      }
+      
     }
 
           }
-    # %>%
-    #   visSetSelection(unselectAll = TRUE) %>%
-    #   visSelectNodes(id = F)
   }
 }
 

@@ -10,7 +10,7 @@ output$varForm <- renderUI({
       mutate(id = row_number())
     
     rows <- df[valuesCoding$nodesSelected, ]
-    div(tagList(
+    conditionalPanel("input.editVar",div(tagList(
       if (length(valuesCoding$nodesSelected) > 0) {
         tagList(
           div(p("Edit: "), style = "display:inline-block;width:5%"),
@@ -22,7 +22,7 @@ output$varForm <- renderUI({
         )
       },
       hr(style = "margin:2px")
-    ), style = "background-color:#EEFFEE;padding:10px;border:1px green solid")
+    ), style = "background-color:#EEFFEE;padding:10px;border:1px green solid"))
   }
 })
 observeEvent(input$editVarForm, {

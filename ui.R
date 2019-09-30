@@ -133,6 +133,7 @@ ui <- tagList(
                                         uiOutput("pagerBig"),
                                         uiOutput("displayStatementPanel"),
                                         
+                                        
                                         uiOutput("varForm"),
                                  
                                    div(

@@ -52,10 +52,39 @@ output$selectBoxButtons <- renderUI({
     div(style = "display:inline-block;margin-left:5px"),
     div(actionButton("recodeButton",NULL,icon=icon("chain")) %>%
         bs_embed_tooltip(title = "Click to RECODE the variable in the orange box into the variable which is listed in the dropdown or selected on the graph"), style = "display:inline-block")
-  )
+  ,checkboxInput("editVar","Edit variable(s)")
+    )
+})
+
+# show hidden vars --------------------------------------------------
+
+observeEvent(req(input$selectBoxValue), {
+  # browser()
+  vno <- isolate(values$codeNet$x$nodes)
+  lab <- input$selectBoxValue
+  labid <- which(vno$label==lab)
+  # browser()
+  if(length(labid)>0){
+      refresh_and_filter_net(isolate(values$codeGraf),vpag = input$pager__page_current,iot = input$onlyThisStatement,fromStack = NULL,reveal=labid)
+      
+      visNetworkProxy("codeNet") %>%
+      visSelectNodes(id=labid)
+      
+  } else {  # node not exists 
+
+        visNetworkProxy("codeNet") %>% 
+      visUpdateNodes(nodes=tibble(id=1:(nrow(vno)+1),label=c(vno$label,lab))) 
+  }
+  
+  # refresh_and_filter_net(req(values$grafCode),req(input$pager__page_current),req(input$onlyThis),req(values$fromStack))
+  
 })
 
 # disable enable buttons --------------------------------------------------
+
+observeEvent(req(valuesCoding$nodesSelected), {
+  if ("" != valuesCoding$nodesSelected[1] ) enable("editVar") else disable("editVar")
+})
 
 observeEvent(c(input$selectBoxValue, valuesCoding$nodesSelected, valuesCoding$fromStack), {
   # browser()
@@ -71,6 +100,9 @@ observeEvent(c(input$selectBoxValue, valuesCoding$nodesSelected, valuesCoding$fr
   # browser()
   if (("" != (ins) | "" != isb) & "" != (vcf)[[1]]) enable("addTo") else disable("addTo")
   if (("" != (ins) | "" != isb) & "" != (vcf)[[1]]) enable("recodeButton") else disable("recodeButton")
+  
+  
+  
 })
 
 # Add edges widget. Provides the additional fields for the edge ----
@@ -161,7 +193,7 @@ output$combo <- renderUI(if (T) {
 
 observeEvent(c(input$addFrom), ignoreInit = TRUE, {
   ns <- valuesCoding$nodesSelected
-  vpag <- values$pag
+  vpag <- input$pager__page_current
   iot <- input$onlyThisStatement
 
         
@@ -169,13 +201,13 @@ observeEvent(c(input$addFrom), ignoreInit = TRUE, {
   # if ("" != (ns) | !is.null(input$selectBoxValue)) {
     # browser()
     
-    isb <- input$selectBoxValue
+    isb <- isolate(input$selectBoxValue)
     if ("" == isb) isb <- NULL
     inpfrom <- NULL
     
     
     if (!is.null(isb)) {
-      vg <- values$rawGraf
+      vg <- isolate(values$rawGraf)
       inpfrom <- vg %>%
         mutate(id = row_number()) %>%
         filter(label == isb) %>%
@@ -191,7 +223,7 @@ observeEvent(c(input$addFrom), ignoreInit = TRUE, {
           `+`(1)
       }
     }
-        valuesCoding$fromStack <- c(ns, inpfrom, valuesCoding$fromStack) %>% unique()
+        valuesCoding$fromStack <- c(ns, inpfrom, isolate(valuesCoding$fromStack)) %>% unique()
         
         valuesCoding$fromStack <- valuesCoding$fromStack[valuesCoding$fromStack != ""]
         
@@ -256,9 +288,9 @@ observeEvent(input$addTo, {
     fun = "",
     combo.type = ifelse(input$crowd, "", ifelse(is.null(input$combo), "", input$combo)),
     definition.type = ifelse(input$crowd, "", input$definition.type),
-    statement_id = ifelse(input$crowd, 1, values$pag %>% as.integer()),
+    statement_id = ifelse(input$crowd, 1, input$pager__page_current %>% as.integer()),
     quote = ifelse(input$crowd, "", qq),
-    # full.quote = ifelse(input$crowd, "", values$statements$text[values$statements$statement == values$pag])
+    # full.quote = ifelse(input$crowd, "", values$statements$text[values$statements$statement == input$pager__page_current])
   )
   
   values$rawGraf <- values$rawGraf %>%
@@ -276,40 +308,14 @@ observeEvent(input$addTo, {
   updateTextInput(session = session, "selectBoxValue", value = "")
   
   tmp <- req(values$rawGraf) 
-  vpag <- values$pag
+  vpag <- input$pager__page_current
   iot <- input$onlyThisStatement
-  delay(4000, refresh_and_filter_net(tmp, vpag, iot)) # TODO the 4 seconds is just a lucky guess
+  delay(1000, refresh_and_filter_net(tmp, vpag, iot)) # TODO the 4 seconds is just a lucky guess
   valuesCoding$nodesSelected <- NULL
   valuesCoding$edgesSelected <- NULL
 })
 
 
-
-# if selectbox is not an existing node, add as new but only to vis; it will get added to graf if addFrom is pressed --------
-# doesn't work??
-
-# observeEvent(c(input$selectBoxValue), {
-#   if (req(input$sides) == "Code") {
-#     
-#     if (input$selectBoxValue != "" && nchar(input$selectBoxValue) > 2) {
-#       
-#       vag <- values$rawGraf %>%
-#         nodes_as_tibble() %>%
-#         pull(label)
-#       
-#       ids <- which(vag == input$selectBoxValue)
-#       
-#       
-#       if (length(ids) != 0 && length(ids) < length(vag)) {
-#         visNetworkProxy("codeNet") %>%
-#           visUpdateNodes(tibble(id = ids, hidden = F)) %>%
-#           visSelectNodes(id = ids)
-#       }
-#       
-#       
-#     }
-#   }
-# })
 
 
 
@@ -318,12 +324,12 @@ observeEvent(input$addTo, {
 observeEvent(c(input$resetSelection, req(input$pager), input$onlyThisStatement), {
 
   tmp <- req(values$rawGraf) # has to be agg2 because of statements, but shouldn't be because some missed out
-  vpag <- values$pag
+  vpag <- input$pager__page_current
   iot <- input$onlyThisStatement
   # browser()
   valuesCoding$fromStack <- NULL
   updateSelectizeInput(session = session, inputId = "selectBoxValue", selected = "")
-
+# doNotification(glue("resetting: pag is {input$pager__page_current}"))
   refresh_and_filter_net(tmp, vpag, iot)
 })
 
