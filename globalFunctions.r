@@ -209,8 +209,8 @@ prepare_vg <- function(graf) {
     mutate(value = if_else(value == "", 0, value)) %>%
     mutate(value = replace_na(value, 0)) %>% 
     mutate(original_is_driver=node_is_source(),original_is_outcome=node_is_sink())
-    
-    
+  
+  
 }
 
 prepare_ved <- function(ved) {
@@ -222,7 +222,7 @@ prepare_ved <- function(ved) {
     mutate(arrows.middle.enabled = as.logical(F)) %>%
     mutate(arrows.to = as.logical(T)) %>%
     mutate(wstrength = strength * trust)
-    
+  
 }
 
 prepare_vno <- function(vno) {
@@ -272,7 +272,8 @@ merge_nodes <- function(vno, ved) {
 
 large <- ""
 small <- ""
-highlight_text <- function(large, smallvec, start = "<a href='.'>", stop = "</a>") {
+# highlight_text <- function(large, smallvec, start = "<a href='.'>", stop = "</a>") {
+highlight_text <- function(large, smallvec,   start = "illlllllllll", stop = "llll") {
   # browser()
   if(length(large)>0 & length(smallvec)>0){
     for (small in smallvec) {
@@ -530,7 +531,7 @@ render_network <- function(vga,vals,type){
       # color=list(highlight="#000000"),
       arrows =
         list(middle = list(type = "circle", scaleFactor = .5)),
-        # list(middle = list(type = "circle", scaleFactor = .5), from = list(type = "circle", scaleFactor = 0.2)),
+      # list(middle = list(type = "circle", scaleFactor = .5), from = list(type = "circle", scaleFactor = 0.2)),
       # ,
       # dashes = findset("arrowdashes") %>% as.logical()
     )
@@ -559,8 +560,8 @@ convert_rawGraf_to_codeGraf <- function(vgraf,vstat,vstate,vals){
   # browser()
   tmp <- prepare_vg(vgraf)
   
-
-    
+  
+  
   vno <- tmp %>% nodes_as_tibble()
   ved <- tmp %>% edges_as_tibble()
   
@@ -572,6 +573,10 @@ convert_rawGraf_to_codeGraf <- function(vgraf,vstat,vstate,vals){
     left_join(vstat, by = "statement_id") %>% 
     left_join(vstate,by = "statement_id")
   
+  # merge edges but don't, curve them instead -------------------------------------------------------------
+  
+  
+  ved <- merge_edges(ved,"Code",vals)
   
   
   # create statement groups -------------------------------------------------
@@ -585,7 +590,7 @@ convert_rawGraf_to_codeGraf <- function(vgraf,vstat,vstate,vals){
   
   vno$font.color <- "#eeeeee"
   vno$color.background <- mygreen
-  vno$color.highlight <- "#336633"
+  vno$color.highlight <- "#aaddaa"
   vno$font.size <- findset("variablecoding.font.size",vals)
   
   
@@ -602,17 +607,18 @@ convert_codeGraf_to_displayGraf <- function(tmp,filterVec,vals,this_tab,input,vs
   
   # tmp <-  
   
-  vno <- tmp %>% nodes_as_tibble()
-  
-  # browser()
-  ved <- tmp %>% edges_as_tibble() %>% 
-    filter(filterVec)
   
   if (findset("variableinfer", v = vals) %>% as.logical()) {
     tmp <- infer(tmp)
     legend <- paste0(legend, "</br>Causal inference carried out")
   }
   
+  
+  vno <- tmp %>% nodes_as_tibble()
+  
+  # browser()
+  ved <- tmp %>% edges_as_tibble() %>% 
+    filter(filterVec)
   
   # merge nodes -------------------------------------------------------------
   
@@ -669,7 +675,7 @@ convert_codeGraf_to_displayGraf <- function(tmp,filterVec,vals,this_tab,input,vs
   doNotification("min freq aggregation")
   
   
-    # browser()
+  # browser()
   # browser()
   if (input$sides != "Code") {
     # if (this_tab != "Code") {
@@ -823,7 +829,7 @@ convert_codeGraf_to_displayGraf <- function(tmp,filterVec,vals,this_tab,input,vs
   
   # browser()
   
- 
+  
 }
 
 
@@ -1155,7 +1161,7 @@ refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {
     unlist %>% 
     c(as.numeric(fromStack),reveal) %>% 
     unique
-
+  
   vno <- vno %>% 
     mutate(id=row_number(),hidden=!(id %in% theseIDs),color.background=if_else(id %in% as.numeric(fromStack),"blue",mygreen),
       font.size=15+5*(sqrt(nrow(vno))))
@@ -1169,21 +1175,21 @@ refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {
       # nods <- tibble(id = 1:nrow(vno), hidden = !ids,color=if_else(id %in% as.numeric(fromStack),"blue",mygreen),font.size=15+5*(sqrt(nrow(vno))))  #TODO THIS IS A TOTAL HACK
       
       # visNetworkProxy("codeNet") %>% 
-    if (nrow(ved) > 0) {
-      # browser()
-      visNetworkProxy("codeNet") %>% 
-        visUpdateNodes(nodes = vno) %>% 
-        visUpdateEdges(edges = tibble(id=1:nrow(ved),hidden=ved$hidden,color=mygreen)) %>%
-      visFit(animation = list(duration = 500)) 
-    } else {
-      
+      if (nrow(ved) > 0) {
+        # browser()
+        visNetworkProxy("codeNet") %>% 
+          visUpdateNodes(nodes = vno) %>% 
+          visUpdateEdges(edges = tibble(id=1:nrow(ved),hidden=ved$hidden,color=mygreen)) %>%
+          visFit(animation = list(duration = 500)) 
+      } else {
+        
         visNetworkProxy("codeNet") %>% 
           visUpdateNodes(nodes = vno) %>% 
           visFit(animation = list(duration = 500)) 
+        
+      }
       
     }
-
-          }
   }
 }
 

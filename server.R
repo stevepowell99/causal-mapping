@@ -1,6 +1,9 @@
 server <- function(input, output, session) {
 
-
+  source("globalFunctions.r",local=T)
+  source("combo_functions.r")
+  
+  
   # TODO pool package to manage
   
   # sql ---------------------------------------------------------------------
@@ -36,7 +39,6 @@ server <- function(input, output, session) {
   tab <- reactiveValues(old = "", change = 0)
   
   
-  
   source("modules/user.r",local=T)
   source("modules/coding.r",local=T)
   source("modules/codingPanel.r",local=T)
@@ -50,6 +52,9 @@ server <- function(input, output, session) {
   source("modules/reports.r",local=T)
   source("modules/tableWidgets.r",local=T)
   source("modules/mainPanelWidgets.r",local=T)
+  
+  
+  
   
   
   #   the default graph object with no nodes or edges
@@ -120,6 +125,9 @@ server <- function(input, output, session) {
   
   
   observe({
+    
+    input$filtersup
+    
     req(values$filterVec)
     # browser()
     doNotification("Starting second agg")

@@ -121,6 +121,7 @@ output$filterscluster <- renderUI({
     }
   )
 })
+
 observe(if(req(input$sides)=="Display") {
   cols <- req(values$codeGraf) %>% 
     edges_as_tibble() %>% 

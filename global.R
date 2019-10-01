@@ -7,9 +7,6 @@ options(stringsAsFactors = F)
 
 # source ------------------------------------------------------------------
 
-source("combo_functions.r")
-
-source("globalFunctions.r",local=T)
 # source("functions/find_cycles.r")
 
 # libs --------------------------------------------------------------------
@@ -331,3 +328,5 @@ userlist <- xc("free Steve BSDR")
 
 paste_colnames <- function(vec) vec %>% paste0(collapse="|")
 # paste_colnames <- function(str) str %>% str_split("\\|") %>% `[[`(1)
+
+
