@@ -9,7 +9,7 @@ server <- function(input, output, session) {
   # sql ---------------------------------------------------------------------
   
   
-  if(T) {
+  if((Sys.getenv('SHINY_PORT') == "")) {
     con <- isolate(dbConnect(RSQLite::SQLite(), "CMA"))
   } else {
     con <-  isolate(DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306))
@@ -44,12 +44,12 @@ server <- function(input, output, session) {
   source("modules/codingPanel.r",local=T)
   source("modules/codingEdits.r",local=T)
   source("modules/codingRecoding.r",local=T)
-  source("modules/stats.r",local=T)
+  # source("modules/stats.r",local=T)
   source("modules/display.r",local=T)
   source("modules/settingsGlobal.r",local=T)
   source("modules/infoBar.r",local=T)
   source("modules/downloads.r",local=T)
-  source("modules/reports.r",local=T)
+  # source("modules/reports.r",local=T)
   source("modules/tableWidgets.r",local=T)
   source("modules/mainPanelWidgets.r",local=T)
   

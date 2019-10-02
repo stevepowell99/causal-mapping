@@ -203,7 +203,7 @@ ui <- tagList(
                                               
                                               
                              conditionalPanel("input.sides=='Code'",withSpinner(
-                               (visNetworkOutput("codeNet", height = "85vh", width="1250px"))
+                               (visNetworkOutput("codeNet", height = "95vh", width="1250px"))
                                ,type = 5))                         # the main network viz. 
                                ,
                              conditionalPanel("input.sides=='Display'",withSpinner(
@@ -214,70 +214,14 @@ ui <- tagList(
                                uiOutput("infoBar")              
                                  
                              )
-                             ,
                              
-                             tabsetPanel(
-                               tabPanel("Quotes",
-                                 
-                                 uiOutput("quotesOutput")
-                               ),
-                               tabPanel("Stats",
-                                 p ("Adjusted R squared"),
-                                 formattableOutput ("statsSigs"),
-                                 uiOutput("statSelector"),
-                                 formattableOutput("stats")
-                               ),
-                               
-                               tabPanel("Statements",
-                                 
-                                 uiOutput("statementsPanel")
-                               ),
-                               
-                                tabPanel("Description",
-                                  uiOutput("description"),# additional narrative abou the project stored in the settings csv
-                                  uiOutput("blog"),                          
-                                  textOutput("info")
-                                ),
-                                tabPanel("Legend",
-                                plotOutput("colourLegend")
-                                  ),
-                               # conditionalPanel("T",
-                                tabPanel("Live Reports",
-                               
-                                  formattableOutput("liveReportTable1", width = "100%", height = "0"),
-                                  formattableOutput("liveReportTable2", width = "100%", height = "0")
-                             # )
-                                 ),
-                                tabPanel("Reports",
-                               
-                             formattableOutput("reportTable2", width = "100%", height = "0")
-                                  ,
-                             formattableOutput("reportTable3", width = "100%", height = "0")
-                                  ,
-                             formattableOutput("reportTable4", width = "100%", height = "0")
-                                  ,
-                             formattableOutput("reportTable5", width = "100%", height = "0")
-                                  ,
-                             uiOutput("extraSelect")
-                                  ,
-                             formattableOutput("reportTable6", width = "100%", height = "0")
-                                  ,
-                             plotOutput("reportPlot1", width = "100%")
-                             )
-                             )
                            
                            )
                          )
                        )
                      ),
-                     div(actionButton("Interrupt", "Interrupt"), style = "position:fixed;bottom:0;right:10px")
-    ),
-    conditionalPanel("input.crowd",
-                     uiOutput("add_edges_widget2"),
-                     visNetworkOutput("net2", height = "75vh", width = "auto")
-                     
-                     # p("lkj")
-    ),
-    div(checkboxInput("crowd","Simplified view for crowdsourcing?"),style="color:#EEFFEE;position:fixed;bottom:0")
+      div(actionButton("Interrupt", "Interrupt",
+      ), style = "position:fixed;bottom:0;right:10px")
+    )
   )
 )

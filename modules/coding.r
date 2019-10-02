@@ -282,14 +282,15 @@ observeEvent(input$addTo, {
   newEdges <- tibble(
     from = inpfrom %>% as.integer(),
     to = inpto %>% as.integer(),
-    trust = ifelse(input$crowd, .5, input$trust),
-    strength = ifelse(input$crowd, .5, input$strength),
-    label = ifelse(input$crowd, "", input$arrLabel),
+    trust = ifelse(F, .5, input$trust),
+    strength = ifelse(F, .5, input$strength),
+    label = ifelse(F, "", input$arrLabel),
     fun = "",
-    combo.type = ifelse(input$crowd, "", ifelse(is.null(input$combo), "", input$combo)),
-    definition.type = ifelse(input$crowd, "", input$definition.type),
-    statement_id = ifelse(input$crowd, 1, input$pager__page_current %>% as.integer()),
-    quote = ifelse(input$crowd, "", qq),
+    combo.type = ifelse(F, "", ifelse(is.null(input$combo), "", input$combo)),
+    definition.type = ifelse(F, "", input$definition.type),
+    statement_id = ifelse(F, 1, input$pager__page_current %>% as.integer()),
+    quote = ifelse(F, "", qq),
+    # quote = qq,
     # full.quote = ifelse(input$crowd, "", values$statements$text[values$statements$statement == input$pager__page_current])
   )
   
@@ -303,6 +304,8 @@ observeEvent(input$addTo, {
         mutate(fun = ifelse(inpto == label, input$combo, fun))
     }
   }
+  
+  # browser()
   
   valuesCoding$fromStack <- NULL
   updateTextInput(session = session, "selectBoxValue", value = "")

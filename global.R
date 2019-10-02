@@ -11,6 +11,11 @@ options(stringsAsFactors = F)
 
 # libs --------------------------------------------------------------------
 
+xc <- function(x, sep = " ") {
+  str_split(x, sep)[[1]]
+}
+
+
 
 library(RMariaDB)
 

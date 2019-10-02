@@ -272,17 +272,17 @@ merge_nodes <- function(vno, ved) {
 
 large <- ""
 small <- ""
-# highlight_text <- function(large, smallvec, start = "<a href='.'>", stop = "</a>") {
-highlight_text <- function(large, smallvec,   start = "illlllllllll", stop = "llll") {
+highlight_text <- function(large, smallvec, start = "<span>", stop = "</span>") {
   # browser()
   if(length(large)>0 & length(smallvec)>0){
     for (small in smallvec) {
-      small <- str_remove_all(small," *\\[.*?\\] *")
+      # small <- str_remove_all(small," *\\[.*?\\] *")
+      # large <- str_remove_all(large," *\\[.*?\\] *")
       if (length(nchar(small)) > 0) {
         if (str_detect(large, small) && nchar(small) > 2) {
           where <- str_locate(large, small)
           stringi::stri_sub(large, where[1], where[1] - 1) <- start
-          stringi::stri_sub(large, where[2] + 13, where[2] + 12) <- stop
+          stringi::stri_sub(large, where[2] + 7, where[2] + 6) <- stop
           large
         }
       }
@@ -291,6 +291,24 @@ highlight_text <- function(large, smallvec,   start = "illlllllllll", stop = "ll
   } else ""
 }
 
+# highlight_text <- function(large, smallvec, start = "<a href='.'>", stop = "</a>") {
+#   # browser()
+#   if(length(large)>0 & length(smallvec)>0){
+#     for (small in smallvec) {
+#       small <- str_remove_all(small," *\\[.*?\\] *")
+#       if (length(nchar(small)) > 0) {
+#         if (str_detect(large, small) && nchar(small) > 2) {
+#           where <- str_locate(large, small)
+#           stringi::stri_sub(large, where[1], where[1] - 1) <- start
+#           stringi::stri_sub(large, where[2] + 13, where[2] + 12) <- stop
+#           large
+#         }
+#       }
+#     }
+#     large
+#   } else ""
+# }
+# 
 
 
 # format_edges <- function(df,input)df
@@ -607,18 +625,17 @@ convert_codeGraf_to_displayGraf <- function(tmp,filterVec,vals,this_tab,input,vs
   
   # tmp <-  
   
+  vno <- tmp %>% nodes_as_tibble()
+  
+  # browser()
+  ved <- tmp %>% edges_as_tibble() %>% 
+    filter(filterVec)
   
   if (findset("variableinfer", v = vals) %>% as.logical()) {
     tmp <- infer(tmp)
     legend <- paste0(legend, "</br>Causal inference carried out")
   }
   
-  
-  vno <- tmp %>% nodes_as_tibble()
-  
-  # browser()
-  ved <- tmp %>% edges_as_tibble() %>% 
-    filter(filterVec)
   
   # merge nodes -------------------------------------------------------------
   
