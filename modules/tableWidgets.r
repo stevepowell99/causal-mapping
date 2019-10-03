@@ -1,21 +1,21 @@
 
 # first of zillions of handsontables.
-observeEvent(input$statementsTableUp, {
-  values$statements <- hot_to_r(input$statements) %>%
-    mutate(text = str_replace(text, "\'", "")) %>%
-    select(1:(ncol(default.statements))) %>%
-    mutate(statement = row_number())
-  # filter(text != "") %>%
-  bind_rows(default.statements[1, ])
-})
+# observeEvent(input$statementsTableUp, {
+#   values$statements <- hot_to_r(input$statements) %>%
+#     mutate(text = str_replace(text, "\'", "")) %>%
+#     select(1:(ncol(default.statements))) %>%
+#     mutate(statement = row_number())
+#   # filter(text != "") %>%
+#   bind_rows(default.statements[1, ])
+# })
 
-
-output$statementsPanel <- renderUI({
-  tagList(
-    actionButton("statementsTableUp", "Update"),
-    rHandsontableOutput("statements")
-  )
-})
+# 
+# output$statementsPanel <- renderUI({
+#   tagList(
+#     actionButton("statementsTableUp", "Update"),
+#     rHandsontableOutput("statements")
+#   )
+# })
 
 # Import/Statements panel -------------------------------------------------
 
@@ -145,7 +145,7 @@ observeEvent(input$up.statements, {
   # if (ncol(vs) > 9) vs <- vs[, 1:8]
   colnames(vstat)[1] <- "text"
   values$statements <- vstat %>%
-    mutate(statement = row_number())
+    mutate(statement_id = row_number())
   
   
   # <- vs

@@ -131,10 +131,13 @@ observeEvent({c(input$projectSelect)},{
   
   
   doNotification(glue("Loaded{nrow(values$rawGraf %>% nodes_as_tibble)} variables from permalink"))
+  
+  
     
   # browser()
   } else {
-    doNotification("There is no such project, leaving old project")
+    doNotification("There is no such project, save as new project")
+  enable("saveProject")
   } 
   
 })
@@ -189,6 +192,7 @@ observeEvent(
     req(input$userSelect)
     
       # browser()
+      # browser()
     
     if ((input$projectSelect!="blank" & input$projectSelect!="")) {
       # inputtitl <- gsub("[^[[:alnum:]|-]]*", "", input$projectSelect) %>% paste0(input$userSelect,"/",.)
@@ -201,13 +205,12 @@ observeEvent(
       project <- input$projectSelect
       v=values
       ius=input$userSelect
-      future({
-      # browser()
+      # future({
       for(c in csvlist){
       send_to_sql(v,con,ius,project,c)
         
       }
-      })
+      # })
       
       doNotification("Saved")
 

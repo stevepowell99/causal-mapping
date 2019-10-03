@@ -63,18 +63,18 @@ observeEvent(req(input$selectBoxValue), {
   vno <- isolate(values$codeNet$x$nodes)
   lab <- input$selectBoxValue
   labid <- which(vno$label==lab)
-  # browser()
   if(length(labid)>0){
       refresh_and_filter_net(isolate(values$codeGraf),vpag = input$pager__page_current,iot = input$onlyThisStatement,fromStack = NULL,reveal=labid)
       
       visNetworkProxy("codeNet") %>%
       visSelectNodes(id=labid)
       
-  } else {  # node not exists 
+  } else if(!is.null(vno)){  # node not exists 
 
-        visNetworkProxy("codeNet") %>% 
-      visUpdateNodes(nodes=tibble(id=1:(nrow(vno)+1),label=c(vno$label,lab))) 
-  }
+  # browser()
+        visNetworkProxy("codeNet") %>%
+      visUpdateNodes(nodes=tibble(id=1:(nrow(vno)+1),label=c(vno$label,lab)))
+  } else doNotification("cannot show new node, sorry")
   
   # refresh_and_filter_net(req(values$grafCode),req(input$pager__page_current),req(input$onlyThis),req(values$fromStack))
   
@@ -214,6 +214,7 @@ observeEvent(c(input$addFrom), ignoreInit = TRUE, {
         pull(id)
       
       if (length(inpfrom) == 0) {
+        browser()
         values$rawGraf <- vg %>%
           bind_nodes(tibble(label = isb, cluster = ""))
         doNotification("Adding Node", 2)
@@ -266,6 +267,7 @@ observeEvent(input$addTo, {
       pull(id)
     
     if (length(inpto) == 0) {
+      browser()
       values$rawGraf <- vg %>%
         bind_nodes(tibble(label = isb, cluster = ""))
       doNotification("Adding Node", 2)
@@ -308,6 +310,7 @@ observeEvent(input$addTo, {
   # browser()
   
   valuesCoding$fromStack <- NULL
+  values$highlightedText <- ""
   updateTextInput(session = session, "selectBoxValue", value = "")
   
   tmp <- req(values$rawGraf) 

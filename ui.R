@@ -96,7 +96,9 @@ ui <- tagList(
                                  )
                                )
                                )
-                               , icon = icon("upload"), tooltip = "settings", circle=F,size = "xs")), style = "display:inline-block;width:8%"),
+                               , icon = icon("upload"), tooltip = "settings", circle=F,size = "xs")) ,
+                               
+                               style = "display:inline-block;width:8%"),
                              
                              div((dropdownButton(
                                tagList(
@@ -132,6 +134,7 @@ ui <- tagList(
                                         
                                         uiOutput("pagerBig"),
                                         uiOutput("displayStatementPanel"),
+                                        uiOutput("highlightedTextGo"),
                                         
                                         
                                         uiOutput("varForm"),

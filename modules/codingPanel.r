@@ -1,9 +1,25 @@
 
 
-observeEvent(input$highlightedText, {
-  if (!is.null(input$highlightedText)) values$highlightedText <- input$highlightedText
-  if (input$sides == "Code") updateTextAreaInput(session, "quote", value = values$highlightedText)
+output$highlightedTextGo <- renderUI({
+      values$highlightedText <- input$highlightedText
+  if(""!=(req(values$highlightedText))){
+    actionButton("highlightedTextGoButton","Add text to quote")
+    }
 })
+
+
+
+observeEvent(input$highlightedTextGoButton, {
+  if (input$sides == "Code"){
+    if (!is.null(input$highlightedText)) 
+   {
+    updateTextAreaInput(session, "quote", value = glue("{input$quote} -- {values$highlightedText}"))
+    # input$highlightedText <- ""
+    values$highlightedText <- ""
+    
+    }
+}
+  })
 
 
 
@@ -135,6 +151,7 @@ output$displayStatementPanel <- renderUI({
     pull(quote) %>%
     replace_na("")
   
+  if(length(quote)==0) quote <- ""
   
   tagList(
     icon("quote-left"),

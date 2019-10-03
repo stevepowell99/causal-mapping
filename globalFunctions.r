@@ -6,7 +6,7 @@ cleanfun=function(tex){
     str_remove("\\[") %>% 
     str_remove("\\'") %>% 
     str_remove('\\"') %>% 
-    gsub("[^[:alnum:]/-\\?[:space:]]","",.) %>% 
+    # gsub("[^[:alnum:]/-\\?[:space:]]","",.) %>% 
     strip_symbols()
   
 }
@@ -20,6 +20,8 @@ tolower_trim <- function(vec) vec %>%
   tolower() %>%
   str_trim() %>%
   strip_symbols()
+
+
 tidy_colnames <- function(df) df %>% rename_all(tolower_trim)
 
 id.finder <- function(label, node.df) {
@@ -599,7 +601,7 @@ convert_rawGraf_to_codeGraf <- function(vgraf,vstat,vstate,vals){
   
   # create statement groups -------------------------------------------------
   
-  if(nrow(ved)>10)ved <- create_auto_groups(ved) else {
+  if(nrow(ved)>70)ved <- create_auto_groups(ved) else {
     if(nrow(ved)>0)ved$auto_group <- 1
     # doNotification("Not enough edges to cluster")
   }     
@@ -1100,7 +1102,7 @@ make_quip_stats <- function(graf) {
 }
 
 send_to_sql <- function(values,con,user,project,table){
-  # if(table=="settingsGlobal")browser()
+  if(table=="statementsExtra") browser()
   doNotification(glue("Sending {table} to sql database"))
   dbExecute(con,glue("DELETE FROM {table} WHERE user = '{user}' AND project='{project}'"))
   temp <- values[[table]] %>% 
