@@ -214,8 +214,9 @@ observeEvent(c(input$addFrom), ignoreInit = TRUE, {
         pull(id)
       
       if (length(inpfrom) == 0) {
-        browser()
+        # browser()
         values$rawGraf <- vg %>%
+          activate(nodes) %>% 
           bind_nodes(tibble(label = isb, cluster = ""))
         doNotification("Adding Node", 2)
         inpfrom <- vg %>%
@@ -231,6 +232,11 @@ observeEvent(c(input$addFrom), ignoreInit = TRUE, {
         # browser()
         
         delay(1000, refresh_and_filter_net(values$rawGraf, vpag, iot,valuesCoding$fromStack))
+        
+        visNetworkProxy("codeNet") %>% 
+          visUnselectAll()
+        
+        
     
   updateSelectizeInput(session = session, inputId = "selectBoxValue", selected = "")
   
@@ -249,6 +255,10 @@ observeEvent(input$addTo, {
   } else {
     qq <- ""
   }
+  if(qq=="") qq <- input$highlightedText
+  
+  
+  
   # browser()
   
   inpfrom <- req(valuesCoding$fromStack)
@@ -267,8 +277,9 @@ observeEvent(input$addTo, {
       pull(id)
     
     if (length(inpto) == 0) {
-      browser()
+      # browser()
       values$rawGraf <- vg %>%
+        activate(nodes) %>% 
         bind_nodes(tibble(label = isb, cluster = ""))
       doNotification("Adding Node", 2)
       inpto <- vg %>%

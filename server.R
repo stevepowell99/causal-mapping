@@ -24,6 +24,7 @@ server <- function(input, output, session) {
 
   values <- reactiveValues() # nearly all reactive values are stored in values$...
   values$statements <- default.statements
+  values$statements_extra <- default.statements_extra
   
   
   values$settingsConditional <- defaultSettingsConditional
@@ -84,7 +85,7 @@ server <- function(input, output, session) {
     if (nrow(nodes_as_tibble(req(values$rawGraf))) > 0) {
       doNotification("starting aggregation")
       
-      values$codeGraf <- convert_rawGraf_to_codeGraf(values$rawGraf,values$statements,values$statements_extra,values$settingsGlobal)
+      values$codeGraf <- convert_rawGraf_to_codeGraf(values$rawGraf,values$statements,values$statements_extra_wide,values$settingsGlobal)
     }
   })
   
@@ -180,7 +181,7 @@ server <- function(input, output, session) {
     
     # browser()
     
-    output$net <- renderVisNetwork({
+    output$displayNet <- renderVisNetwork({
       doNotification("render viz")
       values$displayNet
     })

@@ -252,7 +252,7 @@ merge_nodes <- function(vno, ved) {
     ungroup() %>%
     group_by(clusterid) %>%
     mutate(clusterLength = n()) %>%
-    mutate(clusterLabel = clusterLabel %>% replaceNA()) %>%
+    mutate(clusterLabel = cluster %>% replaceNA()) %>%
     mutate(label = ifelse(clusterLength < 2, label, ifelse(clusterLabel != "", clusterLabel, paste0("Cluster: ", label)))) %>%
     # mutate_if_sw(is.numeric, .funs = list(sum = sumfun, mean = meanfun)) %>%
     ungroup()
@@ -494,6 +494,7 @@ render_network <- function(vga,vals,type){
   )  %>%
     visInteraction(
       dragNodes = T,
+      # hover =T,
       dragView = T,
       zoomView = T,
       navigationButtons = F,
@@ -573,6 +574,13 @@ convert_rawGraf_to_codeGraf <- function(vgraf,vstat,vstate,vals){
   
   # prepare statements, split columns ----
   
+  
+  if(is.null(vstate)){
+    vstate <- vstat %>%
+      unique %>% 
+      spread(key,value,convert=T) 
+  }
+  
   doNotification("starting aggregation")
   legend <- ""
   
@@ -610,12 +618,16 @@ convert_rawGraf_to_codeGraf <- function(vgraf,vstat,vstate,vals){
   
   vno$font.color <- "#eeeeee"
   vno$color.background <- mygreen
-  vno$color.highlight <- "#aaddaa"
+  vno$color.highlight.border <- "blue"
+  vno$color.highlight.background <- "#aaddaa"
   vno$font.size <- findset("variablecoding.font.size",vals)
   
   
   if(nrow(ved)>0)ved$width <- 3
-  
+  # ved$title <- "ved"
+  # ved$title <- ved$quote
+  # ved$label <- ved$quote
+  # ved$color <- ifelse(ved$quote!="",mygreen,"red")
   # infer ----
   
   tbl_graph(vno,ved)
@@ -1102,7 +1114,7 @@ make_quip_stats <- function(graf) {
 }
 
 send_to_sql <- function(values,con,user,project,table){
-  if(table=="statementsExtra") browser()
+  # if(table=="statements_extra") browser()
   doNotification(glue("Sending {table} to sql database"))
   dbExecute(con,glue("DELETE FROM {table} WHERE user = '{user}' AND project='{project}'"))
   temp <- values[[table]] %>% 
@@ -1198,7 +1210,7 @@ refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {
         # browser()
         visNetworkProxy("codeNet") %>% 
           visUpdateNodes(nodes = vno) %>% 
-          visUpdateEdges(edges = tibble(id=1:nrow(ved),hidden=ved$hidden,color=mygreen)) %>%
+          visUpdateEdges(edges = tibble(id=1:nrow(ved),hidden=ved$hidden,color=ifelse(ved$quote=="","red",mygreen))) %>%
           visFit(animation = list(duration = 500)) 
       } else {
         

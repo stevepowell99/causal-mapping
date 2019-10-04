@@ -95,7 +95,7 @@ observeEvent(input$savePackage, {
   
   vpag <- values$pag
   iot <- input$onlyThisStatement
-  delay(1000, refresh_and_filter_net(vg, vpag, iot))
+  delay(2000, refresh_and_filter_net(vg, vpag, iot))
 })
 
 

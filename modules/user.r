@@ -122,8 +122,9 @@ observeEvent({c(input$projectSelect)},{
       values$nodes$details <- values$nodes$details %>% cleanfun
     }
     }
-      
-  values$statements_extra <- values$statements_extra %>%
+      # browser()
+  values$statements_extra_wide <- values$statements_extra %>%
+    unique %>% 
     spread(key,value,convert=T) 
   
   values$rawGraf <- tbl_graph(values$nodes, values$edges)
@@ -165,10 +166,21 @@ observeEvent({c(input$projectSelect)},{
 #   # updateSelectizeInput(session,"projectSelect",choices=tbl(con,"nodes") %>% filter(user==lu) %>% pull(project) %>% unique() %>% c("blank",.))
 # })
 
+observeEvent(input$deleteProject, {
+  showModal(modalDialog(
+  #   tagList(
+  #     selectInput("deletefilename", label = "Delete a file", choices = list.files(pattern="*.txt"))
+  #   ), 
+    title="Delete this project?",
+    footer = tagList(actionButton("confirmDeleteProject", "Delete"),
+      modalButton("Cancel")
+    )
+  ))
+})
 
 
-
-observeEvent(input$deleteProject,{
+observeEvent(input$confirmDeleteProject,{
+  browser()
   delete_from_sql(con,input$userSelect,input$projectSelect)
   sess$projectChoicesAll=tbl(con,"nodes") %>% select(project,user) %>% collect()
   updateSelectInput(session,"userSelect",selected=input$userSelect) # to cascade changes

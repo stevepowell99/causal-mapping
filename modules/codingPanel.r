@@ -13,7 +13,7 @@ observeEvent(input$highlightedTextGoButton, {
   if (input$sides == "Code"){
     if (!is.null(input$highlightedText)) 
    {
-    updateTextAreaInput(session, "quote", value = glue("{input$quote} -- {values$highlightedText}"))
+    updateTextAreaInput(session, "quote", value = glue("{input$quote}{values$highlightedText}"))
     # input$highlightedText <- ""
     values$highlightedText <- ""
     
@@ -21,7 +21,10 @@ observeEvent(input$highlightedTextGoButton, {
 }
   })
 
-
+observeEvent(req(input$onlyThisStatement),{
+  if(input$onlyThisStatement) enable("pager")
+  if(!input$onlyThisStatement) disable("pager")
+})
 
 # create valuesCoding$tot -------------------------------------------------------
 
@@ -50,6 +53,10 @@ observe(({
 
 #   the pager allows user to view interview statements one by one
 output$pagerBig <- renderUI({
+  
+  # browser()
+  # req(input$pager__page_current)
+  # pag <- input$pager__page_current
   tagList(
     div(
       pageruiInput("pager", pages_total = valuesCoding$tot),
@@ -85,7 +92,12 @@ output$pagerBig <- renderUI({
   )
 })
 
-
+output$statementInfo=renderUI({
+  pag <- req(input$pager__page_current)
+  if(!is.null(values$statements_extra))message=values$statements_extra %>% filter(statement_id==pag) %>% paste0(collapse=" | ") else message=""
+  div(p(message), style = "")
+  
+})
 
 
 

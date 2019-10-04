@@ -134,6 +134,7 @@ ui <- tagList(
                                         
                                         uiOutput("pagerBig"),
                                         uiOutput("displayStatementPanel"),
+                                        uiOutput("statementInfo"),
                                         uiOutput("highlightedTextGo"),
                                         
                                         
@@ -210,7 +211,7 @@ ui <- tagList(
                                ,type = 5))                         # the main network viz. 
                                ,
                              conditionalPanel("input.sides=='Display'",withSpinner(
-                               (visNetworkOutput("net", height = "85vh", width="1250px"))
+                               (visNetworkOutput("displayNet", height = "85vh", width="1250px"))
                                ,type = 5)
                                )                         # the main network viz. 
                                ,

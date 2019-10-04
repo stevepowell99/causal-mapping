@@ -1,8 +1,70 @@
 
 xx creating panel
+update from query ...kill
 No edges
 Starting second agg
 render coding viz
+There is no such project, save as new project
+There is no such project, save as new project
+Loading nodes from remote database for project: oslo2
+Loading edges from remote database for project: oslo2
+Loading statements from remote database for project: oslo2
+Loading settingsConditional from remote database for project: oslo2
+Loading settingsGlobal from remote database for project: oslo2
+Loading statements_extra from remote database for project: oslo2
+Loaded6 variables from permalink
+starting aggregation
+starting aggregation
+merge edge aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Starting second agg
+render coding viz
+Loading nodes from remote database for project: VOSCUR
+Loading edges from remote database for project: VOSCUR
+Loading statements from remote database for project: VOSCUR
+Loading settingsConditional from remote database for project: VOSCUR
+Loading settingsGlobal from remote database for project: VOSCUR
+Loading statements_extra from remote database for project: VOSCUR
+Loaded68 variables from permalink
+starting aggregation
+starting aggregation
+merge edge aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Starting second agg
+render coding viz
+xx creating panel
+update from query ...kill
+No edges
+Starting second agg
+render coding viz
+There is no such project, save as new project
+There is no such project, save as new project
+Loading nodes from remote database for project: oslo2
+Loading edges from remote database for project: oslo2
+Loading statements from remote database for project: oslo2
+Loading settingsConditional from remote database for project: oslo2
+Loading settingsGlobal from remote database for project: oslo2
+Loading statements_extra from remote database for project: oslo2
+Loaded6 variables from permalink
+starting aggregation
+starting aggregation
+merge edge aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Starting second agg
+render coding viz
+xx creating panel
+update from query ...kill
+No edges
+Starting second agg
+render coding viz
+There is no such project, save as new project
+There is no such project, save as new project
 Creating new project
 Loaded1 variables from permalink
 starting aggregation
@@ -10,91 +72,13 @@ starting aggregation
 merge edge aggregation
 started coding viz
 Starting second agg
-xx creating panel
-update from query ...sace
-No edges
-Starting second agg
-render coding viz
-Loading nodes from remote database for project: sace
-Loading edges from remote database for project: sace
-Loading statements from remote database for project: sace
-Loading settingsConditional from remote database for project: sace
-Loading settingsGlobal from remote database for project: sace
-Loading statements_extra from remote database for project: sace
-Loaded109 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-xx creating panel
-update from query ...sace
-No edges
-Starting second agg
-render coding viz
-Loading nodes from remote database for project: sace
-Loading edges from remote database for project: sace
-Loading statements from remote database for project: sace
-Loading settingsConditional from remote database for project: sace
-Loading settingsGlobal from remote database for project: sace
-Loading statements_extra from remote database for project: sace
-Loaded110 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-xx creating panel
-update from query ...sace
-No edges
-Starting second agg
-render coding viz
-Loading nodes from remote database for project: sace
-Loading edges from remote database for project: sace
-Loading statements from remote database for project: sace
-Loading settingsConditional from remote database for project: sace
-Loading settingsGlobal from remote database for project: sace
-Loading statements_extra from remote database for project: sace
-Loaded110 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
+Loading nodes from remote database for project: oslo2
+Loading edges from remote database for project: oslo2
+Loading statements from remote database for project: oslo2
+Loading settingsConditional from remote database for project: oslo2
+Loading settingsGlobal from remote database for project: oslo2
+Loading statements_extra from remote database for project: oslo2
+Loaded6 variables from permalink
 starting aggregation
 starting aggregation
 merge edge aggregation
@@ -111,17 +95,17 @@ Sending settingsGlobal to sql database
 Sending statements_extra to sql database
 Saved
 xx creating panel
-update from query ...sace
+update from query ...oslo2
 No edges
 Starting second agg
 render coding viz
-Loading nodes from remote database for project: sace
-Loading edges from remote database for project: sace
-Loading statements from remote database for project: sace
-Loading settingsConditional from remote database for project: sace
-Loading settingsGlobal from remote database for project: sace
-Loading statements_extra from remote database for project: sace
-Loaded112 variables from permalink
+Loading nodes from remote database for project: oslo2
+Loading edges from remote database for project: oslo2
+Loading statements from remote database for project: oslo2
+Loading settingsConditional from remote database for project: oslo2
+Loading settingsGlobal from remote database for project: oslo2
+Loading statements_extra from remote database for project: oslo2
+Loaded6 variables from permalink
 starting aggregation
 starting aggregation
 merge edge aggregation
@@ -130,343 +114,6 @@ NA is not in settings
 Produced viz
 Starting second agg
 render coding viz
-xx creating panel
-update from query ...sace
-No edges
-Starting second agg
-render coding viz
-Loading nodes from remote database for project: sace
-Loading edges from remote database for project: sace
-Loading statements from remote database for project: sace
-Loading settingsConditional from remote database for project: sace
-Loading settingsGlobal from remote database for project: sace
-Loading statements_extra from remote database for project: sace
-Loaded112 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-Saved
-xx creating panel
-update from query ...sace
-No edges
-Starting second agg
-render coding viz
-Loading nodes from remote database for project: sace
-Loading edges from remote database for project: sace
-Loading statements from remote database for project: sace
-Loading settingsConditional from remote database for project: sace
-Loading settingsGlobal from remote database for project: sace
-Loading statements_extra from remote database for project: sace
-Loaded113 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Creating new project
-Loaded1 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Starting second agg
-Starting second agg
-xx creating panel
-update from query ...SLP4genderMore
-No edges
-Starting second agg
-render coding viz
-There is no such project, save as new project
-There is no such project, save as new project
-xx creating panel
-No edges
-Starting second agg
-render coding viz
-Creating new project
-Loaded1 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Starting second agg
-Updated statements
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Starting second agg
-There is no such project, save as new project
-There is no such project, save as new project
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-Saved
-xx creating panel
-update from query ...voscur
-No edges
-Starting second agg
-render coding viz
-Loading nodes from remote database for project: voscur
-Loading edges from remote database for project: voscur
-Loading statements from remote database for project: voscur
-Loading settingsConditional from remote database for project: voscur
-Loading settingsGlobal from remote database for project: voscur
-Loading statements_extra from remote database for project: voscur
-Loaded1 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Starting second agg
-xx creating panel
-update from query ...voscur
-No edges
-Starting second agg
-render coding viz
-Loading nodes from remote database for project: voscur
-Loading edges from remote database for project: voscur
-Loading statements from remote database for project: voscur
-Loading settingsConditional from remote database for project: voscur
-Loading settingsGlobal from remote database for project: voscur
-Loading statements_extra from remote database for project: voscur
-Loaded1 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Starting second agg
-xx creating panel
-update from query ...voscur
-No edges
-Starting second agg
-render coding viz
-Loading nodes from remote database for project: voscur
-Loading edges from remote database for project: voscur
-Loading statements from remote database for project: voscur
-Loading settingsConditional from remote database for project: voscur
-Loading settingsGlobal from remote database for project: voscur
-Loading statements_extra from remote database for project: voscur
-Loaded1 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Starting second agg
-xx creating panel
-No edges
-Starting second agg
-render coding viz
-Creating new project
-Loaded1 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Starting second agg
-Updated statements
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Starting second agg
-There is no such project, save as new project
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-Saved
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-Saved
-cannot show new node, sorry
-cannot show new node, sorry
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Starting second agg
-cannot show new node, sorry
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-Saved
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-Saved
 Starting second agg
 merge edge aggregation
 min freq aggregation
@@ -475,62 +122,24 @@ format aggregation
 final aggregation
 NA is not in settings
 Aggregated
-Creating edges table
-Starting second agg
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Starting second agg
 started viz
 NA is not in settings
 Produced main viz
+render viz
 Starting second agg
 render viz
 xx creating panel
-update from query ...VOSCUR
+update from query ...oslo2
 No edges
 Starting second agg
 render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded16 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
+Loading nodes from remote database for project: oslo2
+Loading edges from remote database for project: oslo2
+Loading statements from remote database for project: oslo2
+Loading settingsConditional from remote database for project: oslo2
+Loading settingsGlobal from remote database for project: oslo2
+Loading statements_extra from remote database for project: oslo2
+Loaded6 variables from permalink
 starting aggregation
 starting aggregation
 merge edge aggregation
@@ -540,184 +149,17 @@ Produced viz
 Starting second agg
 render coding viz
 xx creating panel
-update from query ...VOSCUR
+update from query ...oslo2
 No edges
 Starting second agg
 render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded16 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-xx creating panel
-update from query ...VOSCUR
-No edges
-Starting second agg
-render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded16 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Starting second agg
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-Creating edges table
-Starting second agg
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Starting second agg
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-Creating edges table
-Starting second agg
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Starting second agg
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-Creating edges table
-Starting second agg
-Starting second agg
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-Starting second agg
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Starting second agg
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-Creating edges table
-Starting second agg
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Starting second agg
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-Creating edges table
-Starting second agg
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-xx creating panel
-update from query ...VOSCUR
-No edges
-Starting second agg
-render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded15 variables from permalink
+Loading nodes from remote database for project: oslo2
+Loading edges from remote database for project: oslo2
+Loading statements from remote database for project: oslo2
+Loading settingsConditional from remote database for project: oslo2
+Loading settingsGlobal from remote database for project: oslo2
+Loading statements_extra from remote database for project: oslo2
+Loaded6 variables from permalink
 starting aggregation
 starting aggregation
 merge edge aggregation
@@ -727,193 +169,22 @@ Produced viz
 Starting second agg
 render coding viz
 xx creating panel
-update from query ...VOSCUR
+update from query ...oslo2
 No edges
 Starting second agg
 render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded15 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Sending nodes to sql database
 xx creating panel
-update from query ...VOSCUR
+update from query ...oslo2
 No edges
 Starting second agg
 render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded15 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-Saved
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-Saved
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-Saved
-xx creating panel
-update from query ...VOSCUR
-No edges
-Starting second agg
-render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded15 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
+Loading nodes from remote database for project: oslo2
+Loading edges from remote database for project: oslo2
+Loading statements from remote database for project: oslo2
+Loading settingsConditional from remote database for project: oslo2
+Loading settingsGlobal from remote database for project: oslo2
+Loading statements_extra from remote database for project: oslo2
+Loaded6 variables from permalink
 starting aggregation
 starting aggregation
 merge edge aggregation
@@ -923,34 +194,17 @@ Produced viz
 Starting second agg
 render coding viz
 xx creating panel
-update from query ...VOSCUR
+update from query ...oslo2
 No edges
 Starting second agg
 render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded15 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
+Loading nodes from remote database for project: oslo2
+Loading edges from remote database for project: oslo2
+Loading statements from remote database for project: oslo2
+Loading settingsConditional from remote database for project: oslo2
+Loading settingsGlobal from remote database for project: oslo2
+Loading statements_extra from remote database for project: oslo2
+Loaded6 variables from permalink
 starting aggregation
 starting aggregation
 merge edge aggregation
@@ -967,8 +221,42 @@ format aggregation
 final aggregation
 NA is not in settings
 Aggregated
-Creating edges table
+started viz
+NA is not in settings
+Produced main viz
+render viz
+xx creating panel
+update from query ...oslo2
+No edges
 Starting second agg
+render coding viz
+Loading nodes from remote database for project: oslo2
+Loading edges from remote database for project: oslo2
+Loading statements from remote database for project: oslo2
+Loading settingsConditional from remote database for project: oslo2
+Loading settingsGlobal from remote database for project: oslo2
+Loading statements_extra from remote database for project: oslo2
+Loaded6 variables from permalink
+starting aggregation
+starting aggregation
+merge edge aggregation
+started coding viz
+NA is not in settings
+Produced viz
+Starting second agg
+render coding viz
+xx creating panel
+update from query ...oslo2
+No edges
+Starting second agg
+render coding viz
+Loading nodes from remote database for project: oslo2
+Loading edges from remote database for project: oslo2
+Loading statements from remote database for project: oslo2
+Loading settingsConditional from remote database for project: oslo2
+Loading settingsGlobal from remote database for project: oslo2
+Loading statements_extra from remote database for project: oslo2
+Loaded6 variables from permalink
 starting aggregation
 starting aggregation
 merge edge aggregation
@@ -985,27 +273,19 @@ format aggregation
 final aggregation
 NA is not in settings
 Aggregated
-Creating edges table
+started viz
+NA is not in settings
+Produced main viz
+render viz
 Starting second agg
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-Saved
-xx creating panel
-update from query ...VOSCUR
-No edges
-Starting second agg
-render coding viz
+render viz
 Loading nodes from remote database for project: VOSCUR
 Loading edges from remote database for project: VOSCUR
 Loading statements from remote database for project: VOSCUR
 Loading settingsConditional from remote database for project: VOSCUR
 Loading settingsGlobal from remote database for project: VOSCUR
 Loading statements_extra from remote database for project: VOSCUR
-Loaded16 variables from permalink
+Loaded68 variables from permalink
 starting aggregation
 starting aggregation
 merge edge aggregation
@@ -1014,105 +294,3 @@ NA is not in settings
 Produced viz
 Starting second agg
 render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Starting second agg
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-Creating edges table
-Starting second agg
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-Saved
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Sending nodes to sql database
-Sending edges to sql database
-Sending statements to sql database
-Sending settingsConditional to sql database
-Sending settingsGlobal to sql database
-Sending statements_extra to sql database
-Saved

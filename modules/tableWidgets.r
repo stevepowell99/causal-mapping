@@ -143,9 +143,20 @@ observeEvent(input$up.statements, {
   #   bind_rows(default.statements %>% filter(F))
   #
   # if (ncol(vs) > 9) vs <- vs[, 1:8]
-  colnames(vstat)[1] <- "text"
-  values$statements <- vstat %>%
-    mutate(statement_id = row_number())
+  # colnames(vstat)[1] <- "text"
+  # 
+  
+  # browser()
+  statements <- vstat %>%
+    mutate(statement_id = row_number()) 
+  
+  values$statements <- statements %>% 
+    select(text=1,statement_id)
+  
+  values$statements_extra <- statements %>% 
+    select(-1) %>% 
+    gather(key="key",value="value",1:4) %>% 
+    mutate(user=input$userSelect, project=input$projectSelect)
   
   
   # <- vs

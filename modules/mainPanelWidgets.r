@@ -17,7 +17,8 @@ output$widthControlOutput <- renderUI({
 observeEvent(input$widthControl, {
   toggleClass("app-content", "col7")
   toggleClass("mainPanel", "col5")
-  toggleClass("net", "maindivnet-small")
+  toggleClass("displayNet", "maindivnet-small")
+  toggleClass("codeNet", "maindivnet-small")
 })
 
 

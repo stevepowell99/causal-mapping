@@ -116,8 +116,8 @@ output$reportTable5 <- renderFormattable({
 })
 
 observe({
-  extras <- lapply(c(colnames(values$statements_extra)), function(y) {
-    x <- values$statements_extra[[y]]
+  extras <- lapply(c(colnames(values$statements_extra_wide)), function(y) {
+    x <- values$statements_extra_wide[[y]]
     u <- unique(x) %>% na.omit()
     if (length(u) > 1 & length(u) < 12 & max(nchar(u)) < 20) {
       y
