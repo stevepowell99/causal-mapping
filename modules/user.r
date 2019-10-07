@@ -224,6 +224,8 @@ observeEvent(
       }
       # })
       
+      if(Sys.getenv('SHINY_PORT') == "") system("COPY CMA2 /Y")
+      
       doNotification("Saved")
 
             values$issaved <- T

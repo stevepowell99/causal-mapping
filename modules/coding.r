@@ -86,6 +86,11 @@ observeEvent(req(valuesCoding$nodesSelected), {
   if ("" != valuesCoding$nodesSelected[1] ) enable("editVar") else disable("editVar")
 })
 
+observe( {
+  req(input$quote)
+  if ("" == input$quote ) disable("addTo") else enable("addTo")
+})
+
 observeEvent(c(input$selectBoxValue, valuesCoding$nodesSelected, valuesCoding$fromStack), {
   # browser()
   ins <- valuesCoding$nodesSelected
@@ -135,9 +140,12 @@ output$add_edges_widget <- renderUI({
       
       div(
         div(textAreaInput("quote", NULL, value = ifelse(ise, row$quote, ""), placeholder = "quote", rows = 3, width = "100%"), style = "") %>%
-          bs_embed_tooltip(title = if (T) ("If you select text in the Statement panel above using your mouse, it will appear here. You can also edit this text.")),
+          bs_embed_tooltip(title = if (T) ("If you select text in the Statement panel above using your mouse, it will appear here. You can also edit this text.")
+            ),
         style = "margin-top:20px"
       ),
+      div(sliderInput("strength", "Strength", min = -1, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
+      div(textInput("arrLabel", NULL, value = ifelse(ise, row$label, ""), placeholder = "label"), style = "display:inline-block;width:40%;"),
       awesomeCheckbox("edgeDetails", "Details", value = F),
       
       conditionalPanel(
@@ -145,8 +153,6 @@ output$add_edges_widget <- renderUI({
         # open="Details",
         tagList(
           div(
-            div(textInput("arrLabel", NULL, value = ifelse(ise, row$label, ""), placeholder = "label"), style = "display:inline-block;"),
-            div(style = "display:inline-block;width:5%"),
             div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "display:inline-block;width:20%"),
             div(selectizeInput("function.type", NULL, choices = c("+", "-", "NECC", "SUFF")), style = "display:inline-block;width:20%"),
             div(textInput("package", NULL, value = ifelse(ise, row$package, ""), placeholder = "package"), style = "display:inline-block;"),
@@ -156,7 +162,6 @@ output$add_edges_widget <- renderUI({
           div(
             id = "sliders",
             div(style = "display:inline-block;width:5%"),
-            div(sliderInput("strength", "Strength", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
             div(style = "display:inline-block;width:5%"),
             div(sliderInput("trust", "Trust", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
             div(style = "display:inline-block;width:5%"),
@@ -330,6 +335,10 @@ observeEvent(input$addTo, {
   delay(1000, refresh_and_filter_net(tmp, vpag, iot)) # TODO the 4 seconds is just a lucky guess
   valuesCoding$nodesSelected <- NULL
   valuesCoding$edgesSelected <- NULL
+  
+  doNotification("added edge(s)")
+  
+  if(Sys.getenv('SHINY_PORT') == "")system("COPY CMA2 /Y")
 })
 
 

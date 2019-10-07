@@ -133,8 +133,8 @@ ui <- tagList(
                                         value = "Code", 
                                         
                                         uiOutput("pagerBig"),
+                                        conditionalPanel("input.showStatementInfo",formattableOutput("statementInfo")),
                                         uiOutput("displayStatementPanel"),
-                                        uiOutput("statementInfo"),
                                         uiOutput("highlightedTextGo"),
                                         
                                         

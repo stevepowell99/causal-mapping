@@ -278,8 +278,8 @@ highlight_text <- function(large, smallvec, start = "<span>", stop = "</span>") 
   # browser()
   if(length(large)>0 & length(smallvec)>0){
     for (small in smallvec) {
-      # small <- str_remove_all(small," *\\[.*?\\] *")
-      # large <- str_remove_all(large," *\\[.*?\\] *")
+      small <- str_remove_all(small," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols
+      large <- str_remove_all(large," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols
       if (length(nchar(small)) > 0) {
         if (str_detect(large, small) && nchar(small) > 2) {
           where <- str_locate(large, small)
@@ -1211,6 +1211,7 @@ refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {
         visNetworkProxy("codeNet") %>% 
           visUpdateNodes(nodes = vno) %>% 
           visUpdateEdges(edges = tibble(id=1:nrow(ved),hidden=ved$hidden,color=ifelse(ved$quote=="","red",mygreen))) %>%
+          # visUpdateEdges(edges = tibble(id=1:nrow(ved),hidden=ved$hidden,color=ifelse(ved$quote=="","red",mygreen),label=ifelse(ved$strength<0,"MINUS",ved$label))) %>%
           visFit(animation = list(duration = 500)) 
       } else {
         

@@ -63,7 +63,7 @@ output$pagerBig <- renderUI({
       style = "display:inline-block;"
     ),
     div(
-      actionButton("firstuncoded", "First uncoded"),
+      actionButton("firstuncoded", icon("fast-forward")),
       style = "display:inline-block;"
     ),
     div(
@@ -85,17 +85,17 @@ output$pagerBig <- renderUI({
     div(
       # if("source" %in% colnames(values$statements))
       div(actionButton("resetSelection", label = NULL, icon = icon("refresh")), style = "position:absolute;right:35px") %>% bs_embed_tooltip("Reset the view for this statement"),
-      div(actionButton("overview_col", label = "Read more"), style = "display:inline-block"), #   if one interview source has made more than one statement, show all of them
-      div(checkboxInput("onlyThisStatement", label = "Only this", value = T), style = "display:inline-block"), #   if one interview source has made more than one statement, show all of them
-      style = "display:inline-block;margin-left:20px"
+      div(actionButton("overview_col", label = icon("book-reader")), style = "display:inline-block"), #   if one interview source has made more than one statement, show all of them
+      div(materialSwitch("onlyThisStatement", label = icon("bullseye"), value = T), class="myelement",STYLE="padding:3px;background-color:#cceeaa;WIDTH:70PX"), #   if one interview source has made more than one statement, show all of them
+      div(materialSwitch("showStatementInfo", label = icon("info"), value = F), class="myelement",STYLE="padding:3px;background-color:#aaeecc;WIDTH:70PX"), #   if one interview source has made more than one statement, show all of them
+      style = "display:inline-block;margin-left:10px"
     )
   )
 })
 
-output$statementInfo=renderUI({
+output$statementInfo=renderFormattable({
   pag <- req(input$pager__page_current)
-  if(!is.null(values$statements_extra))message=values$statements_extra %>% filter(statement_id==pag) %>% paste0(collapse=" | ") else message=""
-  div(p(message), style = "")
+  if(!is.null(values$statements_extra)) values$statements_extra %>% filter(statement_id==pag) %>% select(-1) %>% formattable
   
 })
 

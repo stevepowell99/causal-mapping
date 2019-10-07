@@ -628,13 +628,6 @@ margin-left:200px;
   width:555px !important;
 }
 
-#varForm input[type=text] {
-  -webkit-transition: width .155s ease-in-out;
-  transition: width .155s ease-in-out;
-}
-#varForm input[type=text]:focus {
-  width: 500px;
-}
 
 #addFrom{
   background-color: orange;
@@ -740,6 +733,7 @@ margin-left:200px;
 .myelement{
   display:inline-block;
   vertical-align: top;
+  margin-left: 5px;
 }
 
 li:nth-of-type(3) {

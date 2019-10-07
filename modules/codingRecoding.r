@@ -13,6 +13,7 @@ output$combineLink <- renderUI({
 
 observeEvent(input$recodeButton, {
   # browser()
+  req(values$rawGraf)
   vfs <- req(valuesCoding$fromStack) %>% as.numeric()
   ins <- req(valuesCoding$nodesSelected[[1]]) %>% as.numeric()
   
@@ -22,11 +23,13 @@ observeEvent(input$recodeButton, {
   ved <- values$rawGraf %>%
     edges_as_tibble()
   
+  browser()
   
   ved <- ved %>%
     mutate(thisStatement = (ved$statement_id == vpag | !iot)) %>%
     mutate(from = ifelse(thisStatement & from %in% vfs, ins, from)) %>%
     mutate(to = ifelse(thisStatement & to %in% vfs, ins, to))
+  
   
   values$rawGraf <-
     tbl_graph(values$rawGraf %>% nodes_as_tibble(), ved) # kinda stupid not to use tidygraph functions
