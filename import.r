@@ -10,6 +10,7 @@ db_list_tables(conl)
 
 DBI::dbDisconnect(conl)
 DBI::dbDisconnect(conM)
+DBI::dbDisconnect(con)
 
 
 plist=xc("SLP4genderMore SLX5 Nepal3 Malawi2 rick multiple-statements-per-source")

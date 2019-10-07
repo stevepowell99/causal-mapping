@@ -338,7 +338,7 @@ observeEvent(input$addTo, {
   
   doNotification("added edge(s)")
   
-  if(Sys.getenv('SHINY_PORT') == "")system("COPY CMA2 /Y")
+  # if(Sys.getenv('SHINY_PORT') == "")system("COPY CMA2 /Y")
 })
 
 

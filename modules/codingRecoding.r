@@ -23,17 +23,30 @@ observeEvent(input$recodeButton, {
   ved <- values$rawGraf %>%
     edges_as_tibble()
   
-  browser()
+  # browser()
   
   ved <- ved %>%
     mutate(thisStatement = (ved$statement_id == vpag | !iot)) %>%
     mutate(from = ifelse(thisStatement & from %in% vfs, ins, from)) %>%
-    mutate(to = ifelse(thisStatement & to %in% vfs, ins, to))
+    mutate(to = ifelse(thisStatement & to %in% vfs, ins, to)) %>% 
+    select(-thisStatement)
   
   
-  values$rawGraf <-
-    tbl_graph(values$rawGraf %>% nodes_as_tibble(), ved) # kinda stupid not to use tidygraph functions
+  vno <- values$rawGraf %>% nodes_as_tibble()
   
+  
+  vg <-
+    tbl_graph(vno, ved) # kinda stupid not to use tidygraph functions
+  
+  
+  if(!iot){
+    vg <- vg %>% 
+      activate(nodes) %>% 
+      filter(row_number()!=vfs)
+  }
+  
+  
+  values$rawGraf <- vg
   
   delay(1000, refresh_and_filter_net(values$rawGraf, vpag, iot))
   doNotification("Recoded variable(s)", 9)

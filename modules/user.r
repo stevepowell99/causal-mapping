@@ -197,7 +197,7 @@ observeEvent(input$confirmDeleteProject,{
 observeEvent(
   c(input$saveProject),
   ignoreInit = TRUE, {
-    
+    # browser()
     # if(input$projectSelect %in% isolate(sess$projectChoices))
     req(values$nodes)
     req(values$edges)

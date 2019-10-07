@@ -47,6 +47,13 @@ observe(({
   else {
     valuesCoding$tot <- 9
   }
+  
+  
+  req(values$rawGraf)
+  
+  valuesCoding$last=edges_as_tibble(values$rawGraf) %>% filter(quote!="") %>% pull(statement_id) %>% max %>% as.numeric
+  # {
+  # updatePageruiInput(session, "pager", page_current = valuesCoding$last+1)
 }))
 
 # Pager----
@@ -59,7 +66,7 @@ output$pagerBig <- renderUI({
   # pag <- input$pager__page_current
   tagList(
     div(
-      pageruiInput("pager", pages_total = valuesCoding$tot),
+      pageruiInput("pager", pages_total = valuesCoding$tot,page_current = req(valuesCoding$last)+1),
       style = "display:inline-block;"
     ),
     div(
@@ -190,24 +197,27 @@ observeEvent({
 
 observeEvent(input$firstuncoded, {
   # browser()
-  slist <- values$statements %>%
-    filter(text != "") %>%
-    pull(statement_id) %>%
-    na.omit() %>%
-    as.numeric() %>%
-    sort()
+  # slist <- values$statements %>%
+  #   filter(text != "") %>%
+  #   pull(statement_id) %>%
+  #   na.omit() %>%
+  #   as.numeric() %>%
+  #   sort()
+  # 
+  # elist <- edges_as_tibble(values$rawGraf)$statement_id %>%
+  #   na.omit() %>%
+  #   as.numeric()
+  # 
+  # min <- slist[sapply(slist, function(y) !(y %in% elist))] %>% min()
+  # 
+  # if (is.infinite(min)) {
+  #   doNotification("You have coded everything!", level = 2)
+  # } else
   
-  elist <- edges_as_tibble(values$rawGraf)$statement_id %>%
-    na.omit() %>%
-    as.numeric()
-  
-  min <- slist[sapply(slist, function(y) !(y %in% elist))] %>% min()
-  
-  if (is.infinite(min)) {
-    doNotification("You have coded everything!", level = 2)
-  } else {
-    updatePageruiInput(session, "pager", page_current = min)
-  }
+  last=edges_as_tibble(values$rawGraf) %>% filter(quote!="") %>% pull(statement_id) %>% max %>% as.numeric
+    # {
+    updatePageruiInput(session, "pager", page_current = last+1)
+  # }
 })
 
 
