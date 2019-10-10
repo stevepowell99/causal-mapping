@@ -321,14 +321,14 @@ colnames_for_sum=xc("frequency notForwards")
 colnames_for_mean=c("sex", "Positive", "older", "female", "ava", "avp", "attributionExplicit", "attributionValence","What is the education of the main respondent?")
 userlist <- xc("free Steve BSDR")
 
-# query_modal <- modalDialog(
-#   title = "Select user",
-#   selectInput('input_user','Who are you:',userlist),
-#   easyClose = T,            #TODO revert for production
-#   footer = tagList(
-#     actionButton("logon", "Log on")
-#   )
-# )
+query_modal <- modalDialog(
+  title = "Select user",
+  selectInput('input_user','Who are you:',userlist),
+  easyClose = T,            #TODO revert for production
+  footer = tagList(
+    actionButton("logon", "Log on")
+  )
+)
 
 
 paste_colnames <- function(vec) vec %>% paste0(collapse="|")

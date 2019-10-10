@@ -76,18 +76,16 @@ ui <- tagList(
                              img(id="logo",src = "img/logo.gif", height = "20px", style = "display:inline-block;"),
                              a(icon("question-circle"),href="http://www.pogol.net/_causal_mapping/index.html", target="_blank",height = "20px", style = "display:inline-block;margin-left:8px;margin-right:8px"),
                              
-                             
                              div((dropdownButton(
                                tagList(
-                               actionButton("settingsTableGlobalUp","Update")
-                                 ,
-                               
-                               rHandsontableOutput("settingsTableGlobal")
-                               )
-                               , icon = icon("cog"), tooltip = "settings", circle=F,size = "xs")), style = "display:inline-block;width:8%"),
-                             
-                             div((dropdownButton(
-                               tagList(fileInput("up.statements", NULL,
+                                 
+                                 h2("Upload or update your statements"),
+                                 p("You need to provide a single csv file."),
+                                 p("The first column is compulsory and has to contain the text."),
+                                 p("You can provide other columns. If you want these columns to feature as major identifiers like respondent or village, their names have to start with '_'"),
+                                 p("If you uncheck 'append' your previous statements will be overwritten!"),
+                                 checkboxInput("appendStatements","Append?",value = T),
+                                 fileInput("up.statements", NULL,
                                  multiple = FALSE, width = NULL,
                                  accept = c(
                                    "text/csv",
@@ -99,6 +97,16 @@ ui <- tagList(
                                , icon = icon("upload"), tooltip = "settings", circle=F,size = "xs")) ,
                                
                                style = "display:inline-block;width:8%"),
+                             div((dropdownButton(
+                               tagList(
+                               actionButton("settingsTableGlobalUp","Update")
+                                 ,
+                               
+                               rHandsontableOutput("settingsTableGlobal")
+                               )
+                               , icon = icon("cog"), tooltip = "settings", circle=F,size = "xs")), style = "display:inline-block;width:8%"),
+                             
+
                              
                              div((dropdownButton(
                                tagList(
@@ -141,8 +149,8 @@ ui <- tagList(
                                         uiOutput("varForm"),
                                  
                                    div(
-                                     uiOutput("selectBoxButtons"),
                                      uiOutput("combineLink"),
+                                     uiOutput("selectBoxButtons"),
                                      uiOutput("add_edges_widget"),
                                      uiOutput("combo"),
                                      style="background-color:#DDFFDD;border:1px gray solid;padding:3px"

@@ -150,6 +150,11 @@ observeEvent(input$up.statements, {
   statements <- vstat %>%
     mutate(statement_id = row_number()) 
   
+  
+  if(input$appendStatements){
+    doNotification("Not implemented yet")
+  }else{
+  
   values$statements <- statements %>% 
     select(text=1,statement_id)
   
@@ -157,7 +162,7 @@ observeEvent(input$up.statements, {
     select(-1) %>% 
     gather(key="key",value="value",1:4) %>% 
     mutate(user=input$userSelect, project=input$projectSelect)
-  
+  }
   
   # <- vs
   doNotification("Updated statements")

@@ -40,6 +40,7 @@ output$selectBoxButtons <- renderUI({
   varlist <- na.omit(varlist)
   
   tagList(
+    div(
     div(selectizeInput("selectBoxValue",
       label = NULL, selected = NULL, multiple = F,
       options =
@@ -47,12 +48,20 @@ output$selectBoxButtons <- renderUI({
       choices = varlist, width = "400px"
     ), style = "display:inline-block"),
     # these four widgets really need a better metahpor
-    div((actionButton("addFrom", NULL,icon=icon("circle-o"))) %>% bs_embed_tooltip("Click to START new arrow(s) at the variable(s) which are listed in the dropdown and/or selected on the graph"), style = "display:inline-block"),
-    div((actionButton("addTo", NULL,icon=icon("circle"))) %>% bs_embed_tooltip("Click to END the new arrow(s) at the variable which is listed in the dropdown or selected on the graph"), style = "display:inline-block"),
-    div(style = "display:inline-block;margin-left:5px"),
-    div(actionButton("recodeButton",NULL,icon=icon("chain")) %>%
-        bs_embed_tooltip(title = "Click to RECODE the variable in the orange box into the variable which is listed in the dropdown or selected on the graph"), style = "display:inline-block")
-  ,checkboxInput("editVar","Edit variable(s)")
+      div(actionButton("addFrom", NULL,icon=icon("circle-o")) %>% 
+        bs_embed_tooltip("Click to START new arrow(s) at the variable(s) which are listed in the dropdown and/or selected on the graph"),style="width:30px",class="myelement"),
+    div(actionButton("addTo", NULL,icon=icon("circle")) %>% 
+        bs_embed_tooltip("Click to END the new arrow(s) at the variable which is listed in the dropdown or selected on the graph"),style="width:30px",class="myelement"),
+    div(actionButton("recodeButton",NULL,icon=icon("chain")),style="width:30px",class="myelement") 
+    )
+    ,
+    if(!is.null(valuesCoding$nodesSelected)) 
+      div(
+        div(checkboxInput("editVar","Edit variable(s)"),class="myelement",width="150px")
+        ,
+        div(actionLink("deleteVarForm", paste0("Delete: ", valuesCoding$nodesSelected %>% paste0(collapse = ";"), "?")), style = "color:red",class="myelement")
+      )
+     # div(actionLink("deleteVarForm", paste0("Delete: ", valuesCoding$nodesSelected %>% paste0(collapse = ";"), "?")), style = "color:red",class="myelement")
     )
 })
 
@@ -84,14 +93,15 @@ observeEvent(req(input$selectBoxValue), {
 
 observeEvent(req(valuesCoding$nodesSelected), {
   if ("" != valuesCoding$nodesSelected[1] ) enable("editVar") else disable("editVar")
+  # if ("" == input$quote ) disable("addTo") else enable("addTo")
 })
 
 observe( {
-  req(input$quote)
-  if ("" == input$quote ) disable("addTo") else enable("addTo")
+  # req(input$quote)
+  disable("addTo") # enable("addTo")
 })
 
-observeEvent(c(input$selectBoxValue, valuesCoding$nodesSelected, valuesCoding$fromStack), {
+observeEvent(c(input$selectBoxValue, valuesCoding$nodesSelected, valuesCoding$fromStack,input$quote), {
   # browser()
   ins <- valuesCoding$nodesSelected
   isb <- input$selectBoxValue
@@ -103,7 +113,7 @@ observeEvent(c(input$selectBoxValue, valuesCoding$nodesSelected, valuesCoding$fr
   if (length(vcf) == 0) vcf <- ""
   # if (("" != (ins) | "" != isb) & "" == (vcf)) enable("addFrom") else disable("addFrom")
   # browser()
-  if (("" != (ins) | "" != isb) & "" != (vcf)[[1]]) enable("addTo") else disable("addTo")
+  if (("" != (ins) | "" != isb) & "" != (vcf)[[1]] & ""!=input$quote) enable("addTo") else disable("addTo")
   if (("" != (ins) | "" != isb) & "" != (vcf)[[1]]) enable("recodeButton") else disable("recodeButton")
   
   
@@ -144,16 +154,16 @@ output$add_edges_widget <- renderUI({
             ),
         style = "margin-top:20px"
       ),
-      div(sliderInput("strength", "Strength", min = -1, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
-      div(textInput("arrLabel", NULL, value = ifelse(ise, row$label, ""), placeholder = "label"), style = "display:inline-block;width:40%;"),
-      awesomeCheckbox("edgeDetails", "Details", value = F),
+      div(sliderInput("strength", "Strength", min = -1, max = 1, step = .25, value = .5, ticks = F), style = "width:30%",class="myelement"),
+      div(textInput("arrLabel", NULL, value = ifelse(ise, row$label, ""), placeholder = "label"), style = "width:25%",class="myelement"),
+      div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "width:20%",class="myelement"),
+      div(awesomeCheckbox("edgeDetails", "Details", value = F),class="myelement", style = "width:12%"),
       
       conditionalPanel(
         "input.edgeDetails",
         # open="Details",
         tagList(
           div(
-            div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "display:inline-block;width:20%"),
             div(selectizeInput("function.type", NULL, choices = c("+", "-", "NECC", "SUFF")), style = "display:inline-block;width:20%"),
             div(textInput("package", NULL, value = ifelse(ise, row$package, ""), placeholder = "package"), style = "display:inline-block;"),
             div(textInput("packageNote", NULL, value = ifelse(ise, row$packageNote, ""), placeholder = "packageNote"), style = "display:inline-block;")
@@ -263,6 +273,7 @@ observeEvent(input$addTo, {
   if(qq=="") qq <- input$highlightedText
   
   
+  if(qq!="") {
   
   # browser()
   
@@ -337,8 +348,9 @@ observeEvent(input$addTo, {
   valuesCoding$edgesSelected <- NULL
   
   doNotification("added edge(s)")
-  
-  # if(Sys.getenv('SHINY_PORT') == "")system("COPY CMA2 /Y")
+  } else {
+  doNotification("you have to put a quote")
+  }# if(Sys.getenv('SHINY_PORT') == "")system("COPY CMA2 /Y")
 })
 
 

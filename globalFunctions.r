@@ -1210,7 +1210,8 @@ refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {
         # browser()
         visNetworkProxy("codeNet") %>% 
           visUpdateNodes(nodes = vno) %>% 
-          visUpdateEdges(edges = tibble(id=1:nrow(ved),hidden=ved$hidden,color=ifelse(ved$quote=="","red",mygreen))) %>%
+          visUpdateEdges(edges = tibble(id=1:nrow(ved),dashes=ifelse(ved$definition.type=="",F,T),hidden=ved$hidden,width=ifelse(ved$quote!="",5,12),color=ifelse(ved$strength<0,"red",mygreen))) %>%
+          # visUpdateEdges(edges = tibble(id=1:nrow(ved),hidden=ved$hidden,label=ifelse(ved$quote=="","red",""))) %>%
           # visUpdateEdges(edges = tibble(id=1:nrow(ved),hidden=ved$hidden,color=ifelse(ved$quote=="","red",mygreen),label=ifelse(ved$strength<0,"MINUS",ved$label))) %>%
           visFit(animation = list(duration = 500)) 
       } else {

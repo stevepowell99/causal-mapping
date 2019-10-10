@@ -1,25 +1,24 @@
 
 
-output$highlightedTextGo <- renderUI({
-      values$highlightedText <- input$highlightedText
-  if(""!=(req(values$highlightedText))){
-    actionButton("highlightedTextGoButton","Add text to quote")
-    }
-})
+# output$highlightedTextGo <- renderUI({
+#       values$highlightedText <- input$highlightedText
+#   if(""!=(req(values$highlightedText))){
+#     actionButton("highlightedTextGoButton","Add text to quote")
+#     }
+# })
+# 
 
 
-
-observeEvent(input$highlightedTextGoButton, {
-  if (input$sides == "Code"){
-    if (!is.null(input$highlightedText)) 
-   {
-    updateTextAreaInput(session, "quote", value = glue("{input$quote}{values$highlightedText}"))
+observeEvent(input$highlightedText, {
+  if (input$highlightedText != ""){
+    delay(1500,updateTextAreaInput(session, "quote", value = input$highlightedText))
     # input$highlightedText <- ""
-    values$highlightedText <- ""
+    # values$highlightedText <- ""
     
-    }
 }
   })
+
+
 
 observeEvent(req(input$onlyThisStatement),{
   if(input$onlyThisStatement) enable("pager")
@@ -63,10 +62,11 @@ output$pagerBig <- renderUI({
   
   # browser()
   # req(input$pager__page_current)
-  # pag <- input$pager__page_current
+  # pag <- input$pager__page_current_vars()
+  # current <- req(valuesCoding$last)+1
   tagList(
     div(
-      pageruiInput("pager", pages_total = valuesCoding$tot,page_current = req(valuesCoding$last)+1),
+      pageruiInput("pager", pages_total = valuesCoding$tot,page_current = 1),
       style = "display:inline-block;"
     ),
     div(

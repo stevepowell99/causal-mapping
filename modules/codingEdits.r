@@ -17,8 +17,7 @@ output$varForm <- renderUI({
           if (length(valuesCoding$nodesSelected) == 1) div(textInput("editVarFormText", NULL, placeholder = "label", value = df[valuesCoding$nodesSelected, "label"], width = "95%"), style = "display:inline-block;"),
           div(textInput("editdetails", NULL, placeholder = "details", value = ifelse(length(rows$details) > 1, "", rows$details), width = "95%"), style = "display:inline-block;"),
           div(textInput("editcluster", NULL, placeholder = "cluster", value = rows$cluster %>% paste0(collapse = ","), width = "95%"), style = "display:inline-block"),
-          div(actionButton("editVarForm", "Save"), style = "display:inline-block;background-color:white;padding:10px;border-radius:5px"),
-          div(actionLink("deleteVarForm", paste0("Delete: ", valuesCoding$nodesSelected %>% paste0(collapse = ";"), "?")), style = "padding:2px;display:inline-block;color:red")
+          div(actionButton("editVarForm", "Save"), style = "display:inline-block;background-color:white;padding:10px;border-radius:5px")
         )
       },
       hr(style = "margin:2px")
@@ -59,6 +58,9 @@ observeEvent(input$deleteVarForm, {
   values$rawGraf <- values$rawGraf %>%
     activate(nodes) %>%
     filter(!(row_number() %in% whichtarg))
+  
+  refresh_and_filter_net(isolate(values$codeGraf),vpag = input$pager__page_current,iot = T)#input$onlyThisStatement)
+  
 })
 
 observeEvent(input$savePackage, {
