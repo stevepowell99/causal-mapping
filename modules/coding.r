@@ -96,10 +96,10 @@ observeEvent(req(valuesCoding$nodesSelected), {
   # if ("" == input$quote ) disable("addTo") else enable("addTo")
 })
 
-observe( {
-  # req(input$quote)
-  disable("addTo") # enable("addTo")
-})
+# observe( {
+#   # req(input$quote)
+#   disable("addTo") # enable("addTo")
+# })
 
 observeEvent(c(input$selectBoxValue, valuesCoding$nodesSelected, valuesCoding$fromStack,input$quote), {
   # browser()
@@ -359,7 +359,7 @@ observeEvent(input$addTo, {
 
 
 # reset selection and refresh on pressing button etc ----------------------------------
-observeEvent(c(input$resetSelection, req(input$pager), input$onlyThisStatement), {
+observeEvent(c(input$resetSelection, input$pager, input$onlyThisStatement), {
 
   tmp <- req(values$rawGraf) # has to be agg2 because of statements, but shouldn't be because some missed out
   vpag <- input$pager__page_current

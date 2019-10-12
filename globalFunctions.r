@@ -272,26 +272,108 @@ merge_nodes <- function(vno, ved) {
 }
 
 
+mixcol <- function(n,selected,pal=rainbow,clicked){ #returns a single rainbow colour, maybe a mix of several
+  # browser()
+  palet <- pal(n)
+  
+  
+  if(length(selected)>1){
+    result <- palet[selected] %>% 
+      col2rgb %>% 
+      rowMeans
+    
+    result <- rgb(result[1],result[2],result[3], maxColorValue = 256) %>% 
+      paste0("44")
+    
+  } else 
+    result <- replace_na(palet[selected],"#FFFFFF") %>% 
+    str_sub(1,7) %>% 
+    paste0("44")
+  
+  
+  if(clicked %in% selected) paste0(result,";text-decoration: underline") else result
+    
+}
+
+
 large <- ""
 small <- ""
-highlight_text <- function(large, smallvec, start = "<span>", stop = "</span>") {
+highlight_text <- function(large, smallvec, selectedEdge) {
   # browser()
+  hits=tibble(start=rep(0,length(smallvec)),stop=rep(0,length(smallvec)))
+  large <- str_remove_all(large," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols
   if(length(large)>0 & length(smallvec)>0){
-    for (small in smallvec) {
-      small <- str_remove_all(small," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols
-      large <- str_remove_all(large," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols
+    for (s in seq_along(smallvec)) {
+      
+      small <- str_remove_all(smallvec[s]," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols
       if (length(nchar(small)) > 0) {
-        if (str_detect(large, small) && nchar(small) > 2) {
-          where <- str_locate(large, small)
-          stringi::stri_sub(large, where[1], where[1] - 1) <- start
-          stringi::stri_sub(large, where[2] + 7, where[2] + 6) <- stop
-          large
+        # if (str_detect((large), (small))) {
+        # where <- str_locate((large), (small))
+        if (str_detect((large), escapeRegex(small))) {
+          where <- str_locate((large), escapeRegex(small))
+          hits[s,1]=where[1]
+          hits[s,2]=where[2]
         }
       }
     }
-    large
+    # browser()
+    # cat(hits)
+    edges=NULL
+    result="<span>"
+    for(char in 1:nchar(large)){
+      # browser()
+      if(char %in% (hits$start)) {
+        edges <- c(edges,which(char == (hits$start))) %>% unique}
+      if(char %in% (hits$stop)) {
+        edges <- setdiff(edges,which(char == (hits$stop)))
+      } 
+      
+      # if(!is.null(edges))browser()
+      # cat(edges)
+      colour <- mixcol(nrow(hits),selected = edges,clicked=selectedEdge) 
+      # colour <- if(length(edges)>0) mixcol(nrow(hits),selected = edges) else "#FFFFFF"
+      # browser()
+      result <- c(result,
+        ifelse(char %in% (hits$start),
+          paste0("</span><span style='background-color:",colour,"'>"),""),
+        substr(large,char,char)
+      )
+      result <- c(result,
+        ifelse(char %in% (hits$stop),
+          paste0("</span><span style='background-color:",colour,"'>"),"")
+      )
+    }
+    
+    # browser()
+    result       %>%
+      c("</span>") %>%
+      paste0(collapse="")
+    
+    # browser()
+    # hits 
   } else ""
 }
+
+
+# highlight_text <- function(large, smallvec, start = "<span>", stop = "</span>") {
+#   # browser()
+#   if(length(large)>0 & length(smallvec)>0){
+#     for (small in smallvec) {
+#       small <- str_remove_all(small," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols
+#       large <- str_remove_all(large," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols
+#       if (length(nchar(small)) > 0) {
+#         if (str_detect(large, small) && nchar(small) > 2) {
+#           where <- str_locate(large, small)
+#           stringi::stri_sub(large, where[1], where[1] - 1) <- start
+#           stringi::stri_sub(large, where[2] + 7, where[2] + 6) <- stop
+#           large
+#         }
+#       }
+#     }
+#     large
+#   } else ""
+# }
+# 
 
 # highlight_text <- function(large, smallvec, start = "<a href='.'>", stop = "</a>") {
 #   # browser()
@@ -1186,6 +1268,8 @@ refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {
     mutate(hidden=!((statement_id == vpag) | !iot))
   
   
+  
+  
   theseIDs <- ved %>% 
     filter(!hidden) %>% 
     select(from,to) %>% 
@@ -1194,8 +1278,13 @@ refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {
     unique
   
   vno <- vno %>% 
-    mutate(id=row_number(),hidden=!(id %in% theseIDs),color.background=if_else(id %in% as.numeric(fromStack),"blue",mygreen),
+    mutate(id=row_number(),hidden=!(id %in% theseIDs),
+      color.background=if_else(id %in% as.numeric(fromStack),"blue",mygreen),
       font.size=15+5*(sqrt(nrow(vno))))
+  
+  ved <- ved %>% 
+    group_by(statement_id) %>% 
+    mutate(rainbow=row_number())
   
   # if (!("statement_id" %in% colnames(vno))) vno$statement_id <- 1
   
@@ -1206,11 +1295,25 @@ refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {
       # nods <- tibble(id = 1:nrow(vno), hidden = !ids,color=if_else(id %in% as.numeric(fromStack),"blue",mygreen),font.size=15+5*(sqrt(nrow(vno))))  #TODO THIS IS A TOTAL HACK
       
       # visNetworkProxy("codeNet") %>% 
-      if (nrow(ved) > 0) {
+      nrv <- nrow(ved)
+      nrvh <- sum(!(ved$hidden)&(ved$quote!=""),na.rm=T)
+      # ved <- ved %>% 
+      #   mutate(colrs=ifelse(ved$strength<0,"red",ifelse(iot & !hidden,"mygreen"))
+      # colours=
+      # rainbow(nrvh)[1:nrvh]
+      
+      
+      
+      
+      if (nrv > 0) {
         # browser()
+        
+        newedges <- tibble(id=1:nrow(ved),dashes=ifelse(ved$definition.type=="",F,T),hidden=ved$hidden,
+          font.size=36,selectionWidth=18,color=ifelse(ved$hidden,mygreen,rainbow(nrvh)[ved$rainbow]),width=ifelse(ved$quote!="",5,12))
+        
         visNetworkProxy("codeNet") %>% 
           visUpdateNodes(nodes = vno) %>% 
-          visUpdateEdges(edges = tibble(id=1:nrow(ved),dashes=ifelse(ved$definition.type=="",F,T),hidden=ved$hidden,width=ifelse(ved$quote!="",5,12),color=ifelse(ved$strength<0,"red",mygreen))) %>%
+          visUpdateEdges(edges = newedges) %>%
           # visUpdateEdges(edges = tibble(id=1:nrow(ved),hidden=ved$hidden,label=ifelse(ved$quote=="","red",""))) %>%
           # visUpdateEdges(edges = tibble(id=1:nrow(ved),hidden=ved$hidden,color=ifelse(ved$quote=="","red",mygreen),label=ifelse(ved$strength<0,"MINUS",ved$label))) %>%
           visFit(animation = list(duration = 500)) 
@@ -1226,6 +1329,10 @@ refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {
   }
 }
 
+
+mycol <- function(pal,num){
+  pal[num]
+}
 
 
 

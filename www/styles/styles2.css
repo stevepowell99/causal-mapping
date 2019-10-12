@@ -486,7 +486,6 @@ th{background-color: #ded !important}
   font-size:large;
   max-height: 380px;
     overflow: scroll;
-    background-color:#EEEEEE;
 }
 
 .textbanner:before {
@@ -603,7 +602,6 @@ i.glyphicon.glyphicon-play{
 }
 
 
-.textbanner span {background-color: yellow !important;color:black !important;}
 
 #filters {}
 
@@ -734,7 +732,7 @@ margin-left:200px;
   display:inline-block;
   vertical-align: top;
   margin-left: 5px;
-  
+
 }
 
 li:nth-of-type(3) {

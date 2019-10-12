@@ -170,12 +170,15 @@ output$displayStatementPanel <- renderUI({
     pull(quote) %>%
     replace_na("")
   
+    selectedEdge <- which(input$quote==quote)
+    if(length(selectedEdge)==0)selectedEdge <- 9999999
+    
   if(length(quote)==0) quote <- ""
   
   tagList(
     icon("quote-left"),
     values$statements$text[values$statements$statement_id == values$pag] %>%
-      highlight_text(quote) %>%
+      highlight_text(quote,selectedEdge=selectedEdge) %>%
       HTML() %>% div(class = "textbanner", id = "textbanner"),
     # span(values$statements$text[values$statements$statement==values$pag], class = "textbanner", id = "textbanner"),
     # span(add_highlight((ve$quote[ve$statement==values$pag])[1],(values$statements$text[values$statements$statement==values$pag])), class = "textbanner", id = "textbanner"),
@@ -192,6 +195,9 @@ observeEvent({
     
     # if (input$timeslider > 0 & nrow(values$statements) > 2) updatePageruiInput(session, "pager", page_current = input$timeslider)
     if (!is.null(input$pager) && !is.null(input$quote)) updateTextAreaInput(session = session, inputId = "quote", value = "", placeholder = "quote")
+    
+    
+    
   }
 })
 
