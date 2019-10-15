@@ -488,6 +488,11 @@ th{background-color: #ded !important}
     overflow: scroll;
 }
 
+
+.textbanner>span::-moz-selection { background-color: yellow !important}
+.textbanner>span::selection { background-color: yellow;  !important}
+
+
 .textbanner:before {
 /*content: "Text...";
 position: absolute;

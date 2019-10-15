@@ -164,13 +164,20 @@ observeEvent(input$overview_col, {
 output$displayStatementPanel <- renderUI({
   # browser()
   
-  quote <- req(values$rawGraf) %>%
+  ved <- req(values$rawGraf) %>%
     edges_as_tibble() %>%
-    filter(statement_id == values$pag) %>%
+    mutate(id=row_number()) %>% 
+    filter(statement_id == values$pag) 
+  
+  quote <- ved %>%
     pull(quote) %>%
     replace_na("")
   
-    selectedEdge <- which(input$quote==quote)
+    selectedEdge <- which(ved$id==input$net_selectedEdges[1]) ##which(input$quote==quote)
+    # selectedEdge <- input$net_selectedEdges[1]##which(input$quote==quote)
+    
+    
+    
     if(length(selectedEdge)==0)selectedEdge <- 9999999
     
   if(length(quote)==0) quote <- ""

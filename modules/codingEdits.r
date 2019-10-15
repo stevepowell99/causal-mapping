@@ -88,9 +88,9 @@ observeEvent(input$savePackage, {
   }
   
   
-  if (input$arrLabel != "") {
+  if (input$arrNote != "") {
     vg <- vg %>%
-      mutate(label = if_else(row_number() %in% ise, input$arrLabel, label))
+      mutate(note = if_else(row_number() %in% ise, input$arrNote, note))
   }
   
   values$rawGraf <- vg

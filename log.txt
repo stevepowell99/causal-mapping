@@ -4,100 +4,66 @@ No edges
 Starting second agg
 render coding viz
 xx creating panel
-update from query ...VOSCUR
+update from query ...SLP4genderMore
 No edges
 Starting second agg
 render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded96 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-xx creating panel
-update from query ...VOSCUR
-No edges
-Starting second agg
-render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded96 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Starting second agg
-merge edge aggregation
-min freq aggregation
-join to edges aggregation
-format aggregation
-final aggregation
-NA is not in settings
-Aggregated
-started viz
-NA is not in settings
-Produced main viz
-render viz
-Starting second agg
-render viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-Loading nodes from remote database for project: SLX5
-Loading edges from remote database for project: SLX5
-Loading statements from remote database for project: SLX5
-Loading settingsConditional from remote database for project: SLX5
-Loading settingsGlobal from remote database for project: SLX5
-Loading statements_extra from remote database for project: SLX5
-Loaded0 variables from permalink
-started coding viz
-NA is not in settings
-Produced viz
 Loading nodes from remote database for project: SLP4genderMore
 Loading edges from remote database for project: SLP4genderMore
 Loading statements from remote database for project: SLP4genderMore
 Loading settingsConditional from remote database for project: SLP4genderMore
 Loading settingsGlobal from remote database for project: SLP4genderMore
 Loading statements_extra from remote database for project: SLP4genderMore
-Loaded0 variables from permalink
-Loading nodes from remote database for project: multiple-statements-per-source
-Loading edges from remote database for project: multiple-statements-per-source
-Loading statements from remote database for project: multiple-statements-per-source
-Loading settingsConditional from remote database for project: multiple-statements-per-source
-Loading settingsGlobal from remote database for project: multiple-statements-per-source
-Loading statements_extra from remote database for project: multiple-statements-per-source
-Loaded5 variables from permalink
-started coding viz
-Produced viz
+Loaded52 variables from permalink
 starting aggregation
 starting aggregation
 merge edge aggregation
-render coding viz
-Starting second agg
 started coding viz
 Produced viz
+Starting second agg
+render coding viz
+xx creating panel
+update from query ...SLP4genderMore
+No edges
+Starting second agg
+render coding viz
+Loading nodes from remote database for project: SLP4genderMore
+Loading edges from remote database for project: SLP4genderMore
+Loading statements from remote database for project: SLP4genderMore
+Loading settingsConditional from remote database for project: SLP4genderMore
+Loading settingsGlobal from remote database for project: SLP4genderMore
+Loading statements_extra from remote database for project: SLP4genderMore
+Loaded52 variables from permalink
+starting aggregation
+starting aggregation
+merge edge aggregation
+started coding viz
+Produced viz
+Starting second agg
+render coding viz
+xx creating panel
+update from query ...SLP4genderMore
+No edges
+Starting second agg
+render coding viz
+Loading nodes from remote database for project: SLP4genderMore
+Loading edges from remote database for project: SLP4genderMore
+Loading statements from remote database for project: SLP4genderMore
+Loading settingsConditional from remote database for project: SLP4genderMore
+Loading settingsGlobal from remote database for project: SLP4genderMore
+Loading statements_extra from remote database for project: SLP4genderMore
+Loaded52 variables from permalink
+starting aggregation
+starting aggregation
+merge edge aggregation
+started coding viz
+Produced viz
+Starting second agg
+render coding viz
+xx creating panel
+update from query ...SLP4genderMore
+No edges
+Starting second agg
 render coding viz
 Loading nodes from remote database for project: SLP4genderMore
 Loading edges from remote database for project: SLP4genderMore
@@ -120,180 +86,160 @@ started coding viz
 Produced viz
 Starting second agg
 render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Produced viz
-Starting second agg
-render coding viz
-added edge(s)
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Produced viz
-Starting second agg
-render coding viz
-Adding Node
-added edge(s)
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-Produced viz
-Starting second agg
+Sending nodes to sql database
+Sending edges to sql database
+Sending statements to sql database
+Sending settingsConditional to sql database
+Sending settingsGlobal to sql database
+Sending statements_extra to sql database
+Saved
 xx creating panel
-update from query ...VOSCUR
+update from query ...SLP4genderMore
 No edges
 Starting second agg
 render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded96 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
 xx creating panel
-update from query ...VOSCUR
+update from query ...SLP4genderMore
 No edges
 Starting second agg
 render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded96 variables from permalink
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
+xx creating panel
+update from query ...SLP4genderMore
+No edges
 Starting second agg
 render coding viz
-you have to put a quote
-added edge(s)
+Loading nodes from remote database for project: SLP4genderMore
+Loading edges from remote database for project: SLP4genderMore
+Loading statements from remote database for project: SLP4genderMore
+Loading settingsConditional from remote database for project: SLP4genderMore
+Loading settingsGlobal from remote database for project: SLP4genderMore
+Loading statements_extra from remote database for project: SLP4genderMore
+Loaded51 variables from permalink
 starting aggregation
 starting aggregation
 merge edge aggregation
 started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-added edge(s)
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-added edge(s)
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-added edge(s)
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
-Produced viz
-Starting second agg
-render coding viz
-starting aggregation
-starting aggregation
-merge edge aggregation
-started coding viz
-NA is not in settings
 Produced viz
 Starting second agg
 render coding viz
 xx creating panel
-update from query ...VOSCUR
+update from query ...SLP4genderMore
 No edges
 Starting second agg
 render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded96 variables from permalink
+Loading nodes from remote database for project: SLP4genderMore
+Loading edges from remote database for project: SLP4genderMore
+Loading statements from remote database for project: SLP4genderMore
+Loading settingsConditional from remote database for project: SLP4genderMore
+Loading settingsGlobal from remote database for project: SLP4genderMore
+Loading statements_extra from remote database for project: SLP4genderMore
+Loaded51 variables from permalink
 starting aggregation
 starting aggregation
 merge edge aggregation
 started coding viz
-NA is not in settings
 Produced viz
 Starting second agg
 render coding viz
 xx creating panel
-update from query ...VOSCUR
+update from query ...SLP4genderMore
 No edges
 Starting second agg
 render coding viz
-Loading nodes from remote database for project: VOSCUR
-Loading edges from remote database for project: VOSCUR
-Loading statements from remote database for project: VOSCUR
-Loading settingsConditional from remote database for project: VOSCUR
-Loading settingsGlobal from remote database for project: VOSCUR
-Loading statements_extra from remote database for project: VOSCUR
-Loaded96 variables from permalink
+xx creating panel
+update from query ...SLP4genderMore
+No edges
+Starting second agg
+render coding viz
+Loading nodes from remote database for project: SLP4genderMore
+Loading edges from remote database for project: SLP4genderMore
+Loading statements from remote database for project: SLP4genderMore
+Loading settingsConditional from remote database for project: SLP4genderMore
+Loading settingsGlobal from remote database for project: SLP4genderMore
+Loading statements_extra from remote database for project: SLP4genderMore
+Loaded51 variables from permalink
 starting aggregation
 starting aggregation
 merge edge aggregation
 started coding viz
-NA is not in settings
+Produced viz
+Starting second agg
+render coding viz
+xx creating panel
+update from query ...SLP4genderMore
+No edges
+Starting second agg
+render coding viz
+Loading nodes from remote database for project: SLP4genderMore
+Loading edges from remote database for project: SLP4genderMore
+Loading statements from remote database for project: SLP4genderMore
+Loading settingsConditional from remote database for project: SLP4genderMore
+Loading settingsGlobal from remote database for project: SLP4genderMore
+Loading statements_extra from remote database for project: SLP4genderMore
+Loaded51 variables from permalink
+starting aggregation
+starting aggregation
+merge edge aggregation
+started coding viz
+Produced viz
+Starting second agg
+render coding viz
+xx creating panel
+update from query ...SLP4genderMore
+No edges
+Starting second agg
+render coding viz
+Loading nodes from remote database for project: SLP4genderMore
+Loading edges from remote database for project: SLP4genderMore
+Loading statements from remote database for project: SLP4genderMore
+Loading settingsConditional from remote database for project: SLP4genderMore
+Loading settingsGlobal from remote database for project: SLP4genderMore
+Loading statements_extra from remote database for project: SLP4genderMore
+Loaded51 variables from permalink
+starting aggregation
+starting aggregation
+merge edge aggregation
+started coding viz
+Produced viz
+Starting second agg
+render coding viz
+starting aggregation
+starting aggregation
+merge edge aggregation
+started coding viz
+Produced viz
+Starting second agg
+render coding viz
+starting aggregation
+starting aggregation
+merge edge aggregation
+started coding viz
+Produced viz
+Starting second agg
+render coding viz
+starting aggregation
+starting aggregation
+merge edge aggregation
+started coding viz
+Produced viz
+Starting second agg
+render coding viz
+xx creating panel
+update from query ...SLP4genderMore
+No edges
+Starting second agg
+render coding viz
+Loading nodes from remote database for project: SLP4genderMore
+Loading edges from remote database for project: SLP4genderMore
+Loading statements from remote database for project: SLP4genderMore
+Loading settingsConditional from remote database for project: SLP4genderMore
+Loading settingsGlobal from remote database for project: SLP4genderMore
+Loading statements_extra from remote database for project: SLP4genderMore
+Loaded51 variables from permalink
+starting aggregation
+starting aggregation
+merge edge aggregation
+started coding viz
 Produced viz
 Starting second agg
 render coding viz

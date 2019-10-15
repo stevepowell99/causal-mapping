@@ -146,23 +146,23 @@ output$add_edges_widget <- renderUI({
             actionLink("savePackage", " (Save?)")
           )
       }),
-      
-      
-      div(
-        div(textAreaInput("quote", NULL, value = ifelse(ise, row$quote, ""), placeholder = "quote", rows = 3, width = "100%"), style = "") %>%
-          bs_embed_tooltip(title = if (T) ("If you select text in the Statement panel above using your mouse, it will appear here. You can also edit this text.")
-            ),
-        style = "margin-top:20px"
-      ),
       div(sliderInput("strength", "Strength", min = -1, max = 1, step = .25, value = .5, ticks = F), style = "width:30%",class="myelement"),
-      div(textInput("arrLabel", NULL, value = ifelse(ise, row$label, ""), placeholder = "label"), style = "width:25%",class="myelement"),
-      div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "width:20%",class="myelement"),
+      div(textInput("arrNote", NULL, value = ifelse(ise, row$note, ""), placeholder = "note"), style = "width:25%",class="myelement"),
       div(awesomeCheckbox("edgeDetails", "Details", value = F),class="myelement", style = "width:12%"),
       
       conditionalPanel(
         "input.edgeDetails",
         # open="Details",
         tagList(
+          
+          
+          
+          div(
+            div(textAreaInput("quote", NULL, value = ifelse(ise, row$quote, ""), placeholder = "quote", rows = 3, width = "100%"), style = "") %>%
+              bs_embed_tooltip(title = if (T) ("If you select text in the Statement panel above using your mouse, it will appear here. You can also edit this text.")
+              ),
+            style = "margin-top:20px"
+          ),
           div(
             div(selectizeInput("function.type", NULL, choices = c("+", "-", "NECC", "SUFF")), style = "display:inline-block;width:20%"),
             div(textInput("package", NULL, value = ifelse(ise, row$package, ""), placeholder = "package"), style = "display:inline-block;"),
@@ -172,6 +172,7 @@ output$add_edges_widget <- renderUI({
           div(
             id = "sliders",
             div(style = "display:inline-block;width:5%"),
+      div(selectizeInput("definition.type", NULL, choices = c("", "Defined, directed", "Defined, undirected")), style = "width:20%",class="myelement"),
             div(style = "display:inline-block;width:5%"),
             div(sliderInput("trust", "Trust", min = 0, max = 1, step = .25, value = .5, ticks = F), style = "display:inline-block;width:40%"),
             div(style = "display:inline-block;width:5%"),
@@ -313,7 +314,7 @@ observeEvent(input$addTo, {
     to = inpto %>% as.integer(),
     trust = ifelse(F, .5, input$trust),
     strength = ifelse(F, .5, input$strength),
-    label = ifelse(F, "", input$arrLabel),
+    note = ifelse(F, "", input$arrNote),
     fun = "",
     combo.type = ifelse(F, "", ifelse(is.null(input$combo), "", input$combo)),
     definition.type = ifelse(F, "", input$definition.type),

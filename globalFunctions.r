@@ -283,12 +283,12 @@ mixcol <- function(n,selected,pal=rainbow,clicked){ #returns a single rainbow co
       rowMeans
     
     result <- rgb(result[1],result[2],result[3], maxColorValue = 256) %>% 
-      paste0("44")
+      paste0("55")
     
   } else 
     result <- replace_na(palet[selected],"#FFFFFF") %>% 
     str_sub(1,7) %>% 
-    paste0("44")
+    paste0("55")
   
   
   if(clicked %in% selected) paste0(result,";text-decoration: underline") else result
@@ -591,6 +591,7 @@ render_network <- function(vga,vals,type){
       hoverConnectedEdges = F,
       keyboard = F, # would be nice for navigation but interferes with text editing
       selectConnectedEdges = F
+        
     ) %>%
     visOptions(
       manipulation = F,
@@ -610,7 +611,10 @@ render_network <- function(vga,vals,type){
     visEvents(select = "function(data) {
                 Shiny.onInputChange('net_selected', data.nodes);
                 Shiny.onInputChange('net_selectedEdges', data.edges);
-                ;}"
+                ;}",
+      , hoverEdge = "function(edges) {
+    Shiny.onInputChange('net_hoverEdges', edges);
+    ;}"
     ) %>%
     visIgraphLayout(layout = "layout_with_sugiyama", randomSeed = 123, type = "full") %>% 
     visNodes(
@@ -1260,6 +1264,13 @@ make_settingsConditional <- function(inp, vs) {
 refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {   
   # also for the refresh button. refocusses graph on the current statement, removes any half-made arrows etc
   # this part just works out which edges and nodes belong to this statement 
+  
+  tmp <- tmp %>% 
+    activate(nodes) %>% 
+    mutate(degree=centrality_degree(mode="total")) %>% 
+    mutate(title=degree)
+  
+  
   vno <- tmp %>% nodes_as_tibble()
   ved <- tmp %>% edges_as_tibble()
   # browser()
@@ -1309,7 +1320,7 @@ refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {
         # browser()
         
         newedges <- tibble(id=1:nrow(ved),dashes=ifelse(ved$definition.type=="",F,T),hidden=ved$hidden,
-          font.size=36,selectionWidth=18,color=ifelse(ved$hidden,mygreen,rainbow(nrvh)[ved$rainbow]),width=ifelse(ved$quote!="",5,12))
+          font.size=36,selectionWidth=18,color=ifelse(ved$hidden | !iot,ifelse(ved$strength<0,"red","mygreen"),rainbow(nrvh)[ved$rainbow]),width=ifelse(ved$quote!="",5,12))
         
         visNetworkProxy("codeNet") %>% 
           visUpdateNodes(nodes = vno) %>% 

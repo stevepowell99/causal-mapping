@@ -192,6 +192,7 @@ defaultEdges <- data.frame(
   from = 1,
   to = 2,
   label = "",
+  note = "",
   strength = .5,
   trust = .5,
   sensitivity = .5,

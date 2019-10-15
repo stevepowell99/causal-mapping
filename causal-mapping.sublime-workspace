@@ -76,22 +76,19 @@
 	"buffers":
 	[
 		{
-			"contents": "---\ntitle: \"Contribution: Fishing for rainbows?\"\nauthor: \"Steve Powell\"\ndate: \"`r Sys.Date()`\"\ncsl: \"apa.csl\"\nbibliography: \"C:/Users/Steve/Dropbox/Projects/book-bookdown/book.bib\"\noutput: \n  bookdown::html_document2:\n    theme: journal\n    toc: yes\n    toc_float: yes\n    toc_collapsed: no\n    number_sections: no\n  bookdown::word_document2: default\n---\n\n\n```{r setup, include=FALSE}\nknitr::opts_chunk$set(echo = TRUE)\nsource(\"setup.r\")\n\n```\n\n# Asking \"how much of a contribution did we make?\": fishing for rainbows?\n\n\n[TOC]\n\n## Abstract\n\n\n\nEvaluation stakeholders usually want to know how much of a contribution to outcomes of interest was made by an intervention like a project or programme.  We can try to capture contribution as a narrative -- perhaps describing in words how the outcome was affected. But often that will not be enough; stakeholders want to know not just *that* an intervention made a contribution, or what *kind* of contribution it made, but (at least approximately) *how much* of one^[Actually, as Scriven and others point out, what stakeholders most often really want to know is not just how much but whether that much is *good enough*. This article addresses the first in the belief that it is an important part of answering the second.]. \n\nExamples of \"how much\" statements, e.g. about the effect of organisation X's intervention to a desired outcome:\n\n1. \"about 20 units\" or \"very large\" (absolute statements)\n\nor\n\n2. \"about 60%\" or \"more than half\" (proportional statements -– as if an effect was a kind of cake which could be sliced up) \n\nor\n\n3. \"twice\" or \"much bigger\" compared to the effect of organisation Y’s, or \"less than last year\" (comparative statements)\n\nAny evaluator who has been asked to, for example, rate the contribution made by an intervention on a scale of 1-5 has been asked to make a \"how much\" statement about contribution. \n\nThe same applies to attribution understood as the reverse of contribution: \"how much of the outcome can be attributed to intervention X?\"\n\n## Definition: actual contribution\n\nLet's define the *actual contribution* of an intervention $X$ to a quantifiable outcome $Z$ as just the (quantifiable) difference it made to $Z$, given that any other external variables like $Y$ which affect $Z$ are fixed to their actual values, i.e. the values they actually took at the time of the intervention^[or when thinking prospectively, the values we associate with a particular concrete scenario.]  \n\nIn the examples below, I also assume that\n\n- we have God's knowledge about the underlying mechanisms; for any values of the interventions $X$ and $Y$ we know the value of the outcome $Z$.\n- there are no *other* relevant variables (or paths between existing variables) which influence $Z$. Or rather, we simply ignore all other possible influences and assume that they remain the way they are. In particular there are no paths between $X$ and $Y$, so we cannot praise or blame X for not taking Y’s actions into account. \n\nWe will take this same approach regardless of whether we are talking about the future (e.g. when trying to predict a contribution) or the past (e.g. when trying to reconstruct a contribution ex-post when conducting a summative evaluation).\n\n## Example: reservoir\n\nFirst let's look at an easy example.\n\n\nTwo organisations decide to deliver water to a regional government's reserve reservoir. The reservoir has a very large capacity, and nothing is wasted. Each delivery makes a calculable difference (namely the number of litres delivered) to the total number of litres received, each independent of the other.  If organisation $X$ delivers 30,000 litres, its actual contribution to the total store is 30,000 litres, whatever $Y$ does. \n\nThis is a classic example of the simplest case, in which we can say that the actual contribution of each is just the additional number of litres sent. We can compare the contributions, calculate the proportional contribution of each, etc. It’s as if the effect on Z was a cake, which was entirely baked by X and Y, and each organisation is credited with a share.\n\n\nThis is all so simple and so beautiful! *Yet so exceedingly rare*. \n\n\"Actual contribution\" is part of a simple, plausible model of causation exemplified by Michael Scriven's quip \"Causation: the relationship between mosquitoes and mosquito bites\". This model portrays causation as something like a direct, one-to-one, physical transfer of effect from one item in a chain to the next. It is simple, plausible and corresponds to some (though not all) of our naïve, everyday language and thinking about causation. But it is inadequate for many common and familiar cases.\n\n## Example: Bridges on different roads\n\nTwo organisations each simultaneously build their own bridge across a river in order to enable access to a remote region. Just one bridge is enough, but for some reason both are built. Both bridges are connected to the relevant roads on each side of the river.\n\nIf both $X$ and $Y$ build their bridge, in the specific terms of enabling access to the remote region^[we are not interested in other issues like ease of access, resilience of the solution, etc]  the actual contribution of $X$ is *zero*. Because access is anyway enabled, because of $Y$'s bridge, whether or not $X$ builds its bridge. \n\nAnd the same goes for $Y$. \n\nIf they both build their bridge, it's as if each intervention was useless, and yet access is enabled. We could say there is 100% **\"contribution gap\"**.\n\nWhereas if $Y$ does not build its bridge, all at once $X$ can claim total success, a 100% actual contribution to the outcome, without having done anything different.\n\nThis seemingly absurd result shows that our idea of contributions as being anything like slices of a pie break down even in this simple example (as pointed out by @Rothman2005); the problem arises because the parallel-bridges set-up means that the contributions are not independent of one another. This problem is not limited to cases (like this one) involving binary (yes/no) variables; we can create the same kind of problem in the previous example (\"reservoir\") by introducing a capacity limit to the reservoir. The actual contribution of the water pumped in by $X$ (which depends on how much of it overflows) depends on the amount pumped in by $Y$.\n\n### Redundancy\n\nOf course one can argue, the organisations should have realised that building two bridges was unnecessary. Our judgement of the *relevance* of the intervention(s) will vary accordingly, and this judgement will significantly affect our overall judgement of the value or worth of the intervention(s). \nBut the point of this paper is only to ask how we assess the *contribution* to this particular outcome, namely the enabling access to the remote region, independently of any other judgements. I am not trying to answer the question \"how should we judge the overall worth of a project in cases with non-independent interventions\"; that is a very important question, but a more complicated one, and its answer depends in part on the simpler kinds of questions I am addressing here. \n\nOr one could argue that perhaps they did realise this redundancy, and their aim was in fact to enable very *resilient* access to the remote region; but this would be a different outcome. It doesn't address the question which I posed. \n\nEvaluators and their commissioners have good reason to fear these cases. Sometimes this has been called \"the problem of equifinality\". In any case, these kinds of problems arise in *any* context with more than one influencing variable in which the influences are not independent of one another, i.e. in nearly all real-life situations.\n\n### Timing\n\n\nWhen we define what the outcome of interest is, we may sometimes need to make clear what timeframe we are thinking of. We might need to specify, for example \"enabling access to the remote region sometime during the next three years\". Or we might be more interested in, for example, \"being first to enable access to the remote region\". This will affect how we judge the contributions of the two organisations if the bridges are built one after the other. \n\n## Example: Bridges on the same road\n\nIn this example, two agencies each build a bridge on the *same* road, in order to enable access to a remote region. The bridges come one after the other; both are necessary to enable access. Again, the contribution of each depends on the other (if either fails, both fail). \n\nAgain, it is not possible to make a sensible statement about the actual contribution of either agency.  \n\nIf $X$ builds its bridge, the actual contribution of $Y$ makes the difference between \"access enabled\" rather than \"access not enabled\"; the outcome variable in its entirety. And symmetrically, the same goes for $Y$. If each in fact builds its bridge, they can both claim that their actual contribution is the entirety of the outcome variable. The slices of the pie equal two pies. \"Actual contribution\" oversells the story. \n\nWhereas if $Y$ fails to build its bridge, the actual contribution of $X$ is zero. Here, \"actual contribution\" undersells the story: after all, if $Y$ *had* built its bridge, something by definition out of the control of $X$, $X$ would have had total success with exactly the same effort. \n\nAssuming both bridges are built, both `X` and `Y` can claim 100% contribution to $Z$. We could say there is complete **\"contribution overlap\"**, as each contribution is as large as the whole outcome.\n\nThis isn’t a problem of fuzziness or complexity or of lack of knowledge, it’s a black-and-white case where we don’t know whether to say the actual contribution was one end of the scale (everything) or the other (nothing).\n\n## \"Actual contribution\" is unfair\n\nActual contribution is unfair because it punishes unlucky interventions; if a meteorite strike destroys years of work just before $X$ completes an outcome $Z$, the actual contribution of $X$ is zero, because actual contribution only considers the actual but very unlikely value of the additional variable \"meteor strike?\". \n\n\nActual contribution is unfair because it rewards lucky interventions; if a string of coincidences means that the singing lessons given to a child by organisation $X$ ends up culminating in her winning an international competition $Z$, the actual contribution of $X$ is astronomical, because actual contribution only considers the actual but very unlikely value of the additional variables along the way.\n\n### The breadth of possibilities\n\nI have illustrated the problems of assessing the contributions of interacting variables with just these two examples of very simple combinations of just two binary variables. It is possible to work out some piecemeal workarounds or rules of thumb for how to deal with these two cases. However, in real life, we encounter cases with more than two variables, and/or with variables which can have multiple or continuous values. There are uncountably many ways in which continuous variables can interact. \n\n\n## Definition: potential contribution\n\n\"Actual contribution\" as defined above becomes a very paradoxical concept as soon as interventions are not independent of one another. In place of, or complementary to, the concept of actual contribution, we could introduce the more general idea of *potential* contribution. The *potential contribution* of $X$ to $Z$ is the **set** of actual contributions to $Z$ *for all values of $Y$* (and more generally, for all combinations of all variables like $Y$ which affect $Z$). \n\nPotential contribution is a way of assessing the likely effects of an intervention which is immune to coincidences beyond the control of the intervention, taking into account the *different* possible states of other contributing variables. \n\nOur challenge is to summarise these kinds of sets so that we can still make statements of quantity or comparison.  This turns out to be a difficult task.\n\nAn actual contribution is a single difference or delta. But a potential contribution is a multi-dimensional space of differences or deltas. In the simplest case there is just one influence variable, $Y$, in addition to $X$, and $Y$ is binary. So there are just two differences two consider; the difference made by $X$ when $Y=0$ and the difference made by $X$ when $Y=1$. With, say, eight variables additional to X, each of which can take, say, ten values, there are $10^8$ or 100 million differences to combine. And in real life most variables take continuous, not discrete values, so we would need to resort to differential calculus to calculate them. \n\nAn intervention with eight additional variables affecting the outcome is not necessarily complex or even terribly complicated. This is run-of-the-mill stuff.\n\nIn practice, we resort to a whole bunch of heuristics which we can use to make dealing with potential contribution easier.\n\n### Compressing a whole potential contribution space down to a single variable: Probability distributions\n\nIf we know (or can guess) probability distributions for each additional variable, and if all the variables are measured on numerical scales for which multiplication is defined (interval scales??), our lives become much simpler. For example, if we know there is a 95% chance that Q will build its bridge, as in the Example \"bridges on same road\", we could define the potential (proportional) contribution of P to collapse down to $.05*nothing + .95*everything$, which we can gloss as 95%.  In the example \"bridges on different roads\", it is $.05*everything + .95*nothing$, which we can gloss as 05%. However, potential contributions calculated using this \"expected value\" approach are still not slices of a pie; the proportional contributions of the different influence variables will not usually add up to 1. \n\nWhen we are in possession of probability distributions, collapsing multiple clouds of possibilities within a \"potential contribution\" down into a single score makes comparison with other cases easier. But there is nothing in the definition of \"potential contribution\" which dictates exactly how we should do that, whether according to the \"expected value\" approach described here or using some other formula. There are whole libraries of econometrics dealing with these kinds of question. \n\nBy definition, potential contributions are independent of the actual situation. So in the \"same-roads\" case, the potential contribution of P is still just as high even in the unusual case in which Q happens not to build its bridge. \n\nPotential contribution is more natural when the events concerned have not yet happened. However, potential contribution is not so intuitive and can be harder to understand even in principle. In order to make substantial statements we either have to be able to either compress all the information about a cloud of different possibilities into a single measure, or to compare these kinds of sets directly -– things which we can't always do, even given complete knowledge about the causal system.  \n\n### Comparing potential contributions directly\n\nSometimes we cannot collapse the contribution of an intervention $X1$ down to a single quantity because we have no idea about the probability distributions of the external variables; but we can still compare it with the potential contribution of a different intervention $X2$ by directly comparing the sets of differences associated with each.  For example, to take an extreme example, if *all* the differences associated with $X1$ are larger than *all* the differences made by $X2$, we can say with certainty that the potential contribution of $X1$ is larger than the potential contribution of $X2$. In other cases we are not so lucky; the comparisons are mixed and we cannot make an substantive statements about the relative contributions.\n\n\nReal-life answers to questions about \"how much\" contribution will often hinge on finding piecemeal ways to break down the potentially infinite set of answers into useful sub-questions and sub-answers. \n\n\n### Actual vs potential contribution\n\nA lot could be said about the different roles which actual and potential contribution play in evaluation. The former is closer to journalistic, legal and historical explanation and is more likely to satisfy a public who want to know \"where the money went\", but is completely vulnerable to lucky and unlucky accidents; the latter is closer to a scientific (and statistical) assessment which is uninterested in how the dice of chance happen to have landed in a particular case, but would confuse many readers in sometimes saying that $X$ had a large potential contribution to something which never happened because of, say, a meteor strike. \n\nWe don't punish a murderer less harshly if she (intentionally) shot and killed the victim at very long range, even though the chances of her actually hitting him at such a long range were very small: actual contribution is decisive. But, in contrast, if we are writing an evaluation report,  we shouldn't mark down a project just because it was robbed of success at the last minute by an unpredictable meteor strike; we should focus on the potential contribution. \n\nWhen evaluation commissioners ask for statements about contribution, are we sure they know what they mean? \n\nFinally, it is important to note that people are usually sceptical about our ability to make substantive statements about contribution because of considerations of complexity, systems and chaos theory (see e.g. @forss2011evaluating). But none of the difficulties outlined here have anything to do with those things, and appear even in interventions which are not only not complex but not even complicated. This problem affects interventions which are not complex and not even complicated (according to the distinction made by Snowdon @Snowden2007).  \n\n## Conclusion\n\n\nIn a nutshell, my argument is this: \n\nwhat does it mean when we ask \"how much\" contribution one influencing factor (out of a set of possibly several) makes to an outcome? Our understanding of the word \"contribution\" comes from thinking about cases when those influencing factors operate independently of one another. From these kinds of cases, we have learned to think about contributions as like slices of a pie, and it makes sense to say things like \"factor X contributed more than half of the total outcome\". However, in cases when there are two or more influencing factors, and those factors interact with one another, in the sense that the difference made to the outcome by one factor depends on the value of another factor, this \"slices of a pie\" metaphor breaks down, regularly and catastrophically, even in the simplest of cases. Answers to the question \"how much\" actual contribution can vary wildly, seemingly contradictorily, because of the influence of the other factor(s). Alternatively, although we can always list the **set** of possible differences made by a **potential contribution**, i.e. given all the different values of all the other influencing variables, we may have no way to summarise this information sufficiently to be able to answer any \"how much\" questions about it. \nReal-life answers to questions about \"how much *potential* contribution ...\" will often hinge on finding piecemeal ways to break down the large set of answers into useful sub-questions and sub-answers.\n\"Potential contribution\" can be contrasted with **\"actual contribution\"**, i.e. the difference made to an outcome given the actual values of any other influencing factors. \n\n\n### References\n\n",
 			"file": "/G/My Drive/Projects/articles/article-contribution-short.Rmd",
-			"file_size": 19697,
-			"file_write_time": 132140503343130000,
 			"settings":
 			{
-				"buffer_size": 19505,
+				"buffer_size": 21974,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "log.txt",
+			"contents": "",
 			"settings":
 			{
-				"buffer_size": 1124,
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		}
@@ -107,6 +104,14 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"case",
+				"Convert Case: Title Case"
+			],
+			[
+				"wra",
+				"Word Wrap: Toggle"
+			],
 			[
 				"citershowall",
 				"Citer: Show All"
@@ -129,10 +134,6 @@
 			],
 			[
 				"wrap",
-				"Word Wrap: Toggle"
-			],
-			[
-				"wra",
 				"Word Wrap: Toggle"
 			],
 			[
@@ -161,10 +162,6 @@
 			],
 			[
 				"low",
-				"Convert Case: Lower Case"
-			],
-			[
-				"case",
 				"Convert Case: Lower Case"
 			],
 			[
@@ -624,13 +621,26 @@
 	},
 	"expanded_folders":
 	[
-		"/G/My Drive/Projects/articles"
+		"/C/Users/steve/Dropbox/Projects/causal-mapping"
 	],
 	"file_history":
 	[
-		"/G/My Drive/Projects/articles/article-contribution-short.Rmd",
-		"/C/Users/steve/Dropbox/Projects/causal-mapping/log.txt",
 		"/G/My Drive/Projects/articles/article-contribution.Rmd",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/globalFunctions.r",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/server.R",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/modules/codingPanel.r",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/modules/reports.r",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/modules/coding.r",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/modules/codingEdits.r",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/modules/display.r",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/modules/tableWidgets.r",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/modules/user.r",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/modules/stats.r",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/modules/infoBar.r",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/ui.R",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/modules/downloads.r",
+		"/C/Users/steve/Dropbox/Projects/causal-mapping/log.txt",
+		"/G/My Drive/Projects/articles/article-contribution-short.Rmd",
 		"/G/My Drive/Projects/articles/article-INUS.Rmd",
 		"/G/My Drive/Projects/articles/article-DAGs.Rmd",
 		"/C/Users/steve/Dropbox/Projects/causal-mapping-book/30800overview.md",
@@ -742,20 +752,7 @@
 		"/C/Users/User/Google Drive/Projects/articles/test.Rmd",
 		"/C/Users/User/Google Drive/Projects/articles/article-pearl.Rmd",
 		"/C/Users/User/Dropbox/Dragon-in-out/Dragon-out/recording-20170705-133350_wav.txt",
-		"/C/Users/User/Dropbox/ProposalsPending/aaOLD-STUFF-AND-GRAPHICS/cvAsText.txt",
-		"/C/Users/User/Dropbox/Projects/articles/makeSlides.r",
-		"/C/Users/User/Dropbox/Projects/articles/article.Rmd",
-		"/C/Users/User/Dropbox/Projects/articles/Dear Willi,",
-		"/C/Users/User/Dropbox/Projects/articles/makeSlides.r.Rout",
-		"/C/Users/User/Dropbox/Projects/articles/makeSlides.r;makeR('functions.Rmd').Rout",
-		"/C/Users/User/Dropbox/Projects/articles/makeR.r",
-		"/C/Users/User/Dropbox/Projects/articles/functions.Rmd",
-		"/C/Users/User/Dropbox/Projects/articles/poem-proMENTE.md",
-		"/C/Users/User/Dropbox/Projects/articles/setup.r",
-		"/C/Users/User/Dropbox/Personal/sharedFamilyDropbox/surveyor/surveyor report.txt",
-		"/C/Users/User/Dropbox/Projects/pogol/ShinyApps/ShinyApps/theorymaker/javascriptapp/__predefined__tooltipster__.json",
-		"/C/Users/User/Dropbox/Projects/pogol/ShinyApps/ShinyApps/theorymaker/javascriptapp/help.html",
-		"/C/Users/User/Dropbox/Projects/pogol/ShinyApps/ShinyApps/theorymaker/helphtml2.md"
+		"/C/Users/User/Dropbox/ProposalsPending/aaOLD-STUFF-AND-GRAPHICS/cvAsText.txt"
 	],
 	"find":
 	{
@@ -766,6 +763,11 @@
 		"height": 181.0,
 		"where_history":
 		[
+			"*r",
+			"*Rmd",
+			"*Rmd$|*r$",
+			"*Rmd|*r",
+			"*",
 			"*Rmd",
 			"C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\FAQ.md,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\about.md,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\cheat.html,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\cheat.md,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\features.html,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\features.md,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\new-in-tm-2.md,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\robots.txt,C:\\Users\\Steve\\Dropbox\\Projects\\pogol\\ShinyApps\\ShinyApps\\theorymaker\\extras\\pages\\whatis.md",
 			""
@@ -776,6 +778,26 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"attrib",
+			" \n",
+			"’",
+			"“",
+			" -- ",
+			"convert_graf_to_codeGraf",
+			"values$obsList",
+			"values$graf",
+			"values$grafMerged",
+			"values$graf",
+			"netDisplay",
+			"netCode",
+			"valuesnetDisplay",
+			"codingGraf",
+			"convert_",
+			"grafDisplay",
+			"grafCoding",
+			"grafDisplay",
+			"displayGraf",
+			"displayG",
 			"Q",
 			"P",
 			"Q",
@@ -883,27 +905,7 @@
 			"heart_nc",
 			"str_wrap2",
 			"rr",
-			"\\",
-			"do_nc",
-			"heart_nc",
-			"Flooding",
-			"Child",
-			"dz",
-			"error",
-			"”",
-			"“",
-			"variable",
-			"`",
-			"direction=TB \n",
-			"calls",
-			"actual calls",
-			"no parent",
-			"No",
-			"replace ability",
-			"● ",
-			"<",
-			"Students are exposed to creativity training",
-			":"
+			"\\"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -911,6 +913,16 @@
 		"regex": false,
 		"replace_history":
 		[
+			"convert_rawGraf_to_codeGraf",
+			"valuesCoding$obsList",
+			"values$rawGraf",
+			"values$mergedGraf",
+			"displayNet",
+			"codeNet",
+			"values$netDisplay",
+			"codeGraf",
+			"codingGraf",
+			"displayGraf",
 			"",
 			"Resources",
 			"resources",
@@ -1028,17 +1040,7 @@
 			"@Cutter2008",
 			"@IFRCODI2013",
 			"@PMIIFRC2012",
-			"Peduzzi2009",
-			"IFRCODI2013",
-			"IFRC2012",
-			"FAO2008",
-			"DRRAP2013",
-			"Fitzgibbon2012",
-			"Hailu2013",
-			"p. ",
-			"@",
-			"",
-			" "
+			"Peduzzi2009"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1058,15 +1060,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19505,
+						"buffer_size": 21974,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								539,
-								539
+								1977,
+								1977
 							]
 						],
 						"settings":
@@ -1074,7 +1076,7 @@
 							"syntax": "Packages/MarkdownEditing/Markdown (Standard).tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 928.0,
+						"translation.y": 1359.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -1082,11 +1084,10 @@
 				},
 				{
 					"buffer": 1,
-					"file": "log.txt",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1124,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -1099,7 +1100,8 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/MarkdownEditing/Markdown.sublime-syntax"
+							"auto_name": "",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
