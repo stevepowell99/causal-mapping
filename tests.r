@@ -1,3 +1,0 @@
-
-
-vals <- readRDS("settingsGlobal")

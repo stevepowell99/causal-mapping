@@ -109,6 +109,7 @@ server <- function(input, output, session) {
         
         values$codeNet <- vn
         
+        
         doNotification("Produced viz")}
     } else doNotification("No edges")
   })

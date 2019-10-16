@@ -675,6 +675,13 @@ convert_rawGraf_to_codeGraf <- function(vgraf,vstat,vstate,vals){
   tmp <- prepare_vg(vgraf)
   
   
+  tmp <- tmp %>% 
+    activate(nodes) %>% 
+    mutate(degree=centrality_degree(mode="total")) %>% 
+    mutate(title=degree) 
+  
+  
+  
   
   vno <- tmp %>% nodes_as_tibble()
   ved <- tmp %>% edges_as_tibble()
@@ -1264,12 +1271,7 @@ make_settingsConditional <- function(inp, vs) {
 refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {   
   # also for the refresh button. refocusses graph on the current statement, removes any half-made arrows etc
   # this part just works out which edges and nodes belong to this statement 
-  
-  tmp <- tmp %>% 
-    activate(nodes) %>% 
-    mutate(degree=centrality_degree(mode="total")) %>% 
-    mutate(title=degree)
-  
+  # browser()
   
   vno <- tmp %>% nodes_as_tibble()
   ved <- tmp %>% edges_as_tibble()
@@ -1288,10 +1290,15 @@ refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {
     c(as.numeric(fromStack),reveal) %>% 
     unique
   
+  # browser()
+  
   vno <- vno %>% 
     mutate(id=row_number(),hidden=!(id %in% theseIDs),
       color.background=if_else(id %in% as.numeric(fromStack),"blue",mygreen),
-      font.size=15+5*(sqrt(nrow(vno))))
+      font.size=15+5*(sqrt(nrow(vno)))) 
+  
+  
+  
   
   ved <- ved %>% 
     group_by(statement_id) %>% 
@@ -1320,7 +1327,9 @@ refresh_and_filter_net <- function(tmp, vpag, iot,fromStack=NULL,reveal=NULL) {
         # browser()
         
         newedges <- tibble(id=1:nrow(ved),dashes=ifelse(ved$definition.type=="",F,T),hidden=ved$hidden,
-          font.size=36,selectionWidth=18,color=ifelse(ved$hidden | !iot,ifelse(ved$strength<0,"red","mygreen"),rainbow(nrvh)[ved$rainbow]),width=ifelse(ved$quote!="",5,12))
+          font.size=36,selectionWidth=18,
+          color=ifelse(ved$hidden | !iot,ifelse(ved$strength<0,"red","mygreen"),rainbow(nrvh)[ved$rainbow]),
+          width=ifelse(ved$quote!="",5,20))
         
         visNetworkProxy("codeNet") %>% 
           visUpdateNodes(nodes = vno) %>% 
