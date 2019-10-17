@@ -41,15 +41,21 @@ output$selectBoxButtons <- renderUI({
   
   tagList(
     div(
-    div(selectizeInput("selectBoxValue",
-      label = NULL, selected = NULL, multiple = F,
+    div(selectizeInput("selectBoxValue1",
+      label = NULL, selected = NULL, multiple = T,
       options =
-        list(create = T, placeholder = "Type to select or add variables", onInitialize = I('function() { this.setValue(""); }')),
+        list(create = T, placeholder = "Type to select or add items at the start", onInitialize = I('function() { this.setValue(""); }')),
+      choices = varlist, width = "400px"
+    ), style = "display:inline-block"),
+    div(selectizeInput("selectBoxValue2",
+      label = NULL, selected = NULL, multiple = T,
+      options =
+        list(create = T, placeholder = "Type to select or add items at the end", onInitialize = I('function() { this.setValue(""); }')),
       choices = varlist, width = "400px"
     ), style = "display:inline-block"),
     # these four widgets really need a better metahpor
-      div(actionButton("addFrom", NULL,icon=icon("circle-o")) %>% 
-        bs_embed_tooltip("Click to START new arrow(s) at the variable(s) which are listed in the dropdown and/or selected on the graph"),style="width:30px",class="myelement"),
+      # div(actionButton("addFrom", NULL,icon=icon("circle-o")) %>% 
+      #   bs_embed_tooltip("Click to START new arrow(s) at the variable(s) which are listed in the dropdown and/or selected on the graph"),style="width:30px",class="myelement"),
     div(actionButton("addTo", NULL,icon=icon("circle")) %>% 
         bs_embed_tooltip("Click to END the new arrow(s) at the variable which is listed in the dropdown or selected on the graph"),style="width:30px",class="myelement"),
     div(actionButton("recodeButton",NULL,icon=icon("chain")),style="width:30px",class="myelement") 
@@ -89,36 +95,8 @@ observeEvent(req(input$selectBoxValue), {
   
 })
 
-# disable enable buttons --------------------------------------------------
 
-observeEvent(req(valuesCoding$nodesSelected), {
-  if ("" != valuesCoding$nodesSelected[1] ) enable("editVar") else disable("editVar")
-  # if ("" == input$quote ) disable("addTo") else enable("addTo")
-})
 
-# observe( {
-#   # req(input$quote)
-#   disable("addTo") # enable("addTo")
-# })
-
-observeEvent(c(input$selectBoxValue, valuesCoding$nodesSelected, valuesCoding$fromStack,input$quote), {
-  # browser()
-  ins <- valuesCoding$nodesSelected
-  isb <- input$selectBoxValue
-  vcf <- valuesCoding$fromStack
-  
-  if (is.null(ins)) ins <- ""
-  if (is.null(isb)) isb <- ""
-  if (is.null(vcf)) vcf <- ""
-  if (length(vcf) == 0) vcf <- ""
-  # if (("" != (ins) | "" != isb) & "" == (vcf)) enable("addFrom") else disable("addFrom")
-  # browser()
-  if (("" != (ins) | "" != isb) & "" != (vcf)[[1]] & ""!=input$quote) enable("addTo") else disable("addTo")
-  if (("" != (ins) | "" != isb) & "" != (vcf)[[1]]) enable("recodeButton") else disable("recodeButton")
-  
-  
-  
-})
 
 # Add edges widget. Provides the additional fields for the edge ----
 
@@ -207,64 +185,64 @@ output$combo <- renderUI(if (T) {
 
 # addFrom -----------------------------------------------------------------
 
-observeEvent(c(input$addFrom), ignoreInit = TRUE, {
-  ns <- valuesCoding$nodesSelected
-  vpag <- input$pager__page_current
-  iot <- input$onlyThisStatement
-
-        
-  if (is.null(ns)) ns <- ""
-  # if ("" != (ns) | !is.null(input$selectBoxValue)) {
-    # browser()
-    
-    isb <- isolate(input$selectBoxValue)
-    if ("" == isb) isb <- NULL
-    inpfrom <- NULL
-    
-    
-    if (!is.null(isb)) {
-      vg <- isolate(values$rawGraf)
-      inpfrom <- vg %>%
-        mutate(id = row_number()) %>%
-        filter(label == isb) %>%
-        pull(id)
-      
-      if (length(inpfrom) == 0) {
-        # browser()
-        values$rawGraf <- vg %>%
-          activate(nodes) %>% 
-          bind_nodes(tibble(label = isb, cluster = ""))
-        doNotification("Adding Node", 2)
-        inpfrom <- vg %>%
-          nodes_as_tibble() %>%
-          nrow() %>%
-          `+`(1)
-      }
-    }
-        valuesCoding$fromStack <- c(ns, inpfrom, isolate(valuesCoding$fromStack)) %>% unique()
-        
-        valuesCoding$fromStack <- valuesCoding$fromStack[valuesCoding$fromStack != ""]
-        
-        # browser()
-        
-        delay(1000, refresh_and_filter_net(values$rawGraf, vpag, iot,valuesCoding$fromStack))
-        
-        visNetworkProxy("codeNet") %>% 
-          visUnselectAll()
-        
-        
-    
-  updateSelectizeInput(session = session, inputId = "selectBoxValue", selected = "")
-  
-  session$sendCustomMessage("refocus", list(NULL))   # puts cursor back in box
-})
+# observeEvent(c(input$addFrom), ignoreInit = TRUE, {
+#   ns <- valuesCoding$nodesSelected
+#   vpag <- input$pager__page_current
+#   iot <- input$onlyThisStatement
+# 
+#         
+#   if (is.null(ns)) ns <- ""
+#   # if ("" != (ns) | !is.null(input$selectBoxValue)) {
+#     # browser()
+#     
+#     isb <- isolate(input$selectBoxValue)
+#     if ("" == isb) isb <- NULL
+#     inpfrom <- NULL
+#     
+#     
+#     if (!is.null(isb)) {
+#       vg <- isolate(values$rawGraf)
+#       inpfrom <- vg %>%
+#         mutate(id = row_number()) %>%
+#         filter(label == isb) %>%
+#         pull(id)
+#       
+#       if (length(inpfrom) == 0) {
+#         # browser()
+#         values$rawGraf <- vg %>%
+#           activate(nodes) %>% 
+#           bind_nodes(tibble(label = isb, cluster = ""))
+#         doNotification("Adding Node", 2)
+#         inpfrom <- vg %>%
+#           nodes_as_tibble() %>%
+#           nrow() %>%
+#           `+`(1)
+#       }
+#     }
+#         valuesCoding$fromStack <- c(ns, inpfrom, isolate(valuesCoding$fromStack)) %>% unique()
+#         
+#         valuesCoding$fromStack <- valuesCoding$fromStack[valuesCoding$fromStack != ""]
+#         
+#         # browser()
+#         
+#         delay(1000, refresh_and_filter_net(values$rawGraf, vpag, iot,valuesCoding$fromStack))
+#         
+#         visNetworkProxy("codeNet") %>% 
+#           visUnselectAll()
+#         
+#         
+#     
+#   updateSelectizeInput(session = session, inputId = "selectBoxValue", selected = "")
+#   
+#   session$sendCustomMessage("refocus", list(NULL))   # puts cursor back in box
+# })
 
 
 
 # addTo -----------------------------------------------------------------
 
 observeEvent(input$addTo, {
-
+browser()
     
   if (!is.null(input$quote)) {
     qq <- input$quote %>% as.character()
@@ -278,17 +256,32 @@ observeEvent(input$addTo, {
   
   # browser()
   
-  inpfrom <- req(valuesCoding$fromStack)
-  inpto <- NULL
+  inpfrom <- req(input$selectBox1)
+  inpto <- req(input$selectBox2)
   
   
-  isb <- input$selectBoxValue
-  if (isb == "") isb <- NULL
   
-  if (!is.null(isb)) {
+  if (!is.null(inpfrom)&!is.null(inpto)) {
     vg <- values$rawGraf
     
-    inpto <- vg %>%
+    inpfrom <- vg %>%
+      mutate(id = row_number()) %>%
+      filter(label == isb) %>%
+      pull(id)
+    
+    if (length(inpfrom) == 0) {
+      # browser()
+      values$rawGraf <- vg %>%
+        activate(nodes) %>% 
+        bind_nodes(tibble(label = isb, cluster = ""))
+      doNotification("Adding Node", 2)
+      inpfrom <- vg %>%
+        nodes_as_tibble() %>%
+        nrow() %>%
+        `+`(1)
+    }
+    
+    inpto <- values$rawGraf %>%
       mutate(id = row_number()) %>%
       filter(label == isb) %>%
       pull(id)
@@ -304,12 +297,12 @@ observeEvent(input$addTo, {
         nrow() %>%
         `+`(1)
     }
+    
+    
+    
   }
-  if (is.null(inpto)) {
-    inpto <- req(valuesCoding$nodesSelected)[1]
-  }
-  
-  newEdges <- tibble(
+
+    newEdges <- tibble(
     from = inpfrom %>% as.integer(),
     to = inpto %>% as.integer(),
     trust = ifelse(F, .5, input$trust),
@@ -337,9 +330,9 @@ observeEvent(input$addTo, {
   
   # browser()
   
-  valuesCoding$fromStack <- NULL
+  
   values$highlightedText <- ""
-  updateTextInput(session = session, "selectBoxValue", value = "")
+  updateTextInput(session = session, "selectBoxValue2", value = "")
   
   tmp <- req(values$rawGraf) 
   vpag <- input$pager__page_current
