@@ -64,6 +64,8 @@ output$pagerBig <- renderUI({
   # req(input$pager__page_current)
   # pag <- input$pager__page_current_vars()
   # current <- req(valuesCoding$last)+1
+  
+  
   tagList(
     div(
       pageruiInput("pager", pages_total = valuesCoding$tot,page_current = 1),
@@ -100,7 +102,19 @@ output$pagerBig <- renderUI({
   )
 })
 
-output$statementInfo=renderFormattable({
+output$statementNoteBut=renderUI({
+  note <- req(values$statements) %>% 
+    filter(statement_id==input$pager__page_current) %>% 
+    pull(note)
+  div(dropdownButton(tagList(
+    div(textInput("statementNoteText",label=NULL,value=note,placeholder="Note"),class="myelement"),
+    div(actionButton("statementNoteGo",NULL,icon=icon("save")),class="myelement")
+  ) , icon = icon("sticky-note"), tooltip = "settings", circle=F,size = "xs"), class="myelement",STYLE="padding:3px;background-color:#aaeecc;WIDTH:70PX")
+  
+})
+
+  
+  output$statementInfo=renderFormattable({
   pag <- req(input$pager__page_current)
   if(!is.null(values$statements_extra)) values$statements_extra %>% filter(statement_id==pag) %>% select(-1) %>% formattable
   

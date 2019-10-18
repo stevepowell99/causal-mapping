@@ -31,6 +31,11 @@ observeEvent(input$net_selectedEdges, {
 # buttons for making arrows (and also for recoding nodes) --------------------------------------------
 
 
+observeEvent(input$statementNoteGo,{
+  values$statements <- values$statements %>% 
+    mutate(note=if_else(statement_id==input$pager__page_current,input$statementNoteText,note)) 
+})
+
 output$selectBoxButtons <- renderUI({
   varlist <- req(values$rawGraf) %>%
     nodes_as_tibble() %>%

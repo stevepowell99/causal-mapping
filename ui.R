@@ -143,6 +143,7 @@ ui <- tagList(
                                         uiOutput("pagerBig"),
                                         conditionalPanel("input.showStatementInfo",formattableOutput("statementInfo")),
                                         uiOutput("displayStatementPanel"),
+                                        uiOutput("statementNoteBut"),
                                         uiOutput("highlightedTextGo"),
                                         
                                         

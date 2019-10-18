@@ -760,3 +760,11 @@ li:nth-of-type(3) {
 .table-condensed {
   background-color: white;
 }
+
+
+#statementNoteBut{
+	position:relative;
+	right:0;
+	height: 0;
+	top:-70px;
+}
