@@ -151,6 +151,7 @@ ui <- tagList(
                                    div(
                                      uiOutput("combineLink"),
                                      uiOutput("selectBoxButtons"),
+                                     uiOutput("editVar"),
                                      uiOutput("add_edges_widget"),
                                      uiOutput("combo"),
                                      style="background-color:#DDFFDD;border:1px gray solid;padding:3px"

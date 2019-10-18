@@ -33,6 +33,13 @@ id.finder <- function(label, node.df) {
 }
 
 
+get_node_column <- function(gr,col="label"){
+  gr %>% 
+    nodes_as_tibble %>% 
+    pull(col)
+  
+}
+
 # get_user_from_query <- function(url){
 #   str_remove(url,"\\/.*$")
 # }

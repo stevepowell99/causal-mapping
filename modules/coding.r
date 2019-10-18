@@ -39,7 +39,10 @@ output$selectBoxButtons <- renderUI({
     as.character()
   varlist <- na.omit(varlist)
   
+  # doNotification("regenerating")
+  
   tagList(
+    # div(actionButton("putTo", NULL,icon=icon("caret-left")) ,style="background-color:red"),
     div(
     div(selectizeInput("selectBoxValue1",
       label = NULL, selected = NULL, multiple = T,
@@ -47,6 +50,8 @@ output$selectBoxButtons <- renderUI({
         list(create = T, placeholder = "Type to select or add items at the start", onInitialize = I('function() { this.setValue(""); }')),
       choices = varlist, width = "400px"
     ), style = "display:inline-block"),
+       div(actionButton("putFrom", NULL,icon=icon("caret-left")) %>% 
+        bs_embed_tooltip("Click to add the highlighted item"),style="width:30px",class="myelement"),
     div(selectizeInput("selectBoxValue2",
       label = NULL, selected = NULL, multiple = T,
       options =
@@ -56,44 +61,59 @@ output$selectBoxButtons <- renderUI({
     # these four widgets really need a better metahpor
       # div(actionButton("addFrom", NULL,icon=icon("circle-o")) %>% 
       #   bs_embed_tooltip("Click to START new arrow(s) at the variable(s) which are listed in the dropdown and/or selected on the graph"),style="width:30px",class="myelement"),
+    div(actionButton("putTo", NULL,icon=icon("caret-left"))%>% 
+        bs_embed_tooltip("Click to add the highlighted item"),style="width:30px",class="myelement" ),
     div(actionButton("addTo", NULL,icon=icon("circle")) %>% 
         bs_embed_tooltip("Click to END the new arrow(s) at the variable which is listed in the dropdown or selected on the graph"),style="width:30px",class="myelement"),
+    div(actionButton("saveReroute", NULL,icon=icon("save")) %>% 
+        bs_embed_tooltip("Click to save rerouted arrow"),style="width:30px",class="myelement"),
     div(actionButton("recodeButton",NULL,icon=icon("chain")),style="width:30px",class="myelement") 
     )
-    ,
-    if(!is.null(valuesCoding$nodesSelected)) 
-      div(
-        div(checkboxInput("editVar","Edit variable(s)"),class="myelement",width="150px")
-        ,
-        div(actionLink("deleteVarForm", paste0("Delete: ", valuesCoding$nodesSelected %>% paste0(collapse = ";"), "?")), style = "color:red",class="myelement")
-      )
+  
      # div(actionLink("deleteVarForm", paste0("Delete: ", valuesCoding$nodesSelected %>% paste0(collapse = ";"), "?")), style = "color:red",class="myelement")
     )
 })
 
+
+observe({
+  if(is.null(input$net_selectedEdges)) disable("saveReroute") else enable("saveReroute")
+})
+
+
+output$editVar <- renderUI({
+
+  if(!is.null(valuesCoding$nodesSelected))
+    div(
+      div(checkboxInput("editVar","Edit variable(s)"),class="myelement",width="150px")
+      ,
+      div(actionLink("deleteVarForm", paste0("Delete: ", valuesCoding$nodesSelected %>% paste0(collapse = ";"), "?")), style = "color:red",class="myelement")
+    )
+})
+
+
 # show hidden vars --------------------------------------------------
 
-observeEvent(req(input$selectBoxValue), {
-  # browser()
-  vno <- isolate(values$codeNet$x$nodes)
-  lab <- input$selectBoxValue
-  labid <- which(vno$label==lab)
-  if(length(labid)>0){
-      refresh_and_filter_net(isolate(values$codeGraf),vpag = input$pager__page_current,iot = input$onlyThisStatement,fromStack = NULL,reveal=labid)
-      
-      visNetworkProxy("codeNet") %>%
-      visSelectNodes(id=labid)
-      
-  } else if(!is.null(vno)){  # node not exists 
-
-  # browser()
-        visNetworkProxy("codeNet") %>%
-      visUpdateNodes(nodes=tibble(id=1:(nrow(vno)+1),label=c(vno$label,lab)))
-  } else doNotification("cannot show new node, sorry")
-  
-  # refresh_and_filter_net(req(values$grafCode),req(input$pager__page_current),req(input$onlyThis),req(values$fromStack))
-  
-})
+# observeEvent(req(input$selectBoxValue), {
+#   # browser()
+#   vno <- isolate(values$codeNet$x$nodes)
+#   lab <- input$selectBoxValue
+#   labid <- which(vno$label==lab)
+#   if(length(labid)>0){
+#       refresh_and_filter_net(isolate(values$codeGraf),vpag = input$pager__page_current,iot = input$onlyThisStatement,fromStack = NULL,reveal=labid)
+#       
+#       visNetworkProxy("codeNet") %>%
+#       visSelectNodes(id=labid)
+#       
+#   } else if(!is.null(vno)){  # node not exists 
+# 
+#   # browser()
+#         visNetworkProxy("codeNet") %>%
+#       visUpdateNodes(nodes=tibble(id=1:(nrow(vno)+1),label=c(vno$label,lab)))
+#   } else doNotification("cannot show new node, sorry")
+#   
+#   # refresh_and_filter_net(req(values$grafCode),req(input$pager__page_current),req(input$onlyThis),req(values$fromStack))
+#   
+# })
 
 
 
@@ -242,7 +262,7 @@ output$combo <- renderUI(if (T) {
 # addTo -----------------------------------------------------------------
 
 observeEvent(input$addTo, {
-browser()
+# browser()
     
   if (!is.null(input$quote)) {
     qq <- input$quote %>% as.character()
@@ -250,61 +270,54 @@ browser()
     qq <- ""
   }
   if(qq=="") qq <- input$highlightedText
+  if(qq=="") qq <- values$statements$text[values$statements$statement_id == values$pag]
   
   
   if(qq!="") {
   
   # browser()
   
-  inpfrom <- req(input$selectBox1)
-  inpto <- req(input$selectBox2)
+  inpfrom <- req(input$selectBoxValue1)
+  inpto <- req(input$selectBoxValue2)
   
   
   
   if (!is.null(inpfrom)&!is.null(inpto)) {
     vg <- values$rawGraf
-    
-    inpfrom <- vg %>%
-      mutate(id = row_number()) %>%
-      filter(label == isb) %>%
-      pull(id)
-    
-    if (length(inpfrom) == 0) {
+    # browser()
+    labs <- get_node_column(vg)
+
+    add <- inpfrom[!(inpfrom %in% labs)]
+    if (length(add) > 0) {
       # browser()
-      values$rawGraf <- vg %>%
+      vg <- vg %>%
         activate(nodes) %>% 
-        bind_nodes(tibble(label = isb, cluster = ""))
+        bind_nodes(tibble(label = add, cluster = ""))
       doNotification("Adding Node", 2)
-      inpfrom <- vg %>%
-        nodes_as_tibble() %>%
-        nrow() %>%
-        `+`(1)
     }
-    
-    inpto <- values$rawGraf %>%
-      mutate(id = row_number()) %>%
-      filter(label == isb) %>%
-      pull(id)
-    
-    if (length(inpto) == 0) {
-      # browser()
-      values$rawGraf <- vg %>%
-        activate(nodes) %>% 
-        bind_nodes(tibble(label = isb, cluster = ""))
-      doNotification("Adding Node", 2)
-      inpto <- vg %>%
-        nodes_as_tibble() %>%
-        nrow() %>%
-        `+`(1)
-    }
-    
-    
+      
+      inpfromID <- which(nodes_as_tibble(vg)$label %in% inpfrom)
+
+      labs <- vg %>%
+        pull(label)
+      
+      add <- inpto[!(inpto %in% labs)]
+      if (length(add) > 0) {
+        # browser()
+        vg <- vg %>%
+          activate(nodes) %>% 
+          bind_nodes(tibble(label = add, cluster = ""))
+        doNotification("Adding Node", 2)
+      }
+      
+      inptoID <- which(nodes_as_tibble(vg)$label %in% inpto)
+      
     
   }
 
     newEdges <- tibble(
-    from = inpfrom %>% as.integer(),
-    to = inpto %>% as.integer(),
+    from = inpfromID %>% as.integer(),
+    to = inptoID %>% as.integer(),
     trust = ifelse(F, .5, input$trust),
     strength = ifelse(F, .5, input$strength),
     note = ifelse(F, "", input$arrNote),
@@ -316,8 +329,8 @@ browser()
     # quote = qq,
     # full.quote = ifelse(input$crowd, "", values$statements$text[values$statements$statement == input$pager__page_current])
   )
-  
-  values$rawGraf <- values$rawGraf %>%
+# browser()  
+  values$rawGraf <- vg %>%
     bind_edges(newEdges)
   
   if (!is.null(input$combo)) {
@@ -349,7 +362,53 @@ browser()
 
 
 
+# insert selected vars --------------------------------------------------
 
+observeEvent(input$putFrom,{
+  # browser()
+  labs <- get_node_column(values$rawGraf)
+  if(!is.null(input$net_selected)){
+    
+    sel <- labs[input$net_selected]
+    updateSelectizeInput(session = session,inputId = "selectBoxValue1",selected=sel)
+  }
+})
+
+observeEvent(input$putTo,{
+  # browser()
+  labs <- get_node_column(values$rawGraf)
+  if(!is.null(input$net_selected)){
+
+        sel <- labs[input$net_selected]
+    updateSelectizeInput(session = session,inputId = "selectBoxValue2",selected=sel)
+  }
+})
+
+observeEvent(input$net_selectedEdges,{
+  if(!is.null(input$net_selectedEdges)){
+  labs <- get_node_column(values$rawGraf)
+    
+    ends <- values$rawGraf %>% 
+      edges_as_tibble %>% 
+      filter(input$net_selectedEdges==row_number())
+    
+    updateSelectizeInput(session = session,inputId = "selectBoxValue1",selected=labs[ends$from])
+    updateSelectizeInput(session = session,inputId = "selectBoxValue2",selected=labs[ends$to])
+    
+    
+  }
+})
+
+observeEvent(input$saveReroute,{
+  # browser()
+  if(T){
+  labs <- get_node_column(values$rawGraf)
+  values$rawGraf <- values$rawGraf %>% 
+    activate(edges) %>% 
+    reroute(from=which(labs==req(input$selectBoxValue1)),to=which(labs==req(input$selectBoxValue2)),
+      subset=req(input$net_selectedEdges)[1]) 
+}
+  })
 
 
 # reset selection and refresh on pressing button etc ----------------------------------
