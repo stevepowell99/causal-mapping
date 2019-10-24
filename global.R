@@ -179,6 +179,8 @@ default.statements_extra <- tibble(
 default.statements <- data.frame(
   "text" =
     rep("Some text", 1),
+  "note" =
+    rep("", 1),
   "statement_id" =
     rep(1, 1),
   "source_id" =
