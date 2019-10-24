@@ -5,8 +5,9 @@ account: stevepowell
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1041171
-bundleId: 2463014
+bundleId: 2524919
 url: https://stevepowell.shinyapps.io/causal-mapping/
-when: 1570036786.20911
+when: 1571753244.5761
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: causal-mapping.sublime-project|causal-mapping.sublime-workspace|changelog2.md|CMA.sqbpro|ignore/values|.Rproj.user (Selective Sync Conflict 2)|.Rproj.user (Selective Sync Conflict)|import|logs

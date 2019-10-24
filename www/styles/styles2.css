@@ -473,7 +473,18 @@ input[type=text]{
 
 }
 
-
+.tooltip {
+    text-decoration:none;
+    position:relative;
+}
+.tooltip span {
+    display:none;
+}
+.tooltip:hover span {
+    display:block;
+    position:fixed;
+    overflow:hidden;
+}
 a:hover{color:green !important;}
 
 th{background-color: #ded !important}
@@ -485,7 +496,7 @@ th{background-color: #ded !important}
   border-radius:8px;
   font-size:large;
   max-height: 380px;
-    overflow: scroll;
+    overflow: auto;
 }
 
 
@@ -766,5 +777,5 @@ li:nth-of-type(3) {
 	position:relative;
 	right:0;
 	height: 0;
-	top:-70px;
+	top:-40px;
 }

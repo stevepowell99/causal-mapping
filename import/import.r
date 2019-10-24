@@ -4,6 +4,24 @@ library(RMariaDB)
 library(RSQLite)
 conremote <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
 conlocal <-  DBI::dbConnect(RSQLite::SQLite(),"CMA")
+
+nodes <- dbGetQuery(conlocal,"SELECT * FROM nodes") %>% collect()
+copy_to(conremote,nodes,temporary=F,overwrite=T)
+edges <- dbGetQuery(conlocal,"SELECT * FROM edges") %>% collect()
+copy_to(conremote,edges,temporary=F,overwrite=T)
+statements <- dbGetQuery(conlocal,"SELECT * FROM statements") %>% collect()
+copy_to(conremote,statements,temporary=F,overwrite=T)
+statements_extra <- dbGetQuery(conlocal,"SELECT * FROM statements_extra") %>% collect()
+copy_to(conremote,statements_extra,temporary=F,overwrite=T)
+settingsGlobal <- dbGetQuery(conlocal,"SELECT * FROM settingsGlobal") %>% collect()
+copy_to(conremote,settingsGlobal,temporary=F,overwrite=T)
+settingsConditional <- dbGetQuery(conlocal,"SELECT * FROM settingsConditional") %>% collect()
+copy_to(conremote,settingsConditional,temporary=F,overwrite=T)
+
+
+
+
+
 conl <-  DBI::dbConnect(RSQLite::SQLite(),"CMA")
 
 db_list_tables(conl)
@@ -85,19 +103,6 @@ head(mtcars)
 conn <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
 
 conn=conM
-
-nodes <- dbGetQuery(conlocal,"SELECT * FROM nodes") %>% collect()
-copy_to(conremote,nodes,temporary=F,overwrite=T)
-edges <- dbGetQuery(conlocal,"SELECT * FROM edges") %>% collect()
-copy_to(conremote,edges,temporary=F,overwrite=T)
-statements <- dbGetQuery(conlocal,"SELECT * FROM statements") %>% collect()
-copy_to(conremote,statements,temporary=F,overwrite=T)
-statements_extra <- dbGetQuery(conlocal,"SELECT * FROM statements_extra") %>% collect()
-copy_to(conremote,statements_extra,temporary=F,overwrite=T)
-settingsGlobal <- dbGetQuery(conlocal,"SELECT * FROM settingsGlobal") %>% collect()
-copy_to(conremote,settingsGlobal,temporary=F,overwrite=T)
-settingsConditional <- dbGetQuery(conlocal,"SELECT * FROM settingsConditional") %>% collect()
-copy_to(conremote,settingsConditional,temporary=F,overwrite=T)
 
 
 
