@@ -1,1 +1,0 @@
-{"errors":[{"name":"quotesOutput","timestamp":"2019-09-10T22:28:02+01:00","error":"no applicable method for 'filter_' applied to an object of class \"NULL\""}],"session":[{"app":"causal-mapping","user":"user","server_connected":"2019-09-10T22:26:42+0100","sessionid":"8022d9c6ea84811c9d50c70e6512893d","server_disconnected":"2019-09-10T22:28:30+0100"}]}

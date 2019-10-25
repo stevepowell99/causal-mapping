@@ -1,1 +1,0 @@
-{"outputs":[{"name":"net","timestamp":"2019-09-11T09:36:01+01:00","binding":"visNetwork"},{"name":"filters","timestamp":"2019-09-11T09:35:54+01:00","binding":"shiny.htmlOutput"}],"session":[{"app":"causal-mapping","user":"user","server_connected":"2019-09-11T09:35:48+0100","sessionid":"c951ed9f1d8c766ebe0cab7be0b1757f","server_disconnected":"2019-09-11T09:36:48+0100"}]}

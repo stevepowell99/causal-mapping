@@ -151,7 +151,7 @@ output$add_edges_widget <- renderUI({
       }),
       div(sliderInput("strength", "Strength", min = -1, max = 1, step = .25, value = .5, ticks = F), style = "width:30%",class="myelement"),
       div(textInput("arrNote", NULL, value = ifelse(ise, row$note, ""), placeholder = "note"), style = "width:25%",class="myelement"),
-      div(awesomeCheckbox("edgeDetails", "Details", value = F),class="myelement", style = "width:12%"),
+      div(awesomeCheckbox("edgeDetails", "Details", value = T),class="myelement", style = "width:12%"),
       
       conditionalPanel(
         "input.edgeDetails",

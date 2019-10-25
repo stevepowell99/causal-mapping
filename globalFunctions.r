@@ -281,6 +281,8 @@ merge_nodes <- function(vno, ved) {
 
 mixcol <- function(n,selected,pal=rainbow,clicked){ #returns a single rainbow colour, maybe a mix of several
   # browser()
+  
+  # if(length(selected)==0)return ("white") else return("blue")
   palet <- pal(n)
   
   
@@ -292,12 +294,13 @@ mixcol <- function(n,selected,pal=rainbow,clicked){ #returns a single rainbow co
     result <- rgb(result[1],result[2],result[3], maxColorValue = 256) %>% 
       paste0("55")
     
-  } else 
+  } else if(length(selected)==1){
     result <- replace_na(palet[selected],"#FFFFFF") %>% 
     str_sub(1,7) %>% 
     paste0("55")
-  
-  
+  }
+  else result="FFFFFF"
+    
   if(clicked %in% selected) paste0(result,";text-decoration: underline") else result
     
 }
@@ -309,6 +312,7 @@ highlight_text <- function(large, smallvec, selectedEdge) {
   # browser()
   hits=tibble(start=rep(0,length(smallvec)),stop=rep(0,length(smallvec)))
   large <- str_remove_all(large," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols
+  if(is.na(large))large <- ""
   if(length(large)>0 & length(smallvec)>0){
     for (s in seq_along(smallvec)) {
       

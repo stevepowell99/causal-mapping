@@ -500,8 +500,8 @@ th{background-color: #ded !important}
 }
 
 
-.textbanner>span::-moz-selection { background-color: yellow !important}
-.textbanner>span::selection { background-color: yellow;  !important}
+.textbanner>span::-moz-selection { background-color: orange !important}
+.textbanner>span::selection { background-color: orange;  !important}
 
 
 .textbanner:before {
