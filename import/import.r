@@ -1,9 +1,32 @@
 
 library(tidyverse)
 library(RMariaDB)
+library(RMySQL)
 library(RSQLite)
 conremote <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
+conremote <-  DBI::dbConnect(  drv = DBI::dbDriver("MySQL"), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
 conlocal <-  DBI::dbConnect(RSQLite::SQLite(),"CMA")
+
+dbDisconnect(conremote)
+
+temp=read.csv("import/statements.csv")
+temp$user="testt"
+temp$project="testt"
+
+
+dbAppendTable(conn = conremote,name = "statements",value=temp)
+
+tab1 <- dbReadTable(conremote,"statements")
+tab1=tab1[1:10,]
+tab1$user="testtt"
+tab1$project="testtt"
+
+dbWriteTable(conn = conremote,name = "statements",value=tab1,append=T,row.names=F)
+
+
+dbAppendTable(conn = conremote,name = "statements",value=tab1,row.names=F)
+
+
 
 nodes <- dbGetQuery(conlocal,"SELECT * FROM nodes") %>% collect()
 copy_to(conremote,nodes,temporary=F,overwrite=T)
@@ -18,13 +41,6 @@ copy_to(conremote,settingsGlobal,temporary=F,overwrite=T)
 settingsConditional <- dbGetQuery(conlocal,"SELECT * FROM settingsConditional") %>% collect()
 copy_to(conremote,settingsConditional,temporary=F,overwrite=T)
 
-
-
-
-
-conl <-  DBI::dbConnect(RSQLite::SQLite(),"CMA")
-
-db_list_tables(conl)
 
 DBI::dbDisconnect(conl)
 DBI::dbDisconnect(conM)
@@ -85,7 +101,7 @@ dbDisconnect(con)
 # s <- paste0("CREATE DATABASE CMA ")
 conremote <-  DBI::dbConnect(RMariaDB::MariaDB(), user = "admin", password = "barnulf99",dbname = "CMA", host = "db1.c3sdt4rwfkjt.us-west-2.rds.amazonaws.com", port = 3306)
 conlocal <- dbConnect(RSQLite::SQLite(), "CMA")
-dbListTables(conl)
+dbListTables(conremote)
 
 DBI::dbExecute(con, as.character('set character set "utf8"'))
 s="ALTER DATABASE CMA CHARACTER SET utf8 COLLATE utf8_general_ci;"
@@ -130,11 +146,46 @@ dbGetQuery(conl, "SELECT * FROM statements")
 
 # import foreign proj -----------------------------------------------------
 
+library(promises)
+library(future)
+plan(multiprocess)
+future({write.csv(mtcars,"mtcars2.csv")})
+
 temps=list()
 for(c in csvlist){
+  ({
   temps[[c]]=read_csv(glue("import/{c}.csv"))
-  send_to_sql(temps,con,"BSDR","sace",c)
-  
+  # send_to_sql(temps,con,"testing","test",c,notify = F)
+  })
 }
+
+temp <- temps$statements_extra
+temp$user="testt"
+temp$project="testt"
+dbAppendTable(con,"statements_extra",temp)
+dbAppendTable(con,"statements_extra",tibble(statement_id=1,user="test",project="ignore"))
+dbAppendTable(con,"table",tibble(id=1))
+
+
+future({dbAppendTable(con,"statements_extra",tibble(statement_id=1,user="test",project="ignore2"))})
+
+
+con <- dbConnect(RSQLite::SQLite(), ":memory:")
+dbCreateTable(con, "iris", iris)
+dbReadTable(con, "iris")
+
+library(RSQLite)
+library(promises)
+library(future)
+plan(multiprocess)
+con <- dbConnect(RSQLite::SQLite(), ":memory:")
+future({
+dbCreateTable(con, "iris", iris)
+})
+dbReadTable(con, "iris") # gives error
+
+
+future({write.csv(mtcars,"mtcars2.csv")})
+
 
 

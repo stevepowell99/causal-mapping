@@ -3,6 +3,9 @@ server <- function(input, output, session) {
   source("globalFunctions.r",local=T)
   source("combo_functions.r")
   
+file.copy("c:/Users/steve/Dropbox/Projects/textApp/functions/globalFunctions.r",to = "copied/",overwrite = T)
+# list.files("copied") %>% paste0("copied/",.)  %>% map( ~ source(.x,local=T))
+source("copied/globalFunctions.r",local=T)
   
   # TODO pool package to manage
   

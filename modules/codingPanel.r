@@ -183,11 +183,13 @@ output$displayStatementPanel <- renderUI({
     mutate(id=row_number()) %>% 
     filter(statement_id == values$pag) 
   
-  quote <- ved %>%
-    pull(quote) %>%
+  
+  quotes <- ved$quote %>% 
+    replace_na("")
+  codes <- ved$label %>% 
     replace_na("")
   
-    selectedEdge <- which(ved$id==input$net_selectedEdges[1]) ##which(input$quote==quote)
+  selectedEdge <- which(ved$id==input$net_selectedEdges[1]) ##which(input$quote==quote)
     # selectedEdge <- input$net_selectedEdges[1]##which(input$quote==quote)
     
     
@@ -195,11 +197,11 @@ output$displayStatementPanel <- renderUI({
     if(length(selectedEdge)==0)selectedEdge <- 9999999
     
   if(length(quote)==0) quote <- ""
-  
+  # browser()
   tagList(
     icon("quote-left"),
     values$statements$text[values$statements$statement_id == values$pag] %>%
-      highlight_text(quote,selectedEdge=selectedEdge) %>%
+      highlight_text(quotes,selectedEdge=selectedEdge,codevec = codes) %>%
       HTML() %>% div(class = "textbanner", id = "textbanner"),
     # span(values$statements$text[values$statements$statement==values$pag], class = "textbanner", id = "textbanner"),
     # span(add_highlight((ve$quote[ve$statement==values$pag])[1],(values$statements$text[values$statements$statement==values$pag])), class = "textbanner", id = "textbanner"),

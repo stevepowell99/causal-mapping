@@ -197,6 +197,7 @@ defaultEdges <- data.frame(
   note = "",
   strength = .5,
   trust = .5,
+  attribution_code = "positive-other",
   sensitivity = .5,
   specificity = .5,
   statement_id = 1,

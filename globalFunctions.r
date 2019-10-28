@@ -306,65 +306,65 @@ mixcol <- function(n,selected,pal=rainbow,clicked){ #returns a single rainbow co
 }
 
 
-large <- ""
-small <- ""
-highlight_text <- function(large, smallvec, selectedEdge) {
-  # browser()
-  hits=tibble(start=rep(0,length(smallvec)),stop=rep(0,length(smallvec)))
-  large <- str_remove_all(large," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols
-  if(is.na(large))large <- ""
-  if(length(large)>0 & length(smallvec)>0){
-    for (s in seq_along(smallvec)) {
-      
-      small <- str_remove_all(smallvec[s]," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols
-      if (length(nchar(small)) > 0) {
-        # if (str_detect((large), (small))) {
-        # where <- str_locate((large), (small))
-        if (str_detect((large), escapeRegex(small))) {
-          where <- str_locate((large), escapeRegex(small))
-          hits[s,1]=where[1]
-          hits[s,2]=where[2]
-        }
-      }
-    }
-    # browser()
-    # cat(hits)
-    edges=NULL
-    result="<span>"
-    for(char in 1:nchar(large)){
-      # browser()
-      if(char %in% (hits$start)) {
-        edges <- c(edges,which(char == (hits$start))) %>% unique}
-      if(char %in% (hits$stop)) {
-        edges <- setdiff(edges,which(char == (hits$stop)))
-      } 
-      
-      # if(!is.null(edges))browser()
-      # cat(edges)
-      colour <- mixcol(nrow(hits),selected = edges,clicked=selectedEdge) 
-      # colour <- if(length(edges)>0) mixcol(nrow(hits),selected = edges) else "#FFFFFF"
-      # browser()
-      result <- c(result,
-        ifelse(char %in% (hits$start),
-          paste0("</span><span style='background-color:",colour,"'>"),""),
-        substr(large,char,char)
-      )
-      result <- c(result,
-        ifelse(char %in% (hits$stop),
-          paste0("</span><span style='background-color:",colour,"'>"),"")
-      )
-    }
-    
-    # browser()
-    result       %>%
-      c("</span>") %>%
-      paste0(collapse="")
-    
-    # browser()
-    # hits 
-  } else ""
-}
-
+# large <- ""
+# small <- ""
+# highlight_text <- function(large, smallvec, selectedEdge) {
+#   # browser()
+#   hits=tibble(start=rep(0,length(smallvec)),stop=rep(0,length(smallvec)))
+#   large <- str_remove_all(large," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols
+#   if(is.na(large))large <- ""
+#   if(length(large)>0 & length(smallvec)>0){
+#     for (s in seq_along(smallvec)) {
+#       
+#       small <- str_remove_all(smallvec[s]," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols
+#       if (length(nchar(small)) > 0) {
+#         # if (str_detect((large), (small))) {
+#         # where <- str_locate((large), (small))
+#         if (str_detect((large), escapeRegex(small))) {
+#           where <- str_locate((large), escapeRegex(small))
+#           hits[s,1]=where[1]
+#           hits[s,2]=where[2]
+#         }
+#       }
+#     }
+#     # browser()
+#     # cat(hits)
+#     edges=NULL
+#     result="<span>"
+#     for(char in 1:nchar(large)){
+#       # browser()
+#       if(char %in% (hits$start)) {
+#         edges <- c(edges,which(char == (hits$start))) %>% unique}
+#       if(char %in% (hits$stop)) {
+#         edges <- setdiff(edges,which(char == (hits$stop)))
+#       } 
+#       
+#       # if(!is.null(edges))browser()
+#       # cat(edges)
+#       colour <- mixcol(nrow(hits),selected = edges,clicked=selectedEdge) 
+#       # colour <- if(length(edges)>0) mixcol(nrow(hits),selected = edges) else "#FFFFFF"
+#       # browser()
+#       result <- c(result,
+#         ifelse(char %in% (hits$start),
+#           paste0("</span><span style='background-color:",colour,"'>"),""),
+#         substr(large,char,char)
+#       )
+#       result <- c(result,
+#         ifelse(char %in% (hits$stop),
+#           paste0("</span><span style='background-color:",colour,"'>"),"")
+#       )
+#     }
+#     
+#     # browser()
+#     result       %>%
+#       c("</span>") %>%
+#       paste0(collapse="")
+#     
+#     # browser()
+#     # hits 
+#   } else ""
+# }
+# 
 
 # highlight_text <- function(large, smallvec, start = "<span>", stop = "</span>") {
 #   # browser()
@@ -1217,9 +1217,10 @@ make_quip_stats <- function(graf) {
   graf
 }
 
-send_to_sql <- function(values,con,user,project,table){
+send_to_sql <- function(values,con,user,project,table,notify=T){
   # if(table=="statements_extra") browser()
-  doNotification(glue("Sending {table} to sql database"))
+  # browser()
+  if(notify)doNotification(glue("Sending {table} to sql database"))
   dbExecute(con,glue("DELETE FROM {table} WHERE user = '{user}' AND project='{project}'"))
   temp <- values[[table]] %>% 
     mutate(user=user,project=project) %>% 

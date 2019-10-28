@@ -168,6 +168,7 @@ output$add_edges_widget <- renderUI({
           ),
           div(
             div(selectizeInput("function.type", NULL, choices = c("+", "-", "NECC", "SUFF")), style = "display:inline-block;width:20%"),
+            div(selectInput("attribution_code", NULL, choices = xc("positive-other negative-other")), style = "display:inline-block;width:20%"),
             div(textInput("package", NULL, value = ifelse(ise, row$package, ""), placeholder = "package"), style = "display:inline-block;"),
             div(textInput("packageNote", NULL, value = ifelse(ise, row$packageNote, ""), placeholder = "packageNote"), style = "display:inline-block;")
           ),
@@ -319,7 +320,7 @@ observeEvent(input$addTo, {
       
     
   }
-
+# browser()
     newEdges <- tibble(
     from = inpfromID %>% as.integer(),
     to = inptoID %>% as.integer(),
@@ -329,6 +330,7 @@ observeEvent(input$addTo, {
     fun = "",
     combo.type = ifelse(F, "", ifelse(is.null(input$combo), "", input$combo)),
     definition.type = ifelse(F, "", input$definition.type),
+    attribution_code = ifelse(F, "", input$attribution_code),
     statement_id = ifelse(F, 1, input$pager__page_current %>% as.integer()),
     quote = ifelse(F, "", qq),
     # quote = qq,
