@@ -198,11 +198,23 @@ output$displayStatementPanel <- renderUI({
     
   if(length(quote)==0) quote <- ""
   # browser()
+  text <- values$statements$text[values$statements$statement_id == values$pag] 
+  
+  
+  if(length(quotes)==0) {
+    text2 <-   text 
+  } else {
+    
+    text2 <-   text %>% highlight_text(quotes,selectedEdge=selectedEdge) 
+    # text2 <-   highlight_text(quotes,selectedEdge=selectedEdge,codevec = codes) 
+  }
   tagList(
     icon("quote-left"),
-    values$statements$text[values$statements$statement_id == values$pag] %>%
-      highlight_text(quotes,selectedEdge=selectedEdge,codevec = codes) %>%
-      HTML() %>% div(class = "textbanner", id = "textbanner"),
+    
+     
+    
+    text2 %>% 
+      div(class = "textbanner", id = "textbanner"),
     # span(values$statements$text[values$statements$statement==values$pag], class = "textbanner", id = "textbanner"),
     # span(add_highlight((ve$quote[ve$statement==values$pag])[1],(values$statements$text[values$statements$statement==values$pag])), class = "textbanner", id = "textbanner"),
     hr()

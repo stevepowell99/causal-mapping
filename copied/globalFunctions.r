@@ -138,7 +138,27 @@ highlight_found_text <- function(large,small){
   }
 
 
-highlight_text <- function(large, smallvec, selectedEdge,codevec=NULL) {
+split_contiguous <- function(string,df){
+  
+  colnames=colnames(df)
+  # browser()
+  
+  vec=df[,1] %>% unlist
+  df=df[,-1]
+  
+  if(vec[1]!=1) {vec <- c(1,vec);df <- rbind(df[1,],df);df[1,] <- NA}
+  # if(vec[length(vec)]!=nchar(string)) vec <- c(vec,nchar(string)+1) else vec <- c(vec,nchar(string)+1) 
+  vec <- c(vec,nchar(string)+1) 
+  # att <- c(att,NA) 
+  p1 <- vec[-length(vec)]
+  p2 <- vec[-1]-1
+  # df <- df[-nrow(df),]
+  res <- cbind(strings=stri_sub(string,p1,p2),df)
+  colnames(res) <- colnames
+  res
+}
+
+highlight_text <- function(large, smallvec, selectedEdge=NULL,codevec=seq_along(smallvec)) {
   # browser()
   hits=tibble(start=rep(0,length(smallvec)),stop=rep(0,length(smallvec)),codevec=codevec)
   large <- str_remove_all(large," *\\[.*?\\] *") %>% cleanfun %>% strip_symbols %>% 
@@ -153,7 +173,7 @@ if(length(large)>0 & length(smallvec)>0){
         if (str_detect((large), escapeRegex(small))) {
           where <- str_locate((large), escapeRegex(small))
           hits[s,1]=where[1]
-          hits[s,2]=where[2]
+          hits[s,2]=where[2]+1
         }
       }
     }
@@ -187,40 +207,27 @@ if(length(large)>0 & length(smallvec)>0){
       } 
     }
     
-    # browser()
     
     starthits <- hits %>% select(starts_with("start")) %>% select(position=1,cols=2,edges=3,codes=4)
     stophits <- hits %>% select(starts_with("stop")) %>% select(position=1,cols=2,edges=3,codes=4)
     
-    allhits <- rbind(starthits,stophits)
     
-    allhits <- allhits %>% 
-      mutate(insert=paste0("</span><span id='",codes,"' title='",codes,"' style='background-color:",cols,"'>")) 
     
-      # mutate(stopinsert=paste0("</span><span id='",stopcodes,"' title='",stopcodes,"' style='background-color:",stopcols,"'>")) 
-    
-    allhits=arrange(allhits,position) %>% 
-      na.omit %>% 
-      filter(position!=0)
-    result <- stri_sub_replace_all(large,allhits$position,as.numeric(allhits$position)-1,replacement = allhits$insert)    
+    allhits <- rbind(starthits,stophits) %>% 
+      arrange(position)
 
-    
-    # browser()
-    result   %>%
-      # c("<span>",.,"</span>") %>%
-      paste0(collapse="") 
-    # %>% 
-    #   c("<div id='testdiv'>",.,"</div>") 
-    # %>%
-    
-    # browser()
-    # hits 
-  } else ""
+      split_contiguous(large,allhits) %>% 
+    pmap(~span(..1,style=paste0("background-color: ",..2)),class=paste0("'",..3,"'"),title=paste0("'",..3,"'"))
+
+    } else ""
 }
 
 
 
-
+join_codings_to_statements <- function(values){
+  values$statements %>%
+    left_join(values$codings,by="statement_id") 
+}
 
 
 mutate_if_sw <- function(...) suppressMessages(mutate_if(...))
