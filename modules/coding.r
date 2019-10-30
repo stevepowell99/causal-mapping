@@ -276,7 +276,7 @@ observeEvent(input$addTo, {
     qq <- ""
   }
   if(qq=="") qq <- input$highlightedText
-  if(qq=="") qq <- values$statements$text[values$statements$statement_id == values$pag]
+  # if(qq=="") qq <- values$statements$text[values$statements$statement_id == values$pag]
   
   
   if(qq!="") {
@@ -407,7 +407,7 @@ observeEvent(input$net_selectedEdges,{
 })
 
 observeEvent(input$saveReroute,{
-  # browser()
+  browser()#this isn't right, it needs to change nodes and edges 
   if(T){
   labs <- get_node_column(values$rawGraf)
   values$rawGraf <- values$rawGraf %>% 

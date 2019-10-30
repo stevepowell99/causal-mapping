@@ -18,7 +18,41 @@ observeEvent(input$highlightedText, {
 }
   })
 
+observe({# doesent work
+  req(input$quote)
+  if(input$quote=="") disable("addTo")
+})
 
+
+combine_nodes <- function(nodes,edges,ids){
+  target <- ids[[1]]
+  sources <- ids[-1]
+  edges <- edges %>% 
+    mutate(from=ifelse(from %in% sources,target,from),
+      to=ifelse(to %in% sources,target,to))
+  nodes <- nodes%>% 
+    mutate(id=row_number()) %>% 
+    filter(!(id %in% sources) )
+  return(list(nodes,edges))
+}
+
+
+observe({
+  req(values$nodes)
+  tab <- values$nodes %>% mutate(id=row_number()) %>% 
+    group_by(label) %>% 
+    mutate(repeated=n()) %>% select(id,label,repeated) %>% arrange(desc(repeated)) %>% filter(repeated>1)
+  if(max(tab$repeated)>1) {
+    
+    browser()
+    
+    # ids <- c(53,59)
+    # tmp <- combine_nodes(values$nodes,values$edges,ids)
+    # values$nodes <- tmp[[1]]
+    # values$edges <- tmp[[2]]
+    
+  }#browser()
+})
 
 observeEvent(req(input$onlyThisStatement),{
   if(input$onlyThisStatement) enable("pager")
